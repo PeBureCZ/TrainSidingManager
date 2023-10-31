@@ -18,25 +18,49 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
 MainWindow::initializeMap()
 {
     ui->MapView->addWidget(worldObj.getWorld(),1);
+    ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
 }
 
 
 
 void MainWindow::on_pushButton_clicked()
 {
-    worldObj.addRoute(0,0);
+    //ui->label->setText(QString::number(worldObj.getSizeX()) + "/"+QString::number(worldObj.getSizeY()));
+    ui->label->setText(QString::number(worldObj.test()));
+    //QPoint point = ui->centralwidget->pos();
+    //ui->label->setText(QString::number(point.x()) + "/"+ QString::number(point.y()));
+
+
+
 }
 
-void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    QPointF point = event->scenePos();
-    ui->label->setText("xx");
-    //worldObj.addRoute(clickPos.x(),clickPos.y());
-     //worldObj.addRoute(point.x(),point.y());
-    worldObj.addRoute(0,0);
+    QPoint point = event->pos();
+    //QPoint scenePoint = ui->graphicsView->mapToScene(windowPos);
+
+    //ui->label->setText("test: " + QString::number(scenePoint.x())+ QString::number(scenePoint.y())); //return coordinate 100,100 on map
+    ui->label->setText(QString::number(point.x()) + "/"+ QString::number(point.y()));
+
+    //worldObj.addPoint(point.x(),point.y());
+     worldObj.addRoute(point.x(),point.y(),100,0,0,100,100,100);
+    //worldObj.addRoute(point.x(),point.y());
 }
 
+
+
+void MainWindow::on_SubBut_clicked()
+{
+    worldObj.zoomOut();
+}
+
+
+void MainWindow::on_AddBut_clicked()
+{
+    worldObj.zoomIn();
+}
 

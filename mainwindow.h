@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
+#include <QGraphicsView>
+#include <QHBoxLayout>
 #include "worldmap.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,7 +21,10 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+
+    void on_SubBut_clicked();
+    void on_AddBut_clicked();
 
 private:
     Ui::MainWindow *ui;
