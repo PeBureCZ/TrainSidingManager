@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -29,12 +28,11 @@ MainWindow::initializeMap()
 
 void MainWindow::on_pushButton_clicked()
 {
-    //ui->label->setText(QString::number(worldObj.getSizeX()) + "/"+QString::number(worldObj.getSizeY()));
-    ui->label->setText(QString::number(worldObj.test()));
-    //QPoint point = ui->centralwidget->pos();
-    //ui->label->setText(QString::number(point.x()) + "/"+ QString::number(point.y()));
+    //ui->label->setText(worldObj.test());
+}
 
-
+void MainWindow::testFce()
+{
 
 }
 
@@ -47,7 +45,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     ui->label->setText(QString::number(point.x()) + "/"+ QString::number(point.y()));
 
     //worldObj.addPoint(point.x(),point.y());
-     worldObj.addRoute(point.x(),point.y(),100,0,0,100,100,100);
+     worldObj.addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
     //worldObj.addRoute(point.x(),point.y());
 }
 

@@ -18,9 +18,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void testFce();
 
 private slots:
     void on_pushButton_clicked();
+
     void mousePressEvent(QMouseEvent *event);
 
     void on_SubBut_clicked();
