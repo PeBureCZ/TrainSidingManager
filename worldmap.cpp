@@ -6,8 +6,10 @@ WorldMap::WorldMap()
     worldView = new QGraphicsView(worldScene);
     zoomLevel = 0;
     actorList = {};
+    pixmapList = {};
     railList = {};
     setMap();
+
 }
 
 QGraphicsView *WorldMap::getWorld()
@@ -17,7 +19,10 @@ QGraphicsView *WorldMap::getWorld()
 
 QString WorldMap::test()
 {
-    return "actorList[0];";
+
+    deleteActor();
+    return QString::number(pixmapList.size());
+
 }
 
 QPoint WorldMap::getRelativeWorldPos(int x, int y) //NEED TO REBUILD -100/-20 => map window (layout) in mainwindow
@@ -29,7 +34,7 @@ QPoint WorldMap::getRelativeWorldPos(int x, int y) //NEED TO REBUILD -100/-20 =>
     {
         int xBarValue = xBar->value()*pow(1.25,zoomLevel);
         int yBarValue = yBar->value()*pow(1.25,zoomLevel);
-        point = {(x-100)*pow(1.25,zoomLevel) + xBarValue,(y-20)*pow(1.25,zoomLevel) + yBarValue};
+        point = {static_cast<int>((x-100)*pow(1.25,zoomLevel) + xBarValue),static_cast<int>((y-20)*pow(1.25,zoomLevel) + yBarValue)};
     }
     else if (zoomLevel == 0)
     {
@@ -41,7 +46,7 @@ QPoint WorldMap::getRelativeWorldPos(int x, int y) //NEED TO REBUILD -100/-20 =>
     {
         int xBarValue = xBar->value()*pow(0.8,zoomLevel*-1);
         int yBarValue = yBar->value()*pow(0.8,zoomLevel*-1);
-        point = {(x-100)*pow(0.8,zoomLevel*-1) + xBarValue,(y-20)*pow(0.8,zoomLevel*-1) + yBarValue};
+        point = {static_cast<int>((x-100)*pow(0.8,zoomLevel*-1) + xBarValue),static_cast<int>((y-20)*pow(0.8,zoomLevel*-1) + yBarValue)};
     }
     return point;
 }
@@ -97,7 +102,6 @@ void WorldMap::zoomIn()
     {
        worldView->scale(1.25,1.25);
        zoomLevel--;
-
     }
 }
 
@@ -118,11 +122,15 @@ void WorldMap::actualizeMap()
 
 void WorldMap::createTrain()
 {
-    DieselLocomotive *train1;
+    DieselLocomotive train1;
     actorList.push_back(train1);
-    //train1->setPixMap(worldScene);
-    //train1->setName("xxxy");
+    actorList[0].setName("newTrainX");
 
+    QPixmap pixmax = (QDir::currentPath() + "/debug/loco.png");
+    QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(pixmax);
+    pixmapItem->setRotation(0);
+    pixmapList.push_back(pixmapItem);
+    worldScene->addItem(pixmapList[0]);
 }
 
 void WorldMap::moveAllTrains()
@@ -151,14 +159,19 @@ void WorldMap::setMap()
     //QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap1);
     //worldScene->addItem(item);
 
-    addRoute(0,0,1000,0,1000,1000,0,1000, false);
-    addRoute(0,1000,-1000,0,-1000,-1000,0,-1000, false);
+    //addRoute(0,0,10000,0,10000,10000,0,10000, false);
+    //addRoute(0,10000,-10000,0,-10000,-10000,0,-10000, false);
+
     createTrain();
 }
 
 void WorldMap::deleteActor()
 {
+    //DELETE ACTOR HERE!!
+    //actorList.remove(0);
 
+    delete pixmapList[0];
+    pixmapList.remove(0);
 }
 
 

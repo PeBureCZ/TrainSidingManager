@@ -31,6 +31,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     WorldMap worldObj;
-    initializeMap();
+    void initializeMap();
 };
 #endif // MAINWINDOW_H

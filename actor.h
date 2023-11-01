@@ -7,16 +7,20 @@
 
 class Actor
 {
-public:
-    Actor();
+protected:
     QString name;
     QPoint location;
+    float rotation;
     QGraphicsScene *worldScene;
+private:
 
+public:
+    Actor();
     void setName(QString newName);
     QString getName();
-
-    //~Actor();
+    void setRotation(float newRotation);
+    float getRotation();
+    void destroyActor();
 };
 
 #endif // ACTOR_H

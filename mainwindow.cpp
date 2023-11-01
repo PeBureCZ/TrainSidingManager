@@ -18,7 +18,7 @@ MainWindow::~MainWindow()
 }
 
 
-MainWindow::initializeMap()
+void MainWindow::initializeMap()
 {
     ui->MapView->addWidget(worldObj.getWorld(),1);
     ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
@@ -28,7 +28,7 @@ MainWindow::initializeMap()
 
 void MainWindow::on_pushButton_clicked()
 {
-    //ui->label->setText(worldObj.test());
+    ui->label->setText(worldObj.test());
 }
 
 void MainWindow::testFce()

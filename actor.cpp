@@ -4,6 +4,7 @@ Actor::Actor()
 {
     name = "default name";
     location = {0,0};
+    rotation = 0.0f;
     worldScene;
 }
 
@@ -17,9 +18,14 @@ QString Actor::getName()
     return name;
 }
 
-//Actor::~Actor()
-//{
+void Actor::setRotation(float newRotation)
+{
+    rotation = newRotation;
+}
 
-//}
+void Actor::destroyActor()
+{
+    delete this;
+}
 
 

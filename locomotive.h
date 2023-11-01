@@ -1,9 +1,9 @@
 #ifndef LOCOMOTIVE_H
 #define LOCOMOTIVE_H
 
-#include "train.h"
+#include "vehicle.h"
 
-class Locomotive : public Train
+class Locomotive : public Vehicle
 {
 public:
     Locomotive();

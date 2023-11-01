@@ -6,10 +6,12 @@
 #include <QPainterPath>
 #include <QPen>
 #include <QPixmap>
+#include <QGraphicsPixmapItem>
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
 #include <QScrollBar>
 #include <QVector>
+#include <QDir>
 
 #include "diesellocomotive.h"
 #include "rail.h"
@@ -27,8 +29,9 @@ public:
     QGraphicsView* getWorld();
 
     int zoomLevel;
-    QVector<Actor*> actorList;
-    QVector<Rail*> railList;
+    QVector<Actor> actorList;
+    QVector<QGraphicsPixmapItem*> pixmapList;
+    QVector<Rail> railList;
 
     QString test();
     QPoint getRelativeWorldPos(int x, int y);

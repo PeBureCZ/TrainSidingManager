@@ -18,6 +18,7 @@ SOURCES += \
     rail.cpp \
     railwayobject.cpp \
     train.cpp \
+    vehicle.cpp \
     worldmap.cpp
 
 HEADERS += \
@@ -29,6 +30,7 @@ HEADERS += \
     rail.h \
     railwayobject.h \
     train.h \
+    vehicle.h \
     worldmap.h
 
 FORMS += \
