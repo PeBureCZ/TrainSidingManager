@@ -14,9 +14,7 @@ int main(int argc, char *argv[])
         //w.testFce();
         //timer.stop();
     });
-    timer.start(22000);
-
-
+    timer.start(1000);
 
     w.show();
     return a.exec();

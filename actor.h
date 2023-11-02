@@ -20,7 +20,10 @@ public:
     QString getName();
     void setRotation(float newRotation);
     float getRotation();
-    void destroyActor();
+    static int count;
+    ~Actor();
 };
+
+
 
 #endif // ACTOR_H

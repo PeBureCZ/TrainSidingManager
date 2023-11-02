@@ -26,18 +26,17 @@ class WorldMap
 {
 public:
     WorldMap();
+
     QGraphicsView* getWorld();
 
     int zoomLevel;
-    QVector<Actor> actorList;
-    QVector<QGraphicsPixmapItem*> pixmapList;
-    QVector<Rail> railList;
+    QVector<Actor*> actorList;
+    QVector<QGraphicsItem*> graphicsItemList;
+    //QVector<Rail> railList;
 
     QString test();
     QPoint getRelativeWorldPos(int x, int y);
     void setMap();
-    void addPoint(int x, int y);
-    void addRoute(int startx, int starty, int med1x, int med1y, int med2x, int med2y, int endx, int endy, bool relative);
     int getWorldWidth();
     int getWorldHeight();
     void zoomIn();
@@ -45,8 +44,9 @@ public:
     void actualizeMap();
     void createTrain();
     void moveAllTrains();
-    void deleteActor();
-
+    void addActor(int x, QPoint spawnPos);
+    void deleteAllActors(); //QGraphicsItem* item, QString name
+    ~WorldMap();
 
 private:
     QGraphicsScene *worldScene;

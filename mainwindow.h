@@ -30,7 +30,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    WorldMap worldObj;
+    WorldMap* world;
     void initializeMap();
 };
 #endif // MAINWINDOW_H

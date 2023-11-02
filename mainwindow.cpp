@@ -6,29 +6,29 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    WorldMap world;
-    worldObj = world;
+    world = new WorldMap;
     initializeMap();
-
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+
 
 
 void MainWindow::initializeMap()
 {
-    ui->MapView->addWidget(worldObj.getWorld(),1);
+    ui->MapView->addWidget(world->getWorld(),1);
     ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
+    world->addActor(1,{0,0});
 }
 
 
 
 void MainWindow::on_pushButton_clicked()
 {
-    ui->label->setText(worldObj.test());
+
+   //ui->label->setText(world->test());
+    //world->deleteAllActors();
+    QPoint spawnPoint = {0,0};
+    world->addActor(2,spawnPoint);
 }
 
 void MainWindow::testFce()
@@ -39,26 +39,24 @@ void MainWindow::testFce()
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     QPoint point = event->pos();
-    //QPoint scenePoint = ui->graphicsView->mapToScene(windowPos);
-
-    //ui->label->setText("test: " + QString::number(scenePoint.x())+ QString::number(scenePoint.y())); //return coordinate 100,100 on map
-    ui->label->setText(QString::number(point.x()) + "/"+ QString::number(point.y()));
-
-    //worldObj.addPoint(point.x(),point.y());
-     worldObj.addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
-    //worldObj.addRoute(point.x(),point.y());
+    //world->addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
+    world->addActor(1,point);
 }
-
 
 
 void MainWindow::on_SubBut_clicked()
 {
-    worldObj.zoomOut();
+    world->zoomOut();
 }
 
 
 void MainWindow::on_AddBut_clicked()
 {
-    worldObj.zoomIn();
+    world->zoomIn();
 }
 
+MainWindow::~MainWindow()
+{
+    delete world;
+    delete ui;
+}

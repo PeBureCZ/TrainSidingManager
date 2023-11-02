@@ -6,23 +6,20 @@ WorldMap::WorldMap()
     worldView = new QGraphicsView(worldScene);
     zoomLevel = 0;
     actorList = {};
-    pixmapList = {};
-    railList = {};
+    graphicsItemList = {};
+    //railList = {};
     setMap();
-
 }
 
 QGraphicsView *WorldMap::getWorld()
 {
     return worldView;
+
 }
 
 QString WorldMap::test()
 {
-
-    deleteActor();
-    return QString::number(pixmapList.size());
-
+    return "";
 }
 
 QPoint WorldMap::getRelativeWorldPos(int x, int y) //NEED TO REBUILD -100/-20 => map window (layout) in mainwindow
@@ -49,41 +46,6 @@ QPoint WorldMap::getRelativeWorldPos(int x, int y) //NEED TO REBUILD -100/-20 =>
         point = {static_cast<int>((x-100)*pow(0.8,zoomLevel*-1) + xBarValue),static_cast<int>((y-20)*pow(0.8,zoomLevel*-1) + yBarValue)};
     }
     return point;
-}
-
-void WorldMap::addPoint(int x, int y)
-{
-    QGraphicsRectItem *rectItem = worldScene->addRect(-50,-50,100,100,QPen(Qt::blue,3));
-    QPoint relativePos = getRelativeWorldPos(x,y);
-    rectItem->setPos(relativePos);
-}
-
-void WorldMap::addRoute(int startx, int starty, int med1x, int med1y, int med2x, int med2y, int endx, int endy, bool relative)
-{
-    /*
-    add route in absolute coordinate
-
-    https://en.wikipedia.org/wiki/B%C3%A9zier_curve
-
-    startx = start point in scene, x coord. P0          (absolute)
-    starty = start point in scene, Y coord. P0          (absolute)
-
-    med1x = 1st point of bézier curve, x coord. (P1)    (relative)
-    med1y = 1st point of bézier curve, y coord. (P1)    (relative)
-    med2x = 2nd point of bézier curve, x coord. (P2)    (relative)
-    med2y = 2nd point of bézier curve, y coord. (P2)    (relative)
-    endx = end point of bézier curve, x coord.  (P3)    (relative)
-    endy = end point of bézier curve, y coord.  (P3)    (relative)
-    */
-    QPainterPath path;
-    path.cubicTo(med1x,med1y,med2x,med2y,endx,endy);
-    QPoint spawnPos;
-    QGraphicsPathItem *item = worldScene->addPath(path, QPen(Qt::blue, 144));
-
-    if (relative) spawnPos = getRelativeWorldPos(startx,starty); //transfer to relative (mainWindow)
-    else spawnPos = {startx,starty};
-
-    item->setPos(spawnPos);
 }
 
 int WorldMap::getWorldWidth()
@@ -122,23 +84,18 @@ void WorldMap::actualizeMap()
 
 void WorldMap::createTrain()
 {
-    DieselLocomotive train1;
+    /*
+    DieselLocomotive* train1 = new DieselLocomotive;
     actorList.push_back(train1);
-    actorList[0].setName("newTrainX");
-
-    QPixmap pixmax = (QDir::currentPath() + "/debug/loco.png");
-    QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(pixmax);
-    pixmapItem->setRotation(0);
-    pixmapList.push_back(pixmapItem);
-    worldScene->addItem(pixmapList[0]);
+    DieselLocomotive* x = actorList.last();
+    x->setName("train: " + QString::number(x->count));
+    */
 }
 
 void WorldMap::moveAllTrains()
 {
 
 }
-
-
 
 void WorldMap::setMap()
 {
@@ -161,17 +118,64 @@ void WorldMap::setMap()
 
     //addRoute(0,0,10000,0,10000,10000,0,10000, false);
     //addRoute(0,10000,-10000,0,-10000,-10000,0,-10000, false);
-
-    createTrain();
 }
 
-void WorldMap::deleteActor()
+void WorldMap::addActor(int num, QPoint spawnPos)
 {
-    //DELETE ACTOR HERE!!
-    //actorList.remove(0);
+    switch (num)
+    {
+    case 1:
+        {
+           Actor* rail = new Rail;
+           actorList.push_back(rail);
 
-    delete pixmapList[0];
-    pixmapList.remove(0);
+           QPainterPath path;
+           path.cubicTo(10000, 0, 10000, 10000, 0, 10000);
+
+           QGraphicsPathItem* railItem = new QGraphicsPathItem(path);
+           railItem->setPen(QPen(Qt::blue, 144));
+           QPoint relativePos = getRelativeWorldPos(spawnPos.x(), spawnPos.y());
+           railItem->setPos(relativePos);
+           worldScene->addItem(railItem);
+           graphicsItemList.push_back(railItem);
+           break;
+        }
+    case 2:
+        {
+           Actor* train = new DieselLocomotive;
+           actorList.push_back(train);
+
+           QPixmap pixmap("C:/QT_Projects/TrainSidingManager/loco.png");
+           QGraphicsItem* trainItem = new QGraphicsPixmapItem(pixmap);
+           trainItem->setPos(spawnPos);
+           worldScene->addItem(trainItem);
+           graphicsItemList.push_back(trainItem);
+           break;
+        }
+    default:
+        {}
+    }
+}
+
+void WorldMap::deleteAllActors()  //QGraphicsItem* item, QString name
+{
+    for (int i = 0; i < actorList.size(); i++)
+    {
+       delete actorList[i];
+    }
+    for (int i = 0; i < graphicsItemList.size(); i++)
+    {
+       delete graphicsItemList[i];
+    }
+    actorList.clear();
+    graphicsItemList.clear();
+}
+
+WorldMap::~WorldMap()
+{
+    delete worldScene;
+    delete worldView;
+    deleteAllActors();
 }
 
 
