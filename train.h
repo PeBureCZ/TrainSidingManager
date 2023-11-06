@@ -3,10 +3,10 @@
 
 #include "movable.h"
 
-class train : public Movable
+class Train : public Movable
 {
 public:
-    train();
+    Train();
 };
 
 #endif // TRAIN_H

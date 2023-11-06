@@ -25,6 +25,16 @@ void Actor::setRotation(float newRotation)
     rotation = newRotation;
 }
 
+void Actor::setLocation(QPoint newLocation)
+{
+    location = newLocation;
+}
+
+QPoint Actor::getLocation()
+{
+    return location;
+}
+
 Actor::~Actor()
 {
 }

@@ -18,6 +18,8 @@ public:
     QString getName();
     void setRotation(float newRotation);
     float getRotation();
+    void setLocation(QPoint newLocation);
+    QPoint getLocation();
     ~Actor();
 };
 

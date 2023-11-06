@@ -1,8 +1,8 @@
 #include "train.h"
 
-/*
-train::train()
+
+Train::Train()
 {
 
 }
-*/
+

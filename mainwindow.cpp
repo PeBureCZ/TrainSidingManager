@@ -19,16 +19,13 @@ void MainWindow::initializeMap()
 
 void MainWindow::on_pushButton_clicked()
 {
-
-   //ui->label->setText(world->test());
-    //world->deleteAllActors();
     QPoint spawnPoint = {0,0};
     world->addActor(spawnPoint,2);
 }
 
 void MainWindow::testFce()
 {
-
+    ui->label->setText(world->test());
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)

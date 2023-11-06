@@ -1,7 +1,7 @@
 #include "rail.h"
 
 
-Rail::Rail()
+Rail::Rail(QGraphicsPathItem *pathObj) : path{pathObj}
 {
 
 }

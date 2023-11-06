@@ -11,11 +11,18 @@
 #include <QGraphicsRectItem>
 #include <QScrollBar>
 #include <QVector>
-#include <QDir>
+#include <QApplication>
 
-#include "diesellocomotive.h"
-#include "rail.h"
+
 #include "actor.h"
+
+//MOVABLE OBJECTS
+//#include "movable.h"
+#include "train.h"
+#include "diesellocomotive.h"
+
+//STATIC OBJECTS
+#include "rail.h"
 
 #define MAX_ZOOM_LEVEL 20 //NEED TO REBUILD - count relative location not work in zoom level >4
 #define MIN_ZOOM_LEVEL -10
@@ -31,11 +38,16 @@ public:
 
     int zoomLevel;
     QVector<Actor*> actorList;
+
     QVector<QGraphicsItem*> graphicsItemList;
+
     QVector<Rail*> railList;
+    QVector<QGraphicsPathItem*> pathList;
+
 
     QString test();
-    QPoint getRelativeWorldPos(int x, int y);
+    QPoint getRelativeWorldPos(QPoint point);
+    QPoint getAbsoluteWorldPos(QPoint point);
     void setMap();
     int getWorldWidth();
     int getWorldHeight();
@@ -46,6 +58,7 @@ public:
     void moveAllTrains();
     void addActor(QPoint spawnPos, int num);
     void deleteAllActors(); //QGraphicsItem* item, QString name
+    void setActorLocation(QPoint newLocation, Actor* actor);
     ~WorldMap();
 
 private:
