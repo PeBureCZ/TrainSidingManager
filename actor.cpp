@@ -6,11 +6,9 @@ Actor::Actor()
     name = "default name";
     location = {0,0};
     rotation = 0.0f;
-    worldScene;
-    count++;
 }
 
-int Actor::count = 0;
+
 
 void Actor::setName(QString newName)
 {
@@ -29,7 +27,6 @@ void Actor::setRotation(float newRotation)
 
 Actor::~Actor()
 {
-    count--;
 }
 
 

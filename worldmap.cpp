@@ -120,14 +120,15 @@ void WorldMap::setMap()
     //addRoute(0,10000,-10000,0,-10000,-10000,0,-10000, false);
 }
 
-void WorldMap::addActor(int num, QPoint spawnPos)
+void WorldMap::addActor(QPoint spawnPos, int num)
 {
     switch (num)
     {
-    case 1:
+    case 1: //only tests
         {
-           Actor* rail = new Rail;
+           Actor* rail = new Rail();
            actorList.push_back(rail);
+           railList.push_back(dynamic_cast<Rail*>(rail));
 
            QPainterPath path;
            path.cubicTo(10000, 0, 10000, 10000, 0, 10000);
@@ -137,14 +138,16 @@ void WorldMap::addActor(int num, QPoint spawnPos)
            QPoint relativePos = getRelativeWorldPos(spawnPos.x(), spawnPos.y());
            railItem->setPos(relativePos);
            worldScene->addItem(railItem);
+
            graphicsItemList.push_back(railItem);
            break;
         }
-    case 2:
+    case 2: //only tests
         {
-           Actor* train = new DieselLocomotive;
+           Actor* train = new DieselLocomotive();
            actorList.push_back(train);
-
+           //dynamic_cast<Vehicle*>(train)->addPath(?????? - need rework)
+))
            QPixmap pixmap("C:/QT_Projects/TrainSidingManager/loco.png");
            QGraphicsItem* trainItem = new QGraphicsPixmapItem(pixmap);
            trainItem->setPos(spawnPos);

@@ -32,7 +32,7 @@ public:
     int zoomLevel;
     QVector<Actor*> actorList;
     QVector<QGraphicsItem*> graphicsItemList;
-    //QVector<Rail> railList;
+    QVector<Rail*> railList;
 
     QString test();
     QPoint getRelativeWorldPos(int x, int y);
@@ -44,7 +44,7 @@ public:
     void actualizeMap();
     void createTrain();
     void moveAllTrains();
-    void addActor(int x, QPoint spawnPos);
+    void addActor(QPoint spawnPos, int num);
     void deleteAllActors(); //QGraphicsItem* item, QString name
     ~WorldMap();
 

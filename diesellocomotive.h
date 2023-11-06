@@ -5,10 +5,12 @@
 
 class DieselLocomotive : public Locomotive
 {
+private:
+    int fuel;
 public:
     DieselLocomotive();
 
-    int fuel;
+
 };
 
 #endif // DIESELLOCOMOTIVE_H

@@ -4,8 +4,10 @@ Movable::Movable()
 {
 
 }
+/*
+Movable::~Movable()
+{
+    pixmapItem->setPos(-500,-500);
+}
 
-//Movable::~Movable()
-//{
-//    pixmapItem->setPos(-500,-500);
-//}
+*/

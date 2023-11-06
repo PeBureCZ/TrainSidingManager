@@ -10,17 +10,12 @@ MainWindow::MainWindow(QWidget *parent)
     initializeMap();
 }
 
-
-
-
 void MainWindow::initializeMap()
 {
     ui->MapView->addWidget(world->getWorld(),1);
     ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
-    world->addActor(1,{0,0});
+    world->addActor({0,0}, 1); //test spawn - rail
 }
-
-
 
 void MainWindow::on_pushButton_clicked()
 {
@@ -28,7 +23,7 @@ void MainWindow::on_pushButton_clicked()
    //ui->label->setText(world->test());
     //world->deleteAllActors();
     QPoint spawnPoint = {0,0};
-    world->addActor(2,spawnPoint);
+    world->addActor(spawnPoint,2);
 }
 
 void MainWindow::testFce()
@@ -40,7 +35,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     QPoint point = event->pos();
     //world->addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
-    world->addActor(1,point);
+    world->addActor(point,1);
 }
 
 
