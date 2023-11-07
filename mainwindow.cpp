@@ -14,7 +14,6 @@ void MainWindow::initializeMap()
 {
     ui->MapView->addWidget(world->getWorld(),1);
     ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
-    world->addActor({0,0}, 1); //test spawn - rail
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -45,6 +44,11 @@ void MainWindow::on_SubBut_clicked()
 void MainWindow::on_AddBut_clicked()
 {
     world->zoomIn();
+}
+
+void MainWindow::actualizeMap()
+{
+    world->moveAllTrains();
 }
 
 MainWindow::~MainWindow()

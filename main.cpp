@@ -11,10 +11,11 @@ int main(int argc, char *argv[])
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]()
     {
-        w.testFce();
+        w.actualizeMap();
+        //w.testFce();
         //timer.stop();
     });
-    timer.start(1000);
+    timer.start(3000);
 
     w.show();
     return a.exec();

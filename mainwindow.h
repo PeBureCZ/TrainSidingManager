@@ -27,6 +27,7 @@ private slots:
 
     void on_SubBut_clicked();
     void on_AddBut_clicked();
+    void actualizeMap();
 
 private:
     Ui::MainWindow *ui;

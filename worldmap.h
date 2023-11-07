@@ -47,7 +47,6 @@ public:
 
     QString test();
     QPoint getRelativeWorldPos(QPoint point);
-    QPoint getAbsoluteWorldPos(QPoint point);
     void setMap();
     int getWorldWidth();
     int getWorldHeight();
