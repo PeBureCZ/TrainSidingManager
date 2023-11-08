@@ -7,13 +7,12 @@
 class Movable : public Actor
 {
 protected:
-    QGraphicsPathItem* pathItem;
+
+
 
 public:
     Movable();
-    void addPath(QGraphicsPathItem *pathItemObj);
-    QGraphicsPathItem* getPath();
-    QPointF getLocationOnPath(float percentOnPath);
+
     //~Movable();
 };
 

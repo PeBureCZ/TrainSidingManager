@@ -6,17 +6,18 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    MainWindow w;
+    MainWindow mw;
+
 
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]()
     {
-        w.actualizeMap();
+        mw.actualizeMap();
         //w.testFce();
         //timer.stop();
     });
-    timer.start(3000);
+    timer.start(10); //tick "per milsec" - no FPS delta tick support
+    mw.show();
 
-    w.show();
     return a.exec();
 }

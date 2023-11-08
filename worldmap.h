@@ -26,28 +26,22 @@
 
 #define MAX_ZOOM_LEVEL 20 //NEED TO REBUILD - count relative location not work in zoom level >4
 #define MIN_ZOOM_LEVEL -10
-#define MAP_X_SIZE 250000
-#define MAP_Y_SIZE 200000
+#define MAX_MAP_X_SIZE 250000
+#define MAX_MAP_Y_SIZE 200000
 
 class WorldMap
 {
 public:
     WorldMap();
-
-    QGraphicsView* getWorld();
-
     int zoomLevel;
+    QGraphicsView* getWorld();
     QVector<Actor*> actorList;
-
     QVector<QGraphicsItem*> graphicsItemList;
-
     QVector<Rail*> railList;
     QVector<QGraphicsPathItem*> pathList;
-
-
     QString test();
     QPoint getRelativeWorldPos(QPoint point);
-    void setMap();
+    void setMap(int xSize, int ySize);
     int getWorldWidth();
     int getWorldHeight();
     void zoomIn();
@@ -63,6 +57,8 @@ public:
 private:
     QGraphicsScene *worldScene;
     QGraphicsView *worldView;
+    int mapSizeX;
+    int mapSizeY;
 
 };
 

@@ -8,14 +8,15 @@ WorldMap::WorldMap()
     actorList = {};
     pathList = {};
     graphicsItemList = {};
+    mapSizeX = 0;
+    mapSizeY = 0;
     //railList = {};
-    setMap();
+    setMap(250000, 200000); //set map x,y border size
 }
 
-QGraphicsView *WorldMap::getWorld()
+QGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
 {
     return worldView;
-
 }
 
 QString WorldMap::test()
@@ -25,6 +26,7 @@ QString WorldMap::test()
 }
 
 QPoint WorldMap::getRelativeWorldPos(QPoint point)
+//transfer position from (e.g.) mouse click event in mainwindow (relative to scene) to scene coordination
 {
     int x = point.x();
     int y = point.y();
@@ -78,7 +80,6 @@ void WorldMap::zoomOut()
        worldView->scale(0.8,0.8);
        zoomLevel++;
     }
-
 }
 
 void WorldMap::actualizeMap()
@@ -86,7 +87,7 @@ void WorldMap::actualizeMap()
 
 }
 
-void WorldMap::createTrain()
+void WorldMap::createTrain() //need to refract later!
 {
     /*
     DieselLocomotive* train1 = new DieselLocomotive;
@@ -96,47 +97,56 @@ void WorldMap::createTrain()
     */
 }
 
-void WorldMap::moveAllTrains()
+void WorldMap::moveAllTrains() //need to refract later!
 {
     for (auto actor : actorList)
     {
-       if (dynamic_cast<Movable*>(actor))
+       if (dynamic_cast<Train*>(actor))
        {
-
+           float currentPathValue = dynamic_cast<Train*>(actor)->getActualPathValue(); //check value on path = % value (e.g. 0.542)
+           QGraphicsPathItem* actualPath = dynamic_cast<Train*>(actor)->getActualPath(); //check actual path saved in train
+           float newPathValue = currentPathValue + 0.001; //temporary solution - train need speed!
+           (newPathValue > 1 ) ? newPathValue = 1 : newPathValue; //temporary - train will continue on the new path/rail track, atc.
+           QPoint onPathPoint = actualPath->path().pointAtPercent(newPathValue).toPoint() + actualPath->pos().toPoint(); //get new scene location
+           setActorLocation(onPathPoint,actor); //actualize actor location
+           dynamic_cast<Train*>(actor)->setActualPathValue(newPathValue); //actualize new train value on path (rail track)
        }
     }
 }
 
-void WorldMap::setMap()
+void WorldMap::setMap(int xSize, int ySize) //need to refract later!
 {
+    //check max map size -> accept or reduce size to maximum
+    (xSize > MAX_MAP_X_SIZE) ? mapSizeX = MAX_MAP_X_SIZE : mapSizeX = xSize;
+    (ySize > MAX_MAP_Y_SIZE) ? mapSizeY = MAX_MAP_Y_SIZE : mapSizeY = ySize;
 
     //set world border and world size
-    int mapXside = MAP_X_SIZE/2;
-    int mapYside = MAP_Y_SIZE/2;
+    //set border, border set to coordinate (-) and (+) -> coord. {0,0} in map center
+    int mapXside = mapSizeX/2;
+    int mapYside = mapSizeY/2;
     worldScene->addLine(-mapXside + 15,-mapYside + 15,- mapXside +15, mapYside - 15, QPen(Qt::red,30)); //-15 OR +15 DUE TO line thickness
     worldScene->addLine(-mapXside + 15,mapYside - 15,mapXside - 15,mapYside -15, QPen(Qt::red,30));
     worldScene->addLine(mapXside -15,mapYside -15,mapXside -15,-mapYside +15, QPen(Qt::red,30));
     worldScene->addLine(mapXside -15,-mapYside +15,-mapXside +15,-mapYside +15, QPen(Qt::red,30));
 
-    //set prefered zoom def1 + 15 = 16/20
+    //set start zoom level
     for (int i = 0; i < 17; i++) zoomOut();
 
-    //images
-    //QPixmap pixmap1("C:/Users/Bureš/Desktop/Dočasné dokumenty/C++/Screenshots/1.jpg");
-    //QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap1);
-    //worldScene->addItem(item);
-
-    //addRoute(0,0,10000,0,10000,10000,0,10000, false);
-    //addRoute(0,10000,-10000,0,-10000,-10000,0,-10000, false);
+    /*
+    IMAGES - NEED ADD THIS OPTION! (image instances?!)
+    QPixmap pixmap1("C:/Users/Bureš/Desktop/Dočasné dokumenty/C++/Screenshots/1.jpg");
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap1);
+    worldScene->addItem(item);
+    */
 }
 
-void WorldMap::addActor(QPoint spawnPos, int num)
+void WorldMap::addActor(QPoint spawnPos, int num) //need to refract later!
 {
     switch (num)
     {
-    case 1: //only tests
+    case 1: //only tests (rails/paths)
         {
-
+           // PATH* WILL BE SAVED IN RAIL ACTOR (CLASS)??!! ... + CONSTRUCTOR / DESTRUCTOR???
            QPainterPath path;
            path.cubicTo(10000, 0, 10000, 10000, 0, 10000);
            QGraphicsPathItem* railItem = new QGraphicsPathItem(path); //add graphics
@@ -153,52 +163,23 @@ void WorldMap::addActor(QPoint spawnPos, int num)
 
            railList.push_back(dynamic_cast<Rail*>(rail)); //push Rail actor (for find rail actor) - INDEXED WITH pathList (no with actor)
            pathList.push_back(railItem); //push graphic rail item for find graphic - INDEXED WITH railList (no with actor)
-
-           /*  WORKING SOLUTION
-           Actor* newTrain = new Train;
-           actorList.push_back(newTrain);
-           //dynamic_cast<Movable*>(newTrain)->addPath(pathList[0]);
-
-           QString pngPath = QApplication::applicationDirPath() + "/loco.png";
-           //QString pngPath = ""; // TEST ONLY - ABSOLUTE
-           QPixmap pixmap(pngPath);
-
-           QGraphicsItem* trainItem = new QGraphicsPixmapItem(pixmap);
-           graphicsItemList.push_back(trainItem);
-
-           QPoint onPathPoint = pathList.last()->path().pointAtPercent(0.5).toPoint();
-           QPoint pathPos = pathList.last()->pos().toPoint();
-           QPoint test = onPathPoint + pathPos;
-
-           QGraphicsItem* trainItem2 = new QGraphicsPixmapItem(pixmap);
-           graphicsItemList.push_back(trainItem2);
-
-           worldScene->addItem(trainItem);
-           worldScene->addItem(trainItem2);
-
-           trainItem->setPos(relativePos);
-           trainItem2->setPos(test);
-
-           */
-
-
            break;
         }
-    case 2: //only tests;
+    case 2: //only test (loco...)
         {
            if (pathList.size() > 0)
            {
                Actor* newTrain = new Train;
                actorList.push_back(newTrain);
 
-               dynamic_cast<Movable*>(newTrain)->addPath(pathList[0]);
+               dynamic_cast<Train*>(newTrain)->setActualPath(pathList[0]);
                QString pngPath = QApplication::applicationDirPath() + "/loco.png";
                //QString pngPath = ""; // TEST ONLY - ABSOLUTE
                QPixmap pixmap(pngPath);
                QGraphicsItem* trainItem = new QGraphicsPixmapItem(pixmap);
                worldScene->addItem(trainItem);
                graphicsItemList.push_back(trainItem);
-               QPointF spawnPoint = dynamic_cast<Movable*>(newTrain)->getLocationOnPath(0.0) + dynamic_cast<Movable*>(newTrain)->getPath()->pos();
+               QPointF spawnPoint = dynamic_cast<Train*>(newTrain)->getLocationOnPath(0.0) + dynamic_cast<Train*>(newTrain)->getActualPath()->pos();
                trainItem->setPos(spawnPoint);
                newTrain->setLocation(spawnPos);
            }
@@ -209,38 +190,44 @@ void WorldMap::addActor(QPoint spawnPos, int num)
     }
 }
 
-void WorldMap::deleteAllActors()  //QGraphicsItem* item, QString name
-{
-    for (int i = 0; i < actorList.size(); i++)
-    {
-       delete actorList[i];
-    }
-    for (int i = 0; i < graphicsItemList.size(); i++)
-    {
-       delete graphicsItemList[i];
-    }
-    actorList.clear();
-    graphicsItemList.clear();
-}
-
 void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
 {
     if (actor)
     {
         actor->setLocation(newLocation);
         int actorIndex = actorList.indexOf(actor);
-        if (Movable* movableActor = dynamic_cast<Movable*>(actor))
-        {
 
-            //dynamic_cast<Movable*>(actor)->
+        //if (dynamic_cast<Train*>(actor))
+        // if (Movable* movableActor = dynamic_cast<Movable*>(actor))
+
+        if (dynamic_cast<Movable*>(actor))
+        {
+           if (dynamic_cast<Train*>(actor))
+           {
+                   dynamic_cast<QGraphicsItem*>(graphicsItemList[actorIndex])->setPos(newLocation);
+           }
+           //...new code here?
         }
         else
         {
-
+           //....
         }
     }
 }
 
+void WorldMap::deleteAllActors()
+{
+    for (int i = 0; i < actorList.size(); i++)
+    {
+        delete actorList[i];
+    }
+    for (int i = 0; i < graphicsItemList.size(); i++)
+    {
+        delete graphicsItemList[i];
+    }
+    actorList.clear();
+    graphicsItemList.clear();
+}
 
 WorldMap::~WorldMap()
 {
