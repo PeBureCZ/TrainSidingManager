@@ -16,13 +16,13 @@ void MainWindow::initializeMap()
     ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked() //temporary
 {
     QPoint spawnPoint = {0,0};
-    world->addActor(spawnPoint,2);
+    world->addTrainActor(world->getRailFromList(0));
 }
 
-void MainWindow::testFce()
+void MainWindow::testFce() //temporary
 {
     ui->label->setText(world->test());
 }
@@ -31,7 +31,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     QPoint point = event->pos();
     //world->addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
-    world->addActor(point,1);
+    world->addRailActor(point);
 }
 
 

@@ -47,11 +47,17 @@ public:
     void zoomIn();
     void zoomOut();
     void actualizeMap();
-    void createTrain();
+    void addTrainActor(Rail *spawnOnRail);
+    void addRailActor(QPoint point);
     void moveAllTrains();
-    void addActor(QPoint spawnPos, int num);
+    void addRailwaylActor(Rail* railActor, int num);
+    void addStaticlActor(QPoint spawnPos, int num);
     void deleteAllActors(); //QGraphicsItem* item, QString name
     void setActorLocation(QPoint newLocation, Actor* actor);
+
+    Rail* getRailFromList(int index);
+    Actor* getActorFromList(int index);
+
     ~WorldMap();
 
 private:

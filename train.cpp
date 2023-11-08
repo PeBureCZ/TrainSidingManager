@@ -1,9 +1,10 @@
 #include "train.h"
 
-Train::Train()
+Train::Train(Rail* spawnedRail)
 {
     actualPath = {};
     onPathValue = 0;
+    actualRail = spawnedRail;
 }
 
 void Train::setActualPath(QGraphicsPathItem* newPath)
