@@ -3,19 +3,16 @@
 WorldMap::WorldMap()
 {
     worldScene = new QGraphicsScene;
-    worldView = new QGraphicsView(worldScene);
-    zoomLevel = 0;
+    worldView = new CustomQGraphicsView;
+    worldView->setScene(worldScene);
     actorList = {}; //push actor  - INDEXED WITH graphicsItemList
     graphicsItemList = {}; //push graphics - INDEXED WITH actorList
     pathList = {}; //push graphic rail item for find graphic - INDEXED WITH railList (no with actor)
     railList = {}; //push Rail actor (for find rail actor) - INDEXED WITH pathList (no with actor)
-    mapSizeX = 0;
-    mapSizeY = 0;
-
     setMap(250000, 200000); //set map x,y border size
 }
 
-QGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
+CustomQGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
 {
     return worldView;
 }
@@ -28,6 +25,7 @@ QString WorldMap::test()
 QPoint WorldMap::getRelativeWorldPos(QPoint point)
 //transfer position from (e.g.) mouse click event in mainwindow (relative to scene) to scene coordination
 {
+    int zoomLevel = worldView->getZoomLevel();
     int x = point.x();
     int y = point.y();
     QScrollBar* xBar = worldView->horizontalScrollBar();
@@ -64,23 +62,6 @@ int WorldMap::getWorldHeight()
     return worldScene->height();
 }
 
-void WorldMap::zoomIn()
-{
-    if (zoomLevel > MIN_ZOOM_LEVEL)
-    {
-       worldView->scale(1.25,1.25);
-       zoomLevel--;
-    }
-}
-
-void WorldMap::zoomOut()
-{
-    if (zoomLevel < MAX_ZOOM_LEVEL)
-    {
-       worldView->scale(0.8,0.8);
-       zoomLevel++;
-    }
-}
 
 void WorldMap::actualizeMap()
 {
@@ -183,22 +164,13 @@ void WorldMap::moveAllTrains() //need to refract later!
 
 void WorldMap::setMap(int xSize, int ySize) //need to refract later!
 {
-    //check max map size -> accept or reduce size to maximum
-    (xSize > MAX_MAP_X_SIZE) ? mapSizeX = MAX_MAP_X_SIZE : mapSizeX = xSize;
-    (ySize > MAX_MAP_Y_SIZE) ? mapSizeY = MAX_MAP_Y_SIZE : mapSizeY = ySize;
-
-    //set world border and world size
-    //set border, border set to coordinate (-) and (+) -> coord. {0,0} in map center
-    int mapXside = mapSizeX/2;
-    int mapYside = mapSizeY/2;
-    worldScene->addLine(-mapXside + 15,-mapYside + 15,- mapXside +15, mapYside - 15, QPen(Qt::red,30)); //-15 OR +15 DUE TO line thickness
-    worldScene->addLine(-mapXside + 15,mapYside - 15,mapXside - 15,mapYside -15, QPen(Qt::red,30));
-    worldScene->addLine(mapXside -15,mapYside -15,mapXside -15,-mapYside +15, QPen(Qt::red,30));
-    worldScene->addLine(mapXside -15,-mapYside +15,-mapXside +15,-mapYside +15, QPen(Qt::red,30));
-
-    //set start zoom level
-    for (int i = 0; i < 17; i++) zoomOut();
-
+    worldView->setWorldMap(xSize, ySize);
+    int mapXside = worldView->getMapSizeX();
+    int mapYside = worldView->getMapSizeY();
+    worldScene->addLine(-mapXside + 150,-mapYside + 150,- mapXside +150, mapYside - 150, QPen(Qt::red,300)); //-15 OR +15 DUE TO line thickness
+    worldScene->addLine(-mapXside + 150,mapYside - 150,mapXside - 150,mapYside -150, QPen(Qt::red,300));
+    worldScene->addLine(mapXside -150,mapYside -150,mapXside -150,-mapYside +150, QPen(Qt::red,300));
+    worldScene->addLine(mapXside -150,-mapYside +150,-mapXside +150,-mapYside +150, QPen(Qt::red,300));
     /*
     IMAGES - NEED ADD THIS OPTION! (image instances?!)
     QPixmap pixmap1("C:/Users/Bureš/Desktop/Dočasné dokumenty/C++/Screenshots/1.jpg");
@@ -258,9 +230,9 @@ void WorldMap::deleteAllActors()
 
 WorldMap::~WorldMap()
 {
-    delete worldScene;
-    delete worldView;
     deleteAllActors();
+    delete worldScene;
+    delete worldView; //is needed? Scene is parent! Unchecked destructor...
 }
 
 

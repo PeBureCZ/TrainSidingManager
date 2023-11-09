@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="TestButton">
     <property name="geometry">
      <rect>
       <x>9</x>
@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Test Button</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -135,6 +135,42 @@
       <number>0</number>
      </property>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="AddRailBut">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>75</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Add Rail</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="MoveBut">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>75</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Select</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMouseEvent>
+#include <QWheelEvent>
 #include <QGraphicsView>
 #include <QHBoxLayout>
 #include "worldmap.h"
@@ -22,15 +23,20 @@ public:
     void testFce();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_TestButton_clicked();
     void mousePressEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
     void on_SubBut_clicked();
     void on_AddBut_clicked();
+    void on_AddRailBut_clicked();
 
+    void on_MoveBut_clicked();
 
 private:
     Ui::MainWindow *ui;
     WorldMap* world;
+    int menuSelected;
     void initializeMap();
+
 };
 #endif // MAINWINDOW_H

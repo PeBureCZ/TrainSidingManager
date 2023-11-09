@@ -1,7 +1,7 @@
 #ifndef WORLDMAP_H
 #define WORLDMAP_H
 
-#include <QGraphicsScene>
+
 #include "worldviewmap.h"
 #include <QPainterPath>
 #include <QPen>
@@ -9,11 +9,10 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
-#include <QScrollBar>
 #include <QVector>
 #include <QApplication>
 
-
+#include <customqgraphicsview.h>
 #include "actor.h"
 
 //MOVABLE OBJECTS
@@ -24,17 +23,11 @@
 //STATIC OBJECTS
 #include "rail.h"
 
-#define MAX_ZOOM_LEVEL 20 //NEED TO REBUILD - count relative location not work in zoom level >4
-#define MIN_ZOOM_LEVEL -10
-#define MAX_MAP_X_SIZE 250000
-#define MAX_MAP_Y_SIZE 200000
-
 class WorldMap
 {
 public:
     WorldMap();
-    int zoomLevel;
-    QGraphicsView* getWorld();
+    CustomQGraphicsView* getWorld();
     QVector<Actor*> actorList;
     QVector<QGraphicsItem*> graphicsItemList;
     QVector<Rail*> railList;
@@ -44,8 +37,6 @@ public:
     void setMap(int xSize, int ySize);
     int getWorldWidth();
     int getWorldHeight();
-    void zoomIn();
-    void zoomOut();
     void actualizeMap();
     void addTrainActor(Rail *spawnOnRail);
     void addRailActor(QPoint point);
@@ -62,9 +53,7 @@ public:
 
 private:
     QGraphicsScene *worldScene;
-    QGraphicsView *worldView;
-    int mapSizeX;
-    int mapSizeY;
+    CustomQGraphicsView *worldView;
 
 };
 
