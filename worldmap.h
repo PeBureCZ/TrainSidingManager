@@ -51,8 +51,9 @@ public:
 
     ~WorldMap();
 
-private:
     QGraphicsScene *worldScene;
+private:
+
     CustomQGraphicsView *worldView;
 
 };

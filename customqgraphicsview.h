@@ -8,7 +8,7 @@
 #include <QString> //for test only
 
 #define MAX_ZOOM_LEVEL 28 //NEED TO REBUILD - count relative location not work in zoom level > maxMapSize
-#define MIN_ZOOM_LEVEL -10
+#define MIN_ZOOM_LEVEL -2
 #define MAX_MAP_X_SIZE 250000 //MEAN -250000 TO 250000
 #define MAX_MAP_Y_SIZE 200000 //MEAN -200000 TO 200000
 

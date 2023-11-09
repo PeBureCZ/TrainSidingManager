@@ -35,35 +35,49 @@ void CustomQGraphicsView::wheelEvent(QWheelEvent *event)
 }
 
 void CustomQGraphicsView::zoomIn()
-{
-    //ZOOM IN MOUSE DIRECTION
-    QPoint globalPos = QCursor::pos();
-
-    QScrollBar* horizontalBar = horizontalScrollBar();
-    QScrollBar* verticalBar = verticalScrollBar();
-
-    int xBarValue = horizontalBar->value();
-    int yBarValue = verticalBar->value();
-
-    //CALCULATE RELATIVE MOUSE POSITION TO THE MAINWINDOW (in range from -1 to 1)
-    //It must be changed, it does not care about the window size, currently set with fixed values for the scene view location.
-    xBarValue -= 150*(globalPos.x()-830)/(385-830); //-150 = efectivity, 830 = midle pix, 385 = pix on main window (left) - WILL BE CHANGED
-    yBarValue -= 140*(globalPos.y()-400)/(85-400); //-140 = efectivity, 400 = midle pix, 85 = pix on main window (top) - WILL BE CHANGED
-
-    //xBar check min and max
-    (xBarValue < horizontalBar->minimum()) ? xBarValue = horizontalBar->minimum() : xBarValue;
-    (xBarValue > horizontalBar->maximum()) ? xBarValue = horizontalBar->maximum() : xBarValue;
-
-    //yBar check min and max
-    (yBarValue < verticalBar->minimum()) ? yBarValue = verticalBar->minimum() : yBarValue;
-    (yBarValue > verticalBar->maximum()) ? yBarValue = verticalBar->maximum() : yBarValue;
-
-    verticalBar->setValue((yBarValue));
-    horizontalBar->setValue(xBarValue);
-
-    //ZOOM SCALE
+{    
     if (zoomLevel > MIN_ZOOM_LEVEL)
     {
+        //ZOOM IN MOUSE DIRECTION
+        QPoint globalPos = QCursor::pos();
+
+        QScrollBar* horizontalBar = horizontalScrollBar();
+        QScrollBar* verticalBar = verticalScrollBar();
+
+        int xBarValue = horizontalBar->value();
+        int yBarValue = verticalBar->value();
+
+        //CALCULATE RELATIVE MOUSE POSITION TO THE MAINWINDOW (in range from -1 to 1)
+        //It must be changed, it does not care about the window size, currently set with fixed values for the scene view location.
+        QRectF worldRect = sceneRect();
+        QPointF sceneTopLeft = mapToGlobal(worldRect.topLeft().toPoint());
+        int sceneGlobalX = sceneTopLeft.x();
+        int sceneGlobalY = sceneTopLeft.y();
+
+        int pixPositionLeftX = sceneGlobalX + mapSizeX;
+        int PixPositionMiddleX = pixPositionLeftX + 445;
+
+        int pixPositionLeftY = sceneGlobalY + mapSizeY;
+        int PixPositionMiddleY = pixPositionLeftY + 280;
+
+        int xm = 140; // Specifies how much the camera moves sideways during zoom in the x direction
+        int ym = 130; // Specifies how much the camera moves sideways during zoom in the y direction
+
+        xBarValue -= xm*(globalPos.x()-PixPositionMiddleX)/(pixPositionLeftX-PixPositionMiddleX);
+        yBarValue -= ym*(globalPos.y()-PixPositionMiddleY)/(pixPositionLeftY-PixPositionMiddleY);
+
+        //xBar check min and max
+        (xBarValue < horizontalBar->minimum()) ? xBarValue = horizontalBar->minimum() : xBarValue;
+        (xBarValue > horizontalBar->maximum()) ? xBarValue = horizontalBar->maximum() : xBarValue;
+
+        //yBar check min and max
+        (yBarValue < verticalBar->minimum()) ? yBarValue = verticalBar->minimum() : yBarValue;
+        (yBarValue > verticalBar->maximum()) ? yBarValue = verticalBar->maximum() : yBarValue;
+
+        verticalBar->setValue((yBarValue));
+        horizontalBar->setValue(xBarValue);
+
+        //ZOOM SCALE
         scale(1.25,1.25);
         zoomLevel--;
     }
