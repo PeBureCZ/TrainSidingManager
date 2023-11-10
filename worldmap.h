@@ -19,6 +19,7 @@
 //#include "movable.h"
 #include "train.h"
 #include "diesellocomotive.h"
+#include "railconstructor.h"
 
 //STATIC OBJECTS
 #include "rail.h"
@@ -27,33 +28,46 @@ class WorldMap
 {
 public:
     WorldMap();
-    CustomQGraphicsView* getWorld();
-    QVector<Actor*> actorList;
-    QVector<QGraphicsItem*> graphicsItemList;
-    QVector<Rail*> railList;
-    QVector<QGraphicsPathItem*> pathList;
+
+    //VARIABLES
+
+    QGraphicsScene *worldScene;
+
+    //LISTS
+    QVector<Actor*> tickedActorsList;
+    QVector<Actor*> actorListIndexed; //indexed with graphicsItemList
+    QVector<QGraphicsItem*> graphicsItemListIndexed; //indexed with actorList
+    QVector<Rail*> railListIndexed; //indexed with pathList
+    QVector<QGraphicsPathItem*> pathListIndexed; //indexed with railList
+
+    //FCE - return
     QString test();
+    CustomQGraphicsView* getWorld();
     QPoint getRelativeWorldPos(QPoint point);
-    void setMap(int xSize, int ySize);
+    Rail* getRailFromList(int index);
+    Actor* getActorFromList(int index);
     int getWorldWidth();
     int getWorldHeight();
-    void actualizeMap();
+
+    //FCE - TICK
+    void actualizeAllInWorld();
+
+    //FCE - BASIC
+    void setMap(int xSize, int ySize);
     void addTrainActor(Rail *spawnOnRail);
-    void addRailActor(QPoint point);
-    void moveAllTrains();
+    void addRailConstructor(QPoint point);
+    //void addRailActor(QPoint point);
     void addRailwaylActor(Rail* railActor, int num);
     void addStaticlActor(QPoint spawnPos, int num);
     void deleteAllActors(); //QGraphicsItem* item, QString name
     void setActorLocation(QPoint newLocation, Actor* actor);
+    void addActorToLists(Actor *addedActor, QGraphicsItem *graphicsItem);
+    void addRailToLists(Rail *addedRailActor, QGraphicsPathItem *addedPath);
 
-    Rail* getRailFromList(int index);
-    Actor* getActorFromList(int index);
-
+    //DESTRUCTOR
     ~WorldMap();
 
-    QGraphicsScene *worldScene;
 private:
-
     CustomQGraphicsView *worldView;
 
 };

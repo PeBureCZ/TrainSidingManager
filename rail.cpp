@@ -6,3 +6,8 @@ Rail::Rail(QGraphicsPathItem *pathObj) : path{pathObj}
 
 }
 
+QGraphicsPathItem *Rail::getPathItem()
+{
+    return path;
+}
+

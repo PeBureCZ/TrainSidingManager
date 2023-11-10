@@ -10,6 +10,7 @@ protected:
     QGraphicsPathItem* path;
 public:
     Rail(QGraphicsPathItem* pathObj);
+    QGraphicsPathItem* getPathItem();
 };
 
 #endif // RAIL_H

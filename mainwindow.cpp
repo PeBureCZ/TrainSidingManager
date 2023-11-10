@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     menuSelected = 0; //basic menu - "click" only
     /*
     0 =basic (select)
-    1 = add Rail (actor)
+    1 = add Rail (constructor)
+    2 = constructing rail (RailConstructor)
     */
 }
 
@@ -23,8 +24,9 @@ void MainWindow::initializeMap()
 
 void MainWindow::on_TestButton_clicked() //temporary
 {
-    QPoint spawnPoint = {0,0};
-    world->addTrainActor(world->getRailFromList(0));
+    //QPoint spawnPoint = {0,0};
+    //world->addTrainActor(world->getRailFromList(0));
+    ui->label->setText(world->test());
 }
 
 void MainWindow::testFce() //temporary
@@ -36,13 +38,20 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     switch (menuSelected)
     {
-        case 1:
+        case 1: //1 = add Rail (constructor)
         {
             QPoint point = event->pos();
             //world->addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
-            world->addRailActor(point);
+            world->addRailConstructor(point);
+            menuSelected = 2;
             break;
         }
+        case 2: //2 = constructing rail (RailConstructor)
+        {
+            //nothing yet
+            break;
+        }
+
         default:  //incl. 0 = default
         {
 
@@ -89,7 +98,7 @@ void MainWindow::on_AddBut_clicked()
 
 void MainWindow::actualizeMap()
 {
-    world->moveAllTrains();
+    world->actualizeAllInWorld();
 }
 
 MainWindow::~MainWindow()

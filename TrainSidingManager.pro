@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     actor.cpp \
+    actorconstructor.cpp \
     customqgraphicsview.cpp \
     diesellocomotive.cpp \
     locomotive.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     mainwindow.cpp \
     movable.cpp \
     rail.cpp \
+    railconstructor.cpp \
     railwayobject.cpp \
     train.cpp \
     vehicle.cpp \
@@ -24,12 +26,14 @@ SOURCES += \
 
 HEADERS += \
     actor.h \
+    actorconstructor.h \
     customqgraphicsview.h \
     diesellocomotive.h \
     locomotive.h \
     mainwindow.h \
     movable.h \
     rail.h \
+    railconstructor.h \
     railwayobject.h \
     train.h \
     vehicle.h \
