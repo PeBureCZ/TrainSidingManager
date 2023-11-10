@@ -5,6 +5,8 @@
 
 class Locomotive : public Vehicle
 {
+protected:
+    int power;
 public:
     Locomotive();
 };

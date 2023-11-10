@@ -36,11 +36,14 @@ void MainWindow::testFce() //temporary
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    switch (menuSelected)
+    if (event->button() == Qt::LeftButton)
     {
+        switch (menuSelected)
+        {
         case 1: //1 = add Rail (constructor)
         {
             QPoint point = event->pos();
+
             //world->addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
             world->addRailConstructor(point);
             menuSelected = 2;
@@ -48,15 +51,43 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         }
         case 2: //2 = constructing rail (RailConstructor)
         {
-            //nothing yet
+            world->deleteConstructor(false);
+            menuSelected = 1;
             break;
         }
 
         default:  //incl. 0 = default
         {
-
+            QPoint globalPos = QCursor::pos();
+            QPoint point = event->pos();
+            ui->label->setText(QString::number(point.x())  + " __ " + QString::number(point.y()) + " / " + QString::number(globalPos.x())  + " __ " + QString::number(globalPos.y()));
+        }
         }
     }
+    else if (event->button() == Qt::RightButton)
+    {
+        switch (menuSelected)
+        {
+        case 1: //1 = add Rail (constructor)
+        {
+            //nothing?
+            break;
+        }
+        case 2: //2 = constructing rail (RailConstructor)
+        {
+
+            world->deleteConstructor(true);
+            menuSelected = 1;
+            break;
+        }
+
+        default:  //incl. 0 = default
+        {
+            //will be move map
+        }
+        }
+    }
+
 }
 
 
@@ -67,6 +98,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
     if (delta > 0) //front
     {
+
             QRectF sceneRect = world->worldScene->sceneRect();
             QPointF sceneTopLeft = world->getWorld()->mapToGlobal(sceneRect.topLeft().toPoint());
             int sceneGlobalX = sceneTopLeft.x();
@@ -93,7 +125,7 @@ void MainWindow::on_SubBut_clicked()
 
 void MainWindow::on_AddBut_clicked()
 {
-    world->getWorld()->zoomIn();
+    world->getWorld()->zoomIn(false); //false = sideways by mouse
 }
 
 void MainWindow::actualizeMap()

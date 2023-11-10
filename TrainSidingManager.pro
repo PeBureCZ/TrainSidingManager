@@ -13,6 +13,7 @@ SOURCES += \
     actorconstructor.cpp \
     customqgraphicsview.cpp \
     diesellocomotive.cpp \
+    electriclocomotive.cpp \
     locomotive.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     actorconstructor.h \
     customqgraphicsview.h \
     diesellocomotive.h \
+    electriclocomotive.h \
     locomotive.h \
     mainwindow.h \
     movable.h \

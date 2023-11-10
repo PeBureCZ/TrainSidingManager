@@ -8,8 +8,6 @@ Actor::Actor()
     rotation = 0.0f;
 }
 
-
-
 void Actor::setName(QString newName)
 {
     name = newName;

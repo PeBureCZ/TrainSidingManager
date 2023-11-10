@@ -1,6 +1,6 @@
 #include "actorconstructor.h"
 
-ActorConstructor::ActorConstructor()
+ActorConstructor::ActorConstructor(Actor *actorToConstructing) : actorConstructing (actorToConstructing)
 {
 
 }
@@ -8,4 +8,9 @@ ActorConstructor::ActorConstructor()
 void ActorConstructor::actualizeConstructor(QPoint newPoint)
 {
     //overrided in subclass
+}
+
+Actor *ActorConstructor::getActorConstructing()
+{
+    return actorConstructing;
 }

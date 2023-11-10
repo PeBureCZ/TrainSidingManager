@@ -5,6 +5,8 @@
 
 class RailwayObject : public Actor
 {
+protected:
+    bool visibleName;
 public:
     RailwayObject();
 };

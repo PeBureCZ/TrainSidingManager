@@ -6,7 +6,7 @@
 class Vehicle : public Movable
 {
 protected:
-
+    int mass; //in kg
 public:
     Vehicle();
 };

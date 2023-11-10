@@ -9,8 +9,6 @@ private:
     int fuel;
 public:
     DieselLocomotive();
-
-
 };
 
 #endif // DIESELLOCOMOTIVE_H

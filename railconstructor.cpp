@@ -1,13 +1,15 @@
 #include "railconstructor.h"
 
-RailConstructor::RailConstructor(QPoint spawnPos, Rail* connectedRail, Rail* ownRail, int connection) : ownedRail(ownRail)
+RailConstructor::RailConstructor(Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail, int connection) : ActorConstructor(actorToConstructing)
 {
+    ownedRail = dynamic_cast<Rail*>(actorToConstructing);
+    ownedPath = ownedRail->getPathItem();
     location = spawnPos;
     P0 = {0,0};
     P1 = {0,0};
     P2 = {0,0};
     P3 = {0,0};
-    ownedPath = ownedRail->getPathItem();
+
     if (connectedRail == nullptr)
     {
         lined = true;
@@ -54,16 +56,9 @@ RailConstructor::RailConstructor(QPoint spawnPos, Rail* connectedRail, Rail* own
 void RailConstructor::actualizePathVisual() // NEED REBUILD
 {
     ownedPath->setPos(P0.x(),P0.y());
-
-    //ownedPath->path().cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y()); //NOT WORK NOW!!!
-    //ownedPath->path().setElementPositionAt(1,P1.x(),P1.y()); - NOT WORK
-
-    //TRY SET ELEMENTS VIA POINTERS???
-    /*
-    QPainterPath p = item->path();
-    p.setElementPositionAt(0, 0, -5);
-    item->setPath(p);
-    */
+    QPainterPath customPath;
+    customPath.cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y());
+    ownedPath->setPath(customPath);
 }
 
 void RailConstructor::actualizeConstructor(QPoint newPoint)
@@ -110,22 +105,22 @@ void RailConstructor::setPoints(QPoint endP) //GET ABSOLUTE POS!
 
 QPointF RailConstructor::getP0Point()
 {
-
+    return {0,0};
 }
 
 QPointF RailConstructor::getP1Point()
 {
-
+    return {0,0};
 }
 
 QPointF RailConstructor::getP2Point()
 {
-
+    return {0,0};
 }
 
 QPointF RailConstructor::getP3Point()
 {
-
+    return {0,0};
 }
 
 

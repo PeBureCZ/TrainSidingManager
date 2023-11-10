@@ -3,6 +3,6 @@
 
 Locomotive::Locomotive()
 {
-
+    power = 0;
 }
 

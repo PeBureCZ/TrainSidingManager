@@ -4,6 +4,7 @@ WorldMap::WorldMap()
 {
     worldScene = new QGraphicsScene;
     worldView = new CustomQGraphicsView;
+    actualConstructor = nullptr;
     worldView->setScene(worldScene);
     actorListIndexed = {}; //push actor  - INDEXED WITH graphicsItemList
     graphicsItemListIndexed = {}; //push graphics - INDEXED WITH actorList
@@ -20,7 +21,8 @@ CustomQGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
 
 QString WorldMap::test()
 {
-    return dynamic_cast<RailConstructor*>(dynamic_cast<Actor*>(tickedActorsList[0]))->testFce();
+    addTrainActor(railListIndexed[0]);
+    return "";
 }
 
 QPoint WorldMap::getRelativeWorldPos(QPoint point)
@@ -96,6 +98,23 @@ void WorldMap::addRailToLists(Rail* addedRailActor, QGraphicsPathItem* addedPath
     pathListIndexed.push_back(addedPath);//indexed
 }
 
+void WorldMap::deleteActor(Actor *actor)
+{
+    if (tickedActorsList.contains(actor)) tickedActorsList.remove(tickedActorsList.indexOf(actor));
+
+    if (dynamic_cast<Rail*>(actor))
+    {
+       int railIndex = railListIndexed.indexOf(dynamic_cast<Rail*>(actor));
+       railListIndexed.remove(railIndex); //actor will be deleted from actor List
+       pathListIndexed.remove(railIndex); //path will be deleted from actor List
+    }
+    int actorIndex = actorListIndexed.indexOf(actor);
+    delete actorListIndexed[actorIndex];
+    delete graphicsItemListIndexed[actorIndex];
+    actorListIndexed.remove(actorIndex);
+    graphicsItemListIndexed.remove(actorIndex);
+}
+
 void WorldMap::addRailConstructor(QPoint point)
 {
     //ADD PATH FOR RAIL ACTOR and CONSTRUCTOR ACTOR
@@ -107,8 +126,7 @@ void WorldMap::addRailConstructor(QPoint point)
     pathItem->setPos(relativePos.toPointF());
     worldScene->addItem(pathItem);
 
-    QGraphicsPathItem* pathDuplicated = new QGraphicsPathItem(path); //due to indexed
-    pathDuplicated->path().cubicTo(0, 0, 0, 0, 0, 0); //set invisible?
+    QGraphicsPathItem* pathDuplicated = new QGraphicsPathItem(path); //due to indexed - invisible - not added to scene
 
     //ADD RAIL ACTOR
     Actor* rail = new Rail(pathItem); //add actor
@@ -117,32 +135,11 @@ void WorldMap::addRailConstructor(QPoint point)
     rail->setLocation(point);
 
     //ADD CONSTRUCTOR ACTOR
-    Actor* railConstructor = new RailConstructor(relativePos, nullptr, dynamic_cast<Rail*>(rail), 0); //add actor
+    Actor* railConstructor = new RailConstructor(rail, relativePos, nullptr, 0); //add actor
     addActorToLists(railConstructor,pathDuplicated);
+    setConstructor(railConstructor);
     tickedActorsList.push_back(railConstructor);
 }
-
-/*
-void WorldMap::addRailActor(QPoint point)
-{
-    QPainterPath path;
-    path.cubicTo(10000, 0, 10000, 10000, 0, 10000);
-    QGraphicsPathItem* railItem = new QGraphicsPathItem(path); //add graphics
-    railItem->setPen(QPen(Qt::blue, 144));
-    QPoint relativePos = getRelativeWorldPos(point);
-    railItem->setPos(relativePos.toPointF());
-    worldScene->addItem(railItem);
-
-    Actor* rail = new Rail(railItem); //add actor
-    railListIndexed.push_back(dynamic_cast<Rail*>(rail));
-    actorListIndexed.push_back(rail);
-    graphicsItemListIndexed.push_back(railItem);
-    pathListIndexed.push_back(railItem);
-
-    rail->setLocation(point);
-}
-*/
-
 
 void WorldMap::addStaticlActor(QPoint spawnPos, int num)
 {
@@ -196,13 +193,11 @@ void WorldMap::actualizeAllInWorld() //need to refract later! -> only moving act
            setActorLocation(onPathPoint,actor); //actualize actor location
            dynamic_cast<Train*>(actor)->setActualPathValue(newPathValue); //actualize new train value on path (rail track)
        }
-       else if (dynamic_cast<ActorConstructor*>(actor))
-       {
-            QPoint globalPos = QCursor::pos();
-            QPoint relPos = getRelativeWorldPos(globalPos);
-            dynamic_cast<ActorConstructor*>(actor)->actualizeConstructor(relPos);
-
-       }
+        //.....another to actualize?
+    }
+    if (actualConstructor != nullptr)
+    {
+       dynamic_cast<ActorConstructor*>(actualConstructor)->actualizeConstructor(worldView->getRelativeFromCursor());
     }
 }
 
@@ -248,8 +243,6 @@ void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
     }
 }
 
-
-
 Rail* WorldMap::getRailFromList(int index)
 {
     return railListIndexed[index];
@@ -279,6 +272,18 @@ WorldMap::~WorldMap()
     deleteAllActors();
     delete worldScene;
     delete worldView; //is needed? Scene is parent! Unchecked destructor...
+}
+
+void WorldMap::setConstructor(Actor * actor)
+{
+    actualConstructor = actor;
+}
+
+void WorldMap::deleteConstructor(bool deleteCreation)
+{
+    if (deleteCreation) deleteActor(dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing());
+    deleteActor(actualConstructor);
+    actualConstructor = nullptr;
 }
 
 

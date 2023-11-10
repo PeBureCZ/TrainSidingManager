@@ -3,6 +3,6 @@
 
 RailwayObject::RailwayObject()
 {
-
+    visibleName = false;
 }
 

@@ -23,12 +23,13 @@ protected:
 public:
     CustomQGraphicsView(QWidget *parent = nullptr);
     QString testX();
-    void zoomIn();
+    void zoomIn(bool sideways);
     void zoomOut();
     int getZoomLevel();
     void setWorldMap(int xSize, int ySize);
     int getMapSizeX();
     int getMapSizeY();
+    QPoint getRelativeFromCursor();
     void wheelEvent(QWheelEvent *event) override;
 };
 

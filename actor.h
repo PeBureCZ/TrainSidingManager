@@ -11,7 +11,6 @@ protected:
     QPoint location;
     float rotation;
 private:
-
 public:
     Actor();
     virtual void setName(QString newName); //virtual need for polymorph

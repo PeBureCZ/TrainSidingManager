@@ -25,7 +25,7 @@ protected:
     void setPoints(QPoint endP);
 
 public:
-    RailConstructor(QPoint spawnPos = {0,0}, Rail* connectedRail = nullptr, Rail* ownRail = nullptr, int connection = 0);
+    RailConstructor(Actor *actorToConstructing = nullptr, QPoint spawnPos = {0,0}, Rail* connectedRail = nullptr, int connection = 0);
 
     //FCE - public
     QString testFce();

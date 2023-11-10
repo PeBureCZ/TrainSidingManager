@@ -4,6 +4,6 @@
 DieselLocomotive::DieselLocomotive()
 {
     fuel = 100;
-    name = "diesel loco";
+    name = "diesel locomotive";
 }
 

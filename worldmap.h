@@ -30,13 +30,15 @@ public:
     WorldMap();
 
     //VARIABLES
-
+    Actor* actualConstructor;
     QGraphicsScene *worldScene;
 
     //LISTS
     QVector<Actor*> tickedActorsList;
+
     QVector<Actor*> actorListIndexed; //indexed with graphicsItemList
     QVector<QGraphicsItem*> graphicsItemListIndexed; //indexed with actorList
+
     QVector<Rail*> railListIndexed; //indexed with pathList
     QVector<QGraphicsPathItem*> pathListIndexed; //indexed with railList
 
@@ -63,6 +65,9 @@ public:
     void setActorLocation(QPoint newLocation, Actor* actor);
     void addActorToLists(Actor *addedActor, QGraphicsItem *graphicsItem);
     void addRailToLists(Rail *addedRailActor, QGraphicsPathItem *addedPath);
+    void deleteActor(Actor* actor);
+    void setConstructor(Actor*actor);
+    void deleteConstructor(bool deleteCreation);
 
     //DESTRUCTOR
     ~WorldMap();

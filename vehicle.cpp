@@ -3,7 +3,7 @@
 
 Vehicle::Vehicle()
 {
-
+    mass = 0;
 }
 
 
