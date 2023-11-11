@@ -72,12 +72,10 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
        Actor* newTrain = new Train(spawnOnRail);
        actorListIndexed.push_back(newTrain);
        tickedActorsList.push_back(newTrain); //actor with tick update
-
        dynamic_cast<Train*>(newTrain)->setActualPath(pathListIndexed[0]);
+       SpriteColection newSprite; //struct
+       QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.loco()); //sprite from struct
 
-       QString pngPath = QApplication::applicationDirPath() + "/loco.png";
-       QPixmap pixmap(pngPath);
-       QGraphicsItem* trainItem = new QGraphicsPixmapItem(pixmap);
        worldScene->addItem(trainItem);
        graphicsItemListIndexed.push_back(trainItem);
        QPointF spawnPoint = dynamic_cast<Train*>(newTrain)->getLocationOnPath(0.0) + dynamic_cast<Train*>(newTrain)->getActualPath()->pos();
@@ -206,13 +204,13 @@ void WorldMap::setMap(int xSize, int ySize) //need to refract later!
     worldView->setWorldMap(xSize, ySize);
     int mapXside = worldView->getMapSizeX();
     int mapYside = worldView->getMapSizeY();
-    worldScene->addLine(-mapXside + 150,-mapYside + 150,- mapXside +150, mapYside - 150, QPen(Qt::red,300)); //-15 OR +15 DUE TO line thickness
+    worldScene->addLine(-mapXside + 150,-mapYside + 150,- mapXside +150, mapYside - 150, QPen(Qt::red,300)); //-150 OR +150 DUE TO line thickness (half from 300 - pen size)
     worldScene->addLine(-mapXside + 150,mapYside - 150,mapXside - 150,mapYside -150, QPen(Qt::red,300));
     worldScene->addLine(mapXside -150,mapYside -150,mapXside -150,-mapYside +150, QPen(Qt::red,300));
     worldScene->addLine(mapXside -150,-mapYside +150,-mapXside +150,-mapYside +150, QPen(Qt::red,300));
     /*
     IMAGES - NEED ADD THIS OPTION! (image instances?!)
-    QPixmap pixmap1("C:/Users/Bureš/Desktop/Dočasné dokumenty/C++/Screenshots/1.jpg");
+    QPixmap pixmap1("C:/.....");
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap1);
     worldScene->addItem(item);
     */
@@ -285,6 +283,3 @@ void WorldMap::deleteConstructor(bool deleteCreation)
     deleteActor(actualConstructor);
     actualConstructor = nullptr;
 }
-
-
-

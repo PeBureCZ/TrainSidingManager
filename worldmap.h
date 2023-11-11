@@ -1,19 +1,17 @@
 #ifndef WORLDMAP_H
 #define WORLDMAP_H
 
-
 #include "worldviewmap.h"
 #include <QPainterPath>
 #include <QPen>
-#include <QPixmap>
-#include <QGraphicsPixmapItem>
+
+
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
-#include <QVector>
-#include <QApplication>
 
 #include <customqgraphicsview.h>
 #include "actor.h"
+#include "spritecolection.h"
 
 //MOVABLE OBJECTS
 //#include "movable.h"

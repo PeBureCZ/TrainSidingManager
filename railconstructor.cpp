@@ -61,8 +61,17 @@ void RailConstructor::actualizePathVisual() // NEED REBUILD
     ownedPath->setPath(customPath);
 }
 
+void RailConstructor::actualizeRail()
+{
+    ownedRail->setP0(P0); //ABSOLUTE
+    ownedRail->setP1(P1); //RELATIVE
+    ownedRail->setP2(P2); //RELATIVE
+    ownedRail->setP3(P3); //RELATIVE
+}
+
 void RailConstructor::actualizeConstructor(QPoint newPoint)
 {
+    actualizeRail(); //refactor?! Actualize rail every tick - but it´s not necessary (only once at the end is sufficient)
     setPoints(newPoint);
     actualizePathVisual();
 }
@@ -105,22 +114,27 @@ void RailConstructor::setPoints(QPoint endP) //GET ABSOLUTE POS!
 
 QPointF RailConstructor::getP0Point()
 {
-    return {0,0};
+    return {P0};
 }
 
 QPointF RailConstructor::getP1Point()
 {
-    return {0,0};
+    return {P1};
 }
 
 QPointF RailConstructor::getP2Point()
 {
-    return {0,0};
+    return {P2};
 }
 
 QPointF RailConstructor::getP3Point()
 {
-    return {0,0};
+    return {P3};
+}
+
+RailConstructor::~RailConstructor()
+{
+
 }
 
 

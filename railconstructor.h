@@ -34,7 +34,9 @@ public:
     QPointF getP2Point();
     QPointF getP3Point();
     void actualizePathVisual();
+    void actualizeRail();
     void actualizeConstructor(QPoint newPoint) override;
+    ~ RailConstructor();
 };
 
 #endif // RAILCONSTRUCTOR_H

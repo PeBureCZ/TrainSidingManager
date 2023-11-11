@@ -21,6 +21,7 @@ SOURCES += \
     rail.cpp \
     railconstructor.cpp \
     railwayobject.cpp \
+    spritecolection.cpp \
     train.cpp \
     vehicle.cpp \
     worldmap.cpp
@@ -37,6 +38,7 @@ HEADERS += \
     rail.h \
     railconstructor.h \
     railwayobject.h \
+    spritecolection.h \
     train.h \
     vehicle.h \
     worldmap.h
@@ -48,3 +50,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    images/loco.png
