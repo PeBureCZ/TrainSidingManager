@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     Actors/actor.cpp \
     Actors/actorconstructor.cpp \
+    Actors/cd730.cpp \
     Actors/diesellocomotive.cpp \
     Actors/electriclocomotive.cpp \
     Actors/locomotive.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
 HEADERS += \
     Actors/actor.h \
     Actors/actorconstructor.h \
+    Actors/cd730.h \
     Actors/diesellocomotive.h \
     Actors/electriclocomotive.h \
     Actors/locomotive.h \

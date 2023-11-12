@@ -7,7 +7,7 @@
 class Movable : public Actor
 {
 protected:
-
+    int maxSpeed;
 
 
 public:

@@ -16,7 +16,7 @@
 //MOVABLE OBJECTS
 //#include "movable.h"
 #include "Actors/train.h"
-#include "Actors/diesellocomotive.h"
+#include "Actors/cd730.h"
 #include "Actors/railconstructor.h"
 
 //STATIC OBJECTS

@@ -72,6 +72,8 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
     if (pathListIndexed.size() > 0)
     {
        Actor* newTrain = new Train(spawnOnRail);
+       Vehicle* newVehicle = new CD730;
+       dynamic_cast<Train*>(newTrain)->addVehicle(newVehicle);
        actorListIndexed.push_back(newTrain);
        tickedActorsList.push_back(newTrain); //actor with tick update
        dynamic_cast<Train*>(newTrain)->setActualPath(pathListIndexed[0]);

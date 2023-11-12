@@ -2,7 +2,7 @@
 
 Movable::Movable()
 {
-
+    maxSpeed =0;
 }
 
 /*

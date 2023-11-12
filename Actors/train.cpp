@@ -38,7 +38,20 @@ void Train::setActualLengthOnPath(int newValue)
     onPathLength = newValue;
 }
 
+void Train::addVehicle(Vehicle *newVehicle)
+{
+    vehicles.push_back(newVehicle);
+}
+
 QPointF Train::getLocationOnPath(float percentOnPath)
 {
     return actualPath->path().pointAtPercent(percentOnPath);
+}
+
+Train::~Train()
+{
+    for (auto vehicle : vehicles)
+    {
+        delete vehicle;
+    }
 }

@@ -7,6 +7,9 @@ class Vehicle : public Movable
 {
 protected:
     int mass; //in kg
+    QPoint firstAxleCenter; //relative
+    QPoint secondAxleCenter; //relative
+    int actualSpeed;
 public:
     Vehicle();
 };
