@@ -8,8 +8,13 @@ SpriteColection::SpriteColection()
 
 QPixmap SpriteColection::loco()
 {
-    //QString pngPath = relativeDirectory + "/loco.png";
     QPixmap pixmap(relativeDirectory + "/images/loco.png");
+    return pixmap;
+}
+
+QPixmap SpriteColection::cd730()
+{
+    QPixmap pixmap(relativeDirectory + "/images/CD730.png");
     return pixmap;
 }
 

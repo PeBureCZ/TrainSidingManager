@@ -14,6 +14,7 @@ protected:
     float onPathValue;
     int onPathLength;
     QVector<Vehicle*> vehicles;
+    QVector<QGraphicsItem*> vehicleGraphicsItems;
 
 public:
     Train(Rail* spawnedRail);
@@ -23,8 +24,10 @@ public:
 
     int getActualLengthOnPath();
     void setActualLengthOnPath(int newValue);
-    void addVehicle(Vehicle* newVehicle);
-
+    void addVehicle(Vehicle* newVehicle, QGraphicsItem *graphicsItem);
+    Vehicle* getVehicleActor(int indexOfVehicle);
+    QGraphicsItem* getVehicleGraphics(int indexOfVehicle);
+    QPoint getVehicleWorldPos(int indexOfVehicle);
     void setActualPath(QGraphicsPathItem* newPath);
     QGraphicsPathItem* getActualPath();
     QPointF getLocationOnPath(float percentOnPath);

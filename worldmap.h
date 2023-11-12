@@ -60,6 +60,7 @@ public:
     //void addRailActor(QPoint point);
     void addRailwaylActor(Rail* railActor, int num);
     void addStaticlActor(QPoint spawnPos, int num);
+    void addVehicleActor(Train* ownerTrain, int num);
     void deleteAllActors(); //QGraphicsItem* item, QString name
     void setActorLocation(QPoint newLocation, Actor* actor);
     void addActorToLists(Actor *addedActor, QGraphicsItem *graphicsItem);

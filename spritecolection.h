@@ -13,6 +13,7 @@ struct SpriteColection
     QVector<QString> filePath;
     SpriteColection();
     QPixmap loco();
+    QPixmap cd730();
 
 };
 

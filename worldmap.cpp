@@ -23,7 +23,9 @@ CustomQGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
 
 QString WorldMap::test()
 {
+    //if (actorListIndexed.size() > 1 && dynamic_cast<Train*>(actorListIndexed[1])) deleteActor(dynamic_cast<Actor*>(actorListIndexed[1]));
     addTrainActor(railListIndexed[0]);
+
     return "";
 }
 
@@ -72,19 +74,37 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
     if (pathListIndexed.size() > 0)
     {
        Actor* newTrain = new Train(spawnOnRail);
-       Vehicle* newVehicle = new CD730;
-       dynamic_cast<Train*>(newTrain)->addVehicle(newVehicle);
-       actorListIndexed.push_back(newTrain);
-       tickedActorsList.push_back(newTrain); //actor with tick update
+
+       addVehicleActor(dynamic_cast<Train*>(newTrain), 1);
        dynamic_cast<Train*>(newTrain)->setActualPath(pathListIndexed[0]);
        SpriteColection newSprite; //struct
        QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.loco()); //sprite from struct
+       //invisible = not added to scene, only to list (indexed)
+       graphicsItemListIndexed.push_back(trainItem); //indexed woth actor
+       actorListIndexed.push_back(newTrain); //indexed with graphicsItemListIndexed
+       tickedActorsList.push_back(newTrain); //actor with tick update
 
-       worldScene->addItem(trainItem);
-       graphicsItemListIndexed.push_back(trainItem);
-       QPointF spawnPoint = dynamic_cast<Train*>(newTrain)->getLocationOnPath(0.0) + dynamic_cast<Train*>(newTrain)->getActualPath()->pos();
-       trainItem->setPos(spawnPoint);
-       newTrain->setLocation(spawnPoint.toPoint());
+       //QPointF spawnPoint = dynamic_cast<Train*>(newTrain)->getLocationOnPath(0.0) + dynamic_cast<Train*>(newTrain)->getActualPath()->pos();
+       //trainItem->setPos(spawnPoint);
+       //newTrain->setLocation(spawnPoint.toPoint());
+    }
+}
+
+void WorldMap::addVehicleActor(Train *ownerTrain, int num)
+{
+    switch (num)
+    {
+        case 1:
+            {
+                SpriteColection newSprite; //struct
+                QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.cd730()); //sprite from struct
+                Vehicle* newVehicle = new CD730;
+                worldScene->addItem(vehicleGraphicsItem);
+                dynamic_cast<Train*>(ownerTrain)->addVehicle(newVehicle, vehicleGraphicsItem); //need for destructor!
+                break;
+            }
+        //case 2: ....
+        default: {}
     }
 }
 
@@ -159,7 +179,7 @@ void WorldMap::addStaticlActor(QPoint spawnPos, int num)
         }
         default:
         {}
-    }
+        }
 }
 
 void WorldMap::addRailwaylActor(Rail* railActor, int num) //need to refract later!
@@ -197,20 +217,11 @@ void WorldMap::actualizeAllInWorld() //need to refract later! -> only moving act
             (newPathLength > actualPath->path().length() ) ? newPathLength = actualPath->path().length() : newPathLength;
             QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
             setActorLocation(onPathPoint,actor); //actualize actor location
-            dynamic_cast<Train*>(actor)->setActualPathValue(newPathPercentValue); //actualize new train value on path (rail track)
-            dynamic_cast<Train*>(actor)->setActualLengthOnPath(newPathLength);
 
-
-            //OLD MOVEMENT VERSION
-           /*
-           float currentPathValue = dynamic_cast<Train*>(actor)->getActualPathValue(); //check value on path = % value (e.g. 0.542)
-           QGraphicsPathItem* actualPath = dynamic_cast<Train*>(actor)->getActualPath(); //check actual path saved in train
-           float newPathValue = currentPathValue + 0.001; //temporary solution - train need speed!
-           (newPathValue > 1 ) ? newPathValue = 1 : newPathValue; //temporary - train will continue on the new path/rail track, atc.
-           QPoint onPathPoint = actualPath->path().pointAtPercent(newPathValue).toPoint() + actualPath->pos().toPoint(); //get new scene location        
-           setActorLocation(onPathPoint,actor); //actualize actor location
-           dynamic_cast<Train*>(actor)->setActualPathValue(newPathValue); //actualize new train value on path (rail track)
-            */
+            //STOP WORK HERE! NEED REPAIR!
+            //dynamic_cast<QGraphicsItem*>(dynamic_cast<Train*>(actor)->getVehicleGraphics(0))->setPos(onPathPoint);
+            //dynamic_cast<Train*>(actor)->setActualPathValue(newPathPercentValue); //actualize new train value on path (rail track)
+            //dynamic_cast<Train*>(actor)->setActualLengthOnPath(newPathLength);
        }
         //.....another to actualize?
     }
