@@ -5,31 +5,32 @@
 #include <QPainterPath>
 #include <QPen>
 
-
-#include <QGraphicsView>
-#include <QGraphicsRectItem>
-
 #include <customqgraphicsview.h>
-#include "actor.h"
+
+//BASIC OBJECTS
+#include <QGraphicsView>
+#include "Actors/actor.h"
 #include "spritecolection.h"
+#include "worldcollide.h"
 
 //MOVABLE OBJECTS
 //#include "movable.h"
-#include "train.h"
-#include "diesellocomotive.h"
-#include "railconstructor.h"
+#include "Actors/train.h"
+#include "Actors/diesellocomotive.h"
+#include "Actors/railconstructor.h"
 
 //STATIC OBJECTS
-#include "rail.h"
+#include "Actors/rail.h"
 
 class WorldMap
 {
 public:
     WorldMap();
 
-    //VARIABLES
+    //BASIC OBJECTS
     Actor* actualConstructor;
     QGraphicsScene *worldScene;
+    WorldCollide* worldCollide;
 
     //LISTS
     QVector<Actor*> tickedActorsList;

@@ -9,39 +9,53 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    actor.cpp \
-    actorconstructor.cpp \
+    Actors/actor.cpp \
+    Actors/actorconstructor.cpp \
+    Actors/diesellocomotive.cpp \
+    Actors/electriclocomotive.cpp \
+    Actors/locomotive.cpp \
+    Actors/movable.cpp \
+    Actors/rail.cpp \
+    Actors/railconstructor.cpp \
+    Actors/railwayobject.cpp \
+    Actors/train.cpp \
+    Actors/vehicle.cpp \
+    Components/collider.cpp \
+    Components/component.cpp \
+    Components/spherecollider.cpp \
+    Components/trigger.cpp \
     customqgraphicsview.cpp \
-    diesellocomotive.cpp \
-    electriclocomotive.cpp \
-    locomotive.cpp \
     main.cpp \
     mainwindow.cpp \
-    movable.cpp \
-    rail.cpp \
-    railconstructor.cpp \
-    railwayobject.cpp \
     spritecolection.cpp \
-    train.cpp \
-    vehicle.cpp \
-    worldmap.cpp
+    worldcollide.cpp \
+    worldmap.cpp \
+    worldviewmap.cpp
+
 
 HEADERS += \
-    actor.h \
-    actorconstructor.h \
+    Actors/actor.h \
+    Actors/actorconstructor.h \
+    Actors/diesellocomotive.h \
+    Actors/electriclocomotive.h \
+    Actors/locomotive.h \
+    Actors/movable.h \
+    Actors/rail.h \
+    Actors/railconstructor.h \
+    Actors/railwayobject.h \
+    Actors/train.h \
+    Actors/vehicle.h \
+    Components/collider.h \
+    Components/component.h \
+    Components/spherecollider.h \
+    Components/trigger.h \
     customqgraphicsview.h \
-    diesellocomotive.h \
-    electriclocomotive.h \
-    locomotive.h \
     mainwindow.h \
-    movable.h \
-    rail.h \
-    railconstructor.h \
-    railwayobject.h \
     spritecolection.h \
-    train.h \
-    vehicle.h \
-    worldmap.h
+    worldcollide.h \
+    worldmap.h \
+    worldviewmap.h
+
 
 FORMS += \
     mainwindow.ui

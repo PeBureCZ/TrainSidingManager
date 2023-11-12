@@ -4,6 +4,8 @@ WorldMap::WorldMap()
 {
     worldScene = new QGraphicsScene;
     worldView = new CustomQGraphicsView;
+    worldCollide = new WorldCollide;
+
     actualConstructor = nullptr;
     worldView->setScene(worldScene);
     actorListIndexed = {}; //push actor  - INDEXED WITH graphicsItemList
@@ -179,20 +181,38 @@ void WorldMap::addRailwaylActor(Rail* railActor, int num) //need to refract late
 
 void WorldMap::actualizeAllInWorld() //need to refract later! -> only moving actors!
 {
+
     for (auto actor : tickedActorsList)
     {
        if (dynamic_cast<Train*>(actor))
        {
+            //NEW MOVEMENT VERSION
+            int currentPathLength = dynamic_cast<Train*>(actor)->getActualLengthOnPath(); //check value on path = % value (e.g. 0.542)
+            QGraphicsPathItem* actualPath = dynamic_cast<Train*>(actor)->getActualPath(); //check actual path saved in train
+            int newPathLength = currentPathLength + 10; //speed(temporary)
+            float newPathPercentValue = actualPath->path().percentAtLength(newPathLength);
+            (newPathPercentValue > 1 ) ? newPathPercentValue = 1 : newPathPercentValue; //temporary - train will continue on the new path/rail track, atc.
+            (newPathLength > actualPath->path().length() ) ? newPathLength = actualPath->path().length() : newPathLength;
+            QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
+            setActorLocation(onPathPoint,actor); //actualize actor location
+            dynamic_cast<Train*>(actor)->setActualPathValue(newPathPercentValue); //actualize new train value on path (rail track)
+            dynamic_cast<Train*>(actor)->setActualLengthOnPath(newPathLength);
+
+
+            //OLD MOVEMENT VERSION
+           /*
            float currentPathValue = dynamic_cast<Train*>(actor)->getActualPathValue(); //check value on path = % value (e.g. 0.542)
            QGraphicsPathItem* actualPath = dynamic_cast<Train*>(actor)->getActualPath(); //check actual path saved in train
            float newPathValue = currentPathValue + 0.001; //temporary solution - train need speed!
            (newPathValue > 1 ) ? newPathValue = 1 : newPathValue; //temporary - train will continue on the new path/rail track, atc.
-           QPoint onPathPoint = actualPath->path().pointAtPercent(newPathValue).toPoint() + actualPath->pos().toPoint(); //get new scene location
+           QPoint onPathPoint = actualPath->path().pointAtPercent(newPathValue).toPoint() + actualPath->pos().toPoint(); //get new scene location        
            setActorLocation(onPathPoint,actor); //actualize actor location
            dynamic_cast<Train*>(actor)->setActualPathValue(newPathValue); //actualize new train value on path (rail track)
+            */
        }
         //.....another to actualize?
     }
+
     if (actualConstructor != nullptr)
     {
        dynamic_cast<ActorConstructor*>(actualConstructor)->actualizeConstructor(worldView->getRelativeFromCursor());
@@ -269,7 +289,8 @@ WorldMap::~WorldMap()
 {
     deleteAllActors();
     delete worldScene;
-    delete worldView; //is needed? Scene is parent! Unchecked destructor...
+    delete worldView;
+    delete worldCollide;
 }
 
 void WorldMap::setConstructor(Actor * actor)
