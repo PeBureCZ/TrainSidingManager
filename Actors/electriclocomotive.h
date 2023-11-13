@@ -6,7 +6,7 @@
 class ElectricLocomotive : public Locomotive
 {
 public:
-    ElectricLocomotive();
+    ElectricLocomotive(QGraphicsItem* newGraphicItem);
 };
 
 #endif // ELECTRICLOCOMOTIVE_H

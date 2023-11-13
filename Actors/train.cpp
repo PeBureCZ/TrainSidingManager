@@ -1,25 +1,13 @@
 #include "train.h"
 
-Train::Train(Rail* spawnedRail)
+Train::Train(QGraphicsItem* newGraphicItem, Rail* spawnedRail) : Movable(newGraphicItem)
 {
-    actualPath = {};
     onPathValue = 0;
     onPathLength = 0;
     actualRail = spawnedRail;
+    actualPath = dynamic_cast<QGraphicsPathItem*>(dynamic_cast<Actor*>(actualRail)->getGraphicItem());
     vehicles = {}; //list
     vehicleGraphicsItems = {}; //list
-}
-
-
-
-void Train::setActualPath(QGraphicsPathItem* newPath)
-{
-    actualPath = newPath;
-}
-
-QGraphicsPathItem* Train::getActualPath()
-{
-    return actualPath;
 }
 
 float Train::getActualPathValue()
@@ -32,20 +20,21 @@ void Train::setActualPathValue(float newValue)
     onPathValue = newValue;
 }
 
-int Train::getActualLengthOnPath()
-{
-    return onPathLength;
-}
-
-void Train::setActualLengthOnPath(int newValue)
-{
-    onPathLength = newValue;
-}
-
 void Train::addVehicle(Vehicle *newVehicle, QGraphicsItem* graphicsItem)
 {
     vehicles.push_back(newVehicle);
     vehicleGraphicsItems.push_back(graphicsItem);
+    actualizeMaxSpeed();
+}
+
+void Train::actualizeMaxSpeed()
+{
+    int newMaxSpeed = 99999;
+    for (auto vehicle : vehicles)
+    {
+        if (newMaxSpeed > vehicle->getMaxSpeed()) newMaxSpeed = vehicle->getMaxSpeed();
+    }
+    maxSpeed = newMaxSpeed;
 }
 
 Vehicle *Train::getVehicleActor(int indexOfVehicle)
@@ -66,23 +55,6 @@ QGraphicsItem *Train::getVehicleGraphics(int indexOfVehicle)
     return nullptr;
 }
 
-QPoint Train::getVehicleWorldPos(int indexOfVehicle)
-{
-    //WILL RETURN POS OF VEHICLE BY INDEX
-    /*
-    int vehicleOnPathLength = onPathLength + 10; //speed(temporary)
-    float newPathPercentValue = actualPath->path().percentAtLength(vehicleOnPathLength);
-    (newPathPercentValue > 1 ) ? newPathPercentValue = 1 : newPathPercentValue; //temporary - train will continue on the new path/rail track, atc.
-    (vehicleOnPathLength > actualPath->path().length() ) ? vehicleOnPathLength = actualPath->path().length() : vehicleOnPathLength;
-    QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
-    setActorLocation(onPathPoint,actor); //actualize actor location
-
-    dynamic_cast<Train*>(actor)->setActualPathValue(newPathPercentValue); //actualize new train value on path (rail track)
-    dynamic_cast<Train*>(actor)->setActualLengthOnPath(vehicleOnPathLength);
-    */
-    return location;
-}
-
 QPointF Train::getLocationOnPath(float percentOnPath)
 {
     return actualPath->path().pointAtPercent(percentOnPath);
@@ -94,22 +66,18 @@ Train::~Train()
     {
         delete vehicle;
     }
-    for (auto graphicItem : vehicleGraphicsItems)
-    {
-        delete graphicItem;
-    }
 }
 
 void Train::moveTrain()
 {
     //NEW MOVEMENT VERSION
-    int newPathLength = onPathLength + 10; //speed(temporary)
-    float newPathPercentValue = actualPath->path().percentAtLength(newPathLength);
+    int newOnPathLength = onPathLength + actualSpeed; //speed in centimeters / tick
+    float newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/100);
     (newPathPercentValue > 1 ) ? newPathPercentValue = 1 : newPathPercentValue; //temporary - train will continue on the new path/rail track, atc.
-    (newPathLength > actualPath->path().length() ) ? newPathLength = actualPath->path().length() : newPathLength;
+    (newOnPathLength > actualPath->path().length()*100) ? newOnPathLength = actualPath->path().length()*100 : newOnPathLength;
     QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
-    //setActorLocation(onPathPoint,actor); //actualize actor location
+    onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->axlePos();
     dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(onPathPoint); //only index 0 vehicle for now
     onPathValue= newPathPercentValue; //actualize new train value on path (rail track)
-    onPathLength = newPathLength;
+    onPathLength = newOnPathLength;
 }

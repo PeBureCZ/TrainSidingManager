@@ -8,7 +8,7 @@ class ActorConstructor : public Actor
 protected:
     Actor* actorConstructing;
 public:
-    ActorConstructor(Actor* actorToConstructing);
+    ActorConstructor(QGraphicsItem *newGraphicItem, Actor* actorToConstructing);
     virtual void actualizeConstructor(QPoint newPoint);
     Actor *getActorConstructing();
 };

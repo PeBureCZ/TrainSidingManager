@@ -8,10 +8,8 @@ WorldMap::WorldMap()
 
     actualConstructor = nullptr;
     worldView->setScene(worldScene);
-    actorListIndexed = {}; //push actor  - INDEXED WITH graphicsItemList
-    graphicsItemListIndexed = {}; //push graphics - INDEXED WITH actorList
-    pathListIndexed = {}; //push graphic rail item for find graphic - INDEXED WITH railList (no with actor)
-    railListIndexed = {}; //push Rail actor (for find rail actor) - INDEXED WITH pathList (no with actor)
+    actorList = {};
+    railList = {};
     tickedActorsList = {}; //list of actor with any tick event (animation, move, etc.)
     setMap(250000, 200000); //set map x,y border size
 }
@@ -23,13 +21,13 @@ CustomQGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
 
 QString WorldMap::testFunction()
 {
-    if (actorListIndexed.size() > 1 && dynamic_cast<Train*>(actorListIndexed[1]))
+    if (railList.size() > 0)
     {
-        //dynamic_cast<Train*>(actorListIndexed[1])->getVehicleGraphics(1)->setPos(2800,5800);
-        deleteActor(dynamic_cast<Actor*>(actorListIndexed[1]));
-        //return dynamic_cast<Train*>(actorListIndexed[1])->test();
+        addTrainActor(dynamic_cast<Rail*>(railList[0]));
     }
-    else addTrainActor(dynamic_cast<Rail*>(railListIndexed[0]));
+    else
+    {
+    }
     return "nothing";
 }
 
@@ -75,23 +73,16 @@ int WorldMap::getWorldHeight()
 
 void WorldMap::addTrainActor(Rail* spawnOnRail)
 {
-    if (pathListIndexed.size() > 0)
+    if (railList.size() > 0)
     {
-       Actor* newTrain = new Train(spawnOnRail);
-
-       addVehicleActor(dynamic_cast<Train*>(newTrain), 1);
-       dynamic_cast<Train*>(newTrain)->setActualPath(pathListIndexed[0]);
-       SpriteColection newSprite; //struct
-       QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.loco()); //sprite from struct
-       //invisible = not added to scene, only to list (indexed)
-       graphicsItemListIndexed.push_back(trainItem); //indexed woth actor
-       actorListIndexed.push_back(newTrain); //indexed with graphicsItemListIndexed
-       tickedActorsList.push_back(newTrain); //actor with tick update
-       //worldScene->addItem(trainItem); invisible (nopt added to scene)
-
-       //QPointF spawnPoint = dynamic_cast<Train*>(newTrain)->getLocationOnPath(0.0) + dynamic_cast<Train*>(newTrain)->getActualPath()->pos();
-       //trainItem->setPos(spawnPoint);
-       //newTrain->setLocation(spawnPoint.toPoint());
+        SpriteColection newSprite; //struct
+        QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
+        Actor* newTrain = new Train(trainItem, spawnOnRail);
+        addVehicleActor(dynamic_cast<Train*>(newTrain), 1);
+        //invisible = not added to scene, only to list (indexed)
+        actorList.push_back(newTrain); //indexed with graphicsItemListIndexed
+        tickedActorsList.push_back(newTrain); //actor with tick update
+        dynamic_cast<Train*>(newTrain)->setActualSpeed(80);
     }
 }
 
@@ -103,7 +94,7 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int num)
             {
                 SpriteColection newSprite; //struct
                 QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.cd730()); //sprite from struct
-                Vehicle* newVehicle = new CD730;
+                Vehicle* newVehicle = new CD730(vehicleGraphicsItem);
                 worldScene->addItem(vehicleGraphicsItem);
                 dynamic_cast<Train*>(ownerTrain)->addVehicle(newVehicle, vehicleGraphicsItem); //need for destructor!
                 break;
@@ -113,38 +104,9 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int num)
     }
 }
 
-void WorldMap::addActorToLists(Actor* addedActor, QGraphicsItem* graphicsItem)
-{
-    actorListIndexed.push_back(addedActor); //indexed
-    graphicsItemListIndexed.push_back(graphicsItem);//indexed
-}
-
-void WorldMap::addRailToLists(Rail* addedRailActor, QGraphicsPathItem* addedPath)
-{
-    railListIndexed.push_back(dynamic_cast<Rail*>(addedRailActor));//indexed
-    pathListIndexed.push_back(addedPath);//indexed
-}
-
-void WorldMap::deleteActor(Actor *actor)
-{
-    if (tickedActorsList.contains(actor)) tickedActorsList.remove(tickedActorsList.indexOf(actor));
-
-    if (dynamic_cast<Rail*>(actor))
-    {
-       int railIndex = railListIndexed.indexOf(dynamic_cast<Rail*>(actor));
-       railListIndexed.remove(railIndex); //actor will be deleted from actor List
-       pathListIndexed.remove(railIndex); //path will be deleted from actor List
-    }
-    int actorIndex = actorListIndexed.indexOf(actor);
-    delete actorListIndexed[actorIndex];
-    delete graphicsItemListIndexed[actorIndex];
-    actorListIndexed.remove(actorIndex);
-    graphicsItemListIndexed.remove(actorIndex);
-}
-
 void WorldMap::addRailConstructor(QPoint point)
 {
-    //ADD PATH FOR RAIL ACTOR and CONSTRUCTOR ACTOR
+    //ADD PATH FOR RAIL ACTOR
     QPainterPath path;
     path.cubicTo(10000, 0, 10000, 10000, 0, 10000); //deffault line -> will be changed immediately
     QGraphicsPathItem* pathItem = new QGraphicsPathItem(path); //add graphics
@@ -153,19 +115,17 @@ void WorldMap::addRailConstructor(QPoint point)
     pathItem->setPos(relativePos.toPointF());
     worldScene->addItem(pathItem);
 
-    QGraphicsPathItem* pathDuplicated = new QGraphicsPathItem(path); //due to indexed - invisible - not added to scene
-
     //ADD RAIL ACTOR
     Actor* rail = new Rail(pathItem); //add actor
-    addActorToLists(rail,pathItem);
-    addRailToLists(dynamic_cast<Rail*>(rail),pathItem);
+    addActorToLists(rail);
     rail->setLocation(point);
 
     //ADD CONSTRUCTOR ACTOR
-    Actor* railConstructor = new RailConstructor(rail, relativePos, nullptr, 0); //add actor
-    addActorToLists(railConstructor,pathDuplicated);
+    SpriteColection newSprite;
+    QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
+    Actor* railConstructor = new RailConstructor(emptyItem, rail, relativePos, nullptr, 0); //add actor
+    addActorToLists(railConstructor);
     setConstructor(railConstructor);
-    tickedActorsList.push_back(railConstructor);
 }
 
 void WorldMap::addStaticlActor(QPoint spawnPos, int num)
@@ -204,6 +164,26 @@ void WorldMap::addRailwaylActor(Rail* railActor, int num) //need to refract late
         default:
         {}
     }
+}
+
+void WorldMap::addActorToLists(Actor* addedActor)
+{
+    actorList.push_back(addedActor);
+    if (dynamic_cast<Rail*>(addedActor)) railList.push_back(dynamic_cast<Rail*>(addedActor));
+}
+
+void WorldMap::deleteActor(Actor *actor)
+{
+    if (tickedActorsList.contains(actor)) tickedActorsList.remove(tickedActorsList.indexOf(actor));
+
+    if (dynamic_cast<Rail*>(actor))
+    {
+       int railIndex = railList.indexOf(dynamic_cast<Rail*>(actor));
+       railList.remove(railIndex); //actor will be deleted from actor List
+    }
+    int actorIndex = actorList.indexOf(actor);
+    delete actorList[actorIndex];
+    actorList.remove(actorIndex);
 }
 
 void WorldMap::actualizeAllInWorld() //need to refract later! -> only moving actors!
@@ -245,13 +225,13 @@ void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
     if (actor)
     {
         actor->setLocation(newLocation);
-        int actorIndex = actorListIndexed.indexOf(actor);
+        int actorIndex = actorList.indexOf(actor);
 
         if (dynamic_cast<Movable*>(actor))
         {
            if (dynamic_cast<Train*>(actor))
            {
-                   dynamic_cast<QGraphicsItem*>(graphicsItemListIndexed[actorIndex])->setPos(newLocation);
+           //exceoption - train has not visible graphic
            }
            //...new code here - movable "world objects"?
         }
@@ -264,26 +244,37 @@ void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
 
 Rail* WorldMap::getRailFromList(int index)
 {
-    return railListIndexed[index];
+    return railList[index];
 }
 
 Actor* WorldMap::getActorFromList(int index)
 {
-    return actorListIndexed[index];
+    return actorList[index];
+}
+
+Actor *WorldMap::getActorUnderClick()
+{
+    Actor* nearestActor = nullptr;
+    /*
+    QPoint mousePosition = worldView->getRelativeFromCursor();
+    int zoom = worldView->getZoomLevel();
+    int maxDistance = 5000 * zoom;
+    int nearestDistance = maxDistance;
+    for (auto actor : actorList)
+    {
+        QLineF line(actor->getLocation(), mousePosition);
+        if (line.length() < nearestDistance) nearestActor = actor;
+    }
+    */
+    return nearestActor;
 }
 
 void WorldMap::deleteAllActors()
-{
-    for (int i = 0; i < actorListIndexed.size(); i++)
+{  
+    while (actorList.size() > 0)
     {
-        delete actorListIndexed[i];
+        deleteActor(actorList[0]);
     }
-    for (int i = 0; i < graphicsItemListIndexed.size(); i++)
-    {
-        delete graphicsItemListIndexed[i];
-    }
-    actorListIndexed.clear();
-    graphicsItemListIndexed.clear();
 }
 
 WorldMap::~WorldMap()
@@ -297,6 +288,7 @@ WorldMap::~WorldMap()
 void WorldMap::setConstructor(Actor * actor)
 {
     actualConstructor = actor;
+    tickedActorsList.push_back(actor);
 }
 
 void WorldMap::deleteConstructor(bool deleteCreation) //if deleteCreation = true, delete actor in ActorConstructor too

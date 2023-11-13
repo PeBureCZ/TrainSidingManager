@@ -1,7 +1,7 @@
 #include "diesellocomotive.h"
 
 
-DieselLocomotive::DieselLocomotive()
+DieselLocomotive::DieselLocomotive(QGraphicsItem* newGraphicItem) : Locomotive(newGraphicItem)
 {
     fuel = 100;
     name = "diesel locomotive";

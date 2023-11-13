@@ -12,6 +12,7 @@ struct SpriteColection
     QString relativeDirectory;
     QVector<QString> filePath;
     SpriteColection();
+    QPixmap empty();
     QPixmap loco();
     QPixmap cd730();
 

@@ -1,11 +1,16 @@
 #include "actor.h"
 
 
-Actor::Actor()
+Actor::Actor(QGraphicsItem* newGraphicItem) : graphicItem(newGraphicItem)
 {
     name = "default name";
     location = {0,0};
     rotation = 0.0f;
+}
+
+QGraphicsItem *Actor::getGraphicItem()
+{
+    return graphicItem;
 }
 
 void Actor::setName(QString newName)
@@ -35,6 +40,7 @@ QPoint Actor::getLocation()
 
 Actor::~Actor()
 {
+    delete graphicItem;
 }
 
 

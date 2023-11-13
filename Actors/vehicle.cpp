@@ -1,20 +1,18 @@
 #include "vehicle.h"
 
 
-Vehicle::Vehicle()
+Vehicle::Vehicle(QGraphicsItem* newGraphicItem) :Movable(newGraphicItem)
 {
     mass = 0;
     firstAxleCenter = {0,0};
     secondAxleDistance = 0;
-    actualSpeed = 0;
     width = 0;
     length = 0;
 }
 
-QPoint Vehicle::onAxlePos()
+QPoint Vehicle::axlePos()
 {
-    QPoint axlePos = location - firstAxleCenter;
-    return axlePos;
+    return firstAxleCenter;
 }
 
 

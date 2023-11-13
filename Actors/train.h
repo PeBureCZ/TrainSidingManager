@@ -2,7 +2,6 @@
 #define TRAIN_H
 
 #include "movable.h"
-#include <QGraphicsPathItem>
 #include "rail.h"
 #include "vehicle.h"
 
@@ -12,25 +11,23 @@ protected:
     QGraphicsPathItem* actualPath;
     Rail* actualRail;
     float onPathValue;
-    int onPathLength;
+    int onPathLength; //centimeters!
     QVector<Vehicle*> vehicles;
     QVector<QGraphicsItem*> vehicleGraphicsItems;
 
 public:
-    Train(Rail* spawnedRail);
+    Train(QGraphicsItem* newGraphicItem, Rail* spawnedRail);
     virtual ~Train();
 
     void moveTrain();
-    float getActualPathValue();
+
     void setActualPathValue(float newValue);
-    int getActualLengthOnPath();
-    void setActualLengthOnPath(int newValue);
+    float getActualPathValue();
     void addVehicle(Vehicle* newVehicle, QGraphicsItem *graphicsItem);
+    void actualizeMaxSpeed();
+
     Vehicle* getVehicleActor(int indexOfVehicle);
     QGraphicsItem* getVehicleGraphics(int indexOfVehicle);
-    QPoint getVehicleWorldPos(int indexOfVehicle);
-    void setActualPath(QGraphicsPathItem* newPath);
-    QGraphicsPathItem* getActualPath();
     QPointF getLocationOnPath(float percentOnPath);
 };
 

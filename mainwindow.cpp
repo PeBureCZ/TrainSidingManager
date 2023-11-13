@@ -22,12 +22,17 @@ void MainWindow::initializeMap()
     ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
 }
 
-void MainWindow::on_TestButton_clicked() //temporary
+void MainWindow::on_TestButton1_clicked() //temporary
 {
     //QPoint spawnPoint = {0,0};
     //world->addTrainActor(world->getRailFromList(0));
     //ui->label->setText(world->test());
     ui->label->setText(world->testFunction());
+}
+
+void MainWindow::on_testButton2_clicked()
+{
+    world->deleteAllActors();
 }
 
 void MainWindow::testFce() //temporary
@@ -44,11 +49,20 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         case 1: //1 = add Rail (constructor)
         {
             QPoint point = event->pos();
-
-            //world->addRoute(point.x(),point.y(),1000,0,1000,1000,0,1000, true);
             world->addRailConstructor(point);
             menuSelected = 2;
             break;
+            /*
+            Actor* actor = world->getActorUnderClick();
+            if (actor = nullptr)
+            {
+
+            }
+            else
+            {
+                break;
+            }
+            */
         }
         case 2: //2 = constructing rail (RailConstructor)
         {
@@ -149,7 +163,4 @@ void MainWindow::on_AddRailBut_clicked()
 {
     menuSelected = 1;
 }
-
-
-
 

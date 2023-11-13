@@ -7,6 +7,7 @@
 #include <QGraphicsView>
 #include <QHBoxLayout>
 #include "worldmap.h"
+#include "Actors/actor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,14 +24,14 @@ public:
     void testFce();
 
 private slots:
-    void on_TestButton_clicked();
-    void mousePressEvent(QMouseEvent *event);
-    void wheelEvent(QWheelEvent *event);
+    void on_TestButton1_clicked();
+    void on_testButton2_clicked();
     void on_SubBut_clicked();
     void on_AddBut_clicked();
     void on_AddRailBut_clicked();
-
     void on_MoveBut_clicked();
+    void mousePressEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
 
 private:
     Ui::MainWindow *ui;

@@ -1,17 +1,12 @@
 #include "rail.h"
 
 
-Rail::Rail(QGraphicsPathItem *pathObj) : path{pathObj}
+Rail::Rail(QGraphicsItem* newGraphicItem) : RailwayObject(newGraphicItem)
 {
     P0 = {0,0};
     P1 = {0,0};
     P2 = {0,0};
     P3 = {0,0};
-}
-
-QGraphicsPathItem *Rail::getPathItem()
-{
-    return path;
 }
 
 QPointF Rail::getP0Point()

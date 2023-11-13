@@ -25,7 +25,12 @@ protected:
     void setPoints(QPoint endP);
 
 public:
-    RailConstructor(Actor *actorToConstructing = nullptr, QPoint spawnPos = {0,0}, Rail* connectedRail = nullptr, int connection = 0);
+    RailConstructor
+    (QGraphicsItem* newGraphicItem = nullptr
+    ,Actor *actorToConstructing = nullptr
+    ,QPoint spawnPos = {0,0}
+    ,Rail* connectedRail = nullptr
+    , int connection = 0);
 
     //FCE - public
     QString testFce();

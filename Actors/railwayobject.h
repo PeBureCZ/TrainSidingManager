@@ -8,7 +8,7 @@ class RailwayObject : public Actor
 protected:
     bool visibleName;
 public:
-    RailwayObject();
+    RailwayObject(QGraphicsItem* newGraphicItem);
 };
 
 #endif // RAILWAYOBJECT_H

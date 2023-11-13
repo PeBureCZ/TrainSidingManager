@@ -7,14 +7,12 @@
 class Rail : public RailwayObject
 {
 protected:
-    QGraphicsPathItem* path;
     QPoint P0; //start point - ABSOLUTE
     QPoint P1; //first curve control point - RELATIVE TO P0
     QPoint P2; //second curve control point - RELATIVE TO P0
     QPoint P3; //end point - RELATIVE TO P0
 public:
-    Rail(QGraphicsPathItem* pathObj);
-    QGraphicsPathItem* getPathItem();
+    Rail(QGraphicsItem* newGraphicItem);
     QPointF getP0Point();
     QPointF getP1Point();
     QPointF getP2Point();

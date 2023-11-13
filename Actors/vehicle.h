@@ -6,15 +6,14 @@
 class Vehicle : public Movable
 {
 protected:
-    int mass; //in kg
-    int width; //decimetre
-    int length; //decimetre
+    int mass; //kg
+    int width; //decimeter
+    int length; //decimeter
     QPoint firstAxleCenter; //relative
     int secondAxleDistance; //relative
-    int actualSpeed;
 public:
-    Vehicle();
-    QPoint onAxlePos();
+    Vehicle(QGraphicsItem* newGraphicItem);
+    QPoint axlePos();
 };
 
 #endif //VEHICLE_H

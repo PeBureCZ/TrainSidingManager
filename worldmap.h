@@ -14,7 +14,7 @@
 #include "worldcollide.h"
 
 //MOVABLE OBJECTS
-//#include "movable.h"
+#include "Actors/actor.h"
 #include "Actors/train.h"
 #include "Actors/cd730.h"
 #include "Actors/railconstructor.h"
@@ -35,11 +35,9 @@ public:
     //LISTS
     QVector<Actor*> tickedActorsList;
 
-    QVector<Actor*> actorListIndexed; //indexed with graphicsItemList
-    QVector<QGraphicsItem*> graphicsItemListIndexed; //indexed with actorList
+    QVector<Actor*> actorList; //indexed with graphicsItemList
 
-    QVector<Rail*> railListIndexed; //indexed with pathList
-    QVector<QGraphicsPathItem*> pathListIndexed; //indexed with railList
+    QVector<Rail*> railList; //indexed with pathList
 
     //FCE - return
     QString testFunction();
@@ -47,6 +45,7 @@ public:
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
+    Actor* getActorUnderClick();
     int getWorldWidth();
     int getWorldHeight();
 
@@ -63,11 +62,11 @@ public:
     void addVehicleActor(Train* ownerTrain, int num);
     void deleteAllActors(); //QGraphicsItem* item, QString name
     void setActorLocation(QPoint newLocation, Actor* actor);
-    void addActorToLists(Actor *addedActor, QGraphicsItem *graphicsItem);
-    void addRailToLists(Rail *addedRailActor, QGraphicsPathItem *addedPath);
+    void addActorToLists(Actor *addedActor);
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
+
 
     //DESTRUCTOR
     ~WorldMap();

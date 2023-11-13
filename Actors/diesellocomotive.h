@@ -8,7 +8,7 @@ class DieselLocomotive : public Locomotive
 private:
     int fuel;
 public:
-    DieselLocomotive();
+    DieselLocomotive(QGraphicsItem *newGraphicItem);
 };
 
 #endif // DIESELLOCOMOTIVE_H

@@ -6,6 +6,12 @@ SpriteColection::SpriteColection()
     filePath = {""};
 }
 
+QPixmap SpriteColection::empty()
+{
+    QPixmap pixmap;
+    return pixmap;
+}
+
 QPixmap SpriteColection::loco()
 {
     QPixmap pixmap(relativeDirectory + "/images/loco.png");
@@ -17,13 +23,3 @@ QPixmap SpriteColection::cd730()
     QPixmap pixmap(relativeDirectory + "/images/CD730.png");
     return pixmap;
 }
-
-
-/*
-
-
-       QString pngPath = QApplication::applicationDirPath() + "/loco.png";
-
-       QGraphicsItem* trainItem = new QGraphicsPixmapItem(pixmap);
-
- */

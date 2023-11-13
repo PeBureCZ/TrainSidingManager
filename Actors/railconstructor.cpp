@@ -1,9 +1,11 @@
 #include "railconstructor.h"
 
-RailConstructor::RailConstructor(Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail, int connection) : ActorConstructor(actorToConstructing)
+RailConstructor::RailConstructor
+    (QGraphicsItem* newGraphicItem, Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail, int connection)
+    : ActorConstructor(newGraphicItem,actorToConstructing)
 {
     ownedRail = dynamic_cast<Rail*>(actorToConstructing);
-    ownedPath = ownedRail->getPathItem();
+    ownedPath = dynamic_cast<QGraphicsPathItem*>(dynamic_cast<Actor*>(ownedRail)->getGraphicItem());
     location = spawnPos;
     P0 = {0,0};
     P1 = {0,0};
@@ -71,7 +73,7 @@ void RailConstructor::actualizeRail()
 
 void RailConstructor::actualizeConstructor(QPoint newPoint)
 {
-    actualizeRail(); //refactor?! Actualize rail every tick - but it´s not necessary (only once at the end is sufficient)
+    actualizeRail(); //refact?! Actualize rail every tick - but it´s not necessary (only once at the end is sufficient)
     setPoints(newPoint);
     actualizePathVisual();
 }

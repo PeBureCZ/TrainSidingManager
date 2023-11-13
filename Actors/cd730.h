@@ -6,7 +6,7 @@
 class CD730 : public DieselLocomotive
 {
 public:
-    CD730();
+    CD730(QGraphicsItem* newGraphicItem);
 };
 
 #endif // CD730_H

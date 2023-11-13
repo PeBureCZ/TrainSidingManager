@@ -8,7 +8,7 @@ class Locomotive : public Vehicle
 protected:
     int power;
 public:
-    Locomotive();
+    Locomotive(QGraphicsItem* newGraphicItem);
 };
 
 #endif // LOCOMOTIVE_H
