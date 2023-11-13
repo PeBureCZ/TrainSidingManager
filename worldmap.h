@@ -42,7 +42,7 @@ public:
     QVector<QGraphicsPathItem*> pathListIndexed; //indexed with railList
 
     //FCE - return
-    QString test();
+    QString testFunction();
     CustomQGraphicsView* getWorld();
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);

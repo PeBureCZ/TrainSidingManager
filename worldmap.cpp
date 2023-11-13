@@ -21,12 +21,16 @@ CustomQGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
     return worldView;
 }
 
-QString WorldMap::test()
+QString WorldMap::testFunction()
 {
-    //if (actorListIndexed.size() > 1 && dynamic_cast<Train*>(actorListIndexed[1])) deleteActor(dynamic_cast<Actor*>(actorListIndexed[1]));
-    addTrainActor(railListIndexed[0]);
-
-    return "";
+    if (actorListIndexed.size() > 1 && dynamic_cast<Train*>(actorListIndexed[1]))
+    {
+        //dynamic_cast<Train*>(actorListIndexed[1])->getVehicleGraphics(1)->setPos(2800,5800);
+        deleteActor(dynamic_cast<Actor*>(actorListIndexed[1]));
+        //return dynamic_cast<Train*>(actorListIndexed[1])->test();
+    }
+    else addTrainActor(dynamic_cast<Rail*>(railListIndexed[0]));
+    return "nothing";
 }
 
 QPoint WorldMap::getRelativeWorldPos(QPoint point)
@@ -83,6 +87,7 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
        graphicsItemListIndexed.push_back(trainItem); //indexed woth actor
        actorListIndexed.push_back(newTrain); //indexed with graphicsItemListIndexed
        tickedActorsList.push_back(newTrain); //actor with tick update
+       //worldScene->addItem(trainItem); invisible (nopt added to scene)
 
        //QPointF spawnPoint = dynamic_cast<Train*>(newTrain)->getLocationOnPath(0.0) + dynamic_cast<Train*>(newTrain)->getActualPath()->pos();
        //trainItem->setPos(spawnPoint);
@@ -203,25 +208,11 @@ void WorldMap::addRailwaylActor(Rail* railActor, int num) //need to refract late
 
 void WorldMap::actualizeAllInWorld() //need to refract later! -> only moving actors!
 {
-
     for (auto actor : tickedActorsList)
     {
        if (dynamic_cast<Train*>(actor))
        {
-            //NEW MOVEMENT VERSION
-            int currentPathLength = dynamic_cast<Train*>(actor)->getActualLengthOnPath(); //check value on path = % value (e.g. 0.542)
-            QGraphicsPathItem* actualPath = dynamic_cast<Train*>(actor)->getActualPath(); //check actual path saved in train
-            int newPathLength = currentPathLength + 10; //speed(temporary)
-            float newPathPercentValue = actualPath->path().percentAtLength(newPathLength);
-            (newPathPercentValue > 1 ) ? newPathPercentValue = 1 : newPathPercentValue; //temporary - train will continue on the new path/rail track, atc.
-            (newPathLength > actualPath->path().length() ) ? newPathLength = actualPath->path().length() : newPathLength;
-            QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
-            setActorLocation(onPathPoint,actor); //actualize actor location
-
-            //STOP WORK HERE! NEED REPAIR!
-            //dynamic_cast<QGraphicsItem*>(dynamic_cast<Train*>(actor)->getVehicleGraphics(0))->setPos(onPathPoint);
-            //dynamic_cast<Train*>(actor)->setActualPathValue(newPathPercentValue); //actualize new train value on path (rail track)
-            //dynamic_cast<Train*>(actor)->setActualLengthOnPath(newPathLength);
+               dynamic_cast<Train*>(actor)->moveTrain(); //move all vehicles in train
        }
         //.....another to actualize?
     }
@@ -232,7 +223,7 @@ void WorldMap::actualizeAllInWorld() //need to refract later! -> only moving act
     }
 }
 
-void WorldMap::setMap(int xSize, int ySize) //need to refract later!
+void WorldMap::setMap(int xSize, int ySize)
 {
     worldView->setWorldMap(xSize, ySize);
     int mapXside = worldView->getMapSizeX();
@@ -255,9 +246,6 @@ void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
     {
         actor->setLocation(newLocation);
         int actorIndex = actorListIndexed.indexOf(actor);
-
-        //if (dynamic_cast<Train*>(actor))
-        // if (Movable* movableActor = dynamic_cast<Movable*>(actor))
 
         if (dynamic_cast<Movable*>(actor))
         {
@@ -311,7 +299,7 @@ void WorldMap::setConstructor(Actor * actor)
     actualConstructor = actor;
 }
 
-void WorldMap::deleteConstructor(bool deleteCreation)
+void WorldMap::deleteConstructor(bool deleteCreation) //if deleteCreation = true, delete actor in ActorConstructor too
 {
     if (deleteCreation) deleteActor(dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing());
     deleteActor(actualConstructor);

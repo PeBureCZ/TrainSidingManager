@@ -18,10 +18,11 @@ protected:
 
 public:
     Train(Rail* spawnedRail);
-    ~Train();
+    virtual ~Train();
+
+    void moveTrain();
     float getActualPathValue();
     void setActualPathValue(float newValue);
-
     int getActualLengthOnPath();
     void setActualLengthOnPath(int newValue);
     void addVehicle(Vehicle* newVehicle, QGraphicsItem *graphicsItem);

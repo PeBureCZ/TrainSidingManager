@@ -6,9 +6,11 @@ Train::Train(Rail* spawnedRail)
     onPathValue = 0;
     onPathLength = 0;
     actualRail = spawnedRail;
-    vehicles = {0}; //list
-    vehicleGraphicsItems = {0}; //list
+    vehicles = {}; //list
+    vehicleGraphicsItems = {}; //list
 }
+
+
 
 void Train::setActualPath(QGraphicsPathItem* newPath)
 {
@@ -96,4 +98,18 @@ Train::~Train()
     {
         delete graphicItem;
     }
+}
+
+void Train::moveTrain()
+{
+    //NEW MOVEMENT VERSION
+    int newPathLength = onPathLength + 10; //speed(temporary)
+    float newPathPercentValue = actualPath->path().percentAtLength(newPathLength);
+    (newPathPercentValue > 1 ) ? newPathPercentValue = 1 : newPathPercentValue; //temporary - train will continue on the new path/rail track, atc.
+    (newPathLength > actualPath->path().length() ) ? newPathLength = actualPath->path().length() : newPathLength;
+    QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
+    //setActorLocation(onPathPoint,actor); //actualize actor location
+    dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(onPathPoint); //only index 0 vehicle for now
+    onPathValue= newPathPercentValue; //actualize new train value on path (rail track)
+    onPathLength = newPathLength;
 }

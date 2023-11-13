@@ -13,7 +13,7 @@ protected:
 public:
     Movable();
 
-    //~Movable();
+    //virtual ~Movable();
 };
 
 #endif // MOVABLE_H

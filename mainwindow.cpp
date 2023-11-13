@@ -27,12 +27,12 @@ void MainWindow::on_TestButton_clicked() //temporary
     //QPoint spawnPoint = {0,0};
     //world->addTrainActor(world->getRailFromList(0));
     //ui->label->setText(world->test());
-    world->test();
+    ui->label->setText(world->testFunction());
 }
 
 void MainWindow::testFce() //temporary
 {
-    ui->label->setText(world->test());
+    ui->label->setText(world->testFunction());
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)

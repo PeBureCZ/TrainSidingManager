@@ -20,7 +20,7 @@ public:
     float getRotation();
     void setLocation(QPoint newLocation);
     QPoint getLocation();
-    ~Actor();
+    virtual ~Actor();
 };
 
 #endif // ACTOR_H
