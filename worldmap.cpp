@@ -5,7 +5,6 @@ WorldMap::WorldMap()
     worldScene = new QGraphicsScene;
     worldView = new CustomQGraphicsView;
     worldCollide = new WorldCollide;
-
     actualConstructor = nullptr;
     worldView->setScene(worldScene);
     actorList = {};
@@ -86,9 +85,9 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
     }
 }
 
-void WorldMap::addVehicleActor(Train *ownerTrain, int num)
+void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
 {
-    switch (num)
+    switch (indexOfVehicle)
     {
         case 1:
             {
@@ -117,6 +116,9 @@ void WorldMap::addRailConstructor(QPoint point)
 
     //ADD RAIL ACTOR
     Actor* rail = new Rail(pathItem); //add actor
+    //rail->enableCollision(worldCollide);
+    QVector<int>collideChannels = {2};
+    rail->addTriggerComponent({0,0},0.0f,0,collideChannels); //add collision trigger at relative loc 0,0, with rotation 0, type 0, with collide channel 2
     addActorToLists(rail);
     rail->setLocation(point);
 
@@ -128,9 +130,9 @@ void WorldMap::addRailConstructor(QPoint point)
     setConstructor(railConstructor);
 }
 
-void WorldMap::addStaticlActor(QPoint spawnPos, int num)
+void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
 {
-    switch (num)
+    switch (indexOfActor)
     {
         case 1:
         {
@@ -147,9 +149,9 @@ void WorldMap::addStaticlActor(QPoint spawnPos, int num)
         }
 }
 
-void WorldMap::addRailwaylActor(Rail* railActor, int num) //need to refract later!
+void WorldMap::addRailwaylActor(Rail* railActor, int indexOfActor) //need to refract later!
 {
-    switch (num)
+    switch (indexOfActor)
     {
         case 1:
         {
@@ -252,21 +254,50 @@ Actor* WorldMap::getActorFromList(int index)
     return actorList[index];
 }
 
-Actor *WorldMap::getActorUnderClick()
+Actor *WorldMap::getActorUnderClick(QVector<int> useChannels)
 {
-    Actor* nearestActor = nullptr;
-    /*
+    Actor* actorInRadius = nullptr;
     QPoint mousePosition = worldView->getRelativeFromCursor();
-    int zoom = worldView->getZoomLevel();
-    int maxDistance = 5000 * zoom;
-    int nearestDistance = maxDistance;
-    for (auto actor : actorList)
+    //int zoom = worldView->getZoomLevel();
+    int maxRadius = 5000; // * zoom;
+    for (auto channel : useChannels)
     {
-        QLineF line(actor->getLocation(), mousePosition);
-        if (line.length() < nearestDistance) nearestActor = actor;
+        switch(channel)
+        {
+            case 0: //staticChannel
+            {
+                for (int i = 0; i < worldCollide->getSizeOfStaticChannel(); i++)
+                {
+                    worldCollide->getTrigger(channel,i);
+                }
+                break;
+            }
+            case 1: //trainChannel
+            {
+                for (int i = 0; i < worldCollide->getSizeOfTrainChannel(); i++)
+                {
+                    worldCollide->getTrigger(channel,i);
+                }
+                break;
+            }
+            case 2: //railChannel
+            {
+                for (int i = 0; i < worldCollide->getSizeOfRailChannel(); i++)
+                {
+                    worldCollide->getTrigger(channel,i);
+                }
+                break;
+            }
+        }
+        //QLineF line(actor->getLocation(), mousePosition);
+        //if (line.length() < nearestDistance) actorInRadius = actor;
     }
-    */
-    return nearestActor;
+    return actorInRadius;
+}
+
+WorldCollide *WorldMap::getWorldCollide()
+{
+    return worldCollide;
 }
 
 void WorldMap::deleteAllActors()

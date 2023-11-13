@@ -4,3 +4,8 @@ Trigger::Trigger()
 {
 
 }
+
+Trigger::~Trigger()
+{
+
+}

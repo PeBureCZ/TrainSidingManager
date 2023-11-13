@@ -1,6 +1,5 @@
 #include "rail.h"
 
-
 Rail::Rail(QGraphicsItem* newGraphicItem) : RailwayObject(newGraphicItem)
 {
     P0 = {0,0};

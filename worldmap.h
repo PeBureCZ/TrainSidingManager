@@ -45,7 +45,8 @@ public:
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
-    Actor* getActorUnderClick();
+    Actor* getActorUnderClick(QVector<int> useChannels);
+    WorldCollide* getWorldCollide();
     int getWorldWidth();
     int getWorldHeight();
 
@@ -57,9 +58,9 @@ public:
     void addTrainActor(Rail *spawnOnRail);
     void addRailConstructor(QPoint point);
     //void addRailActor(QPoint point);
-    void addRailwaylActor(Rail* railActor, int num);
-    void addStaticlActor(QPoint spawnPos, int num);
-    void addVehicleActor(Train* ownerTrain, int num);
+    void addRailwaylActor(Rail* railActor, int indexOfActor);
+    void addStaticlActor(QPoint spawnPos, int indexOfActor);
+    void addVehicleActor(Train* ownerTrain, int indexOfVehicle);
     void deleteAllActors(); //QGraphicsItem* item, QString name
     void setActorLocation(QPoint newLocation, Actor* actor);
     void addActorToLists(Actor *addedActor);

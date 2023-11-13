@@ -3,10 +3,12 @@
 
 #include "component.h"
 
+
 class Trigger : public Component
 {
 public:
     Trigger();
+    virtual ~Trigger();
 };
 
 #endif // TRIGGER_H

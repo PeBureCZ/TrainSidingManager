@@ -4,7 +4,8 @@
 #include <QString>
 #include <QPoint>
 #include <QGraphicsPathItem>
-#include "Components/collider.h"
+#include "Components/spherecollider.h"
+#include "worldcollide.h"
 
 class Actor
 {
@@ -13,6 +14,9 @@ protected:
     QPoint location;
     QGraphicsItem* graphicItem;
     float rotation;
+    QVector<Trigger*> triggers;
+    bool collisionEnabled;
+    WorldCollide* worldCollideObject;
 private:
 public:
     Actor(QGraphicsItem *newGraphicItem);
@@ -23,6 +27,9 @@ public:
     float getRotation();
     void setLocation(QPoint newLocation);
     QPoint getLocation();
+    void addTriggerComponent(QPoint relativeLocation, float relativeRotation, int indexOfType, QVector<int> channels);
+    void enableCollision(WorldCollide* collisionObject);
+
     virtual ~Actor();
 };
 

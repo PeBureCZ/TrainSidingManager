@@ -24,6 +24,7 @@ SOURCES += \
     Components/collider.cpp \
     Components/component.cpp \
     Components/spherecollider.cpp \
+    Components/spheretrigger.cpp \
     Components/trigger.cpp \
     customqgraphicsview.cpp \
     main.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     Components/collider.h \
     Components/component.h \
     Components/spherecollider.h \
+    Components/spheretrigger.h \
     Components/trigger.h \
     customqgraphicsview.h \
     mainwindow.h \

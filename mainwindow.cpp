@@ -32,7 +32,8 @@ void MainWindow::on_TestButton1_clicked() //temporary
 
 void MainWindow::on_testButton2_clicked()
 {
-    world->deleteAllActors();
+    //world->deleteAllActors();
+    ui->label->setText(world->getWorldCollide()->test());
 }
 
 void MainWindow::testFce() //temporary
@@ -52,17 +53,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             world->addRailConstructor(point);
             menuSelected = 2;
             break;
-            /*
-            Actor* actor = world->getActorUnderClick();
+            Actor* actor = world->getActorUnderClick({2});
             if (actor = nullptr)
             {
 
             }
             else
             {
-                break;
             }
-            */
         }
         case 2: //2 = constructing rail (RailConstructor)
         {
@@ -102,9 +100,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         }
         }
     }
-
 }
-
 
 void MainWindow::wheelEvent(QWheelEvent *event)
 {
