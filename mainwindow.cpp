@@ -51,14 +51,38 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             {
                 QPoint point = event->pos();
                 menuSelected = 2;
-                QVector<Actor*> actors = world->getActorUnderClick({2});
-                if (actors.size() == 0) world->addRailConstructor(world->getRelativeWorldPos(point));
-                else world->addRailConstructor(dynamic_cast<Actor*>(actors[0])->getLocation()); //MUST BE REWORKED -> to get trigger pos (now actor pos)
+                int zoom = world->getWorld()->getZoomLevel();
+                int maxRadius = 1;
+                if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
+                QVector<Actor*> actors = world->getActorUnderClick({2}, maxRadius);
+                if (actors.size() == 0) world->addRailConstructor(world->getRelativeWorldPos(point)); 
+                else
+                {
+                    Actor* actor = dynamic_cast<Actor*>(actors[0]);
+                    Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
+                    world->addRailConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation());
+                }
                 break;
             }
             case 2: //2 = constructing rail (RailConstructor)
             {
-                world->deleteConstructor(false);
+
+                int zoom = world->getWorld()->getZoomLevel();
+                int maxRadius = 1;
+                if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
+                QVector<Actor*> actors = world->getActorUnderClick({2}, maxRadius);
+                if (actors.size() == 0) world->deleteConstructor(false);
+                else
+                {
+                    QPoint point = event->pos();
+                    Actor* actor = actors[0];
+                    Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
+                    //world->getActualConstructor()->setLocation(actor->getLocation() + nearestTrigger->getRelativeLocation());
+                    dynamic_cast<ActorConstructor*>(world->getActualConstructor())->actualizeConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation());
+                    world->deleteConstructor(false);
+                }
+
+                //world->deleteConstructor(false);
                 menuSelected = 1;
                 break;
             }
@@ -99,7 +123,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     int delta = event->angleDelta().y();
     if (delta > 0) //front
     {
-        QRectF sceneRect = world->worldScene->sceneRect();
+        QRectF sceneRect = world->getWorld()->sceneRect();
         QPointF sceneTopLeft = world->getWorld()->mapToGlobal(sceneRect.topLeft().toPoint());
         int sceneGlobalX = sceneTopLeft.x();
         ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()) + " !!! " + QString::number(sceneGlobalX + world->getWorld()->getMapSizeX()));

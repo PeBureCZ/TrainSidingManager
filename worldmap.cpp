@@ -6,6 +6,7 @@ WorldMap::WorldMap()
 {
     worldScene = new QGraphicsScene;
     worldView = new CustomQGraphicsView;
+    worldView->setBackgroundBrush(QBrush(Qt::gray));
     worldCollide = new WorldCollide;
     actualConstructor = nullptr;
     worldView->setScene(worldScene);
@@ -154,16 +155,15 @@ void WorldMap::addRailwaylActor(Rail* railActor, int indexOfActor) //need to ref
     {
         case 1:
         {
-           //createRail(spawnPos);
+           //nothing yet
            break;
         }
         case 2:
         {
-           //createTrain(spawnPos);
+           //nothing yet
            break;
         }
-        default:
-        {}
+        default:{}
     }
 }
 
@@ -191,15 +191,16 @@ void WorldMap::deleteActor(Actor *actor)
     actorList.remove(actorIndex);
 }
 
-void WorldMap::actualizeAllInWorld() //need to refract later! -> only moving actors!
+void WorldMap::actualizeAllInWorld()
 {
+    //need create virtual tick event for actor, temporary solution
+
     for (auto actor : tickedActorsList)
     {
        if (dynamic_cast<Train*>(actor))
        {
-               dynamic_cast<Train*>(actor)->moveTrain(); //move all vehicles in train
+               dynamic_cast<Train*>(actor)->moveTrain();
        }
-        //.....another to actualize?
     }
     if (actualConstructor != nullptr)
     {
@@ -216,34 +217,11 @@ void WorldMap::setMap(int xSize, int ySize)
     worldScene->addLine(-mapXside + 150,mapYside - 150,mapXside - 150,mapYside -150, QPen(Qt::red,300));
     worldScene->addLine(mapXside -150,mapYside -150,mapXside -150,-mapYside +150, QPen(Qt::red,300));
     worldScene->addLine(mapXside -150,-mapYside +150,-mapXside +150,-mapYside +150, QPen(Qt::red,300));
-    /*
-    IMAGES - NEED ADD THIS OPTION! (image instances?!)
-    QPixmap pixmap1("C:/.....");
-    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap1);
-    worldScene->addItem(item);
-    */
 }
 
 void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
 {
-    if (actor)
-    {
-        actor->setLocation(newLocation);
-        int actorIndex = actorList.indexOf(actor);
-
-        if (dynamic_cast<Movable*>(actor))
-        {
-           if (dynamic_cast<Train*>(actor))
-           {
-           //exceoption - train has not visible graphic
-           }
-           //...new code here - movable "world objects"?
-        }
-        else //static objects?
-        {
-           //....
-        }
-    }
+    actor->setLocation(newLocation);
 }
 
 Rail* WorldMap::getRailFromList(int index)
@@ -256,13 +234,10 @@ Actor* WorldMap::getActorFromList(int index)
     return actorList[index];
 }
 
-QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
+QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels, int radius)
 {
     QVector<Actor*> actorsToReturn = {};
     QPoint mousePosition = worldView->getRelativeFromCursor();
-    int zoom = worldView->getZoomLevel();
-    int maxRadius = 1;
-    if (zoom > 0) maxRadius += zoom * 50;
     for (auto channel : useBlockChannels)
     {
         switch(channel)
@@ -271,17 +246,8 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfStaticChannel(); i++)
                 {
-                    Actor* testedActor = worldCollide->getActorFromTriggerList(channel,i);
-                    QVector<Trigger*> testedTriggers = testedActor->getAllTriggers();
-                    for (auto trigger : testedTriggers)
-                    {
-                        qDebug() << "test";
-                        if (getDistance(testedActor->getLocation()+trigger->getRelativeLocation(), mousePosition) <= maxRadius)
-                        {
-                            qDebug() << "return";
-                            actorsToReturn.push_back(worldCollide->getActorFromTriggerList(channel,i));
-                        }
-                    }
+                   Actor* testedActor = checkTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
+                   if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
             }
@@ -289,17 +255,8 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfTrainChannel(); i++)
                 {
-                    Actor* testedActor = worldCollide->getActorFromTriggerList(channel,i);
-                    QVector<Trigger*> testedTriggers = testedActor->getAllTriggers();
-                    for (auto trigger : testedTriggers)
-                    {
-                        qDebug() << "test";
-                        if (getDistance(testedActor->getLocation()+trigger->getRelativeLocation(), mousePosition) <= maxRadius)
-                        {
-                            qDebug() << "return";
-                            actorsToReturn.push_back(worldCollide->getActorFromTriggerList(channel,i));
-                        }
-                    }
+                    Actor* testedActor = checkTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
+                    if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
             }
@@ -307,23 +264,42 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfRailChannel(); i++)
                 {
-                    Actor* testedActor = worldCollide->getActorFromTriggerList(channel,i);
-                    QVector<Trigger*> testedTriggers = testedActor->getAllTriggers();
-                    for (auto trigger : testedTriggers)
-                    {
-                        qDebug() << "distance: " + QString::number(getDistance(testedActor->getLocation()+trigger->getRelativeLocation(), mousePosition));
-                        if (getDistance(testedActor->getLocation()+trigger->getRelativeLocation(), mousePosition) <= maxRadius)
-                        {
-                            qDebug() << "return";
-                            actorsToReturn.push_back(worldCollide->getActorFromTriggerList(channel,i));
-                        }
-                    }
+                    Actor* testedActor = checkTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
+                    if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
             }
         }
     }
     return actorsToReturn;
+}
+
+Actor *WorldMap::checkTriggersInRange(Actor *testedActor, QPoint position, int radius)
+{
+    if (testedActor != nullptr)
+    {
+        QVector<Trigger*> testedTriggers = testedActor->getAllTriggers();
+        for (auto trigger : testedTriggers)
+        {
+            if (getDistance(testedActor->getLocation() + trigger->getRelativeLocation(), position) <= radius) return testedActor;
+        }
+    }
+    else return nullptr;
+}
+
+Actor *WorldMap::getActualConstructor()
+{
+    return actualConstructor;
+}
+
+Trigger *WorldMap::getTriggerInRange(Actor *actor, QPoint position, int radius)
+{
+    QVector<Trigger*> testedTriggers = actor->getAllTriggers();
+    for (auto trigger : testedTriggers)
+    {
+        if (getDistance(actor->getLocation() + trigger->getRelativeLocation(), position) <= radius) return trigger;
+    }
+    return nullptr;
 }
 
 WorldCollide *WorldMap::getWorldCollide()

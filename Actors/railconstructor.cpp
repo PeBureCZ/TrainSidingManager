@@ -79,7 +79,6 @@ void RailConstructor::actualizeConstructor(QPoint newPoint)
     if (ownedRail->getAllTriggers().size() > 0)
     {
         dynamic_cast<Component*>(ownedRail->getAllTriggers()[1])->setRelativeLocation(newPoint - ownedRail->getLocation()); //p3 trigger
-        qDebug() << "actualize rel. loc.";
     }
 }
 
