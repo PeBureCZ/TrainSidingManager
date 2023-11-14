@@ -76,6 +76,11 @@ void RailConstructor::actualizeConstructor(QPoint newPoint)
     actualizeRail(); //refact?! Actualize rail every tick - but it´s not necessary (only once at the end is sufficient)
     setPoints(newPoint);
     actualizePathVisual();
+    if (ownedRail->getAllTriggers().size() > 0)
+    {
+        dynamic_cast<Component*>(ownedRail->getAllTriggers()[1])->setRelativeLocation(newPoint - ownedRail->getLocation()); //p3 trigger
+        qDebug() << "actualize rel. loc.";
+    }
 }
 
 QString RailConstructor::testFce()

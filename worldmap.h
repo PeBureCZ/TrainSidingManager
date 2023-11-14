@@ -45,7 +45,7 @@ public:
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
-    Actor* getActorUnderClick(QVector<int> useChannels);
+    QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels);
     WorldCollide* getWorldCollide();
     int getWorldWidth();
     int getWorldHeight();
@@ -56,7 +56,7 @@ public:
     //FCE - BASIC
     void setMap(int xSize, int ySize);
     void addTrainActor(Rail *spawnOnRail);
-    void addRailConstructor(QPoint point);
+    void addRailConstructor(QPoint mapLocation);
     //void addRailActor(QPoint point);
     void addRailwaylActor(Rail* railActor, int indexOfActor);
     void addStaticlActor(QPoint spawnPos, int indexOfActor);
@@ -67,6 +67,7 @@ public:
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
+    int getDistance(QPoint pointOne, QPoint pointTwo);
 
 
     //DESTRUCTOR
@@ -74,7 +75,6 @@ public:
 
 private:
     CustomQGraphicsView *worldView;
-
 };
 
 #endif // WORLDMAP_H

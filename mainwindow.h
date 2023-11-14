@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QDebug>
+
 #include <QMainWindow>
 #include <QMouseEvent>
 #include <QWheelEvent>

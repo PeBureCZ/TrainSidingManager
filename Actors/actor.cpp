@@ -8,7 +8,6 @@ Actor::Actor(QGraphicsItem* newGraphicItem) : graphicItem(newGraphicItem)
     rotation = 0.0f;
     triggers = {};
     collisionEnabled = false;
-    worldCollideObject = nullptr;
 }
 
 QGraphicsItem *Actor::getGraphicItem()
@@ -41,40 +40,58 @@ QPoint Actor::getLocation()
     return location;
 }
 
-void Actor::addTriggerComponent(QPoint relativeLocation, float relativeRotation, int indexOfType, QVector<int> channels)
+QVector<Trigger*> Actor::getAllTriggers()
 {
-    if (collisionEnabled = true)
-    {
-        switch (indexOfType)
-        {
-        case 0:
-        {
-            Trigger* newComponent = new SphereCollider();
-            triggers.push_back(newComponent);
-            for (auto channel : channels)
-            {
-                worldCollideObject->addTriggerToList(newComponent, channel);
-            }
+    return triggers;
+}
 
-            break;
-        }
-        case 1:
-        {
-            break;
-        }
-        case 2:
-        {
-            break;
-        }
-        defaul: {}
-        }
+void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation)
+{
+    collisionEnabled = true;
+    switch (indexOfType)
+    {
+    case 0: //SphereCollider
+    {
+        Trigger* newComponent = new SphereCollider();
+        newComponent->setRelativeLocation(relativeLocation);
+        newComponent->setRelativeRotation(relativeRotation);
+        newComponent->setBlockChannels(channels);
+        triggers.push_back(newComponent);
+        break;
+    }
+    case 1:
+    {
+        break;
+    }
+    case 2:
+    {
+        break;
+    }
+    defaul: {}
     }
 }
 
-void Actor::enableCollision(WorldCollide* collisionObject)
+QVector<int> Actor::getCollideChannels()
 {
-    worldCollideObject = collisionObject;
-    collisionEnabled = true;
+    QVector<int> allChannelsUsed = {};
+    QVector<int> testedChannels = {};
+    for (auto trigger : triggers)
+    {
+        testedChannels = trigger->getBlockChannels();
+        for (auto channel : testedChannels)
+        {
+            if (allChannelsUsed.indexOf(channel) == -1)
+            {
+            allChannelsUsed.push_back(channel);
+            }
+        }
+    }
+    return allChannelsUsed;
+}
+
+bool Actor::canCollide()
+{
+    return collisionEnabled;
 }
 
 Actor::~Actor()

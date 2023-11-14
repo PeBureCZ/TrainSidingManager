@@ -2,13 +2,11 @@
 #include <QApplication>
 #include <Qtimer>
 
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
     MainWindow mw;
-
-
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]()
     {

@@ -10,6 +10,9 @@ protected:
     float relativeRotation;
 public:
     Component();
+    void setRelativeLocation(QPoint newPosition);
+    void setRelativeRotation(float newRotation);
+    QPoint getRelativeLocation();
     virtual ~Component();
 };
 

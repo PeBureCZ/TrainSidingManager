@@ -27,13 +27,13 @@ void MainWindow::on_TestButton1_clicked() //temporary
     //QPoint spawnPoint = {0,0};
     //world->addTrainActor(world->getRailFromList(0));
     //ui->label->setText(world->test());
-    ui->label->setText(world->testFunction());
+    world->deleteAllActors();
+    //ui->label->setText(world->testFunction());
 }
 
 void MainWindow::on_testButton2_clicked()
 {
-    //world->deleteAllActors();
-    ui->label->setText(world->getWorldCollide()->test());
+    ui->label->setText(QString::number(world->getWorldCollide()->getSizeOfRailChannel()));
 }
 
 void MainWindow::testFce() //temporary
@@ -47,57 +47,48 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         switch (menuSelected)
         {
-        case 1: //1 = add Rail (constructor)
-        {
-            QPoint point = event->pos();
-            world->addRailConstructor(point);
-            menuSelected = 2;
-            break;
-            Actor* actor = world->getActorUnderClick({2});
-            if (actor = nullptr)
+            case 1: //1 = add Rail (constructor)
             {
-
+                QPoint point = event->pos();
+                menuSelected = 2;
+                QVector<Actor*> actors = world->getActorUnderClick({2});
+                if (actors.size() == 0) world->addRailConstructor(world->getRelativeWorldPos(point));
+                else world->addRailConstructor(dynamic_cast<Actor*>(actors[0])->getLocation()); //MUST BE REWORKED -> to get trigger pos (now actor pos)
+                break;
             }
-            else
+            case 2: //2 = constructing rail (RailConstructor)
             {
+                world->deleteConstructor(false);
+                menuSelected = 1;
+                break;
             }
-        }
-        case 2: //2 = constructing rail (RailConstructor)
-        {
-            world->deleteConstructor(false);
-            menuSelected = 1;
-            break;
-        }
-
-        default:  //incl. 0 = default
-        {
-            QPoint globalPos = QCursor::pos();
-            QPoint point = event->pos();
-            ui->label->setText(QString::number(point.x())  + " __ " + QString::number(point.y()) + " / " + QString::number(globalPos.x())  + " __ " + QString::number(globalPos.y()));
-        }
+            default:  //incl. 0 = default
+            {
+                QPoint globalPos = QCursor::pos();
+                QPoint point = event->pos();
+                ui->label->setText(QString::number(point.x())  + " __ " + QString::number(point.y()) + " / " + QString::number(globalPos.x())  + " __ " + QString::number(globalPos.y()));
+            }
         }
     }
     else if (event->button() == Qt::RightButton)
     {
         switch (menuSelected)
         {
-        case 1: //1 = add Rail (constructor)
-        {
-            //nothing?
-            break;
-        }
-        case 2: //2 = constructing rail (RailConstructor)
-        {
-
-            world->deleteConstructor(true);
-            menuSelected = 1;
-            break;
-        }
-
-        default:  //incl. 0 = default
-        {
-            //will be move map
-        }
+            case 1: //1 = add Rail (constructor)
+            {
+                //nothing?
+                break;
+            }
+            case 2: //2 = constructing rail (RailConstructor)
+            {
+                world->deleteConstructor(true);
+                menuSelected = 1;
+                break;
+            }
+            default:  //incl. 0 = default
+            {
+                //will be move map
+            }
         }
     }
 }
@@ -106,19 +97,17 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 {
     QPoint globalPos = QCursor::pos();
     int delta = event->angleDelta().y();
-
     if (delta > 0) //front
     {
-
-            QRectF sceneRect = world->worldScene->sceneRect();
-            QPointF sceneTopLeft = world->getWorld()->mapToGlobal(sceneRect.topLeft().toPoint());
-            int sceneGlobalX = sceneTopLeft.x();
-            ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()) + " !!! " + QString::number(sceneGlobalX + world->getWorld()->getMapSizeX()));
-    //world->getWorld()->testX());
+        QRectF sceneRect = world->worldScene->sceneRect();
+        QPointF sceneTopLeft = world->getWorld()->mapToGlobal(sceneRect.topLeft().toPoint());
+        int sceneGlobalX = sceneTopLeft.x();
+        ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()) + " !!! " + QString::number(sceneGlobalX + world->getWorld()->getMapSizeX()));
+        //world->getWorld()->testX());
     }
     else if (delta < 0) //beck
     {
-            ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()));
+        ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()));
     }
     else
     {
