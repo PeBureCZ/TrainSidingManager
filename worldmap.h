@@ -35,7 +35,7 @@ public:
     //FCE - BASIC
     void setMap(int xSize, int ySize);
     void addTrainActor(Rail *spawnOnRail);
-    void addRailConstructor(QPoint mapLocation);
+    void addRailConstructor(QPoint mapLocation, Rail *connectedRail);
     void addRailwaylActor(Rail* railActor, int indexOfActor);
     void addStaticlActor(QPoint spawnPos, int indexOfActor);
     void addVehicleActor(Train* ownerTrain, int indexOfVehicle);

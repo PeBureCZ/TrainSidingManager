@@ -19,12 +19,10 @@ RailConstructor::RailConstructor
         connectedRailB0 = {}; //connection 1
         connectedRailC1 = {}; //connection 2
         connectedRailD1 = {}; //connection 3
-        startAtSpawnPos = true; //define if start (percent 0 in percentRange 0-1) is at spawn position (=click pos) or at "tick mouse target" position
     }
     else
     {
         lined = false;
-        startAtSpawnPos = false;  //define if start (percent 0 in percentRange 0-1) is at spawn position (=click pos) or at "tick mouse target" position
         switch (connection)
         {
             case 0:
@@ -87,7 +85,7 @@ QString RailConstructor::testFce()
     return QString::number(P3.x());
 }
 
-void RailConstructor::setPoints(QPoint endP) //GET ABSOLUTE POS!
+void RailConstructor::setPoints(QPoint endP) //GET WORLD (SCENE) POS!
 {
     //P0 = ABSOLUTE
     //P1-3 = RELATIVE!
@@ -95,12 +93,12 @@ void RailConstructor::setPoints(QPoint endP) //GET ABSOLUTE POS!
     int y = endP.y() - location.y();
 
     //set start (P0) and end (P3)
-    if (startAtSpawnPos)
+    if (true) //
     {
         P0 = location; //ABOLUTE COORD
         P3 = {x,y}; //relative
     }
-    else
+    else //changed direction, not use yet
     {
         P3 = {x,y}; //relative
         P0 = endP; //end = START LOCATION - ABSOLUTE COORD
@@ -112,9 +110,33 @@ void RailConstructor::setPoints(QPoint endP) //GET ABSOLUTE POS!
         P1 = {(x)/2,y/2}; //relative
         P2 = P1; //relative
     }
-    else
+    else    //Béziere path
     {
-        //Béziere...
+        Rail* connectedRail = {};
+        if (connectedRailA0 != nullptr) connectedRail = connectedRailA0;
+        else if (connectedRailB0 != nullptr) connectedRail = connectedRailB0;
+        else if (connectedRailC1 != nullptr) connectedRail = connectedRailC1;
+        else if (connectedRailD1 != nullptr) connectedRail = connectedRailD1;
+        if (connectedRail->getLined()) //conected to "(simulted) line" path
+        {
+            /*
+                mirror vector...
+                x' = x2 - (x1 - x2)
+                y' = y2 - (y1 - y2)
+                ...
+                b1=(1, 2) &  b2=(4, 5)
+                vector b1b2 = (4-1, 5-2) = (3, 3).
+                x' = 4 - (1-4) = 7
+                y' = 5 - (2-5) = 8
+            */
+            QPoint connectedP3 = connectedRail->getP3Point().toPoint(); //get P3 point from previous (connected) path
+            QPoint connectedP2 = connectedRail->getP2Point().toPoint(); //get P2 point from previous (connected) path
+            //P0 = {connectedRail->getLocation().x() + connectedP2.x(), connectedRail->getLocation().y() + connectedP2.y()};
+            //P1 = {(x)/2,y/2}; //relative
+            //P2 = connectedP3; //relative
+            //P3 = {x,y};
+        }
+        else; //...conected to béziere
     }
 }
 

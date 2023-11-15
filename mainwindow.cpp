@@ -55,12 +55,15 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 int maxRadius = 1;
                 if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
                 QVector<Actor*> actors = world->getActorUnderClick({2}, maxRadius);
-                if (actors.size() == 0) world->addRailConstructor(world->getRelativeWorldPos(point)); 
+                if (actors.size() == 0) world->addRailConstructor(world->getRelativeWorldPos(point), nullptr);
                 else
                 {
                     Actor* actor = dynamic_cast<Actor*>(actors[0]);
-                    Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
-                    world->addRailConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation());
+                    if (dynamic_cast<Rail*>(actor))
+                    {
+                        Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
+                        world->addRailConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation(), dynamic_cast<Rail*>(actor));
+                    }
                 }
                 break;
             }

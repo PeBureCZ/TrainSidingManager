@@ -106,7 +106,7 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
     }
 }
 
-void WorldMap::addRailConstructor(QPoint mapLocation)
+void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
 {
     //ADD PATH FOR RAIL ACTOR
     QPainterPath path;
@@ -121,12 +121,13 @@ void WorldMap::addRailConstructor(QPoint mapLocation)
     addActorToLists(rail);
     worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P0 point
     worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P3 point
+    if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
     rail->setLocation(mapLocation);
 
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
     QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
-    Actor* railConstructor = new RailConstructor(emptyItem, rail, mapLocation, nullptr, 0); //add actor
+    Actor* railConstructor = new RailConstructor(emptyItem, rail, mapLocation, connectedRail, 0); //add actor
     addActorToLists(railConstructor);
     setConstructor(railConstructor);
 }

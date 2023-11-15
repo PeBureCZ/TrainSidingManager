@@ -11,6 +11,7 @@ protected:
     QPoint P1; //first curve control point - RELATIVE TO P0
     QPoint P2; //second curve control point - RELATIVE TO P0
     QPoint P3; //end point - RELATIVE TO P0
+    bool lined;
 public:
     Rail(QGraphicsItem* newGraphicItem);
     QPointF getP0Point();
@@ -21,6 +22,8 @@ public:
     void setP1(QPoint newPoint);
     void setP2(QPoint newPoint);
     void setP3(QPoint newPoint);
+    void setLined(bool newBool);
+    bool getLined();
 };
 
 #endif // RAIL_H

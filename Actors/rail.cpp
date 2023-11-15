@@ -6,6 +6,7 @@ Rail::Rail(QGraphicsItem* newGraphicItem) : RailwayObject(newGraphicItem)
     P1 = {0,0};
     P2 = {0,0};
     P3 = {0,0};
+    lined = true;
 }
 
 QPointF Rail::getP0Point()
@@ -46,5 +47,15 @@ void Rail::setP2(QPoint newPoint)
 void Rail::setP3(QPoint newPoint)
 {
     P3 = newPoint;
+}
+
+void Rail::setLined(bool newBool)
+{
+    lined = newBool;
+}
+
+bool Rail::getLined()
+{
+    return lined;
 }
 
