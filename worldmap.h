@@ -53,7 +53,7 @@ public:
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
     Actor* getActorFromTriggersInRange(Actor* testedActor, QPoint position, int radius);
-    Actor *getActualConstructor();
+    ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels, int radius);
     WorldCollide* getWorldCollide();
     Trigger *getTriggerInRange(Actor *actor, QPoint position, int radius);
@@ -68,7 +68,7 @@ public:
     ~WorldMap();
 private:
     CustomQGraphicsView *worldView;
-    Actor* actualConstructor;
+    ActorConstructor* actualConstructor;
     QGraphicsScene *worldScene;
     WorldCollide* worldCollide;
 };

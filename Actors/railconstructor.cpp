@@ -20,7 +20,7 @@ RailConstructor::RailConstructor
     else
     {
         lined = false;
-        connectedRail->connectRails(ownedRail);
+        ownedRail->connectRails(connectedRail,true);
         ownedRail->setLined(false);
     }
 }
@@ -73,7 +73,7 @@ void RailConstructor::setPoints(QPoint endP)
     }
     else   //Béziere path
     {
-        QLineF line(location, {x,y}); //line between P0/P3 (Rail being created by this constructor.)
+        QLineF line(location, {static_cast<qreal>(x),static_cast<qreal>(y)}); //line between P0/P3 (Rail being created by this constructor.)
         QPoint connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP2RelativeLocation().toPoint();
 
         float pathReduction = connectedRailActor->getRailLength() / line.length();
@@ -111,9 +111,14 @@ Rail *RailConstructor::getOwnedRail()
     return dynamic_cast<Rail*>(ownedRail);
 }
 
+Rail *RailConstructor::getConnectedRail()
+{
+    return connectedRailActor;
+}
+
 RailConstructor::~RailConstructor()
 {
-    ownedRail->smoothP3Point();
+    ownedRail->smoothP3PointByC1();
 }
 
 

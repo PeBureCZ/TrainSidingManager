@@ -36,6 +36,7 @@ public:
     QPointF getP2Point();
     QPointF getP3Point();
     Rail* getOwnedRail();
+    Rail* getConnectedRail();
     void actualizePathVisual();
     void actualizeRail();
     void actualizeConstructor(QPoint newPoint) override;

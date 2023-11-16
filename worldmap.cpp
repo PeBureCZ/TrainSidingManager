@@ -116,23 +116,20 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     pathItem->setPos(mapLocation.toPointF());
     worldScene->addItem(pathItem);
 
-    qDebug() << "x1";
     //ADD RAIL ACTOR
     Actor* rail = new Rail(pathItem); //add actor  
     addActorToLists(rail);
-    worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P0 point
-    worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P3 point
+    //worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P0 point
+    //worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P3 point
     if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
     rail->setLocation(mapLocation);
 
-    qDebug() << "x2";
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
     QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
     Actor* railConstructor = new RailConstructor(emptyItem, rail, mapLocation, connectedRail); //add actor
     addActorToLists(railConstructor);
     setConstructor(railConstructor);
-    qDebug() << "x3";
 }
 
 void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
@@ -291,7 +288,7 @@ Actor *WorldMap::getActorFromTriggersInRange(Actor *testedActor, QPoint position
     return nullptr;
 }
 
-Actor *WorldMap::getActualConstructor()
+ActorConstructor *WorldMap::getActualConstructor()
 {
     return actualConstructor;
 }
@@ -329,7 +326,7 @@ WorldMap::~WorldMap()
 
 void WorldMap::setConstructor(Actor * actor)
 {
-    actualConstructor = actor;
+    actualConstructor = dynamic_cast<ActorConstructor*>(actor);
     tickedActorsList.push_back(actor);
 }
 

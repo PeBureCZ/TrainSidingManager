@@ -29,9 +29,9 @@ public:
     void setP2RelativeLocation(QPoint newPoint);
     void setP3RelativeLocation(QPoint newPoint);
     void setLined(bool newBool);
-    void connectRails(Rail* connectedRail);
+    void connectRails(Rail* connectedRail, bool connectedAtStart);
     void unconnectRails(Rail* unconnectedRail);
-    void smoothP3Point();
+    void smoothP3PointByC1();
     bool getLined();
     int getRailLength();
 };

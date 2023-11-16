@@ -50,7 +50,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
             case 1: //1 = add Rail (constructor)
             {
-            qDebug() << "1";
                 QPoint point = event->pos();
                 menuSelected = 2;
                 int zoom = world->getWorld()->getZoomLevel();
@@ -60,11 +59,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 if (actors.size() == 0) world->addRailConstructor(world->getRelativeWorldPos(point), nullptr);
                 else if (dynamic_cast<Rail*>(actors[0]))
                 {
-                     qDebug() << "2";
                     Actor* actor = dynamic_cast<Actor*>(actors[0]);
                     if (dynamic_cast<Rail*>(actor))
                     {
-                         qDebug() << "3";
                         Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
                         world->addRailConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation(), dynamic_cast<Rail*>(actor));
                     }
@@ -78,16 +75,31 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 int maxRadius = 1;
                 if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
                 QVector<Actor*> actors = world->getActorUnderClick({2}, maxRadius);
-                if (actors.size() == 0) world->deleteConstructor(false);
-                else if (dynamic_cast<Rail*>(actors[0]))
+                Rail* createdRail = dynamic_cast<Rail*>(world->getActualConstructor()->getActorConstructing());
+                world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f); //for P0 point
+                world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f);//for P3 point
+                if (actors.size() == 0)
                 {
-                    QPoint point = event->pos();
-                    Actor* actor = actors[0];
-                    Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
-                    dynamic_cast<ActorConstructor*>(world->getActualConstructor())->actualizeConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation());
-                    dynamic_cast<Rail*>(actors[0])->connectRails(dynamic_cast<RailConstructor*>(world->getActualConstructor())->getOwnedRail());
                     world->deleteConstructor(false);
                 }
+                else
+                {
+                    for (int i = 0; i < actors.size(); ++i)
+                    {
+                        if (dynamic_cast<Rail*>(actors[i]))
+                        {
+                            QPoint point = event->pos();
+                            Actor* actor = actors[0];
+                            Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
+                            world->getActualConstructor()->actualizeConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation());
+                            dynamic_cast<RailConstructor*>(world->getActualConstructor())->getOwnedRail()->connectRails(dynamic_cast<Rail*>(actors[0]), false);
+                            world->deleteConstructor(false);
+                            break;
+                        }
+                    }
+
+                }
+
                 menuSelected = 1;
                 break;
             }
