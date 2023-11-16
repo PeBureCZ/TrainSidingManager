@@ -116,6 +116,7 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     pathItem->setPos(mapLocation.toPointF());
     worldScene->addItem(pathItem);
 
+    qDebug() << "x1";
     //ADD RAIL ACTOR
     Actor* rail = new Rail(pathItem); //add actor  
     addActorToLists(rail);
@@ -124,12 +125,14 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
     rail->setLocation(mapLocation);
 
+    qDebug() << "x2";
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
     QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
-    Actor* railConstructor = new RailConstructor(emptyItem, rail, mapLocation, connectedRail, 0); //add actor
+    Actor* railConstructor = new RailConstructor(emptyItem, rail, mapLocation, connectedRail); //add actor
     addActorToLists(railConstructor);
     setConstructor(railConstructor);
+    qDebug() << "x3";
 }
 
 void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
@@ -247,8 +250,8 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels, int 
             {
                 for (int i = 0; i < worldCollide->getSizeOfStaticChannel(); i++)
                 {
-                   Actor* testedActor = checkTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
-                   if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
+                   Actor* testedActor = getActorFromTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
+                    if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
             }
@@ -256,7 +259,7 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels, int 
             {
                 for (int i = 0; i < worldCollide->getSizeOfTrainChannel(); i++)
                 {
-                    Actor* testedActor = checkTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
+                    Actor* testedActor = getActorFromTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -265,7 +268,7 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels, int 
             {
                 for (int i = 0; i < worldCollide->getSizeOfRailChannel(); i++)
                 {
-                    Actor* testedActor = checkTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
+                    Actor* testedActor = getActorFromTriggersInRange(worldCollide->getActorFromTriggerList(channel,i), mousePosition, radius);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -275,7 +278,7 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels, int 
     return actorsToReturn;
 }
 
-Actor *WorldMap::checkTriggersInRange(Actor *testedActor, QPoint position, int radius)
+Actor *WorldMap::getActorFromTriggersInRange(Actor *testedActor, QPoint position, int radius)
 {
     if (testedActor != nullptr)
     {
@@ -285,7 +288,7 @@ Actor *WorldMap::checkTriggersInRange(Actor *testedActor, QPoint position, int r
             if (getDistance(testedActor->getLocation() + trigger->getRelativeLocation(), position) <= radius) return testedActor;
         }
     }
-    else return nullptr;
+    return nullptr;
 }
 
 Actor *WorldMap::getActualConstructor()

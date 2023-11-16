@@ -9,13 +9,10 @@ class RailConstructor : public ActorConstructor
 protected:
     bool startAtSpawnPos; //define if start (percent 0 in percentRange 0-1) is at spawn position (=click pos) or at "tick mouse target" position
     bool lined;
+    Rail *connectedRailActor;
     Rail* ownedRail;
     QGraphicsPathItem* ownedPath;
 
-    Rail* connectedRailA0;
-    Rail* connectedRailB0;
-    Rail* connectedRailC1;
-    Rail* connectedRailD1;
     QPoint P0; //start point
     QPoint P1; //first curve control point
     QPoint P2; //second curve control point
@@ -27,10 +24,10 @@ protected:
 public:
     RailConstructor
     (QGraphicsItem* newGraphicItem = nullptr
-    ,Actor *actorToConstructing = nullptr
-    ,QPoint spawnPos = {0,0}
-    ,Rail* connectedRail = nullptr
-    , int connection = 0);
+    , Actor *actorToConstructing = nullptr
+    , QPoint spawnPos = {0,0}
+    , Rail* connectedRail = nullptr
+    );
 
     //FCE - public
     QString testFce();
@@ -38,6 +35,7 @@ public:
     QPointF getP1Point();
     QPointF getP2Point();
     QPointF getP3Point();
+    Rail* getOwnedRail();
     void actualizePathVisual();
     void actualizeRail();
     void actualizeConstructor(QPoint newPoint) override;

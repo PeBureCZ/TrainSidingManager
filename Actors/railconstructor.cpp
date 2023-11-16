@@ -1,10 +1,11 @@
 #include "railconstructor.h"
 
 RailConstructor::RailConstructor
-    (QGraphicsItem* newGraphicItem, Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail, int connection)
+    (QGraphicsItem* newGraphicItem, Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail)
     : ActorConstructor(newGraphicItem,actorToConstructing)
 {
-    ownedRail = dynamic_cast<Rail*>(actorToConstructing);
+    ownedRail = dynamic_cast<Rail*>(actorConstructing);
+    connectedRailActor = connectedRail;
     ownedPath = dynamic_cast<QGraphicsPathItem*>(dynamic_cast<Actor*>(ownedRail)->getGraphicItem());
     location = spawnPos;
     P0 = {0,0};
@@ -15,41 +16,12 @@ RailConstructor::RailConstructor
     if (connectedRail == nullptr)
     {
         lined = true;
-        connectedRailA0 = {}; //connection 0
-        connectedRailB0 = {}; //connection 1
-        connectedRailC1 = {}; //connection 2
-        connectedRailD1 = {}; //connection 3
     }
     else
     {
         lined = false;
-        switch (connection)
-        {
-            case 0:
-            {
-                connectedRailA0 = connectedRail; //connection 0
-                break;
-            }
-            case 1:
-            {
-                connectedRailB0 = connectedRail; //connection 1
-                break;
-            }
-            case 2:
-            {
-                connectedRailC1 = connectedRail; //connection 2
-                break;
-            }
-            case 3:
-            {
-                connectedRailD1 = connectedRail; //connection 3
-                break;
-            }
-            default:
-            {
-                connectedRailA0 = connectedRail; //connection 0
-            }
-        }
+        connectedRail->connectRails(ownedRail);
+        ownedRail->setLined(false);
     }
 }
 
@@ -63,15 +35,15 @@ void RailConstructor::actualizePathVisual() // NEED REBUILD
 
 void RailConstructor::actualizeRail()
 {
-    ownedRail->setP0(P0); //ABSOLUTE
-    ownedRail->setP1(P1); //RELATIVE
-    ownedRail->setP2(P2); //RELATIVE
-    ownedRail->setP3(P3); //RELATIVE
+    ownedRail->setP0WorldLocation(P0); //ABSOLUTE
+    ownedRail->setP1RelativeLocation(P1); //RELATIVE
+    ownedRail->setP2RelativeLocation(P2); //RELATIVE
+    ownedRail->setP3RelativeLocation(P3); //RELATIVE
 }
 
 void RailConstructor::actualizeConstructor(QPoint newPoint)
 {
-    actualizeRail(); //refact?! Actualize rail every tick - but it´s not necessary (only once at the end is sufficient)
+    actualizeRail();
     setPoints(newPoint);
     actualizePathVisual();
     if (ownedRail->getAllTriggers().size() > 0)
@@ -85,58 +57,32 @@ QString RailConstructor::testFce()
     return QString::number(P3.x());
 }
 
-void RailConstructor::setPoints(QPoint endP) //GET WORLD (SCENE) POS!
+void RailConstructor::setPoints(QPoint endP)
 {
-    //P0 = ABSOLUTE
-    //P1-3 = RELATIVE!
+    //P0 = WORLD, P1-3 = RELATIVE
     int x = endP.x() - location.x();
     int y = endP.y() - location.y();
-
-    //set start (P0) and end (P3)
-    if (true) //
-    {
-        P0 = location; //ABOLUTE COORD
-        P3 = {x,y}; //relative
-    }
-    else //changed direction, not use yet
-    {
-        P3 = {x,y}; //relative
-        P0 = endP; //end = START LOCATION - ABSOLUTE COORD
-    }
+    P0 = location; //world
+    P3 = {x,y}; //relative
 
     //set P1 and P2
-    if (lined)
+    if (connectedRailActor == nullptr)
     {
         P1 = {(x)/2,y/2}; //relative
         P2 = P1; //relative
     }
-    else    //Béziere path
+    else   //Béziere path
     {
-        Rail* connectedRail = {};
-        if (connectedRailA0 != nullptr) connectedRail = connectedRailA0;
-        else if (connectedRailB0 != nullptr) connectedRail = connectedRailB0;
-        else if (connectedRailC1 != nullptr) connectedRail = connectedRailC1;
-        else if (connectedRailD1 != nullptr) connectedRail = connectedRailD1;
-        if (connectedRail->getLined()) //conected to "(simulted) line" path
-        {
-            /*
-                mirror vector...
-                x' = x2 - (x1 - x2)
-                y' = y2 - (y1 - y2)
-                ...
-                b1=(1, 2) &  b2=(4, 5)
-                vector b1b2 = (4-1, 5-2) = (3, 3).
-                x' = 4 - (1-4) = 7
-                y' = 5 - (2-5) = 8
-            */
-            QPoint connectedP3 = connectedRail->getP3Point().toPoint(); //get P3 point from previous (connected) path
-            QPoint connectedP2 = connectedRail->getP2Point().toPoint(); //get P2 point from previous (connected) path
-            //P0 = {connectedRail->getLocation().x() + connectedP2.x(), connectedRail->getLocation().y() + connectedP2.y()};
-            //P1 = {(x)/2,y/2}; //relative
-            //P2 = connectedP3; //relative
-            //P3 = {x,y};
-        }
-        else; //...conected to béziere
+        QLineF line(location, {x,y}); //line between P0/P3 (Rail being created by this constructor.)
+        QPoint connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP2RelativeLocation().toPoint();
+
+        float pathReduction = connectedRailActor->getRailLength() / line.length();
+        QPoint vectorP2world = location - (connectedP2world - location)/pathReduction;
+        QPoint vectorP2Local = vectorP2world - location;
+        P0 = location;
+        P1 = vectorP2Local; //relative
+        P2 = P1; //relative
+        P3 = {x,y};
     }
 }
 
@@ -160,9 +106,14 @@ QPointF RailConstructor::getP3Point()
     return {P3};
 }
 
+Rail *RailConstructor::getOwnedRail()
+{
+    return dynamic_cast<Rail*>(ownedRail);
+}
+
 RailConstructor::~RailConstructor()
 {
-
+    ownedRail->smoothP3Point();
 }
 
 
