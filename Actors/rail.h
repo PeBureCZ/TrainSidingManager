@@ -34,6 +34,7 @@ public:
     void smoothP3PointByC1();
     bool getLined();
     int getRailLength();
+    ~Rail();
 };
 
 #endif // RAIL_H

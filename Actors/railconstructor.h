@@ -39,6 +39,7 @@ public:
     Rail* getConnectedRail();
     void actualizePathVisual();
     void actualizeRail();
+    void smoothEndPoint();
     void actualizeConstructor(QPoint newPoint) override;
     ~ RailConstructor();
 };

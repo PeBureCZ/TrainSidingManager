@@ -249,13 +249,24 @@ void Rail::connectRails(Rail *connectedRail, bool connectedAtStart) //connectedR
 
 void Rail::unconnectRails(Rail *unconnectedRail)
 {
-
+    if (conectionA0 == unconnectedRail) conectionA0 = {};
+    if (conectionB0 == unconnectedRail) conectionB0 = {};
+    if (conectionC1 == unconnectedRail) conectionC1 = {};
+    if (conectionD1 == unconnectedRail) conectionD1 = {};
 }
 
 void Rail::smoothP3PointByC1() //call only if conected to C1 point
 {
     if (conectionC1 != nullptr)
     {
+        QLineF distanceOne(conectionC1->getP0WorldLocation(), getLocation() + P3);
+        QLineF distanceTwo(conectionC1->getLocation() + conectionC1->getP3RelativeLocation(), getLocation() + P3);
+        if (distanceOne.length() < distanceTwo.length()) P3 = conectionC1->getLocation() - location;
+        else
+        {
+            QPoint connectedP3world = conectionC1->getLocation() + conectionC1->getP3RelativeLocation().toPoint();
+            P3 = connectedP3world - location;
+        }
         QPainterPath smoothPath;
         QPoint connectedP2world = conectionC1->getLocation() + conectionC1 ->getP2RelativeLocation().toPoint();
         //float pathReduction = conectionC1->getRailLength() / line.length();
@@ -274,5 +285,13 @@ bool Rail::getLined()
 int Rail::getRailLength()
 {
     return dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().length();
+}
+
+Rail::~Rail()
+{
+    if (conectionA0 != nullptr) conectionA0->unconnectRails(dynamic_cast<Rail*>(this));
+    if (conectionB0 != nullptr) conectionB0->unconnectRails(dynamic_cast<Rail*>(this));
+    if (conectionC1 != nullptr) conectionC1->unconnectRails(dynamic_cast<Rail*>(this));
+    if (conectionD1 != nullptr) conectionD1->unconnectRails(dynamic_cast<Rail*>(this));
 }
 

@@ -232,7 +232,12 @@ Rail* WorldMap::getRailFromList(int index)
 
 Actor* WorldMap::getActorFromList(int index)
 {
-    return actorList[index];
+    if (index < actorList.size()) return actorList[index];
+}
+
+int WorldMap::getActorListSize()
+{
+    return actorList.size();
 }
 
 QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels, int radius)
@@ -330,7 +335,7 @@ void WorldMap::setConstructor(Actor * actor)
     tickedActorsList.push_back(actor);
 }
 
-void WorldMap::deleteConstructor(bool deleteCreation) //if deleteCreation = true, delete actor in ActorConstructor too
+void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = true, delete actor in ActorConstructor too
 {
     if (deleteCreation) deleteActor(dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing());
     deleteActor(actualConstructor);

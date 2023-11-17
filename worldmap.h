@@ -52,6 +52,7 @@ public:
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
+    int getActorListSize();
     Actor* getActorFromTriggersInRange(Actor* testedActor, QPoint position, int radius);
     ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels, int radius);

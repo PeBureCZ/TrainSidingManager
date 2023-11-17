@@ -24,17 +24,11 @@ void MainWindow::initializeMap()
 
 void MainWindow::on_TestButton1_clicked() //temporary
 {
-    //QPoint spawnPoint = {0,0};
-    //world->addTrainActor(world->getRailFromList(0));
-    //ui->label->setText(world->test());
-    world->deleteAllActors();
-    //ui->label->setText(world->testFunction());
+    world->deleteActor(world->getActorFromList(world->getActorListSize()-1));
 }
 
 void MainWindow::on_testButton2_clicked()
 {
-    qDebug() << "_______________________________";
-    //ui->label->setText(QString::number(world->getWorldCollide()->getSizeOfRailChannel()));
 }
 
 void MainWindow::testFce() //temporary
@@ -92,14 +86,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                             Actor* actor = actors[0];
                             Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
                             world->getActualConstructor()->actualizeConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation());
-                            dynamic_cast<RailConstructor*>(world->getActualConstructor())->getOwnedRail()->connectRails(dynamic_cast<Rail*>(actors[0]), false);
+                            RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
+                            actualRailConstructor->getOwnedRail()->connectRails(dynamic_cast<Rail*>(actors[0]), false);
+                            actualRailConstructor->smoothEndPoint();
                             world->deleteConstructor(false);
                             break;
                         }
                     }
-
                 }
-
                 menuSelected = 1;
                 break;
             }
