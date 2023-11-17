@@ -78,7 +78,7 @@ void RailConstructor::setPoints(QPoint endP)
     }
     else   //Béziere path
     {
-
+        /*
         QLineF line(location, {static_cast<qreal>(x),static_cast<qreal>(y)}); //line between P0/P3 (Rail being created by this constructor.)
         QPoint connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP2RelativeLocation().toPoint();
 
@@ -90,10 +90,23 @@ void RailConstructor::setPoints(QPoint endP)
         P1 = vectorP2Local; //relative
         P2 = P1; //relative
         P3 = {x,y};
+        */
 
+        QLineF line(P0, P3+location); //line between P0/P3 (Rail being created by this constructor.)
 
-        //QPoint connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP2RelativeLocation().toPoint();
-        //QPoint vectorP2world =(location - (connectedP2world - location));
+        QPoint connectedP1world = connectedRailActor->getLocation() + connectedRailActor->getP1RelativeLocation().toPoint();
+        QPoint connectedP3world = connectedRailActor->getLocation() + connectedRailActor->getP3RelativeLocation().toPoint();
+
+        QLineF lineP2(connectedP1world, connectedP3world);
+
+        float reduction = line.length() / lineP2.length();
+        if (reduction < 0.05f)  reduction = 0.05f;
+        QPoint negativeVector = lineP2.pointAt(1-reduction).toPoint();
+        QPoint vectorP2world = (location - (negativeVector - location));
+        QPoint vectorP2Local = vectorP2world  - location;
+        P0 = location;
+        P1 = vectorP2Local; //relative
+        P2 = P1; //relative
     }
 }
 
