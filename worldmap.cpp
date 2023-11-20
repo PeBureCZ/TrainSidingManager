@@ -348,6 +348,14 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
     actualConstructor = nullptr;
 }
 
+QVector<Rail*> WorldMap::findPath(Train *train, Rail* destinationRail)
+{
+    QVector<Rail*> test = {};
+    TrainNavigation navigation(train, destinationRail);
+    return test;
+
+}
+
 int WorldMap::getDistance(QPoint pointOne, QPoint pointTwo)
 {
     QLineF line(pointOne, pointTwo);

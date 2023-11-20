@@ -30,6 +30,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     spritecolection.cpp \
+    trainnavigation.cpp \
     worldcollide.cpp \
     worldmap.cpp \
     worldviewmap.cpp
@@ -56,6 +57,7 @@ HEADERS += \
     customqgraphicsview.h \
     mainwindow.h \
     spritecolection.h \
+    trainnavigation.h \
     worldcollide.h \
     worldmap.h \
     worldviewmap.h

@@ -12,6 +12,11 @@ Train::Train(QGraphicsItem* newGraphicItem, Rail* spawnedRail) : Movable(newGrap
     trainPath = {};
 }
 
+Rail *Train::getActualRail()
+{
+    return actualRail;
+}
+
 float Train::getActualPathValue()
 {
     return onPathValue;

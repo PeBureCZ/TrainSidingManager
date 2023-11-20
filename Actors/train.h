@@ -23,6 +23,7 @@ public:
     QGraphicsItem* getVehicleGraphics(int indexOfVehicle);
     QPointF getLocationOnPath(float percentOnPath);
     Train(QGraphicsItem* newGraphicItem, Rail* spawnedRail);
+    Rail* getActualRail();
 
     float getActualPathValue();
 

@@ -12,6 +12,7 @@
 #include "Actors/actor.h"
 #include "spritecolection.h"
 #include "worldcollide.h"
+#include "trainnavigation.h"
 
 //MOVABLE OBJECTS
 #include "Actors/actor.h"
@@ -45,6 +46,7 @@ public:
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
+    QVector<Rail*> findPath(Train* train, Rail* destinationRail);
 
     //FCE - RETURN
     QString testFunction();
