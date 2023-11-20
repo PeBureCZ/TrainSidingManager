@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     world = new WorldMap;
     initializeMap();
-    menuSelected = 0; //basic menu - "click" only
+    menuSelected = 0;
     /*
     0 =basic (select)
     1 = add Rail (constructor)
@@ -24,11 +24,20 @@ void MainWindow::initializeMap()
 
 void MainWindow::on_TestButton1_clicked() //temporary
 {
-    world->deleteActor(world->getActorFromList(world->getActorListSize()-1));
+    //world->deleteActor(world->getActorFromList(world->getActorListSize()-1));
+    for (auto rail : world->railList)
+    {
+        qDebug() << rail->getConnectedRail(0);
+        qDebug() << rail->getConnectedRail(1);
+        qDebug() << rail->getConnectedRail(2);
+        qDebug() << rail->getConnectedRail(3);
+        qDebug() <<" _______";
+    }
 }
 
 void MainWindow::on_testButton2_clicked()
 {
+    if (world->railList.size() > 0) world->addTrainActor(world->railList[0]);
 }
 
 void MainWindow::testFce() //temporary
@@ -42,24 +51,40 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         switch (menuSelected)
         {
-            case 1: //1 = add Rail (constructor)
+            case 1: //1 = add Rail (RailConstructor)
             {
-                QPoint point = event->pos();
+                QPoint point = (world->getRelativeWorldPos(event->pos()));
                 menuSelected = 2;
                 int zoom = world->getWorld()->getZoomLevel();
                 int maxRadius = 1;
                 if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
                 QVector<Actor*> actors = world->getActorUnderClick({2}, maxRadius);
-                if (actors.size() == 0) world->addRailConstructor(world->getRelativeWorldPos(point), nullptr);
-                else if (dynamic_cast<Rail*>(actors[0]))
+                if (actors.size() == 0) world->addRailConstructor(point, nullptr);
+                else
                 {
-                    Actor* actor = dynamic_cast<Actor*>(actors[0]);
-                    if (dynamic_cast<Rail*>(actor))
+                    Actor* nearestActor = nullptr;
+                    int distance = 99999999;
+                    for (int i = 0; i < actors.size(); i++)
                     {
-                        Trigger* nearestTrigger = world->getTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
-                        world->addRailConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation(), dynamic_cast<Rail*>(actor));
+                        Trigger* nearestTrigger = {};
+                        if (dynamic_cast<Rail*>(actors[i]))
+                        {
+                            nearestTrigger = world->getTriggerInRange(actors[i], point, maxRadius);
+                            int testedDistance = world->getDistance(nearestTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
+                            if (distance > testedDistance)
+                            {
+                                nearestActor = actors[i];
+                                distance = testedDistance;
+                            }
+                        }
+                    }
+                    if (nearestActor != nullptr)
+                    {
+                        Trigger* nearestTrigger = world->getTriggerInRange(nearestActor, point, maxRadius);
+                        world->addRailConstructor(nearestActor->getLocation() + nearestTrigger->getRelativeLocation(), dynamic_cast<Rail*>(nearestActor));
                     }
                 }
+
                 break;
             }
             case 2: //2 = constructing rail (RailConstructor)

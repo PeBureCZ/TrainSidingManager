@@ -84,7 +84,13 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         //invisible = not added to scene, only to list (indexed)
         actorList.push_back(newTrain); //indexed with graphicsItemListIndexed
         tickedActorsList.push_back(newTrain); //actor with tick update
-        dynamic_cast<Train*>(newTrain)->setActualSpeed(80);
+        dynamic_cast<Train*>(newTrain)->setActualSpeed(2000);
+        if (railList.size()>1)
+        {
+            QVector<Rail*> temporaryTrainPath(railList.begin(),railList.end()-1);
+            dynamic_cast<Train*>(newTrain)->setTrainPath(temporaryTrainPath);
+        }
+
     }
 }
 

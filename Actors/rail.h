@@ -23,6 +23,11 @@ public:
     QPointF getP2RelativeLocation();
     QPointF getP3RelativeLocation();
     Rail* getConnectedRail(int connection);
+
+    bool getLined();
+    int getRailLength();
+    int getConnection(Rail* rail);
+
     void setConnectedRail(Rail *connectedRail, int connection);
     void setP0WorldLocation(QPoint newPoint);
     void setP1RelativeLocation(QPoint newPoint);
@@ -32,8 +37,6 @@ public:
     void connectRails(Rail* connectedRail, bool connectedAtStart);
     void unconnectRails(Rail* unconnectedRail);
     void smoothP3PointByC1();
-    bool getLined();
-    int getRailLength();
     ~Rail();
 };
 

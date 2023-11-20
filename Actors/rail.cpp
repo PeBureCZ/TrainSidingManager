@@ -259,19 +259,28 @@ void Rail::smoothP3PointByC1() //call only if conected to C1 point
 {
     if (conectionC1 != nullptr)
     {
-        QLineF distanceOne(conectionC1->getP0WorldLocation(), getLocation() + P3);
-        QLineF distanceTwo(conectionC1->getLocation() + conectionC1->getP3RelativeLocation(), getLocation() + P3);
-        if (distanceOne.length() < distanceTwo.length()) P3 = conectionC1->getLocation() - location;
-        else
+        QLineF distanceOne(conectionC1->getP0WorldLocation(), getLocation() + P3); //P3 to connectedP0
+        QLineF distanceTwo(conectionC1->getLocation() + conectionC1->getP3RelativeLocation(), getLocation() + P3); //P3 to connected P3
+        float reduction = 0.05f;
+        QLineF vectorDistance;
+        if (distanceOne.length() < distanceTwo.length()) //P3 to connectedP0
+        {
+            P3 = conectionC1->getLocation() - location;
+            vectorDistance.setPoints(conectionC1->getP1RelativeLocation() + conectionC1->getLocation(), P0 + P3 ); //in world coordinate
+        }
+        else //P3 to connected P3
         {
             QPoint connectedP3world = conectionC1->getLocation() + conectionC1->getP3RelativeLocation().toPoint();
             P3 = connectedP3world - location;
+            vectorDistance.setPoints(conectionC1->getP2RelativeLocation() + conectionC1->getLocation(), P0 + P3); //in world coordinate
         }
+        QLineF fromP0ToP3(P0, P0 + P3);
+        reduction = fromP0ToP3.length() / 2 / vectorDistance.length();
+        if (reduction < 0.05f)  reduction = 0.05f;
+        QPoint negativeVector = vectorDistance.pointAt(1-reduction).toPoint();
+        QPoint vectorP2world = ((P0 + P3) - (negativeVector - (P0 + P3)));
+        P2 = vectorP2world  - location;
         QPainterPath smoothPath;
-        QPoint connectedP2world = conectionC1->getLocation() + conectionC1 ->getP2RelativeLocation().toPoint();
-        //float pathReduction = conectionC1->getRailLength() / line.length();
-        QPoint vectorP2world = (location + getP3RelativeLocation().toPoint()) - (connectedP2world - (location + getP3RelativeLocation().toPoint()));  // /pathReduction;
-        P2 = vectorP2world - location;
         smoothPath.cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y());
         dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPath(smoothPath);
     }
@@ -285,6 +294,15 @@ bool Rail::getLined()
 int Rail::getRailLength()
 {
     return dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().length();
+}
+
+int Rail::getConnection(Rail *rail)
+{
+    if (conectionA0 = rail) return 0; //connection 0
+    if (conectionB0 = rail) return 1; //connection 1
+    if (conectionC1 = rail) return 2; //connection 2
+    if (conectionD1 = rail) return 3; //connection 3
+    return -1;
 }
 
 Rail::~Rail()
