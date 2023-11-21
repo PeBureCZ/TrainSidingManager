@@ -12,7 +12,7 @@
 #include "Actors/actor.h"
 #include "spritecolection.h"
 #include "worldcollide.h"
-#include "trainnavigation.h"
+#include "railnavigation.h"
 
 //MOVABLE OBJECTS
 #include "Actors/actor.h"
@@ -55,9 +55,9 @@ public:
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
     int getActorListSize();
-    Actor* getActorFromTriggersInRange(Actor* testedActor, QPoint position, int radius);
+    Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position);
     ActorConstructor *getActualConstructor();
-    QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels, int radius);
+    QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels);
     WorldCollide* getWorldCollide();
     Trigger *getTriggerInRange(Actor *actor, QPoint position, int radius);
     int getWorldWidth();

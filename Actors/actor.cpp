@@ -48,26 +48,34 @@ QVector<Trigger*> Actor::getAllTriggers()
 void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation)
 {
     collisionEnabled = true;
+    Trigger* component = {};
     switch (indexOfType)
     {
-    case 0: //SphereCollider
-    {
-        Trigger* newComponent = new SphereCollider();
-        newComponent->setRelativeLocation(relativeLocation);
-        newComponent->setRelativeRotation(relativeRotation);
-        newComponent->setBlockChannels(channels);
-        triggers.push_back(newComponent);
-        break;
+        case 0: //SphereCollider
+        {
+            Trigger* newComponent = new SphereCollider();
+            dynamic_cast<SphereCollider*>(newComponent)->setRadius(1000);
+            component = newComponent;
+            break;
+        }
+        case 1: //BoxCollider
+        {
+            Trigger* newComponent = new BoxCollider();
+            component = newComponent;
+            break;
+        }
+        case 2:
+        {
+            break;
+        }
+        defaul: {}
     }
-    case 1:
+    if (component != nullptr)
     {
-        break;
-    }
-    case 2:
-    {
-        break;
-    }
-    defaul: {}
+        component->setRelativeLocation(relativeLocation);
+        component->setRelativeRotation(relativeRotation);
+        component->setBlockChannels(channels);
+        triggers.push_back(component);
     }
 }
 
@@ -92,6 +100,11 @@ QVector<int> Actor::getCollideChannels()
 bool Actor::canCollide()
 {
     return collisionEnabled;
+}
+
+void Actor::setObjectBoxCollider()
+{
+    //overrided
 }
 
 Actor::~Actor()

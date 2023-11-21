@@ -2,6 +2,7 @@
 #define RAILCONSTRUCTOR_H
 
 #include "actorconstructor.h"
+#include <QTransform>
 #include "rail.h"
 
 class RailConstructor : public ActorConstructor
@@ -41,6 +42,7 @@ public:
     void actualizeRail();
     void smoothEndPoint();
     void actualizeConstructor(QPoint newPoint) override;
+    void setObjectBoxCollider() override;
     ~ RailConstructor();
 };
 

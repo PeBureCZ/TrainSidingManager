@@ -4,12 +4,12 @@ WorldCollide::WorldCollide()
 {
     staticChannel ={}; //channel0
     trainChannel ={}; //channel1
-    railChannel ={}; //channel2
+    railConnectionChannel ={}; //channel2
 }
 
 QString WorldCollide::test()
 {
-    return QString::number(railChannel.size());
+    return QString::number(railConnectionChannel.size());
 }
 
 
@@ -19,18 +19,27 @@ void WorldCollide::addActorToCollideLists(Actor *actor, int channel)
     {
         case 0: //staticChannel
         {
-            staticChannel.push_back(actor);
+            if (staticChannel.indexOf(actor) == -1)
+            {
+                staticChannel.push_back(actor);
+            }
             break;
         }
         case 1: //trainChannel
         {
+            if (trainChannel.indexOf(actor) == -1)
+            {
             trainChannel.push_back(actor);
             break;
+            }
         }
         case 2: //railChannel
         {
-            railChannel.push_back(actor);
+            if (railConnectionChannel.indexOf(actor) == -1)
+            {
+            railConnectionChannel.push_back(actor);
             break;
+            }
         }
     }
 }
@@ -56,8 +65,8 @@ void WorldCollide::removeActorFromCollideLists(Actor *removedActor)
             }
             case 2: //railChannel
             {
-                int removedIndex = railChannel.indexOf(removedActor);
-                if (removedIndex != -1) railChannel.remove(removedIndex);
+                int removedIndex = railConnectionChannel.indexOf(removedActor);
+                if (removedIndex != -1) railConnectionChannel.remove(removedIndex);
                 break;
             }
         }
@@ -86,9 +95,9 @@ Actor *WorldCollide::getActorFromTriggerList(int inChannel, int index)
         }
         case 2: //railChannel
         {
-            if (railChannel.size() > index)
+            if (railConnectionChannel.size() > index)
             {
-                return railChannel[index];
+                return railConnectionChannel[index];
             }
             break;
         }
@@ -98,7 +107,7 @@ Actor *WorldCollide::getActorFromTriggerList(int inChannel, int index)
 
 int WorldCollide::getSizeOfRailChannel()
 {
-    return railChannel.size();
+    return railConnectionChannel.size();
 }
 
 int WorldCollide::getSizeOfStaticChannel()
@@ -113,29 +122,12 @@ int WorldCollide::getSizeOfTrainChannel()
 
 void WorldCollide::addTriggerToActor(Actor* actor, int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation)
 {
-    if (actor->canCollide()) //add to list if isn´t in list yet
+    for (auto channel : channels)
     {
-        for (auto channel : channels)
-        {
-            switch (indexOfType)
-            {
-            case 0: //SphereCollider
-            {
-                addActorToCollideLists(actor, channel);
-                break;
-            }
-            case 1:
-            {
-                break;
-            }
-            case 2:
-            {
-                break;
-            }
-            defaul: {}
-            }
-        }
+            addActorToCollideLists(actor, channel);
     }
     actor->addTriggerComponent(indexOfType, channels, relativeLocation, relativeRotation);
 }
+
+
 

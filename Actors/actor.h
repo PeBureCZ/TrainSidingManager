@@ -7,6 +7,7 @@
 #include <QPoint>
 #include <QGraphicsPathItem>
 #include "Components/spherecollider.h"
+#include "Components/boxcollider.h"
 
 class Actor
 {
@@ -32,6 +33,7 @@ public:
     void addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation);
     virtual void setName(QString newName); //virtual need for polymorph
     bool canCollide();
+    virtual void setObjectBoxCollider(); //overrided
     virtual ~Actor();
 };
 

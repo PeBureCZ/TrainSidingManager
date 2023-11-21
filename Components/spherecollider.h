@@ -5,8 +5,12 @@
 
 class SphereCollider : public Collider
 {
+protected:
+    int radius;
 public:
     SphereCollider();
+    void setRadius(int newRadius);
+    int getRadius();
 };
 
 #endif // SPHERECOLLIDER_H

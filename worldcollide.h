@@ -11,9 +11,9 @@
 class WorldCollide
 {
 protected:
-    QVector<Actor*> railChannel;
-    QVector<Actor*> staticChannel;
-    QVector<Actor*> trainChannel;
+    QVector<Actor*> railConnectionChannel; //0
+    QVector<Actor*> staticChannel; //1
+    QVector<Actor*> trainChannel; //2
     void addActorToCollideLists(Actor* actor, int channel);
 public:
     WorldCollide();

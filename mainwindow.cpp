@@ -25,14 +25,6 @@ void MainWindow::initializeMap()
 void MainWindow::on_TestButton1_clicked() //temporary
 {
     //world->deleteActor(world->getActorFromList(world->getActorListSize()-1));
-    for (auto rail : world->railList)
-    {
-        qDebug() << rail->getConnectedRail(0);
-        qDebug() << rail->getConnectedRail(1);
-        qDebug() << rail->getConnectedRail(2);
-        qDebug() << rail->getConnectedRail(3);
-        qDebug() <<" _______";
-    }
 }
 
 void MainWindow::on_testButton2_clicked()
@@ -51,6 +43,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         switch (menuSelected)
         {
+            //case 0: same as default
             case 1: //1 = add Rail (RailConstructor)
             {
                 QPoint point = (world->getRelativeWorldPos(event->pos()));
@@ -58,7 +51,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 int zoom = world->getWorld()->getZoomLevel();
                 int maxRadius = 1;
                 if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
-                QVector<Actor*> actors = world->getActorUnderClick({2}, maxRadius);
+                QVector<Actor*> actors = world->getActorUnderClick({2});
                 if (actors.size() == 0) world->addRailConstructor(point, nullptr);
                 else
                 {
@@ -93,12 +86,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 int zoom = world->getWorld()->getZoomLevel();
                 int maxRadius = 1;
                 if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
-                QVector<Actor*> actors = world->getActorUnderClick({2}, maxRadius);
+                QVector<Actor*> actors = world->getActorUnderClick({2});
                 Rail* createdRail = dynamic_cast<Rail*>(world->getActualConstructor()->getActorConstructing());
                 world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f); //for P0 point
                 world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f);//for P3 point
+                world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f);//create object BoxCollider
                 if (actors.size() == 0)
                 {
+                    dynamic_cast<RailConstructor*>(world->getActualConstructor())->setObjectBoxCollider();
                     world->deleteConstructor(false);
                 }
                 else
@@ -114,6 +109,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                             RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
                             actualRailConstructor->getOwnedRail()->connectRails(dynamic_cast<Rail*>(actors[0]), false);
                             actualRailConstructor->smoothEndPoint();
+                            //dynamic_cast<RailConstructor*>(world->getActualConstructor())->setObjectBoxCollider(); //actualize
                             world->deleteConstructor(false);
                             break;
                         }
@@ -122,11 +118,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 menuSelected = 1;
                 break;
             }
-            default:  //incl. 0 = default
+            default:  //incl. 0
             {
-                QPoint globalPos = QCursor::pos();
-                QPoint point = event->pos();
-                ui->label->setText(QString::number(point.x())  + " __ " + QString::number(point.y()) + " / " + QString::number(globalPos.x())  + " __ " + QString::number(globalPos.y()));
+                QVector<Actor*> actors = world->getActorUnderClick({0});
+                qDebug() << QString::number(actors.size());
             }
         }
     }

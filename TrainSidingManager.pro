@@ -21,6 +21,7 @@ SOURCES += \
     Actors/railwayobject.cpp \
     Actors/train.cpp \
     Actors/vehicle.cpp \
+    Components/boxcollider.cpp \
     Components/collider.cpp \
     Components/component.cpp \
     Components/spherecollider.cpp \
@@ -29,8 +30,8 @@ SOURCES += \
     customqgraphicsview.cpp \
     main.cpp \
     mainwindow.cpp \
+    railnavigation.cpp \
     spritecolection.cpp \
-    trainnavigation.cpp \
     worldcollide.cpp \
     worldmap.cpp \
     worldviewmap.cpp
@@ -49,6 +50,7 @@ HEADERS += \
     Actors/railwayobject.h \
     Actors/train.h \
     Actors/vehicle.h \
+    Components/boxcollider.h \
     Components/collider.h \
     Components/component.h \
     Components/spherecollider.h \
@@ -56,8 +58,8 @@ HEADERS += \
     Components/trigger.h \
     customqgraphicsview.h \
     mainwindow.h \
+    railnavigation.h \
     spritecolection.h \
-    trainnavigation.h \
     worldcollide.h \
     worldmap.h \
     worldviewmap.h

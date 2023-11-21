@@ -123,6 +123,73 @@ Rail *RailConstructor::getConnectedRail()
     return connectedRailActor;
 }
 
+void RailConstructor::setObjectBoxCollider()
+{
+
+    BoxCollider* boxCollider = {};
+    for (auto trigger : ownedRail->getAllTriggers())
+    {
+        if (dynamic_cast<BoxCollider*>(trigger))
+        {
+            boxCollider = dynamic_cast<BoxCollider*>(trigger);
+            break;
+        }
+    }
+    if (boxCollider != nullptr)
+    {
+        //get and make rotation
+        float radian = atan2(static_cast<double>(P3.y()),P3.x());
+        float basicRotation = qRadiansToDegrees(radian);
+        float correctedRotation = fmod(360 - basicRotation, 360);
+        qDebug() << QString::number(correctedRotation);
+
+        QTransform rotationTransform;
+        rotationTransform.rotate(correctedRotation);
+
+        QVector<QPoint> relativeLocations = {};
+
+        //make 10 points on path declare box (still in "rotated" coordinate)
+        for (int i = 0; i < 1; i++)
+        {
+            float percent = i*0.1f;
+            relativeLocations.push_back(ownedPath->path().pointAtPercent(0.5).toPoint()); //relative
+            qDebug() << QString::number(relativeLocations[0].x()) + " & " + QString::number(relativeLocations[0].y());
+        }
+
+        //make points "unrotated" to check bounds
+        for (auto &point : relativeLocations)
+        {
+            point = rotationTransform.map(point);
+            qDebug() << QString::number(relativeLocations[0].x()) + " & " + QString::number(relativeLocations[0].y());
+        }
+
+        //make size of box
+        int maxX = 0;
+        int minX = 0;
+        int maxY = 0;
+        int minY = 0;
+        for (auto point : relativeLocations)
+        {
+            if (maxX < point.x()) maxX = point.x();
+            if (minX > point.x()) minX = point.x();
+            if (maxY < point.y()) maxY = point.y();
+            if (minY > point.y()) minY = point.y();
+        }
+        maxX += 50;
+        minX -= 50;
+        maxY += 50;
+        minY -= 50;
+
+        QPoint leftUpCorner = {minX,maxY};
+        QPoint rightDownCorner = {maxX,maxY};
+
+        //set coordination and rotations
+        boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);
+
+    }
+
+}
+
 RailConstructor::~RailConstructor()
 {
 }
