@@ -55,7 +55,7 @@ public:
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
     int getActorListSize();
-    Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position);
+    Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
     ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels);
     WorldCollide* getWorldCollide();

@@ -141,7 +141,6 @@ void RailConstructor::setObjectBoxCollider()
         float radian = atan2(static_cast<double>(P3.y()),P3.x());
         float basicRotation = qRadiansToDegrees(radian);
         float correctedRotation = fmod(360 - basicRotation, 360);
-        qDebug() << QString::number(correctedRotation);
 
         QTransform rotationTransform;
         rotationTransform.rotate(correctedRotation);
@@ -149,18 +148,16 @@ void RailConstructor::setObjectBoxCollider()
         QVector<QPoint> relativeLocations = {};
 
         //make 10 points on path declare box (still in "rotated" coordinate)
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i <= 10; i++)
         {
             float percent = i*0.1f;
-            relativeLocations.push_back(ownedPath->path().pointAtPercent(0.5).toPoint()); //relative
-            qDebug() << QString::number(relativeLocations[0].x()) + " & " + QString::number(relativeLocations[0].y());
+            relativeLocations.push_back(ownedPath->path().pointAtPercent(percent).toPoint()); //relative
         }
 
         //make points "unrotated" to check bounds
         for (auto &point : relativeLocations)
         {
             point = rotationTransform.map(point);
-            qDebug() << QString::number(relativeLocations[0].x()) + " & " + QString::number(relativeLocations[0].y());
         }
 
         //make size of box
@@ -175,13 +172,13 @@ void RailConstructor::setObjectBoxCollider()
             if (maxY < point.y()) maxY = point.y();
             if (minY > point.y()) minY = point.y();
         }
-        maxX += 50;
-        minX -= 50;
-        maxY += 50;
-        minY -= 50;
+        maxX += 1000;
+        minX -= 1000;
+        maxY += 1000;
+        minY -= 1000;
 
-        QPoint leftUpCorner = {minX,maxY};
-        QPoint rightDownCorner = {maxX,maxY};
+        QPoint leftUpCorner = {minX, minY};
+        QPoint rightDownCorner = {maxX, maxY};
 
         //set coordination and rotations
         boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);

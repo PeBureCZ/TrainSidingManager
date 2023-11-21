@@ -109,7 +109,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                             RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
                             actualRailConstructor->getOwnedRail()->connectRails(dynamic_cast<Rail*>(actors[0]), false);
                             actualRailConstructor->smoothEndPoint();
-                            //dynamic_cast<RailConstructor*>(world->getActualConstructor())->setObjectBoxCollider(); //actualize
+                            dynamic_cast<RailConstructor*>(world->getActualConstructor())->setObjectBoxCollider(); //actualize
                             world->deleteConstructor(false);
                             break;
                         }
@@ -121,7 +121,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             default:  //incl. 0
             {
                 QVector<Actor*> actors = world->getActorUnderClick({0});
-                qDebug() << QString::number(actors.size());
             }
         }
     }

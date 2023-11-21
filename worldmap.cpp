@@ -258,7 +258,7 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfStaticChannel(); i++)
                 {
-                   Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition);
+                   Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition, channel);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -267,7 +267,7 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfTrainChannel(); i++)
                 {
-                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition);
+                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition, channel);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -276,7 +276,7 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfRailChannel(); i++)
                 {
-                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition);
+                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition, channel);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -286,23 +286,28 @@ QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
     return actorsToReturn;
 }
 
-Actor *WorldMap::getActorFromTriggersInCollide(Actor *testedActor, QPoint position)
+Actor *WorldMap::getActorFromTriggersInCollide(Actor *testedActor, QPoint position, int channel)
 {
     if (testedActor != nullptr)
     {
         QVector<Trigger*> testedTriggers = testedActor->getAllTriggers();
         for (auto trigger : testedTriggers)
         {
-            if (dynamic_cast<SphereCollider*>(trigger))
-            {
-                    QPoint relativePosition = testedActor->getLocation() + trigger->getRelativeLocation();
-                    int radius = dynamic_cast<SphereCollider*>(trigger)->getRadius();
-                    if (getDistance(relativePosition, position) <= radius) return testedActor;
-            }
-            else if (dynamic_cast<BoxCollider*>(testedActor))
-            {
+                for (auto usedChannel : trigger->getBlockChannels())
+                {
+                    if (usedChannel != channel) continue;
+                    if (dynamic_cast<SphereCollider*>(trigger))
+                    {
+                        QPoint relativePosition = testedActor->getLocation() + trigger->getRelativeLocation();
+                        int radius = dynamic_cast<SphereCollider*>(trigger)->getRadius();
+                        if (getDistance(relativePosition, position) <= radius) return testedActor;
+                    }
+                    else if (dynamic_cast<BoxCollider*>(trigger))
+                    {
+                        if (dynamic_cast<BoxCollider*>(trigger)->isInCollision(position - testedActor->getLocation())) return testedActor;
+                    }
+                }
 
-            }
 
         }
     }

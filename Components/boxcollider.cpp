@@ -6,9 +6,23 @@ BoxCollider::BoxCollider()
     rightDownCorner = {0,0};
 }
 
-BoxCollider::setBoxCollider(QPoint newLeftUpCorner, QPoint newRightDownCorner, float newRotation)
+void BoxCollider::setBoxCollider(QPoint newLeftUpCorner, QPoint newRightDownCorner, float newRotation)
 {
     leftUpCorner = newLeftUpCorner;
     rightDownCorner = newRightDownCorner;
     setRelativeRotation(newRotation);
+
+}
+
+bool BoxCollider::isInCollision(QPoint relativeLocation)
+{
+    QTransform rotationTransform;
+    rotationTransform.rotate(relativeRotation);
+    QPoint rotatedPoint = rotationTransform.map(relativeLocation);
+    if (rotatedPoint.x() >= leftUpCorner.x()
+        && rotatedPoint.x() <= rightDownCorner.x()
+        && rotatedPoint.y() >= leftUpCorner.y()
+        && rotatedPoint.y() <= rightDownCorner.y())
+        return true;
+    return false;
 }
