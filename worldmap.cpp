@@ -87,10 +87,9 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         dynamic_cast<Train*>(newTrain)->setActualSpeed(2000);
         if (railList.size()>1)
         {
-            QVector<Rail*> temporaryTrainPath(railList.begin(),railList.end()-1);
+            QVector<Rail*> temporaryTrainPath(railList.begin()+1,railList.end());
             dynamic_cast<Train*>(newTrain)->setTrainPath(temporaryTrainPath);
         }
-
     }
 }
 
@@ -116,7 +115,7 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
 {
     //ADD PATH FOR RAIL ACTOR
     QPainterPath path;
-    path.cubicTo(10000, 0, 10000, 10000, 0, 10000); //deffault line -> will be changed immediately
+    path.cubicTo(0, 0, 0, 0, 0, 0); //deffault line -> will be changed immediately
     QGraphicsPathItem* pathItem = new QGraphicsPathItem(path); //add graphics
     pathItem->setPen(QPen(Qt::blue, 144));
     pathItem->setPos(mapLocation.toPointF());
@@ -125,8 +124,6 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     //ADD RAIL ACTOR
     Actor* rail = new Rail(pathItem); //add actor  
     addActorToLists(rail);
-    //worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P0 point
-    //worldCollide->addTriggerToActor(rail, 0, {2}, {0,0}, 0.0f); //for P3 point
     if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
     rail->setLocation(mapLocation);
 

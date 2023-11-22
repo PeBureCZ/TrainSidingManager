@@ -28,6 +28,7 @@ SOURCES += \
     Components/spheretrigger.cpp \
     Components/trigger.cpp \
     customqgraphicsview.cpp \
+    dependencies/trainnavigation.cpp \
     main.cpp \
     mainwindow.cpp \
     railnavigation.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     Components/spheretrigger.h \
     Components/trigger.h \
     customqgraphicsview.h \
+    dependencies/trainnavigation.h \
     mainwindow.h \
     railnavigation.h \
     spritecolection.h \

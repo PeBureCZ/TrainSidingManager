@@ -2,8 +2,8 @@
 #define TRAIN_H
 
 #include "movable.h"
-#include "rail.h"
 #include "vehicle.h"
+#include "dependencies/trainnavigation.h"
 
 class Train : public Movable
 {

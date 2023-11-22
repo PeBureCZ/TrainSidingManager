@@ -6,7 +6,6 @@
 #include <QScrollBar>
 #include <QRect>
 #include <QGraphicsRectItem>
-#include <QString> //for test only
 
 #define MAX_ZOOM_LEVEL 28 //NEED TO REBUILD - count relative location not work in zoom level > maxMapSize
 #define MIN_ZOOM_LEVEL -2
@@ -23,7 +22,6 @@ protected:
 
 public:
     CustomQGraphicsView(QWidget *parent = nullptr);
-    QString testX();
     void zoomIn(bool sideways);
     void zoomOut();
     int getZoomLevel();

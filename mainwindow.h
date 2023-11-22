@@ -23,7 +23,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void actualizeMap();
-    void testFce();
 
 private slots:
     void on_TestButton1_clicked();

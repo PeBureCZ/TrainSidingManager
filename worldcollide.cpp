@@ -7,12 +7,6 @@ WorldCollide::WorldCollide()
     railConnectionChannel ={}; //channel2
 }
 
-QString WorldCollide::test()
-{
-    return QString::number(railConnectionChannel.size());
-}
-
-
 void WorldCollide::addActorToCollideLists(Actor *actor, int channel)
 {
     switch(channel)

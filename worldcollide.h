@@ -17,7 +17,6 @@ protected:
     void addActorToCollideLists(Actor* actor, int channel);
 public:
     WorldCollide();
-    QString test();
     void removeActorFromCollideLists(Actor* removedActor);
     Actor* getActorFromTriggerList(int inChannel, int index);
     int getSizeOfRailChannel();

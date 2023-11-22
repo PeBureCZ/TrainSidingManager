@@ -32,11 +32,6 @@ void MainWindow::on_testButton2_clicked()
     if (world->railList.size() > 0) world->addTrainActor(world->railList[0]);
 }
 
-void MainWindow::testFce() //temporary
-{
-    ui->label->setText(world->testFunction());
-}
-
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)

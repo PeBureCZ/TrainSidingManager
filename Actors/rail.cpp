@@ -259,6 +259,7 @@ void Rail::smoothP3PointByC1() //call only if conected to C1 point
 {
     if (conectionC1 != nullptr)
     {
+        lined = false;
         QLineF distanceOne(conectionC1->getP0WorldLocation(), getLocation() + P3); //P3 to connectedP0
         QLineF distanceTwo(conectionC1->getLocation() + conectionC1->getP3RelativeLocation(), getLocation() + P3); //P3 to connected P3
         float reduction = 0.05f;

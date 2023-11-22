@@ -7,16 +7,6 @@ CustomQGraphicsView::CustomQGraphicsView(QWidget *parent) : QGraphicsView(parent
     mapSizeY = 0;
 }
 
-QString CustomQGraphicsView::testX()
-{
-    QPoint globalPos = QCursor::pos();
-
-    QRectF mySceneRect = sceneRect(); //resolution of scene
-    qreal sceneWidth = mySceneRect.width(); // equal mapSizeX * 2
-    qreal sceneHeight = mySceneRect.height(); //equal mapSizeY * 2
-    return QString::number(sceneWidth) + " / " + QString::number(sceneHeight) + " / " + QString::number(mapSizeX) + " / " + QString::number(mapSizeY);
-}
-
 void CustomQGraphicsView::wheelEvent(QWheelEvent *event)
 {
     int delta = event->angleDelta().y();

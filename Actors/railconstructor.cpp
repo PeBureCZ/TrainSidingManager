@@ -79,7 +79,10 @@ void RailConstructor::setPoints(QPoint endP)
     else   //Béziere path
     {
         QLineF line(P0, P3+location); //line between P0/P3 (Rail being created by this constructor.)
-        QPoint connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP2RelativeLocation().toPoint();
+        QPoint connectedP2world;
+        (P0 == connectedRailActor->getLocation()) ? connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP1RelativeLocation().toPoint()
+        : connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP2RelativeLocation().toPoint();
+
         QLineF lineP2(connectedP2world, P0);
         float reduction = line.length() / lineP2.length();
         if (reduction < 0.05f)  reduction = 0.05f;
