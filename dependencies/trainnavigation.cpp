@@ -4,7 +4,6 @@ TrainNavigation::TrainNavigation()
 {
 
 }
-
 bool TrainNavigation::checkNewDirection(bool actualDirection, Rail *actualRail, Rail* newRail)
 {
     QPoint railEndPosition;

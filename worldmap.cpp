@@ -316,14 +316,22 @@ ActorConstructor *WorldMap::getActualConstructor()
     return actualConstructor;
 }
 
-Trigger *WorldMap::getTriggerInRange(Actor *actor, QPoint position, int radius)
+Trigger *WorldMap::getNearestTriggerInRange(Actor *actor, QPoint position, int radius)
 {
     QVector<Trigger*> testedTriggers = actor->getAllTriggers();
+    QPoint actorLocation = actor->getLocation();
+    int nearestDistance = radius;
+    Trigger* nearestTrigger = {};
     for (auto trigger : testedTriggers)
     {
-        if (getDistance(actor->getLocation() + trigger->getRelativeLocation(), position) <= radius) return trigger;
+        int testedDistance = getDistance(actorLocation + trigger->getRelativeLocation(), position);
+        if (testedDistance <= nearestDistance)
+        {
+            nearestTrigger = trigger;
+            nearestDistance = testedDistance;
+        }
     }
-    return nullptr;
+    return nearestTrigger;
 }
 
 WorldCollide *WorldMap::getWorldCollide()

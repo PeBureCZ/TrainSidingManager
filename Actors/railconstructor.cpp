@@ -118,7 +118,7 @@ QPointF RailConstructor::getP3Point()
 
 Rail *RailConstructor::getOwnedRail()
 {
-    return dynamic_cast<Rail*>(ownedRail);
+    return dynamic_cast<Rail*>(ownedRail); //for return actor call "getActorConstructing()"
 }
 
 Rail *RailConstructor::getConnectedRail()

@@ -59,7 +59,7 @@ public:
     ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels);
     WorldCollide* getWorldCollide();
-    Trigger *getTriggerInRange(Actor *actor, QPoint position, int radius);
+    Trigger *getNearestTriggerInRange(Actor *actor, QPoint position, int radius);
     int getWorldWidth();
     int getWorldHeight();
     int getDistance(QPoint pointOne, QPoint pointTwo);
