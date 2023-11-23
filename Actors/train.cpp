@@ -85,21 +85,24 @@ void Train::moveTrain()
     int endPointValue;
     (directionToEnd) ? endPointValue = 1 : endPointValue = 0;
     float newPathPercentValue;
-    do
+    int maxLoop = 0;  //due bug - not ideal!!
+    do //need fix!! Bugged loop in unknown situation!
     {
+        maxLoop++; //due bug - not ideal!! (max loop "fix" problem...)
+        qDebug() << "bugged - need repair in: Train::moveTrain";
         newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/100);
         if (newPathPercentValue == endPointValue)
         {
             if (trainPath.size() > 0)
             {
-                (directionToEnd) ? newOnPathLength -= actualRail->getRailLength()*100 : newOnPathLength += actualRail->getRailLength()*100;
+                (directionToEnd) ? newOnPathLength -= actualRail->getRailLength()*100 : newOnPathLength = newOnPathLength*-1 + dynamic_cast<Rail*>(trainPath[0])->getRailLength()*100;
                 TrainNavigation navigation;
                 directionToEnd = navigation.checkNewDirection(directionToEnd, actualRail, trainPath[0]); //check direction for new path segment
                 actualRail = trainPath[0];
                 trainPath.remove(0);
                 actualPath = dynamic_cast<QGraphicsPathItem*>(actualRail->getGraphicItem());
             }
-            else if (trainPath.size() == 0)
+            else
             {
                 setActualSpeed(0);
                 (directionToEnd) ? newOnPathLength = actualPath->path().length()*100 : newOnPathLength = 0;
@@ -108,15 +111,16 @@ void Train::moveTrain()
             }
         }
     }
-    while((newPathPercentValue == 1 || newPathPercentValue == 0) && lastRail == false);
+    while(maxLoop < 5 && (newPathPercentValue == 1 || newPathPercentValue == 0) && lastRail == false);
     if (directionOnEventBegin != directionToEnd)
     {
         newOnPathLength = (newOnPathLength - (actualPath->path().length()*100))*-1;
+        newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/100);
     }
     QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
     onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->axlePos();
     dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(onPathPoint); //only index 0 vehicle for now
-    onPathValue= newPathPercentValue; //actualize new train value on path (rail track)
+    onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
 }
 
