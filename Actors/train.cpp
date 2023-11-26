@@ -85,17 +85,15 @@ void Train::moveTrain()
     int endPointValue;
     (directionToEnd) ? endPointValue = 1 : endPointValue = 0;
     float newPathPercentValue;
-    int maxLoop = 0;  //due bug - not ideal!!
-    do //need fix!! Bugged loop in unknown situation!
+    int loop = 0; //if train on tick "stop" exactly on percent 1 or 0
+    do
     {
-        maxLoop++; //due bug - not ideal!! (max loop "fix" problem...)
-        qDebug() << "bugged - need repair in: Train::moveTrain";
         newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/100);
         if (newPathPercentValue == endPointValue)
         {
             if (trainPath.size() > 0)
             {
-                (directionToEnd) ? newOnPathLength -= actualRail->getRailLength()*100 : newOnPathLength = newOnPathLength*-1 + dynamic_cast<Rail*>(trainPath[0])->getRailLength()*100;
+                (directionToEnd) ? newOnPathLength -= actualRail->getRailLength()*100 : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(trainPath[0])->getRailLength()*100;
                 TrainNavigation navigation;
                 directionToEnd = navigation.checkNewDirection(directionToEnd, actualRail, trainPath[0]); //check direction for new path segment
                 actualRail = trainPath[0];
@@ -110,8 +108,9 @@ void Train::moveTrain()
                 lastRail = true;
             }
         }
+        loop++;
     }
-    while(maxLoop < 5 && (newPathPercentValue == 1 || newPathPercentValue == 0) && lastRail == false);
+    while(loop < 4 && newPathPercentValue == 1 || newPathPercentValue == 0 && lastRail == false);
     if (directionOnEventBegin != directionToEnd)
     {
         newOnPathLength = (newOnPathLength - (actualPath->path().length()*100))*-1;

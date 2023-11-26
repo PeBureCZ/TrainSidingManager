@@ -174,9 +174,8 @@ void MainWindow::wheelEvent(QWheelEvent *event)
         QPointF sceneTopLeft = world->getWorld()->mapToGlobal(sceneRect.topLeft().toPoint());
         int sceneGlobalX = sceneTopLeft.x();
         ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()) + " !!! " + QString::number(sceneGlobalX + world->getWorld()->getMapSizeX()));
-        //world->getWorld()->testX());
     }
-    else if (delta < 0) //beck
+    else if (delta < 0) //back
     {
         ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()));
     }

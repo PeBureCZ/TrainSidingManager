@@ -7,6 +7,7 @@ WorldMap::WorldMap()
     worldScene = new QGraphicsScene;
     worldView = new CustomQGraphicsView;
     worldView->setBackgroundBrush(QBrush(Qt::gray));
+    worldView->setViewportUpdateMode(QGraphicsView::NoViewportUpdate); //stop update screen automatically
     worldCollide = new WorldCollide;
     actualConstructor = nullptr;
     worldView->setScene(worldScene);
@@ -84,7 +85,7 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         //invisible = not added to scene, only to list (indexed)
         actorList.push_back(newTrain); //indexed with graphicsItemListIndexed
         tickedActorsList.push_back(newTrain); //actor with tick update
-        dynamic_cast<Train*>(newTrain)->setActualSpeed(2000);
+        dynamic_cast<Train*>(newTrain)->setActualSpeed(4000);
         if (railList.size()>1)
         {
             QVector<Rail*> temporaryTrainPath(railList.begin()+1,railList.end());
@@ -201,15 +202,17 @@ void WorldMap::actualizeAllInWorld()
 
     for (auto actor : tickedActorsList)
     {
-       if (dynamic_cast<Train*>(actor))
-       {
-               dynamic_cast<Train*>(actor)->moveTrain();
-       }
+        if (dynamic_cast<Train*>(actor))
+        {
+            dynamic_cast<Train*>(actor)->moveTrain();
+        }
     }
     if (actualConstructor != nullptr)
     {
        dynamic_cast<ActorConstructor*>(actualConstructor)->actualizeConstructor(worldView->getRelativeFromCursor());
     }
+    worldScene->update();
+    worldView->update();
 }
 
 void WorldMap::setMap(int xSize, int ySize)
@@ -290,22 +293,20 @@ Actor *WorldMap::getActorFromTriggersInCollide(Actor *testedActor, QPoint positi
         QVector<Trigger*> testedTriggers = testedActor->getAllTriggers();
         for (auto trigger : testedTriggers)
         {
-                for (auto usedChannel : trigger->getBlockChannels())
+            for (auto usedChannel : trigger->getBlockChannels())
+            {
+                if (usedChannel != channel) continue;
+                if (dynamic_cast<SphereCollider*>(trigger))
                 {
-                    if (usedChannel != channel) continue;
-                    if (dynamic_cast<SphereCollider*>(trigger))
-                    {
-                        QPoint relativePosition = testedActor->getLocation() + trigger->getRelativeLocation();
-                        int radius = dynamic_cast<SphereCollider*>(trigger)->getRadius();
-                        if (getDistance(relativePosition, position) <= radius) return testedActor;
-                    }
-                    else if (dynamic_cast<BoxCollider*>(trigger))
-                    {
-                        if (dynamic_cast<BoxCollider*>(trigger)->isInCollision(position - testedActor->getLocation())) return testedActor;
-                    }
+                    QPoint relativePosition = testedActor->getLocation() + trigger->getRelativeLocation();
+                    int radius = dynamic_cast<SphereCollider*>(trigger)->getRadius();
+                    if (getDistance(relativePosition, position) <= radius) return testedActor;
                 }
-
-
+                else if (dynamic_cast<BoxCollider*>(trigger))
+                {
+                    if (dynamic_cast<BoxCollider*>(trigger)->isInCollision(position - testedActor->getLocation())) return testedActor;
+                }
+            }
         }
     }
     return nullptr;

@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
         //w.testFce();
         //timer.stop();
     });
-    timer.start(10); //tick "per milsec" - no FPS delta tick support
+    timer.start(30); //tick "per milsec" - no FPS delta tick support
     mw.show();
 
     return a.exec();
