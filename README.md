@@ -6,6 +6,7 @@
 
 > ## 1)
 PROGRAM DESCRIPTION:
+(text as of November 28, 2023)
 "The Train Siding Manager program is my second project in QT Creator utilizing the QT Framework. 
 I am developing this program to enhance my skills in QT, and thus, it is not, and certainly will not be, 
 the ideal solution for all the proposed functionalities found in the program. In addition to the preferred skill improvement, 
