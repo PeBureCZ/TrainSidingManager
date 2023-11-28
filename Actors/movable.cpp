@@ -2,7 +2,7 @@
 
 Movable::Movable(QGraphicsItem* newGraphicItem) : Actor(newGraphicItem)
 {
-    maxSpeed =0; //centimeters per tick (1 km/h = 27.778 cm/s)
+    maxSpeed =0; //centimeters per tick (1 km/h = 27.778 cm/s), tick = 1 second
     actualSpeed = 0; //centimeters per tick
 }
 

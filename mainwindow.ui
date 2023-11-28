@@ -172,7 +172,7 @@
      <string>Select</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="testButton2">
+   <widget class="QPushButton" name="PlayBut">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -182,7 +182,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Test Button2</string>
+     <string>PlayMode</string>
     </property>
    </widget>
   </widget>

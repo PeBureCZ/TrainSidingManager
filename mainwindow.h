@@ -23,10 +23,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void actualizeMap();
+    void actualizeDeltaTime(qint64 deltaTime);
 
 private slots:
     void on_TestButton1_clicked();
-    void on_testButton2_clicked();
+    void on_PlayBut_clicked();
     void on_SubBut_clicked();
     void on_AddBut_clicked();
     void on_AddRailBut_clicked();
@@ -38,6 +39,7 @@ private:
     Ui::MainWindow *ui;
     WorldMap* world;
     int menuSelected;
+    qint64 elapsedTime;
     void initializeMap();
 
 };

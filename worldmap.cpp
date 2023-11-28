@@ -85,7 +85,7 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         //invisible = not added to scene, only to list (indexed)
         actorList.push_back(newTrain); //indexed with graphicsItemListIndexed
         tickedActorsList.push_back(newTrain); //actor with tick update
-        dynamic_cast<Train*>(newTrain)->setActualSpeed(4000);
+        dynamic_cast<Train*>(newTrain)->setActualSpeed(130000);
         if (railList.size()>1)
         {
             QVector<Rail*> temporaryTrainPath(railList.begin()+1,railList.end());
@@ -196,7 +196,7 @@ void WorldMap::deleteActor(Actor *actor)
     actorList.remove(actorIndex);
 }
 
-void WorldMap::actualizeAllInWorld()
+void WorldMap::actualizeEditor()
 {
     //need create virtual tick event for actor, temporary solution
 
@@ -211,6 +211,23 @@ void WorldMap::actualizeAllInWorld()
     {
        dynamic_cast<ActorConstructor*>(actualConstructor)->actualizeConstructor(worldView->getRelativeFromCursor());
     }
+}
+
+void WorldMap::actualizePlayMode()
+{
+    //need create virtual tick event for actor, temporary solution
+
+    for (auto actor : tickedActorsList)
+    {
+       if (dynamic_cast<Train*>(actor))
+       {
+            dynamic_cast<Train*>(actor)->moveTrain();
+       }
+    }
+}
+
+void WorldMap::updateWorld()
+{
     worldScene->update();
     worldView->update();
 }

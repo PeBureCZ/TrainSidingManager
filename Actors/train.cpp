@@ -80,12 +80,12 @@ void Train::moveTrain()
     if (actualSpeed == 0) return; //no change
     bool lastRail = false;
     bool directionOnEventBegin = directionToEnd;
-    int newOnPathLength; //speed in centimeters / tick
+    int newOnPathLength; //speed in centimeters / tick (1 second)
     (directionToEnd) ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
     int endPointValue;
     (directionToEnd) ? endPointValue = 1 : endPointValue = 0;
     float newPathPercentValue;
-    int loop = 0; //if train on tick "stop" exactly on percent 1 or 0
+    int loop = 0; //if train on tick end "stop" exactly on percent 1 or 0
     do
     {
         newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/100);

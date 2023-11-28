@@ -65,7 +65,9 @@ public:
     int getDistance(QPoint pointOne, QPoint pointTwo);
 
     //FCE - TICK
-    void actualizeAllInWorld();
+    void actualizeEditor();
+    void actualizePlayMode();
+    void updateWorld();
 
     //DESTRUCTOR
     ~WorldMap();
