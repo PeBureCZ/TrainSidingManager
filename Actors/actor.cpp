@@ -107,6 +107,11 @@ void Actor::setObjectBoxCollider()
     //overrided
 }
 
+void Actor::tickEvent()
+{
+    //overrided
+}
+
 Actor::~Actor()
 {
     for (auto trigger : triggers)

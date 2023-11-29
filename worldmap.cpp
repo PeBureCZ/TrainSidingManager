@@ -15,6 +15,7 @@ WorldMap::WorldMap()
     railList = {};
     tickedActorsList = {}; //list of actor with any tick event (animation, move, etc.)
     setMap(250000, 200000); //set map x,y border size
+    latestActorActualized = 0;
 }
 
 CustomQGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
@@ -198,32 +199,21 @@ void WorldMap::deleteActor(Actor *actor)
 
 void WorldMap::actualizeEditor()
 {
-    //need create virtual tick event for actor, temporary solution
-
-    for (auto actor : tickedActorsList)
-    {
-        if (dynamic_cast<Train*>(actor))
-        {
-            dynamic_cast<Train*>(actor)->moveTrain();
-        }
-    }
     if (actualConstructor != nullptr)
     {
        dynamic_cast<ActorConstructor*>(actualConstructor)->actualizeConstructor(worldView->getRelativeFromCursor());
     }
 }
 
-void WorldMap::actualizePlayMode()
+bool WorldMap::actualizePlayMode()
 {
-    //need create virtual tick event for actor, temporary solution
-
-    for (auto actor : tickedActorsList)
-    {
-       if (dynamic_cast<Train*>(actor))
-       {
-            dynamic_cast<Train*>(actor)->moveTrain();
-       }
-    }
+    if (tickedActorsList.size() > latestActorActualized)
+   {
+        dynamic_cast<Actor*>(tickedActorsList[latestActorActualized])->tickEvent();
+        latestActorActualized++;
+        return false;
+   }
+   return true;
 }
 
 void WorldMap::updateWorld()
@@ -384,6 +374,11 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
     if (deleteCreation) deleteActor(dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing());
     deleteActor(actualConstructor);
     actualConstructor = nullptr;
+}
+
+void WorldMap::resetLatestActorActualized()
+{
+    latestActorActualized = 0;
 }
 
 QVector<Rail*> WorldMap::findPath(Train *train, Rail* destinationRail)

@@ -34,6 +34,7 @@ public:
     virtual void setName(QString newName); //virtual need for polymorph
     bool canCollide();
     virtual void setObjectBoxCollider(); //overrided
+    virtual void tickEvent();
     virtual ~Actor();
 };
 

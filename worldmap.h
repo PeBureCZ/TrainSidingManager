@@ -46,7 +46,7 @@ public:
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
-    QVector<Rail*> findPath(Train* train, Rail* destinationRail);
+    void resetLatestActorActualized();
 
     //FCE - RETURN
     QString testFunction();
@@ -58,6 +58,7 @@ public:
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
     ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels);
+    QVector<Rail*> findPath(Train* train, Rail* destinationRail);
     WorldCollide* getWorldCollide();
     Trigger *getNearestTriggerInRange(Actor *actor, QPoint position, int radius);
     int getWorldWidth();
@@ -66,7 +67,7 @@ public:
 
     //FCE - TICK
     void actualizeEditor();
-    void actualizePlayMode();
+    bool actualizePlayMode();
     void updateWorld();
 
     //DESTRUCTOR
@@ -76,6 +77,7 @@ private:
     ActorConstructor* actualConstructor;
     QGraphicsScene *worldScene;
     WorldCollide* worldCollide;
+    int latestActorActualized;
 };
 
 #endif // WORLDMAP_H

@@ -9,10 +9,11 @@ MainWindow::MainWindow(QWidget *parent)
     world = new WorldMap;
     initializeMap();
     menuSelected = 0;
+
     elapsedTime = 0;
     /*
     0 =basic (select)
-    1 = add Rail (constructor)
+    1 = add Rail (create constructor)
     2 = constructing rail (RailConstructor)
     3 = playMode
     */
@@ -45,10 +46,7 @@ void MainWindow::on_PlayBut_clicked()
     menuSelected = 3;
     if (world->railList.size() > 0)
     {
-        for (int var = 0; var < 30; ++var)
-        {
-            world->addTrainActor(world->railList[0]);
-        }
+        world->addTrainActor(world->railList[0]);
     }
 }
 
@@ -211,11 +209,11 @@ void MainWindow::actualizeMap()
 {
     if (menuSelected == 3)
     {
-        if (elapsedTime > 1000)
-        {
-            world->actualizePlayMode();
+        if (world->actualizePlayMode() && elapsedTime > 1000)
+        { 
             world->updateWorld();
             elapsedTime -= 1000;
+            world->resetLatestActorActualized();
         }
     }
     else
@@ -227,8 +225,8 @@ void MainWindow::actualizeMap()
 }
 
 void MainWindow::actualizeDeltaTime(qint64 deltaTime)
-{  
-    elapsedTime += deltaTime;
+{
+    if (menuSelected == 3) elapsedTime += deltaTime;
 }
 
 MainWindow::~MainWindow()

@@ -127,3 +127,8 @@ void Train::setTrainPath(QVector<Rail *> newTrainPath)
 {
     trainPath = newTrainPath;
 }
+
+void Train::tickEvent()
+{
+    moveTrain();
+}

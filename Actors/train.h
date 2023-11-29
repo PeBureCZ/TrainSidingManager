@@ -32,6 +32,7 @@ public:
     void setActualPathValue(float newValue);
     void moveTrain();
     void setTrainPath(QVector<Rail*> newTrainPath);
+    void tickEvent() override;
 
 };
 
