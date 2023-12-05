@@ -77,6 +77,7 @@ Train::~Train()
 
 void Train::moveTrain()
 {
+    qDebug() << "move train start";
     if (actualSpeed == 0) return; //no change
     bool lastRail = false;
     bool directionOnEventBegin = directionToEnd;
@@ -118,9 +119,14 @@ void Train::moveTrain()
     }
     QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
     onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->axlePos();
-    dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(onPathPoint); //only index 0 vehicle for now
+
+    //dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(onPathPoint); //only index 0 vehicle for now
+    //graphic item pos change in WorldMap!
+    qDebug() << "move train (Train Actor)  - NEED ACTUALIZE GRAPHIC ITEM HERE";
+
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
+    qDebug() << "move train end";
 }
 
 void Train::setTrainPath(QVector<Rail *> newTrainPath)

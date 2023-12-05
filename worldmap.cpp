@@ -1,6 +1,12 @@
 #include "worldmap.h"
-
 #include <QDebug>
+
+
+void actualizeActor(Actor* actor) //global function - threated
+{
+    actor->tickEvent();
+    qDebug() << "NEED REWORK ACTOR - ACTUALIZE POSITION OF GRAPHIC ITEM AFTER TICK EVENT";
+}
 
 WorldMap::WorldMap(QObject* parent) : QObject(parent)
 {
@@ -207,6 +213,7 @@ void WorldMap::actualizeEditor()
 
 bool WorldMap::actualizePlayMode()
 {
+    /*
     if (tickedActorsList.size() > latestActorActualized)
    {
         dynamic_cast<Actor*>(tickedActorsList[latestActorActualized])->tickEvent();
@@ -214,6 +221,21 @@ bool WorldMap::actualizePlayMode()
         return false;
    }
    return true;
+    */
+
+    if (tickedActorsList.size() > latestActorActualized)
+    {
+        qDebug() << "start threating";
+        Actor* actor = tickedActorsList[latestActorActualized];
+
+        QThread *thread = QThread::create(actualizeActor, actor);
+        connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+        QObject::connect(thread, &QThread::destroyed, this, &WorldMap::returnErrorThread);
+        thread->start();
+        latestActorActualized++;
+        return false;
+    }
+    return true;
 }
 
 void WorldMap::updateWorld()
@@ -379,6 +401,11 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
 void WorldMap::resetLatestActorActualized()
 {
     latestActorActualized = 0;
+}
+
+void WorldMap::returnErrorThread()
+{
+    qDebug() << "Result received:";
 }
 
 QVector<Rail*> WorldMap::findPath(Train *train, Rail* destinationRail)

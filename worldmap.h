@@ -4,7 +4,7 @@
 #include "worldviewmap.h"
 #include <QPainterPath>
 #include <QPen>
-
+#include <QThread>
 #include <customqgraphicsview.h>
 
 //BASIC OBJECTS
@@ -48,6 +48,7 @@ public:
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
     void resetLatestActorActualized();
+    void returnErrorThread();
 
     //FCE - RETURN
     QString testFunction();

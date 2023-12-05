@@ -27,18 +27,6 @@ void MainWindow::initializeMap()
 
 void MainWindow::on_TestButton1_clicked() //temporary
 {
-    int index = 0;
-    //world->deleteActor(world->getActorFromList(world->getActorListSize()-1));
-    for (auto rail : world->railList)
-    {
-        qDebug() << QString::number(index);
-        (rail->getConnectedRail(0) == nullptr) ? qDebug() << "null" : qDebug() << "connected";
-        (rail->getConnectedRail(1) == nullptr) ? qDebug() << "null" : qDebug() << "connected";
-        (rail->getConnectedRail(2) == nullptr) ? qDebug() << "null" : qDebug() << "connected";
-        (rail->getConnectedRail(3) == nullptr) ? qDebug() << "null" : qDebug() << "connected";
-        qDebug() << " ____ ";
-        index++;
-    }
 }
 
 void MainWindow::on_PlayBut_clicked()
