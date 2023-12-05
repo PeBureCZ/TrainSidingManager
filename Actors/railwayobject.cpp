@@ -1,7 +1,7 @@
 #include "railwayobject.h"
 
 
-RailwayObject::RailwayObject(QGraphicsItem* newGraphicItem) : Actor(newGraphicItem)
+RailwayObject::RailwayObject(QObject* parent, QGraphicsItem* newGraphicItem) : Actor(parent, newGraphicItem)
 {
     visibleName = false;
 }

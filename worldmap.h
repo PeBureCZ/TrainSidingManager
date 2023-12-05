@@ -23,10 +23,11 @@
 //STATIC OBJECTS
 #include "Actors/rail.h"
 
-class WorldMap
+class WorldMap : public QObject
 {
+Q_OBJECT
 public:
-    WorldMap();
+    WorldMap(QObject *parent = nullptr);
 
     //LISTS
     QVector<Actor*> tickedActorsList;

@@ -9,8 +9,11 @@
 #include "Components/spherecollider.h"
 #include "Components/boxcollider.h"
 
-class Actor
+#include <QObject>
+
+class Actor : public QObject
 {
+Q_OBJECT
 protected:
     QString name;
     QPoint location;
@@ -20,7 +23,7 @@ protected:
     bool collisionEnabled;
 private:
 public:
-    Actor(QGraphicsItem *newGraphicItem);
+    Actor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr);
     QGraphicsItem* getGraphicItem();
     QVector<int> getCollideChannels();
     QString getName();
@@ -36,6 +39,9 @@ public:
     virtual void setObjectBoxCollider(); //overrided
     virtual void tickEvent();
     virtual ~Actor();
+signals:
+
+public slots:
 };
 
 #endif // ACTOR_H

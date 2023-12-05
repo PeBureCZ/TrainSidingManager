@@ -1,7 +1,7 @@
 #include "vehicle.h"
 
 
-Vehicle::Vehicle(QGraphicsItem* newGraphicItem) :Movable(newGraphicItem)
+Vehicle::Vehicle(QObject* parent, QGraphicsItem* newGraphicItem) :Movable(parent, newGraphicItem)
 {
     mass = 0;
     firstAxleCenter = {0,0};

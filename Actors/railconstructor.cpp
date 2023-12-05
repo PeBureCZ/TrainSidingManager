@@ -1,8 +1,8 @@
 #include "railconstructor.h"
 
 RailConstructor::RailConstructor
-    (QGraphicsItem* newGraphicItem, Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail)
-    : ActorConstructor(newGraphicItem,actorToConstructing)
+    (QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail)
+    : ActorConstructor(parent, newGraphicItem, actorToConstructing)
 {
     ownedRail = dynamic_cast<Rail*>(actorConstructing);
     connectedRailActor = connectedRail;

@@ -1,6 +1,6 @@
 #include "rail.h"
 
-Rail::Rail(QGraphicsItem* newGraphicItem) : RailwayObject(newGraphicItem)
+Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(parent, newGraphicItem)
 {
     P0 = {0,0};
     P1 = {0,0};

@@ -5,8 +5,12 @@
 
 class ElectricLocomotive : public Locomotive
 {
+Q_OBJECT
 public:
-    ElectricLocomotive(QGraphicsItem* newGraphicItem);
+    ElectricLocomotive(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
+signals:
+
+public slots:
 };
 
 #endif // ELECTRICLOCOMOTIVE_H

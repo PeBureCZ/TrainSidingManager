@@ -1,7 +1,7 @@
 #include "locomotive.h"
 
 
-Locomotive::Locomotive(QGraphicsItem* newGraphicItem) : Vehicle(newGraphicItem)
+Locomotive::Locomotive(QObject* parent, QGraphicsItem* newGraphicItem) : Vehicle(parent, newGraphicItem)
 {
     power = 0;
 }

@@ -1,6 +1,6 @@
 #include "electriclocomotive.h"
 
-ElectricLocomotive::ElectricLocomotive(QGraphicsItem* newGraphicItem) : Locomotive(newGraphicItem)
+ElectricLocomotive::ElectricLocomotive(QObject* parent, QGraphicsItem* newGraphicItem) : Locomotive(parent, newGraphicItem)
 {
 
 }

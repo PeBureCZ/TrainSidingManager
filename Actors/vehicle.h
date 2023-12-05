@@ -5,6 +5,7 @@
 
 class Vehicle : public Movable
 {
+Q_OBJECT
 protected:
     int mass; //kg
     int width; //decimeter
@@ -12,8 +13,11 @@ protected:
     QPoint firstAxleCenter; //relative
     int secondAxleDistance; //relative
 public:
-    Vehicle(QGraphicsItem* newGraphicItem);
+    Vehicle(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
     QPoint axlePos();
+signals:
+
+public slots:
 };
 
 #endif //VEHICLE_H

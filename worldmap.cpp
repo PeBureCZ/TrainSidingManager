@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-WorldMap::WorldMap()
+WorldMap::WorldMap(QObject* parent) : QObject(parent)
 {
     worldScene = new QGraphicsScene;
     worldView = new CustomQGraphicsView;
@@ -81,7 +81,7 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
     {
         SpriteColection newSprite; //struct
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
-        Actor* newTrain = new Train(trainItem, spawnOnRail);
+        Actor* newTrain = new Train(nullptr, trainItem, spawnOnRail);
         addVehicleActor(dynamic_cast<Train*>(newTrain), 1);
         //invisible = not added to scene, only to list (indexed)
         actorList.push_back(newTrain); //indexed with graphicsItemListIndexed
@@ -103,7 +103,7 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
             {
                 SpriteColection newSprite; //struct
                 QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.cd730()); //sprite from struct
-                Vehicle* newVehicle = new CD730(vehicleGraphicsItem);
+                Vehicle* newVehicle = new CD730(nullptr, vehicleGraphicsItem);
                 worldScene->addItem(vehicleGraphicsItem);
                 dynamic_cast<Train*>(ownerTrain)->addVehicle(newVehicle, vehicleGraphicsItem); //need for destructor!
                 break;
@@ -124,7 +124,7 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     worldScene->addItem(pathItem);
 
     //ADD RAIL ACTOR
-    Actor* rail = new Rail(pathItem); //add actor  
+    Actor* rail = new Rail(nullptr, pathItem); //add actor
     addActorToLists(rail);
     if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
     rail->setLocation(mapLocation);
@@ -132,7 +132,7 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
     QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
-    Actor* railConstructor = new RailConstructor(emptyItem, rail, mapLocation, connectedRail); //add actor
+    Actor* railConstructor = new RailConstructor(nullptr, emptyItem, rail, mapLocation, connectedRail); //add actor
     addActorToLists(railConstructor);
     setConstructor(railConstructor);
 }

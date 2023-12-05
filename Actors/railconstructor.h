@@ -7,6 +7,7 @@
 
 class RailConstructor : public ActorConstructor
 {
+Q_OBJECT
 protected:
     bool startAtSpawnPos; //define if start (percent 0 in percentRange 0-1) is at spawn position (=click pos) or at "tick mouse target" position
     bool lined;
@@ -24,7 +25,8 @@ protected:
 
 public:
     RailConstructor
-    (QGraphicsItem* newGraphicItem = nullptr
+    (QObject* parent = nullptr
+    ,QGraphicsItem* newGraphicItem = nullptr
     , Actor *actorToConstructing = nullptr
     , QPoint spawnPos = {0,0}
     , Rail* connectedRail = nullptr
@@ -44,6 +46,9 @@ public:
     void actualizeConstructor(QPoint newPoint) override;
     void setObjectBoxCollider() override;
     ~ RailConstructor();
+signals:
+
+public slots:
 };
 
 #endif // RAILCONSTRUCTOR_H

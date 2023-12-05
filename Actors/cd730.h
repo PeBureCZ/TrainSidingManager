@@ -5,8 +5,12 @@
 
 class CD730 : public DieselLocomotive
 {
+Q_OBJECT
 public:
-    CD730(QGraphicsItem* newGraphicItem);
+    CD730(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
+signals:
+
+public slots:
 };
 
 #endif // CD730_H

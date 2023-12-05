@@ -209,10 +209,10 @@ void MainWindow::actualizeMap()
 {
     if (menuSelected == 3)
     {
-        if (world->actualizePlayMode() && elapsedTime > 1000)
+        if (world->actualizePlayMode() && elapsedTime > 2000)
         { 
             world->updateWorld();
-            elapsedTime -= 1000;
+            elapsedTime -= 2000;
             world->resetLatestActorActualized();
         }
     }

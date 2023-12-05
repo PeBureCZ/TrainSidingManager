@@ -1,7 +1,7 @@
 #include "actor.h"
 
 
-Actor::Actor(QGraphicsItem* newGraphicItem) : graphicItem(newGraphicItem)
+Actor::Actor(QObject *parent, QGraphicsItem* newGraphicItem) : QObject(parent), graphicItem(newGraphicItem)
 {
     name = "default name";
     location = {0,0};

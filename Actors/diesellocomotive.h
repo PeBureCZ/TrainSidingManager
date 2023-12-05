@@ -5,10 +5,14 @@
 
 class DieselLocomotive : public Locomotive
 {
+Q_OBJECT
 private:
     int fuel;
 public:
-    DieselLocomotive(QGraphicsItem *newGraphicItem);
+    DieselLocomotive(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr);
+signals:
+
+public slots:
 };
 
 #endif // DIESELLOCOMOTIVE_H

@@ -1,6 +1,6 @@
 #include "cd730.h"
 
-CD730::CD730(QGraphicsItem* newGraphicItem) : DieselLocomotive(newGraphicItem)
+CD730::CD730(QObject* parent, QGraphicsItem* newGraphicItem) : DieselLocomotive(parent, newGraphicItem)
 {
     maxSpeed = 220000; //centimeters per tick (1 second)
     mass = 70000;

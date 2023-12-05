@@ -5,10 +5,14 @@
 
 class Locomotive : public Vehicle
 {
+Q_OBJECT
 protected:
     int power;
 public:
-    Locomotive(QGraphicsItem* newGraphicItem);
+    Locomotive(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
+signals:
+
+public slots:
 };
 
 #endif // LOCOMOTIVE_H

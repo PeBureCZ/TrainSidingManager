@@ -5,17 +5,21 @@
 
 class Movable : public Actor
 {
+Q_OBJECT
 protected:
     int maxSpeed;
     int actualSpeed;
 
 
 public:
-    Movable(QGraphicsItem* newGraphicItem);
+    Movable(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
     void setActualSpeed(int newSpeed);
     int getMaxSpeed();
+signals:
 
-    //virtual ~Movable();
+public slots:
+
+
 };
 
 #endif // MOVABLE_H

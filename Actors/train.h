@@ -7,6 +7,7 @@
 
 class Train : public Movable
 {
+Q_OBJECT
 protected:
     QGraphicsPathItem* actualPath;
     Rail* actualRail;
@@ -22,7 +23,7 @@ public:
     Vehicle* getVehicleActor(int indexOfVehicle);
     QGraphicsItem* getVehicleGraphics(int indexOfVehicle);
     QPointF getLocationOnPath(float percentOnPath);
-    Train(QGraphicsItem* newGraphicItem, Rail* spawnedRail);
+    Train(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Rail* spawnedRail = nullptr);
     Rail* getActualRail();
 
     float getActualPathValue();
@@ -33,7 +34,9 @@ public:
     void moveTrain();
     void setTrainPath(QVector<Rail*> newTrainPath);
     void tickEvent() override;
+signals:
 
+public slots:
 };
 
 #endif // TRAIN_H

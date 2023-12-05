@@ -1,6 +1,6 @@
 #include "train.h"
 
-Train::Train(QGraphicsItem* newGraphicItem, Rail* spawnedRail) : Movable(newGraphicItem)
+Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) : Movable(parent, newGraphicItem)
 {
     onPathValue = 0;
     onPathLength = 0;

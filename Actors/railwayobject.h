@@ -5,10 +5,14 @@
 
 class RailwayObject : public Actor
 {
+Q_OBJECT
 protected:
     bool visibleName;
 public:
-    RailwayObject(QGraphicsItem* newGraphicItem);
+    RailwayObject(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
+signals:
+
+public slots:
 };
 
 #endif // RAILWAYOBJECT_H

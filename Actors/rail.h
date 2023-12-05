@@ -6,6 +6,7 @@
 
 class Rail : public RailwayObject
 {
+Q_OBJECT
 protected:
     QPoint P0; //start point - ABSOLUTE
     QPoint P1; //first curve control point - RELATIVE TO P0
@@ -17,7 +18,7 @@ protected:
     Rail* conectionD1;
     bool lined;
 public:
-    Rail(QGraphicsItem* newGraphicItem);
+    Rail(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
     QPointF getP0WorldLocation();
     QPointF getP1RelativeLocation();
     QPointF getP2RelativeLocation();
@@ -38,6 +39,9 @@ public:
     void unconnectRails(Rail* unconnectedRail);
     void smoothP3PointByC1();
     ~Rail();
+signals:
+
+public slots:
 };
 
 #endif // RAIL_H
