@@ -40,6 +40,7 @@ private:
     WorldMap* world;
     int menuSelected;
     qint64 elapsedTime;
+    bool playModeActualized;
     void initializeMap();
 
 };

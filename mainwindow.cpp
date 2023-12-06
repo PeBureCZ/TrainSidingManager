@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     world = new WorldMap;
     initializeMap();
     menuSelected = 0;
-
+    playModeActualized = false;
     elapsedTime = 0;
     /*
     0 =basic (select)
@@ -197,11 +197,16 @@ void MainWindow::actualizeMap()
 {
     if (menuSelected == 3)
     {
-        if (world->actualizePlayMode() && elapsedTime > 2000)
+        if (!playModeActualized) //actualize only one time per "updateWorld" function
+        {
+            world->actualizePlayMode();
+            playModeActualized = true;
+        }
+        if (elapsedTime > 1000) //actualize play mode only one time per 1 second
         { 
             world->updateWorld();
-            elapsedTime -= 2000;
-            world->resetLatestActorActualized();
+            elapsedTime -= 1000;
+            playModeActualized = false;
         }
     }
     else

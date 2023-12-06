@@ -47,7 +47,6 @@ public:
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
-    void resetLatestActorActualized();
     void returnErrorThread();
 
     //FCE - RETURN
@@ -69,7 +68,7 @@ public:
 
     //FCE - TICK
     void actualizeEditor();
-    bool actualizePlayMode();
+    void actualizePlayMode();
     void updateWorld();
 
     //DESTRUCTOR
@@ -79,7 +78,6 @@ private:
     ActorConstructor* actualConstructor;
     QGraphicsScene *worldScene;
     WorldCollide* worldCollide;
-    int latestActorActualized;
 };
 
 #endif // WORLDMAP_H

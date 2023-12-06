@@ -17,10 +17,12 @@ Q_OBJECT
 protected:
     QString name;
     QPoint location;
+    QPoint graphicLocation;
     QGraphicsItem* graphicItem;
     float rotation;
     QVector<Trigger*> triggers;
     bool collisionEnabled;
+    void setGraphicLocation(QPoint newLocation);
 private:
 public:
     Actor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr);
@@ -30,6 +32,7 @@ public:
     QPoint getLocation();
     QVector<Trigger*> getAllTriggers();
 
+    virtual void actualizeGraphicLocation();
     void setRotation(float newRotation);
     float getRotation();
     void setLocation(QPoint newLocation);

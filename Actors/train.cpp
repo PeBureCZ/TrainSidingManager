@@ -12,6 +12,13 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     trainPath = {};
 }
 
+void Train::actualizeGraphicLocation()
+{
+    //this function is called from world with function "updateWorld"
+    //location (graphicLocation variable) is changed in QThreads and have to be visually changed in main thread
+    dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(graphicLocation); //only index 0 vehicle for now
+}
+
 Rail *Train::getActualRail()
 {
     return actualRail;
@@ -119,14 +126,9 @@ void Train::moveTrain()
     }
     QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
     onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->axlePos();
-
-    //dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(onPathPoint); //only index 0 vehicle for now
-    //graphic item pos change in WorldMap!
-    qDebug() << "move train (Train Actor)  - NEED ACTUALIZE GRAPHIC ITEM HERE";
-
+    setGraphicLocation(onPathPoint); //graphic item position change by class WorldMap! (out of QTHREAD)
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
-    qDebug() << "move train end";
 }
 
 void Train::setTrainPath(QVector<Rail *> newTrainPath)

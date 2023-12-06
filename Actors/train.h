@@ -18,6 +18,7 @@ protected:
     QVector<Vehicle*> vehicles;
     QVector<QGraphicsItem*> vehicleGraphicsItems;
 
+
 public:
     Train(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Rail* spawnedRail = nullptr);
     Vehicle* getVehicleActor(int indexOfVehicle);
@@ -25,8 +26,8 @@ public:
     QPointF getLocationOnPath(float percentOnPath);
     Rail* getActualRail();
 
+    void actualizeGraphicLocation() override;
     float getActualPathValue();
-
     void addVehicle(Vehicle* newVehicle, QGraphicsItem *graphicsItem);
     void actualizeMaxSpeed();
     void setActualPathValue(float newValue);
@@ -35,6 +36,7 @@ public:
     void moveTrain();
 
     virtual ~Train();
+
 
 signals:
 
