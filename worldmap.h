@@ -47,11 +47,10 @@ public:
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
-    void returnErrorThread();
 
     //FCE - RETURN
     QString testFunction();
-    CustomQGraphicsView* getWorld();
+    CustomQGraphicsView* getWorldView();
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);

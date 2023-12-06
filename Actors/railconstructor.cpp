@@ -175,10 +175,11 @@ void RailConstructor::setObjectBoxCollider()
             if (maxY < point.y()) maxY = point.y();
             if (minY > point.y()) minY = point.y();
         }
-        maxX += 1000;
-        minX -= 1000;
-        maxY += 1000;
-        minY -= 1000;
+
+        maxX += 40; //decimeters
+        minX -= 40; //decimeters
+        maxY += 40; //decimeters
+        minY -= 40; //decimeters
 
         QPoint leftUpCorner = {minX, minY};
         QPoint rightDownCorner = {maxX, maxY};

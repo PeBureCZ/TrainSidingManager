@@ -7,10 +7,11 @@
 #include <QRect>
 #include <QGraphicsRectItem>
 
-#define MAX_ZOOM_LEVEL 28 //NEED TO REBUILD - count relative location not work in zoom level > maxMapSize
-#define MIN_ZOOM_LEVEL -2
-#define MAX_MAP_X_SIZE 250000 //MEAN -250000 TO 250000
-#define MAX_MAP_Y_SIZE 200000 //MEAN -200000 TO 200000
+#define MAX_ZOOM_LEVEL 20 //NEED TO REBUILD - count relative location not work in zoom level > maxMapSize
+#define MIN_ZOOM_LEVEL -5
+#define MAX_MAP_X_SIZE 25000 //MEAN x -25000 TO x 25000
+#define MAX_MAP_Y_SIZE 20000 //MEAN y -20000 TO y 20000
+#define START_ZOOM 4
 
 class CustomQGraphicsView : public QGraphicsView
 {

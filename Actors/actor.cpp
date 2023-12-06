@@ -68,7 +68,7 @@ void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint r
         case 0: //SphereCollider
         {
             Trigger* newComponent = new SphereCollider();
-            dynamic_cast<SphereCollider*>(newComponent)->setRadius(1000);
+            dynamic_cast<SphereCollider*>(newComponent)->setRadius(30);
             component = newComponent;
             break;
         }

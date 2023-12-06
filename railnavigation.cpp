@@ -2,8 +2,8 @@
 
 RailNavigation::RailNavigation(Train *trainObject, Rail *destinationRail)
 {
-    actualRail = train->getActualRail();
     train = trainObject;
+    actualRail = train->getActualRail();
 }
 
 QVector<Rail *> RailNavigation::makePath()

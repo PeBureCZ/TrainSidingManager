@@ -84,7 +84,6 @@ Train::~Train()
 
 void Train::moveTrain()
 {
-    qDebug() << "move train start";
     if (actualSpeed == 0) return; //no change
     bool lastRail = false;
     bool directionOnEventBegin = directionToEnd;
@@ -93,15 +92,15 @@ void Train::moveTrain()
     int endPointValue;
     (directionToEnd) ? endPointValue = 1 : endPointValue = 0;
     float newPathPercentValue;
-    int loop = 0; //if train on tick end "stop" exactly on percent 1 or 0
+    int loop = 0; //if train on tick end "stop" exactly on percent 1.00 or 0.00
     do
     {
-        newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/100);
+        newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/10); //transfer to decimeters (unit on map)
         if (newPathPercentValue == endPointValue)
         {
             if (trainPath.size() > 0)
             {
-                (directionToEnd) ? newOnPathLength -= actualRail->getRailLength()*100 : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(trainPath[0])->getRailLength()*100;
+                (directionToEnd) ? newOnPathLength -= actualRail->getRailLength()*10 : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(trainPath[0])->getRailLength()*10;
                 TrainNavigation navigation;
                 directionToEnd = navigation.checkNewDirection(directionToEnd, actualRail, trainPath[0]); //check direction for new path segment
                 actualRail = trainPath[0];
@@ -111,21 +110,21 @@ void Train::moveTrain()
             else
             {
                 setActualSpeed(0);
-                (directionToEnd) ? newOnPathLength = actualPath->path().length()*100 : newOnPathLength = 0;
+                (directionToEnd) ? newOnPathLength = actualPath->path().length()*10 : newOnPathLength = 0;
                 (directionToEnd) ? newPathPercentValue = 1 : newPathPercentValue = 0;
                 lastRail = true;
             }
         }
         loop++;
     }
-    while(loop < 4 && newPathPercentValue == 1 || newPathPercentValue == 0 && lastRail == false);
+    while(loop < 4 && (newPathPercentValue == 1 || newPathPercentValue == 0) && lastRail == false);
     if (directionOnEventBegin != directionToEnd)
     {
-        newOnPathLength = (newOnPathLength - (actualPath->path().length()*100))*-1;
-        newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/100);
+        newOnPathLength = (newOnPathLength - (actualPath->path().length()*10))*-1;
+        newPathPercentValue = actualPath->path().percentAtLength(newOnPathLength/10);
     }
     QPoint onPathPoint = actualPath->path().pointAtPercent(newPathPercentValue).toPoint() + actualPath->pos().toPoint();
-    onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->axlePos();
+    onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->axlePos(); //change pos by axle pos (relative pos)
     setGraphicLocation(onPathPoint); //graphic item position change by class WorldMap! (out of QTHREAD)
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;

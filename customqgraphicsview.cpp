@@ -101,7 +101,7 @@ void CustomQGraphicsView::setWorldMap(int xSize, int ySize) //need to refract la
     int mapYside = mapSizeY/2;
 
     //set start zoom level
-    for (int i = 0; i < 17; i++) zoomOut();
+    for (int i = 0; i < START_ZOOM; i++) zoomOut();
 
     /*
     IMAGES - NEED ADD THIS OPTION! (image instances?!)

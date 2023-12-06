@@ -21,8 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::initializeMap()
 {
-    ui->MapView->addWidget(world->getWorld(),1);
-    ui->horizontalLayoutWidget->raise(); //raise layout inMapLayout
+    ui->MapViewLayout->addWidget(world->getWorldView(),1);
 }
 
 void MainWindow::on_TestButton1_clicked() //temporary
@@ -48,8 +47,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             case 1: //1 = add Rail (RailConstructor)
             {
                 QPoint point = (world->getRelativeWorldPos(event->pos()));
-                int zoom = world->getWorld()->getZoomLevel();
-                int maxRadius = 1;
+                int zoom = world->getWorldView()->getZoomLevel();
+                int maxRadius = 150;
                 if (zoom > 0) maxRadius += zoom * 150; //increase radius on zoom in
                 QVector<Actor*> actors = world->getActorUnderClick({2});
                 if (actors.size() == 0)
@@ -98,9 +97,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                     //true = Rail construction continue with actual Constructor
                 }
 
-                int zoom = world->getWorld()->getZoomLevel();
-                int maxRadius = 1;
-                if (zoom > 0) maxRadius += zoom * 50; //increase radius on zoom in
+                int zoom = world->getWorldView()->getZoomLevel();
+                int maxRadius = 40;
+                if (zoom > 0) maxRadius += zoom * 15; //increase radius on zoom in
                 world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f); //for P0 point
                 world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f);//for P3 point
                 world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f);//create object BoxCollider
@@ -165,10 +164,10 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     int delta = event->angleDelta().y();
     if (delta > 0) //front
     {
-        QRectF sceneRect = world->getWorld()->sceneRect();
-        QPointF sceneTopLeft = world->getWorld()->mapToGlobal(sceneRect.topLeft().toPoint());
+        QRectF sceneRect = world->getWorldView()->sceneRect();
+        QPointF sceneTopLeft = world->getWorldView()->mapToGlobal(sceneRect.topLeft().toPoint());
         int sceneGlobalX = sceneTopLeft.x();
-        ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()) + " !!! " + QString::number(sceneGlobalX + world->getWorld()->getMapSizeX()));
+        ui->label->setText(QString::number(globalPos.x()) + " / " + QString::number(globalPos.y()) + " !!! " + QString::number(sceneGlobalX + world->getWorldView()->getMapSizeX()));
     }
     else if (delta < 0) //back
     {
@@ -181,16 +180,15 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     QWidget::wheelEvent(event);
 }
 
-
 void MainWindow::on_SubBut_clicked()
 {
-    world->getWorld()->zoomOut();
+    world->getWorldView()->zoomOut();
 }
 
 
 void MainWindow::on_AddBut_clicked()
 {
-    world->getWorld()->zoomIn(false); //false = sideways by mouse
+    world->getWorldView()->zoomIn(false); //false = sideways by mouse
 }
 
 void MainWindow::actualizeMap()

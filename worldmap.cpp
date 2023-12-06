@@ -19,10 +19,10 @@ WorldMap::WorldMap(QObject* parent) : QObject(parent)
     actorList = {};
     railList = {};
     tickedActorsList = {}; //list of actor with any tick event (animation, move, etc.)
-    setMap(250000, 200000); //set map x,y border size
+    setMap(25000, 20000); //set map x,y border size
 }
 
-CustomQGraphicsView *WorldMap::getWorld() //return view of scene (QGraphicsView)
+CustomQGraphicsView *WorldMap::getWorldView() //return view of scene (QGraphicsView)
 {
     return worldView;
 }
@@ -90,10 +90,10 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         //invisible = not added to scene, only to list (indexed)
         actorList.push_back(newTrain); //indexed with graphicsItemListIndexed
         tickedActorsList.push_back(newTrain); //actor with tick update
-        dynamic_cast<Train*>(newTrain)->setActualSpeed(130000);
+        dynamic_cast<Train*>(newTrain)->setActualSpeed(1300); //centimeters/s
         if (railList.size()>1)
         {
-            QVector<Rail*> temporaryTrainPath(railList.begin()+1,railList.end());
+            QVector<Rail*> temporaryTrainPath(railList.begin()+1,railList.end()); //will be changed with RailNavigation
             dynamic_cast<Train*>(newTrain)->setTrainPath(temporaryTrainPath);
         }
     }
@@ -123,7 +123,7 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     QPainterPath path;
     path.cubicTo(0, 0, 0, 0, 0, 0); //deffault line -> will be changed immediately
     QGraphicsPathItem* pathItem = new QGraphicsPathItem(path); //add graphics
-    pathItem->setPen(QPen(Qt::blue, 144));
+    pathItem->setPen(QPen(Qt::blue, 14));
     pathItem->setPos(mapLocation.toPointF());
     worldScene->addItem(pathItem);
 
@@ -215,7 +215,6 @@ void WorldMap::actualizePlayMode()
     {
        QThread *thread = QThread::create(actualizeActor, actor);
        connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-       QObject::connect(thread, &QThread::destroyed, this, &WorldMap::returnErrorThread);
        thread->start();
     }
 }
@@ -384,17 +383,11 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
     actualConstructor = nullptr;
 }
 
-void WorldMap::returnErrorThread()
-{
-    //qDebug() << "Result received:";
-}
-
 QVector<Rail*> WorldMap::findPath(Train *train, Rail* destinationRail)
 {
-    QVector<Rail*> test = {};
+    QVector<Rail*> rails = {};
     RailNavigation navigation(train, destinationRail);
-    return test;
-
+    return rails;
 }
 
 int WorldMap::getDistance(QPoint pointOne, QPoint pointTwo)
