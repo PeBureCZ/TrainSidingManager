@@ -77,6 +77,10 @@ private:
     ActorConstructor* actualConstructor;
     QGraphicsScene *worldScene;
     WorldCollide* worldCollide;
+
+public slots:
+    printMessage();
+
 };
 
 #endif // WORLDMAP_H

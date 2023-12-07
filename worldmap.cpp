@@ -214,7 +214,9 @@ void WorldMap::actualizePlayMode()
     for (auto actor : tickedActorsList)
     {
        QThread *thread = QThread::create(actualizeActor, actor);
-       connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+       connect(thread, SIGNAL(finished()), thread, SLOT(quit()));
+       connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+       //connect(thread, &QThread::destroyed, this, &WorldMap::printMessage);
        thread->start();
     }
 }
@@ -368,6 +370,11 @@ WorldMap::~WorldMap()
     delete worldScene;
     delete worldView;
     delete worldCollide;
+}
+
+WorldMap::printMessage()
+{
+    qDebug() << "message send";
 }
 
 void WorldMap::setConstructor(Actor * actor)
