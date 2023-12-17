@@ -52,19 +52,19 @@ QPoint WorldMap::getRelativeWorldPos(QPoint point)
     {
         int xBarValue = xBar->value()*pow(1.25,zoomLevel);
         int yBarValue = yBar->value()*pow(1.25,zoomLevel);
-        newPoint = {static_cast<int>((x-100)*pow(1.25,zoomLevel) + xBarValue),static_cast<int>((y-20)*pow(1.25,zoomLevel) + yBarValue)};
+        newPoint = {static_cast<int>((x-160)*pow(1.25,zoomLevel) + xBarValue),static_cast<int>((y-20)*pow(1.25,zoomLevel) + yBarValue)};
     }
     else if (zoomLevel == 0)
     {
         int xBarValue = xBar->value();
         int yBarValue = yBar->value();
-        newPoint = {x-100 + xBarValue,y-20 + yBarValue};
+        newPoint = {x-160 + xBarValue,y-20 + yBarValue};
     }
     else
     {
         int xBarValue = xBar->value()*pow(0.8,zoomLevel*-1);
         int yBarValue = yBar->value()*pow(0.8,zoomLevel*-1);
-        newPoint = {static_cast<int>((x-100)*pow(0.8,zoomLevel*-1) + xBarValue),static_cast<int>((y-20)*pow(0.8,zoomLevel*-1) + yBarValue)};
+        newPoint = {static_cast<int>((x-160)*pow(0.8,zoomLevel*-1) + xBarValue),static_cast<int>((y-20)*pow(0.8,zoomLevel*-1) + yBarValue)};
     }
     return newPoint;
 }

@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     world = new WorldMap;
-    initializeMap();
+    initializeInterface();
     menuSelected = 0;
     playModeActualized = false;
     elapsedTime = 0;
@@ -17,11 +17,35 @@ MainWindow::MainWindow(QWidget *parent)
     2 = constructing rail (RailConstructor)
     3 = playMode
     */
+
+    //set buttons
 }
 
-void MainWindow::initializeMap()
+void MainWindow::initializeInterface()
 {
     ui->MapViewLayout->addWidget(world->getWorldView(),1);
+    ui->UnusedBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut3->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut4->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut5->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut6->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut7->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut8->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut9->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut10->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut11->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut12->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut13->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut14->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut15->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut16->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut17->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut18->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut19->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut20->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut21->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->UnusedBut22->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
 }
 
 void MainWindow::on_TestButton1_clicked() //temporary

@@ -7,7 +7,7 @@
 #include <QRect>
 #include <QGraphicsRectItem>
 
-#define MAX_ZOOM_LEVEL 20 //NEED TO REBUILD - count relative location not work in zoom level > maxMapSize
+#define MAX_ZOOM_LEVEL 18 //NEED TO REBUILD - count relative location not work in zoom level > maxMapSize
 #define MIN_ZOOM_LEVEL -5
 #define MAX_MAP_X_SIZE 25000 //MEAN x -25000 TO x 25000
 #define MAX_MAP_Y_SIZE 20000 //MEAN y -20000 TO y 20000

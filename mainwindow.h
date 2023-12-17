@@ -41,7 +41,7 @@ private:
     int menuSelected;
     qint64 elapsedTime;
     bool playModeActualized;
-    void initializeMap();
+    void initializeInterface();
 
 };
 #endif // MAINWINDOW_H

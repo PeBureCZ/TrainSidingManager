@@ -40,14 +40,13 @@ void CustomQGraphicsView::zoomIn(bool sideways)
             int yBarValue = verticalBar->value();
 
             //CALCULATE RELATIVE MOUSE POSITION TO THE MAINWINDOW (in range from -1 to 1)
-            //It must be changed, it does not care about the window size, currently set with fixed values for the scene view location.
             QRectF worldRect = sceneRect();
             QPointF sceneTopLeft = mapToGlobal(worldRect.topLeft().toPoint());
             int sceneGlobalX = sceneTopLeft.x();
             int sceneGlobalY = sceneTopLeft.y();
 
             int pixPositionLeftX = sceneGlobalX + mapSizeX;
-            int PixPositionMiddleX = pixPositionLeftX + 445;
+            int PixPositionMiddleX = pixPositionLeftX + 450;
 
             int pixPositionLeftY = sceneGlobalY + mapSizeY;
             int PixPositionMiddleY = pixPositionLeftY + 280;
