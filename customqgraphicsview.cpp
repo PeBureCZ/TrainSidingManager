@@ -101,13 +101,6 @@ void CustomQGraphicsView::setWorldMap(int xSize, int ySize) //need to refract la
 
     //set start zoom level
     for (int i = 0; i < START_ZOOM; i++) zoomOut();
-
-    /*
-    IMAGES - NEED ADD THIS OPTION! (image instances?!)
-    QPixmap pixmap1("C:/Users/Bureš/Desktop/Dočasné dokumenty/C++/Screenshots/1.jpg");
-    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap1);
-    worldScene->addItem(item);
-    */
 }
 
 int CustomQGraphicsView::getMapSizeX()

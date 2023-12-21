@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "dependencies/interfacewindow.h"
 #include <QApplication>
 #include <Qtimer>
 #include <QElapsedTimer>
@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow mw;
+    InterfaceWindow mw;
     QTimer timer;
     QElapsedTimer responseTimer;
     responseTimer.restart();

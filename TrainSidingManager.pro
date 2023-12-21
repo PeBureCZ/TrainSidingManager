@@ -28,6 +28,8 @@ SOURCES += \
     Components/spheretrigger.cpp \
     Components/trigger.cpp \
     customqgraphicsview.cpp \
+    dependencies/interfacewindow.cpp \
+    dependencies/mwlogic.cpp \
     dependencies/trainnavigation.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -58,6 +60,8 @@ HEADERS += \
     Components/spheretrigger.h \
     Components/trigger.h \
     customqgraphicsview.h \
+    dependencies/interfacewindow.h \
+    dependencies/mwlogic.h \
     dependencies/trainnavigation.h \
     mainwindow.h \
     railnavigation.h \

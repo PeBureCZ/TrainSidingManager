@@ -2,14 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QDebug>
-
 #include <QMainWindow>
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QGraphicsView>
-#include <QHBoxLayout>
-#include "worldmap.h"
-#include "Actors/actor.h"
+#include <worldmap.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,26 +16,23 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void actualizeMap();
-    void actualizeDeltaTime(qint64 deltaTime);
+    void wheelEvent(QWheelEvent *event);
+    void initializeInterface();
+    virtual void playButSwitch(bool editMode);
+    void InterfaceSet(int menuSelected);
 
 private slots:
-    void on_TestButton1_clicked();
-    void on_PlayBut_clicked();
-    void on_SubBut_clicked();
-    void on_AddBut_clicked();
-    void on_AddRailBut_clicked();
-    void on_MoveBut_clicked();
-    void mousePressEvent(QMouseEvent *event);
-    void wheelEvent(QWheelEvent *event);
 
-private:
+    virtual void on_PlayBut_clicked();
+    virtual void on_TestButton1_clicked();
+    virtual void on_MultiFuncBut1_clicked();
+    virtual void on_MoveBut_clicked();
+    virtual void on_SubBut_clicked();
+    virtual void on_AddBut_clicked();
+
+protected:
     Ui::MainWindow *ui;
     WorldMap* world;
-    int menuSelected;
-    qint64 elapsedTime;
-    bool playModeActualized;
-    void initializeInterface();
 
 };
 #endif // MAINWINDOW_H
