@@ -1,9 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QDebug>
 #include <QMainWindow>
 #include <worldmap.h>
+#include <QLabel>
+#include <QLayout>
+#include "dependencies/managerconsole.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -12,6 +14,8 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+private:
+    void resizeEvent(QResizeEvent *event) override;
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -20,6 +24,8 @@ public:
     void initializeInterface();
     virtual void playButSwitch(bool editMode);
     void InterfaceSet(int menuSelected);
+    QVBoxLayout *consoleLayout;
+    ManagerConsole* managerConsole;
 
 private slots:
 

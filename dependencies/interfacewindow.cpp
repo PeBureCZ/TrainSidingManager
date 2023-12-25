@@ -4,8 +4,10 @@ InterfaceWindow::InterfaceWindow(mwlogic *parent)
     : mwlogic{parent}
 {}
 
+
 void InterfaceWindow::on_TestButton1_clicked() //temporary
 {
+    managerConsole->addToConsole("asdad");
 }
 
 void InterfaceWindow::on_PlayBut_clicked()

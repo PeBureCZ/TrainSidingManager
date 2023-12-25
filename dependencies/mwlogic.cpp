@@ -36,6 +36,7 @@ void mwlogic::actualizeMap()
         world->updateWorld();
         elapsedTime = 0;
     }
+    managerConsole->reduceTimeSpan(1);
 }
 
 void mwlogic::actualizeDeltaTime(qint64 deltaTime)

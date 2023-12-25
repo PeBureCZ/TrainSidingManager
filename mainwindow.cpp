@@ -18,6 +18,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeInterface()
 {
+    //ui
     ui->MapViewLayout->addWidget(world->getWorldView(),1);
     ui->UnusedBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->UnusedBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
@@ -41,6 +42,15 @@ void MainWindow::initializeInterface()
     ui->UnusedBut20->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->UnusedBut21->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->UnusedBut22->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+
+    //console
+    managerConsole = new ManagerConsole(this); //add custom manager console
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QSize sizeView = world->getWorldView()->size();
+    managerConsole->setConsolePos({160,sizeView.height()-250},250,250);
 }
 
 void MainWindow::playButSwitch(bool editMode)

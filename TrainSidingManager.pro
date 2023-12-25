@@ -29,6 +29,8 @@ SOURCES += \
     Components/trigger.cpp \
     customqgraphicsview.cpp \
     dependencies/interfacewindow.cpp \
+    dependencies/managerconsole.cpp \
+    dependencies/managerconsolelogic.cpp \
     dependencies/mwlogic.cpp \
     dependencies/trainnavigation.cpp \
     main.cpp \
@@ -61,6 +63,8 @@ HEADERS += \
     Components/trigger.h \
     customqgraphicsview.h \
     dependencies/interfacewindow.h \
+    dependencies/managerconsole.h \
+    dependencies/managerconsolelogic.h \
     dependencies/mwlogic.h \
     dependencies/trainnavigation.h \
     mainwindow.h \
