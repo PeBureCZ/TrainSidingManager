@@ -18,7 +18,9 @@
 #include "Actors/actor.h"
 #include "Actors/train.h"
 #include "Actors/cd730.h"
-#include "Actors/railconstructor.h"
+#include "Actors/signal.h"
+#include "Actors/Constructors/signalconstructor.h"
+#include "Actors/Constructors/railconstructor.h"
 
 //STATIC OBJECTS
 #include "Actors/rail.h"
@@ -38,6 +40,7 @@ public:
     void setMap(int xSize, int ySize);
     void addTrainActor(Rail *spawnOnRail);
     void addRailConstructor(QPoint mapLocation, Rail *connectedRail);
+    void addSignalConstructor(QPoint mapLocation);
     void addRailwaylActor(Rail* railActor, int indexOfActor);
     void addStaticlActor(QPoint spawnPos, int indexOfActor);
     void addVehicleActor(Train* ownerTrain, int indexOfVehicle);

@@ -28,6 +28,7 @@ public:
     void actualizeMap();
     void actualizeDeltaTime(qint64 deltaTime);
     void playButSwitch(bool editMode) override;
+    void addConstructor(int constructorType, QPoint point);
     void mouseEvent(QMouseEvent* event);
 
 };

@@ -10,19 +10,17 @@ class ManagerConsoleLogic : public QObject
     Q_OBJECT
 
 protected:
-    QLabel* consoleText;
+    QLabel* consoleTextObject;
     int consoleLines;
-    int timeSpan;
+    QList<int> timeSpan;
+    QList<QString> consoleText;
 public:
     explicit ManagerConsoleLogic(QObject *parent = nullptr);
-    addToConsole(QString text);
+    addToConsole(QString text, int timeToHidden);
     setConsolePos(QPoint point, int sizeX, int sizeY);
     reduceTimeSpan(int reduction);
     actualizeConsoleText();
     ~ManagerConsoleLogic();
-
-
-
 
 signals:
 

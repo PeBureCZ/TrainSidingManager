@@ -8,8 +8,8 @@ mwlogic::mwlogic(MainWindow *parent)
     elapsedTime = 0;
     /*
     0 = editMode
-    1 = add Rail (create constructor)
-    2 = constructing rail (RailConstructor)
+    1 = prepare to add constructor (e.g. SignalConstructor)
+    2 = under constructing (e.g. RailConstructor)
     3 = playMode
     */
 }
@@ -50,6 +50,57 @@ void mwlogic::playButSwitch(bool editMode)
     InterfaceSet(menuSelected);
 }
 
+void mwlogic::addConstructor(int constructorType, QPoint point)
+{
+    int zoom = world->getWorldView()->getZoomLevel();
+    int maxRadius = 150;
+    if (zoom > 0) maxRadius += zoom * 150; //increase radius on zoom in
+    QVector<Actor*> actors = world->getActorUnderClick({2});
+    if (actors.size() == 0)
+    {
+        switch (constructorType)
+        {
+        case 1: //1 = add Rail (RailConstructor)
+            world->addRailConstructor(point, nullptr);
+            managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB).", 99, 500);
+            managerConsole->printToConsole("(To connect to another track, use the left mouse button (LMB) near the end of another track)", 99, 500);
+            break;
+        case 2:
+            world->addSignalConstructor(point);
+            managerConsole->printToConsole("no Signal constructor yet", 1, 500);
+        default: {}
+        }
+        menuSelected = 2; //set menu "under constructor
+
+    }
+    else
+    {
+        Actor* nearestActor = nullptr;
+        int distance = 99999999;
+        for (int i = 0; i < actors.size(); i++)
+        {
+            Trigger* nearestTrigger = {};
+            if (dynamic_cast<Rail*>(actors[i]))
+            {
+                nearestTrigger = world->getNearestTriggerInRange(actors[i], point, maxRadius);
+                if (nearestTrigger == nullptr) continue; //all triggers are out of range
+                int testedDistance = world->getDistance(nearestTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
+                if (distance > testedDistance) //nearest actor by trigger
+                {
+                    nearestActor = actors[i];
+                    distance = testedDistance;
+                }
+            }
+        }
+        if (nearestActor != nullptr) //all actors are out of range
+        {
+            Trigger* nearestTrigger = world->getNearestTriggerInRange(nearestActor, point, maxRadius);
+            world->addRailConstructor(nearestActor->getLocation() + nearestTrigger->getRelativeLocation(), dynamic_cast<Rail*>(nearestActor));
+            menuSelected = 2;
+        }
+    }
+}
+
 void mwlogic::mouseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
@@ -60,41 +111,7 @@ void mwlogic::mouseEvent(QMouseEvent *event)
         case 1: //1 = add Rail (RailConstructor)
         {
             QPoint point = (world->getRelativeWorldPos(event->pos()));
-            int zoom = world->getWorldView()->getZoomLevel();
-            int maxRadius = 150;
-            if (zoom > 0) maxRadius += zoom * 150; //increase radius on zoom in
-            QVector<Actor*> actors = world->getActorUnderClick({2});
-            if (actors.size() == 0)
-            {
-                world->addRailConstructor(point, nullptr);
-                menuSelected = 2;
-            }
-            else
-            {
-                Actor* nearestActor = nullptr;
-                int distance = 99999999;
-                for (int i = 0; i < actors.size(); i++)
-                {
-                    Trigger* nearestTrigger = {};
-                    if (dynamic_cast<Rail*>(actors[i]))
-                    {
-                        nearestTrigger = world->getNearestTriggerInRange(actors[i], point, maxRadius);
-                        if (nearestTrigger == nullptr) continue; //all triggers are out of range
-                        int testedDistance = world->getDistance(nearestTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
-                        if (distance > testedDistance) //nearest actor by trigger
-                        {
-                            nearestActor = actors[i];
-                            distance = testedDistance;
-                        }
-                    }
-                }
-                if (nearestActor != nullptr) //all actors are out of range
-                {
-                    Trigger* nearestTrigger = world->getNearestTriggerInRange(nearestActor, point, maxRadius);
-                    world->addRailConstructor(nearestActor->getLocation() + nearestTrigger->getRelativeLocation(), dynamic_cast<Rail*>(nearestActor));
-                    menuSelected = 2;
-                }
-            }
+            addConstructor(1, point);
             break;
         }
         case 2: //2 = constructing rail (RailConstructor)

@@ -9,16 +9,19 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Actors/Constructors/actorconstructor.cpp \
+    Actors/Constructors/railconstructor.cpp \
+    Actors/Constructors/railobjectconstructor.cpp \
+    Actors/Constructors/signalconstructor.cpp \
     Actors/actor.cpp \
-    Actors/actorconstructor.cpp \
     Actors/cd730.cpp \
     Actors/diesellocomotive.cpp \
     Actors/electriclocomotive.cpp \
     Actors/locomotive.cpp \
     Actors/movable.cpp \
     Actors/rail.cpp \
-    Actors/railconstructor.cpp \
     Actors/railwayobject.cpp \
+    Actors/signal.cpp \
     Actors/train.cpp \
     Actors/vehicle.cpp \
     Components/boxcollider.cpp \
@@ -43,16 +46,19 @@ SOURCES += \
 
 
 HEADERS += \
+    Actors/Constructors/actorconstructor.h \
+    Actors/Constructors/railconstructor.h \
+    Actors/Constructors/railobjectconstructor.h \
+    Actors/Constructors/signalconstructor.h \
     Actors/actor.h \
-    Actors/actorconstructor.h \
     Actors/cd730.h \
     Actors/diesellocomotive.h \
     Actors/electriclocomotive.h \
     Actors/locomotive.h \
     Actors/movable.h \
     Actors/rail.h \
-    Actors/railconstructor.h \
     Actors/railwayobject.h \
+    Actors/signal.h \
     Actors/train.h \
     Actors/vehicle.h \
     Components/boxcollider.h \

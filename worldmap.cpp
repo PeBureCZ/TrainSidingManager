@@ -141,6 +141,30 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     setConstructor(railConstructor);
 }
 
+void WorldMap::addSignalConstructor(QPoint mapLocation)
+{
+    /*
+    //ADD GRAPHIC FOR SIGNAL ACTOR
+    SpriteColection newSprite;
+    QGraphicsItem* signalItem = new QGraphicsPixmapItem(newSprite.redSignal()); //add graphics
+    worldScene->addItem(signalItem);
+
+
+    //ADD SIGNAL ACTOR
+    Actor* signal = new Signal(nullptr, signalItem); //add actor
+    addActorToLists(signal;
+    signal->setLocation(mapLocation);
+
+    //ADD CONSTRUCTOR ACTOR
+    QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
+    Actor* signalConstructor = new SignalConstructor(nullptr, emptyItem, rail, mapLocation, connectedRail); //add actor
+    addActorToLists(signalConstructor);
+    setConstructor(signalConstructor);
+    uncomplete!
+    */
+}
+
+
 void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
 {
     switch (indexOfActor)
@@ -185,20 +209,23 @@ void WorldMap::addActorToLists(Actor* addedActor)
 
 void WorldMap::deleteActor(Actor *actor)
 {
-    if (actor->canCollide())
+    if (dynamic_cast<Actor*>(actor))
     {
-        worldCollide->removeActorFromCollideLists(actor);
-    }
-    if (tickedActorsList.contains(actor)) tickedActorsList.remove(tickedActorsList.indexOf(actor));
+        if (actor->canCollide())
+        {
+            worldCollide->removeActorFromCollideLists(actor);
+        }
+        if (tickedActorsList.contains(actor)) tickedActorsList.remove(tickedActorsList.indexOf(actor));
 
-    if (dynamic_cast<Rail*>(actor))
-    {
-       int railIndex = railList.indexOf(dynamic_cast<Rail*>(actor));
-       railList.remove(railIndex); //actor will be deleted from actor List
+        if (dynamic_cast<Rail*>(actor))
+        {
+            int railIndex = railList.indexOf(dynamic_cast<Rail*>(actor));
+            railList.remove(railIndex); //actor will be deleted from actor List
+        }
+        int actorIndex = actorList.indexOf(actor);
+        delete actorList[actorIndex];
+        actorList.remove(actorIndex);
     }
-    int actorIndex = actorList.indexOf(actor);
-    delete actorList[actorIndex];
-    actorList.remove(actorIndex);
 }
 
 void WorldMap::actualizeEditor()
@@ -385,8 +412,11 @@ void WorldMap::setConstructor(Actor * actor)
 
 void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = true, delete actor in ActorConstructor too
 {
-    if (deleteCreation) deleteActor(dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing());
-    deleteActor(actualConstructor);
+    if (actualConstructor != nullptr && dynamic_cast<ActorConstructor*>(actualConstructor))
+    {
+        if (deleteCreation) deleteActor(dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing());
+        deleteActor(actualConstructor);
+    }
     actualConstructor = nullptr;
 }
 

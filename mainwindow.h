@@ -31,10 +31,13 @@ private slots:
 
     virtual void on_PlayBut_clicked();
     virtual void on_TestButton1_clicked();
-    virtual void on_MultiFuncBut1_clicked();
-    virtual void on_MoveBut_clicked();
     virtual void on_SubBut_clicked();
     virtual void on_AddBut_clicked();
+
+    virtual void on_MultiFuncBut1_clicked();
+    virtual void on_MultiFuncBut2_clicked();
+    virtual void on_MultiFuncBut24_clicked();
+
 
 protected:
     Ui::MainWindow *ui;
