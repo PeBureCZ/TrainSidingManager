@@ -44,13 +44,11 @@ void CustomQGraphicsView::zoomIn(bool sideways)
             QPointF sceneTopLeft = mapToGlobal(worldRect.topLeft().toPoint());
             int sceneGlobalX = sceneTopLeft.x();
             int sceneGlobalY = sceneTopLeft.y();
-
+            QSize viewSize = viewport()->size();
             int pixPositionLeftX = sceneGlobalX + mapSizeX;
-            int PixPositionMiddleX = pixPositionLeftX + 450;
-
+            int PixPositionMiddleX = pixPositionLeftX + viewSize.width()/2;
             int pixPositionLeftY = sceneGlobalY + mapSizeY;
-            int PixPositionMiddleY = pixPositionLeftY + 280;
-
+            int PixPositionMiddleY = pixPositionLeftY + viewSize.height()/2;
             int xm = 140; // Specifies how much the camera moves sideways during zoom in the x direction
             int ym = 130; // Specifies how much the camera moves sideways during zoom in the y direction
 

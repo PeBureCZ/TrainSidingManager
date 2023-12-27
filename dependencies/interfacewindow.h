@@ -15,11 +15,13 @@ private slots:
     void on_PlayBut_clicked() override;
     void on_SubBut_clicked() override;
     void on_AddBut_clicked() override;
-    void on_MultiFuncBut1_clicked() override;
-    void on_MoveBut_clicked() override;
     void mousePressEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void playButSwitch(bool editMode) override;
+
+    void on_MultiFuncBut1_clicked() override;
+    void on_MultiFuncBut2_clicked() override;
+    void on_MultiFuncBut24_clicked() override;
 };
 
 #endif // INTERFACEWINDOW_H

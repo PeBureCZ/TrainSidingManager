@@ -3,67 +3,67 @@
 ManagerConsoleLogic::ManagerConsoleLogic(QObject *parent)
     : QObject{parent}
 {
-    consoleText = new QLabel("", dynamic_cast<QWidget*>(parent));
-    consoleText->setAlignment(Qt::AlignBottom);
+    consoleTextObject = new QLabel("", dynamic_cast<QWidget*>(parent));
+    consoleTextObject->setAlignment(Qt::AlignBottom);
     consoleLines = 0;
-    timeSpan = 0;
-    consoleText->clear();
-    //consoleText->raise();
+    timeSpan = {};
+    consoleText = {};
 }
 
-ManagerConsoleLogic::addToConsole(QString text)
+ManagerConsoleLogic::addToConsole(QString text, int timeToHidden)
 {
     //visual size = max 14 rows
-    timeSpan = 80;
-    QString newText = consoleText->text();
-    newText += "<br>" + text;
-    consoleText->setText(newText);
+    timeSpan.push_back(timeToHidden);
+    consoleText.push_back(text);
     consoleLines++;
+    if (consoleLines > 13)
+    {
+        consoleText.remove(0,1);
+        timeSpan.remove(0,1);
+        consoleLines--;
+    }
+    consoleTextObject->clear();
+    QString newText = "";
+    actualizeConsoleText();
 }
 
 ManagerConsoleLogic::setConsolePos(QPoint point, int sizeX, int sizeY)
 {
-    consoleText->setGeometry(point.x(), point.y(), sizeX, sizeY);
+    consoleTextObject->setGeometry(point.x(), point.y(), sizeX, sizeY);
 }
 
 ManagerConsoleLogic::reduceTimeSpan(int reduction)
-{ 
-    if (timeSpan > 0)
+{
+    bool actualize = false;
+    if (consoleText.size() > 0)
     {
-        timeSpan--;
-        if (timeSpan == 0)
+
+        for (int i = timeSpan.size() -1; i >= 0 ; i--)
         {
-            actualizeConsoleText();
+            timeSpan[i]--;
+            if (timeSpan[i] <= 0)
+            {
+                actualize = true;
+                timeSpan.remove(i,1);
+                consoleText.remove(i,1);
+                consoleLines--;
+            }
         }
     }
+    if (actualize) actualizeConsoleText();
 }
 
 ManagerConsoleLogic::actualizeConsoleText()
 {
-    if (consoleLines == 1)
+    QString textInConsole = "";
+    consoleTextObject->clear();
+    for (int i = 0; i < timeSpan.size(); i++)
     {
-        consoleLines--;
-        consoleText->clear();
+        textInConsole += "<br>" + consoleText[i];
     }
-    else if (consoleLines > 0)
-    {
-        int letterIndex = 4; //start after <br> at index 4 (<br>.....QString chars)
-        //delete one line (first)
-        QString textInConsole = consoleText->text();
-        consoleLines--;
-        for (int i = 4; i < textInConsole.size(); i++)
-        {
-            if (textInConsole[i] == '<')
-            {
-                textInConsole.remove(0,i);
-                timeSpan = 80;
-                consoleText->setText(textInConsole);
-                break;
-            }
-            else letterIndex++;
-        }
-    }
+    consoleTextObject->setText(textInConsole);
 }
+
 
 ManagerConsoleLogic::~ManagerConsoleLogic(){}
 
