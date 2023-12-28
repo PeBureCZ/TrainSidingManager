@@ -33,9 +33,6 @@ QString WorldMap::testFunction()
     {
         addTrainActor(dynamic_cast<Rail*>(railList[0]));
     }
-    else
-    {
-    }
     return "nothing";
 }
 
