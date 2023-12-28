@@ -24,26 +24,25 @@ SOURCES += \
     Actors/signal.cpp \
     Actors/train.cpp \
     Actors/vehicle.cpp \
+    main.cpp \
     Components/boxcollider.cpp \
     Components/collider.cpp \
     Components/component.cpp \
     Components/spherecollider.cpp \
     Components/spheretrigger.cpp \
     Components/trigger.cpp \
-    customqgraphicsview.cpp \
-    dependencies/interfacewindow.cpp \
     dependencies/managerconsole.cpp \
     dependencies/managerconsolelogic.cpp \
-    dependencies/mwlogic.cpp \
     dependencies/trainnavigation.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    railnavigation.cpp \
-    spritecolection.cpp \
-    worldcollide.cpp \
-    worldmap.cpp \
-    worldviewmap.cpp
-
+    dependencies/railnavigation.cpp \
+    dependencies/spritecolection.cpp \
+    dependencies/worldcollide.cpp \
+    dependencies/worldmap.cpp \
+    dependencies/worldviewmap.cpp \
+    mainWindow/interfacewindow.cpp \
+    mainWindow/customqgraphicsview.cpp \
+    mainWindow/mwlogic.cpp \
+    mainWindow/mainwindow.cpp
 
 HEADERS += \
     Actors/Constructors/actorconstructor.h \
@@ -67,19 +66,19 @@ HEADERS += \
     Components/spherecollider.h \
     Components/spheretrigger.h \
     Components/trigger.h \
-    customqgraphicsview.h \
     dependencies/interfacewindow.h \
     dependencies/managerconsole.h \
     dependencies/managerconsolelogic.h \
-    dependencies/mwlogic.h \
     dependencies/trainnavigation.h \
-    mainwindow.h \
-    railnavigation.h \
-    spritecolection.h \
-    worldcollide.h \
-    worldmap.h \
-    worldviewmap.h
-
+    dependencies/railnavigation.h \
+    dependencies/spritecolection.h \
+    dependencies/worldcollide.h \
+    dependencies/worldmap.h \
+    dependencies/worldviewmap.h \
+    mainWindow/interfacewindow.h \
+    mainWindow/customqgraphicsview.h \
+    mainWindow/mwlogic.h \
+    mainWindow/mainwindow.h
 
 FORMS += \
     mainwindow.ui
@@ -90,4 +89,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    images/loco.png
+    README.md \
+    images/CD730.png \
+    images/loco.png \
+    images/signal_green.png \
+    images/signal_red.png \
+    images/signal_white.png \
+    images/signal_yellow.png

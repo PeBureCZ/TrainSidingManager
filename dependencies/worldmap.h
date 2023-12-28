@@ -5,7 +5,7 @@
 #include <QPainterPath>
 #include <QPen>
 #include <QThread>
-#include <customqgraphicsview.h>
+#include "mainWindow/customqgraphicsview.h"
 
 //BASIC OBJECTS
 #include <QGraphicsView>

@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <worldmap.h>
+#include "dependencies/worldmap.h"
 #include <QLabel>
 #include <QLayout>
 #include "dependencies/managerconsole.h"

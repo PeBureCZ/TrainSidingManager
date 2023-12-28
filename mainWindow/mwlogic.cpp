@@ -1,4 +1,4 @@
-#include "dependencies/mwlogic.h"
+#include "mainWindow/mwlogic.h"
 
 mwlogic::mwlogic(MainWindow *parent)
     : MainWindow{parent}

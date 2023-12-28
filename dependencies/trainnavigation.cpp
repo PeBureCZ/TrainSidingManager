@@ -1,4 +1,4 @@
-#include "trainnavigation.h"
+#include "dependencies/trainnavigation.h"
 
 TrainNavigation::TrainNavigation()
 {

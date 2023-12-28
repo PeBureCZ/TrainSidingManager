@@ -2,7 +2,7 @@
 #define INTERFACEWINDOW_H
 
 #include <QObject>
-#include "dependencies/mwlogic.h"
+#include "mainWindow/mwlogic.h"
 
 class InterfaceWindow : public mwlogic
 {

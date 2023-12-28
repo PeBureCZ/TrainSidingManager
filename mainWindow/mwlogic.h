@@ -1,7 +1,7 @@
 #ifndef MWLOGIC_H
 #define MWLOGIC_H
 
-#include <mainwindow.h>
+#include <mainWindow/mainwindow.h>
 #include <QObject>
 #include <QMouseEvent>
 #include <QWheelEvent>
