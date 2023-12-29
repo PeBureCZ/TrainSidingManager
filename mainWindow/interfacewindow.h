@@ -4,6 +4,8 @@
 #include <QObject>
 #include "mainWindow/mwlogic.h"
 
+
+
 class InterfaceWindow : public mwlogic
 {
     Q_OBJECT

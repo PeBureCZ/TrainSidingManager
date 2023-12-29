@@ -9,6 +9,13 @@
 #include <QHBoxLayout>
 #include "Actors/actor.h"
 
+/*
+    menuSelected:
+    0-99 = menu option
+    100-199 = edit mode functionss
+    200-299 = play mode functions
+    */
+
 class mwlogic : public MainWindow
 {
     Q_OBJECT
@@ -29,8 +36,7 @@ public:
     void actualizeDeltaTime(qint64 deltaTime);
     void playButSwitch(bool editMode) override;
     void addConstructor(int constructorType, QPoint point);
-    void mouseEvent(QMouseEvent* event);
-
+    void constructRail(QPoint point);
 };
 
 #endif // MWLOGIC_H

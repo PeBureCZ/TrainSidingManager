@@ -94,7 +94,7 @@ void MainWindow::InterfaceSet(int menuSelected)
 {
     switch (menuSelected)
     {
-    case 1:
+    case EDIT_MODE:
         ui->MultiFuncBut1->setText("");
         ui->MultiFuncBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
         ui->MultiFuncBut2->setText("");
@@ -102,9 +102,9 @@ void MainWindow::InterfaceSet(int menuSelected)
         ui->MultiFuncBut24->setText("");
         ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
         break;
-    case 2:
+    case RAIL_ADD_MODE:
         break;
-    case 3:
+    case PLAY_MODE:
         ui->MultiFuncBut1->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
         ui->MultiFuncBut1->setText("Rails");
         ui->MultiFuncBut2->setStyleSheet("background-color: rgba(240, 240, 240, 255);");

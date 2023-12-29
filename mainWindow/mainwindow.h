@@ -7,6 +7,13 @@
 #include <QLayout>
 #include "dependencies/managerconsole.h"
 
+#define EDIT_MODE 0
+#define PLAY_MODE 1
+#define FREE_MODE 100
+#define RAIL_SPAWN_MODE 101
+#define RAIL_ADD_MODE 102
+#define SIGNAL_ADD_MODE 103
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

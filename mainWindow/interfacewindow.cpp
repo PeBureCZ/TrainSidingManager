@@ -1,5 +1,32 @@
 #include "interfacewindow.h"
 
+/*
+    menuSelected:
+    0-99 = menu option
+    100-199 = edit mode functionss
+    200-299 = play mode functions
+
+    /*
+    OLD
+    0 = editMode
+    1 = prepare to add constructor (e.g. SignalConstructor)
+    2 = under constructing (e.g. RailConstructor)
+    3 = playMode
+
+    NEW
+    0 = editMode
+    1 = playMode
+
+    100 = free
+    101 = prepare to add rail constructor
+    102 = under constructing rail
+    103 = spawn SignalConstructor and prepare to add Signal
+
+    0-99 = menu option
+    100-199 = edit mode functionss
+    200-299 = play mode functions
+    */
+
 InterfaceWindow::InterfaceWindow(mwlogic *parent)
     : mwlogic{parent}
 {}
@@ -11,12 +38,41 @@ void InterfaceWindow::on_TestButton1_clicked() //temporary
 
 void InterfaceWindow::on_PlayBut_clicked()
 {
-    playButSwitch(menuSelected == 3);
+    playButSwitch(menuSelected == PLAY_MODE);
 }
 
 void InterfaceWindow::mousePressEvent(QMouseEvent *event)
 {
-    mouseEvent(event);
+    //mouseEvent(event);
+    if (event->button() == Qt::LeftButton)
+    {
+        switch (menuSelected)
+        {
+            //case 0: same as default
+            case RAIL_SPAWN_MODE: //add Rail (RailConstructor)
+                addConstructor(1, world->getRelativeWorldPos(event->pos()));
+                break;
+            case RAIL_ADD_MODE: //constructing rail (RailConstructor)
+                constructRail(event->pos());
+                break;
+            default: break;//incl. 0
+                //nothing yet...;
+        }
+    }
+    else if (event->button() == Qt::RightButton)
+    {
+        switch (menuSelected)
+        {
+            case PLAY_MODE: //add Rail (constructor)
+                //nothing?
+                break;
+            case RAIL_ADD_MODE: //constructing rail (RailConstructor)
+                world->deleteConstructor(true);
+                menuSelected = EDIT_MODE;
+                break;
+            default: break;//incl. 0 = default
+        }
+    }
 }
 
 void InterfaceWindow::wheelEvent(QWheelEvent *event)
@@ -29,12 +85,12 @@ void InterfaceWindow::playButSwitch(bool editMode)
     mwlogic::playButSwitch(editMode);
     if (editMode)
     {
-        menuSelected = 0;
+        menuSelected = EDIT_MODE;
         managerConsole->printToConsole("switch to edit mode", 6, 140);
     }
     else if(!editMode)
     {
-        menuSelected = 3;
+        menuSelected = PLAY_MODE;
         managerConsole->printToConsole("switch to play mode", 6, 140);
         if (world->railList.size() > 0)
         {
@@ -56,20 +112,19 @@ void InterfaceWindow::on_AddBut_clicked()
 
 void InterfaceWindow::on_MultiFuncBut1_clicked()
 {
-    if (menuSelected == 0) menuSelected = 1; //if editMode -> constructiong Rail
+    if (menuSelected == EDIT_MODE) menuSelected = RAIL_SPAWN_MODE; //if editMode -> constructiong Rail
 }
 
 void InterfaceWindow::on_MultiFuncBut2_clicked()
 {
-    //menuSelected = 0;
 }
 
 void InterfaceWindow::on_MultiFuncBut24_clicked()
 {
-    if (menuSelected != 3)
+    if (menuSelected != PLAY_MODE)
     {
         //delete button
-        menuSelected = 0;
+        menuSelected = EDIT_MODE;
         if (world->actorList.size() > 0)
         {
             //delete last created actor
