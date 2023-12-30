@@ -128,7 +128,7 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     Actor* rail = new Rail(nullptr, pathItem); //add actor
     addActorToLists(rail);
     if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
-    rail->setLocation(mapLocation);
+    rail->setLocation(mapLocation, true);
 
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
@@ -256,7 +256,8 @@ void WorldMap::setMap(int xSize, int ySize)
 
 void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
 {
-    actor->setLocation(newLocation);
+    actor->setLocation(newLocation, true);
+    qDebug() << "setActorLoc";
 }
 
 Rail* WorldMap::getRailFromList(int index)

@@ -1,5 +1,15 @@
 #include "actor.h"
 
+Actor::Actor(QObject *parent, QGraphicsItem* newGraphicItem) : QObject(parent), graphicItem(newGraphicItem)
+{
+    name = "default name";
+    location = {0,0};
+    graphicLocation = {0,0};
+    rotation = 0.0f;
+    triggers = {};
+    collisionEnabled = false;
+}
+
 void Actor::setGraphicLocation(QPoint newLocation)
 {
     //This function is called from QThread. The visual change is made in the main thread (in the WorldMap)
@@ -12,16 +22,6 @@ void Actor::actualizeGraphicLocation()
     //this function is called from world with function "updateWorld"
     //location (graphicLocation variable) is changed in QThreads and have to be changed in main thread
     graphicItem->setPos(graphicLocation);
-}
-
-Actor::Actor(QObject *parent, QGraphicsItem* newGraphicItem) : QObject(parent), graphicItem(newGraphicItem)
-{
-    name = "default name";
-    location = {0,0};
-    graphicLocation = {0,0};
-    rotation = 0.0f;
-    triggers = {};
-    collisionEnabled = false;
 }
 
 QGraphicsItem *Actor::getGraphicItem()
@@ -44,9 +44,10 @@ void Actor::setRotation(float newRotation)
     rotation = newRotation;
 }
 
-void Actor::setLocation(QPoint newLocation)
+void Actor::setLocation(QPoint newLocation, bool actualizeGraphic)
 {
     location = newLocation;
+    if (actualizeGraphic) setGraphicLocation(newLocation);
 }
 
 QPoint Actor::getLocation()

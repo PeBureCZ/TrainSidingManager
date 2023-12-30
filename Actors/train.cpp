@@ -130,7 +130,7 @@ void Train::moveTrain()
     onPathLength = newOnPathLength;
 }
 
-void Train::setTrainPath(QVector<Rail *> newTrainPath)
+void Train::setTrainPath(QVector<Rail*> newTrainPath)
 {
     trainPath = newTrainPath;
 }
