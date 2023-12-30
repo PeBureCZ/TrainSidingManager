@@ -192,7 +192,6 @@ void RailConstructor::setObjectBoxCollider()
 }
 
 RailConstructor::~RailConstructor()
-{
-}
+{}
 
 

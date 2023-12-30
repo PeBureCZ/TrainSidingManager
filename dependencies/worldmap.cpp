@@ -140,25 +140,13 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
 
 void WorldMap::addSignalConstructor(QPoint mapLocation)
 {
-    /*
-    //ADD GRAPHIC FOR SIGNAL ACTOR
+    //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
     SpriteColection newSprite;
-    QGraphicsItem* signalItem = new QGraphicsPixmapItem(newSprite.redSignal()); //add graphics
-    worldScene->addItem(signalItem);
-
-
-    //ADD SIGNAL ACTOR
-    Actor* signal = new Signal(nullptr, signalItem); //add actor
-    addActorToLists(signal;
-    signal->setLocation(mapLocation);
-
+    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.noPlaceSignal()); //sprite from struct
     //ADD CONSTRUCTOR ACTOR
-    QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
-    Actor* signalConstructor = new SignalConstructor(nullptr, emptyItem, rail, mapLocation, connectedRail); //add actor
+    Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
-    uncomplete!
-    */
 }
 
 
@@ -411,7 +399,8 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
 {
     if (actualConstructor != nullptr && dynamic_cast<ActorConstructor*>(actualConstructor))
     {
-        if (deleteCreation) deleteActor(dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing());
+        Actor* actorConstructed = dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing();
+        if (deleteCreation && actorConstructed != nullptr) deleteActor(actorConstructed);
         deleteActor(actualConstructor);
     }
     actualConstructor = nullptr;

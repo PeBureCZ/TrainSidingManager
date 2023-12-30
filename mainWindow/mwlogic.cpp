@@ -80,6 +80,7 @@ void mwlogic::playButSwitch(bool editMode)
 
 void mwlogic::addConstructor(int constructorType, QPoint point)
 {
+    world->deleteConstructor(true);
     int zoom = world->getWorldView()->getZoomLevel();
     int maxRadius = 150;
     if (zoom > 0) maxRadius += zoom * 150; //increase radius on zoom in
@@ -96,7 +97,8 @@ void mwlogic::addConstructor(int constructorType, QPoint point)
             break;
         case 2:
             world->addSignalConstructor(point);
-            managerConsole->printToConsole("no Signal constructor yet", 1, 500);
+            managerConsole->printToConsole("To place a signal, move the mouse cursor closer to the breakpoints of one of the tracks. The track with the placed signal will be marked with a changed color", 99, 500);
+            managerConsole->printToConsole("(To confirm the placement of a signal on the track, use the left mouse button (LMB))", 99, 500);
         default: {}
         }
     }
@@ -151,7 +153,7 @@ void mwlogic::constructRail(QPoint point)
     {
         actualRailConstructor->setObjectBoxCollider();
         world->deleteConstructor(false);
-        menuSelected = EDIT_MODE;
+        menuSelected = RAIL_SPAWN_MODE;
     }
     else
     {
@@ -166,7 +168,7 @@ void mwlogic::constructRail(QPoint point)
                 actualRailConstructor->smoothEndPoint();
                 dynamic_cast<RailConstructor*>(world->getActualConstructor())->setObjectBoxCollider(); //actualize
                 world->deleteConstructor(false);
-                menuSelected = EDIT_MODE;
+                menuSelected = RAIL_SPAWN_MODE;
             }
         }
     }

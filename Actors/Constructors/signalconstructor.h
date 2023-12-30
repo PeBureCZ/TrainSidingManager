@@ -9,6 +9,7 @@ class SignalConstructor : public RailobjectConstructor
     Q_OBJECT
 public:
     explicit SignalConstructor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
+    ~SignalConstructor();
 };
 
 #endif // SIGNALCONSTRUCTOR_H

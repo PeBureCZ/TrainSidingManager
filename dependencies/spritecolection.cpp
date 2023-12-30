@@ -47,3 +47,21 @@ QPixmap SpriteColection::whiteSignal()
     QPixmap pixmap(relativeDirectory + "/images/signal_white.png");
     return pixmap;
 }
+
+QPixmap SpriteColection::rail()
+{
+    QPixmap pixmap(relativeDirectory + "/images/rail.png");
+    return pixmap;
+}
+
+QPixmap SpriteColection::fullSignal()
+{
+    QPixmap pixmap(relativeDirectory + "/images/signal_full.png");
+    return pixmap;
+}
+
+QPixmap SpriteColection::noPlaceSignal()
+{
+    QPixmap pixmap(relativeDirectory + "/images/signal_full_noPlace.png");
+    return pixmap;
+}

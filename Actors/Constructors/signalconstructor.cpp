@@ -5,3 +5,8 @@ SignalConstructor::SignalConstructor(QObject* parent, QGraphicsItem* newGraphicI
 {
 
 }
+
+SignalConstructor::~SignalConstructor()
+{
+    qDebug() <<"Signal constructor deleted";
+}

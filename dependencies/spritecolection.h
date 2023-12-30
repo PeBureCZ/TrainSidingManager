@@ -19,6 +19,10 @@ struct SpriteColection
     QPixmap greenSignal();
     QPixmap yellowSignal();
     QPixmap whiteSignal();
+    QPixmap rail();
+    QPixmap fullSignal();
+    QPixmap noPlaceSignal();
+public slots:
 };
 
 #endif // SPRITECOLECTION_H

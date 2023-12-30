@@ -5,26 +5,6 @@
     0-99 = menu option
     100-199 = edit mode functionss
     200-299 = play mode functions
-
-    /*
-    OLD
-    0 = editMode
-    1 = prepare to add constructor (e.g. SignalConstructor)
-    2 = under constructing (e.g. RailConstructor)
-    3 = playMode
-
-    NEW
-    0 = editMode
-    1 = playMode
-
-    100 = free
-    101 = prepare to add rail constructor
-    102 = under constructing rail
-    103 = spawn SignalConstructor and prepare to add Signal
-
-    0-99 = menu option
-    100-199 = edit mode functionss
-    200-299 = play mode functions
     */
 
 InterfaceWindow::InterfaceWindow(mwlogic *parent)
@@ -54,6 +34,8 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 break;
             case RAIL_ADD_MODE: //constructing rail (RailConstructor)
                 constructRail(event->pos());
+                break;
+            case SIGNAL_ADD_MODE:
                 break;
             default: break;//incl. 0
                 //nothing yet...;
@@ -112,11 +94,20 @@ void InterfaceWindow::on_AddBut_clicked()
 
 void InterfaceWindow::on_MultiFuncBut1_clicked()
 {
-    if (menuSelected == EDIT_MODE) menuSelected = RAIL_SPAWN_MODE; //if editMode -> constructiong Rail
+    if (menuSelected == 0 || (menuSelected >= 100 && menuSelected <= 199))
+    {
+        menuSelected = RAIL_SPAWN_MODE; //if editMode -> constructiong Rail
+        world->deleteConstructor(true);
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut2_clicked()
 {
+    if (menuSelected == 0 || (menuSelected >= 100 && menuSelected <= 199))
+    {
+        menuSelected = SIGNAL_ADD_MODE; //if editMode -> constructiong signals
+        addConstructor(2, {0,0}); //delete constructor included
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut24_clicked()
