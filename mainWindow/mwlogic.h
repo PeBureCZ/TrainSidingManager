@@ -37,6 +37,7 @@ public:
     void playButSwitch(bool editMode) override;
     void addConstructor(int constructorType, QPoint point);
     void constructRail(QPoint point);
+    void constructSignal();
 };
 
 #endif // MWLOGIC_H

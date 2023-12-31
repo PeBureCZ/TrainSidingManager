@@ -9,6 +9,7 @@ class Signal : public RailwayObject
     Q_OBJECT
 public:
     explicit Signal(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
+    ~Signal();
 };
 
 #endif // SIGNAL_H

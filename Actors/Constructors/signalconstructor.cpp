@@ -6,7 +6,13 @@ SignalConstructor::SignalConstructor(QObject* parent, QGraphicsItem* newGraphicI
 
 }
 
-SignalConstructor::~SignalConstructor()
+void SignalConstructor::actualizeConstructor(QPoint newPoint)
 {
-    qDebug() <<"Signal constructor deleted";
+    QPoint slideLocation = {5,-50};
+    setLocation(newPoint + slideLocation, true);
 }
+
+SignalConstructor::~SignalConstructor()
+{qDebug() << "destroyed signal constructor";}
+
+

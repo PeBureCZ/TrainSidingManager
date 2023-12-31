@@ -41,7 +41,6 @@ public:
     void addTrainActor(Rail *spawnOnRail);
     void addRailConstructor(QPoint mapLocation, Rail *connectedRail);
     void addSignalConstructor(QPoint mapLocation);
-    void addRailwaylActor(Rail* railActor, int indexOfActor);
     void addStaticlActor(QPoint spawnPos, int indexOfActor);
     void addVehicleActor(Train* ownerTrain, int indexOfVehicle);
     void deleteAllActors(); //QGraphicsItem* item, QString name
@@ -59,6 +58,7 @@ public:
     Actor* getActorFromList(int index);
     int getActorListSize();
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
+    Actor* addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor *connectedRail);
     ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorUnderClick(QVector<int> useBlockChannels);
     QVector<Rail*> findPath(Train* train, Rail* destinationRail);

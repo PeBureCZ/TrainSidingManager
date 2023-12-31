@@ -116,19 +116,7 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
 
 void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
 {
-    //ADD PATH FOR RAIL ACTOR
-    QPainterPath path;
-    path.cubicTo(0, 0, 0, 0, 0, 0); //deffault line -> will be changed immediately
-    QGraphicsPathItem* pathItem = new QGraphicsPathItem(path); //add graphics
-    pathItem->setPen(QPen(Qt::blue, 14));
-    pathItem->setPos(mapLocation.toPointF());
-    worldScene->addItem(pathItem);
-
-    //ADD RAIL ACTOR
-    Actor* rail = new Rail(nullptr, pathItem); //add actor
-    addActorToLists(rail);
-    if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
-    rail->setLocation(mapLocation, true);
+    Actor* rail = addRailwaylActor(1, mapLocation, connectedRail); //rail created
 
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
@@ -142,13 +130,13 @@ void WorldMap::addSignalConstructor(QPoint mapLocation)
 {
     //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
     SpriteColection newSprite;
-    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.noPlaceSignal()); //sprite from struct
+    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.redSignal()); //sprite from struct
+    worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
 }
-
 
 void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
 {
@@ -168,19 +156,41 @@ void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
         }
 }
 
-void WorldMap::addRailwaylActor(Rail* railActor, int indexOfActor) //need to refract later!
+Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* connectedRail) //need to refract later!
 {
     switch (indexOfActor)
     {
         case 1:
         {
-           //nothing yet
-           break;
+           //ADD PATH FOR RAIL ACTOR = GRAPHIC ITEM
+           QPainterPath path;
+           path.cubicTo(0, 0, 0, 0, 0, 0); //deffault line -> will be changed immediately
+           QGraphicsPathItem* pathItem = new QGraphicsPathItem(path); //add graphics
+           pathItem->setPen(QPen(Qt::blue, 14));
+           pathItem->setPos(mapLocation.toPointF());
+           worldScene->addItem(pathItem);
+
+           //ADD RAIL ACTOR
+           Actor* rail = new Rail(nullptr, pathItem); //add actor
+           addActorToLists(rail);
+           if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
+           rail->setLocation(mapLocation, true);
+           return rail;
         }
         case 2:
         {
-           //nothing yet
-           break;
+            //ADD GRAPHIC FOR SIGNAL
+            SpriteColection newSprite;
+            QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(newSprite.redSignal()); //sprite from struct
+            worldScene->addItem(signalGraphic);
+
+            //ADD SIGNAL ACTOR
+            Actor* newSignal = new Signal(nullptr, signalGraphic);
+            newSignal->setLocation(mapLocation, true);
+            newSignal->actualizeGraphicLocation();
+            addActorToLists(newSignal);
+            qDebug() << "SIGNAL CREATED";
+            return newSignal;
         }
         default:{}
     }

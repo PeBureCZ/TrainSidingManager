@@ -36,6 +36,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 constructRail(event->pos());
                 break;
             case SIGNAL_ADD_MODE:
+                constructSignal();
                 break;
             default: break;//incl. 0
                 //nothing yet...;
@@ -49,6 +50,10 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 //nothing?
                 break;
             case RAIL_ADD_MODE: //constructing rail (RailConstructor)
+                world->deleteConstructor(true);
+                menuSelected = EDIT_MODE;
+                break;
+            case SIGNAL_ADD_MODE: //constructing signal (SignalConstructor)
                 world->deleteConstructor(true);
                 menuSelected = EDIT_MODE;
                 break;
