@@ -44,10 +44,10 @@ void Actor::setRotation(float newRotation)
     rotation = newRotation;
 }
 
-void Actor::setLocation(QPoint newLocation, bool actualizeGraphic)
+void Actor::setLocation(QPoint newLocation, bool setGraphic)
 {
     location = newLocation;
-    if (actualizeGraphic) setGraphicLocation(newLocation);
+    if (setGraphic) setGraphicLocation(newLocation);
 }
 
 QPoint Actor::getLocation()

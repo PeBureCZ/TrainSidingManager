@@ -180,9 +180,7 @@ void mwlogic::constructSignal()
     {
         SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(world->getActualConstructor());
         world->addRailwaylActor(2, actualSignalConstructor->getLocation(), nullptr); //create signal actor
-        qDebug() << "SIGNAL START CREATING";
     }
-    else qDebug() << "not SignalConstructor";
 }
 
 mwlogic::~mwlogic() {}

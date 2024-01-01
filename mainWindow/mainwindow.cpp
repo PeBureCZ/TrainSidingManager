@@ -14,6 +14,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete world;
+    delete mapZoomLayout;
+    delete widgetWithLayout;
 }
 
 void MainWindow::initializeInterface()
@@ -55,18 +57,18 @@ void MainWindow::initializeInterface()
     managerConsole = new ManagerConsole(this); //add custom manager console
 
     //zoom option in map
-    QHBoxLayout *mapZoomLayout = new QHBoxLayout(this);
-    QWidget *widgetWithLayout = new QWidget(this);
+    mapZoomLayout = new QHBoxLayout;
+    widgetWithLayout = new QWidget;
     mapZoomLayout->addWidget(ui->SubBut);
     mapZoomLayout->addWidget(ui->AddBut);
     widgetWithLayout->setLayout(mapZoomLayout);
     widgetWithLayout->setGeometry(QRect(160,20,100,50));
 
     //BASIC STATS
-    ui->BasicStats->setVisible(false);
+    ui->BasicStats->setVisible(true);
 
     //SPECIAL STATS
-    ui->SpecialStats->setVisible(false);
+    ui->SpecialStats->setVisible(true);
     //ui->SpecialLabel1->setVisible(false);
     //ui->SpecialTextEdit1->setVisible(false);
 }

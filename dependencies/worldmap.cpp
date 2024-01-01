@@ -189,7 +189,6 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
             newSignal->setLocation(mapLocation, true);
             newSignal->actualizeGraphicLocation();
             addActorToLists(newSignal);
-            qDebug() << "SIGNAL CREATED";
             return newSignal;
         }
         default:{}

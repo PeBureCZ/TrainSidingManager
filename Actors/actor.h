@@ -35,7 +35,7 @@ public:
     virtual void actualizeGraphicLocation();
     void setRotation(float newRotation);
     float getRotation();
-    void setLocation(QPoint newLocation, bool actualizeGraphic);
+    void setLocation(QPoint newLocation, bool setGraphic);
     void addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation);
     virtual void setName(QString newName); //virtual need for polymorph
     bool canCollide();

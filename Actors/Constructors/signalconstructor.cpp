@@ -9,8 +9,8 @@ SignalConstructor::SignalConstructor(QObject* parent, QGraphicsItem* newGraphicI
 void SignalConstructor::actualizeConstructor(QPoint newPoint)
 {
     QPoint slideLocation = {5,-50};
-    setGraphicLocation(slideLocation);
-    //actualizeGraphicLocation();
+    setLocation(newPoint + slideLocation, true);
+    actualizeGraphicLocation();
 }
 
 SignalConstructor::~SignalConstructor(){}

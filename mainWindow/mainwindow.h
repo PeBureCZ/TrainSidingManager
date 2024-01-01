@@ -33,6 +33,8 @@ public:
     void InterfaceSet(int menuSelected);
     QVBoxLayout *consoleLayout;
     ManagerConsole* managerConsole;
+    QHBoxLayout *mapZoomLayout;
+    QWidget *widgetWithLayout;
 
 private slots:
 

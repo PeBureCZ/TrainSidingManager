@@ -7,6 +7,4 @@ Signal::Signal(QObject *parent, QGraphicsItem *newGraphicItem)
 }
 
 Signal::~Signal()
-{
-    qDebug() << "signal destroyed on loc: " << location << " > " << graphicLocation;
-}
+{}
