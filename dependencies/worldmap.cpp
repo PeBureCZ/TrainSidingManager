@@ -181,7 +181,7 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
         {
             //ADD GRAPHIC FOR SIGNAL
             SpriteColection newSprite;
-            QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(newSprite.redSignal()); //sprite from struct
+            QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(newSprite.noPlaceSignal()); //sprite from struct
             worldScene->addItem(signalGraphic);
 
             //ADD SIGNAL ACTOR

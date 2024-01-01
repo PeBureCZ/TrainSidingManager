@@ -53,6 +53,22 @@ void MainWindow::initializeInterface()
 
     //console
     managerConsole = new ManagerConsole(this); //add custom manager console
+
+    //zoom option in map
+    QHBoxLayout *mapZoomLayout = new QHBoxLayout(this);
+    QWidget *widgetWithLayout = new QWidget(this);
+    mapZoomLayout->addWidget(ui->SubBut);
+    mapZoomLayout->addWidget(ui->AddBut);
+    widgetWithLayout->setLayout(mapZoomLayout);
+    widgetWithLayout->setGeometry(QRect(160,20,100,50));
+
+    //BASIC STATS
+    ui->BasicStats->setVisible(false);
+
+    //SPECIAL STATS
+    ui->SpecialStats->setVisible(false);
+    //ui->SpecialLabel1->setVisible(false);
+    //ui->SpecialTextEdit1->setVisible(false);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
