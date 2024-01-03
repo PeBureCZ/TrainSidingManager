@@ -22,7 +22,7 @@ public:
     int getSizeOfRailChannel();
     int getSizeOfStaticChannel();
     int getSizeOfTrainChannel();
-    void addTriggerToActor(Actor *actor, int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation);
+    void addTriggerToActor(Actor *actor, int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius);
 };
 
 #endif // WORLDCOLLIDE_H

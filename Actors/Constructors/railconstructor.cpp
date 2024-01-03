@@ -52,7 +52,6 @@ void RailConstructor::actualizeConstructor(QPoint newPoint)
     else
     {
         setLocation(newPoint,true);
-        actualizeGraphicLocation();
     }
 }
 
@@ -84,7 +83,6 @@ void RailConstructor::setPoints(QPoint endP)
         QPoint vectorP2world = (location - (negativeVector - location));
         QPoint vectorP2Local = vectorP2world  - location;
 
-        P0 = location;
         P1 = vectorP2Local / 2; //relative
         P2 = P1; //relative
     }

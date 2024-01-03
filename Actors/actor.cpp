@@ -47,7 +47,11 @@ void Actor::setRotation(float newRotation)
 void Actor::setLocation(QPoint newLocation, bool setGraphic)
 {
     location = newLocation;
-    if (setGraphic) setGraphicLocation(newLocation);
+    if (setGraphic)
+    {
+        setGraphicLocation(newLocation);
+        actualizeGraphicLocation();
+    }
 }
 
 QPoint Actor::getLocation()
@@ -60,7 +64,7 @@ QVector<Trigger*> Actor::getAllTriggers()
     return triggers;
 }
 
-void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation)
+void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius)
 {
     collisionEnabled = true;
     Trigger* component = {};
@@ -69,7 +73,7 @@ void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint r
         case 0: //SphereCollider
         {
             Trigger* newComponent = new SphereCollider();
-            dynamic_cast<SphereCollider*>(newComponent)->setRadius(30);
+            dynamic_cast<SphereCollider*>(newComponent)->setRadius(radius);
             component = newComponent;
             break;
         }

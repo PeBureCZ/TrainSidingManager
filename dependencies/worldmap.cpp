@@ -189,7 +189,6 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
            //ADD SIGNAL ACTOR
            Actor* newSignal = new Signal(nullptr, signalGraphic);
            newSignal->setLocation(mapLocation, true);
-           newSignal->actualizeGraphicLocation();
            addActorToLists(newSignal);
            return newSignal;
         }
@@ -362,7 +361,7 @@ Trigger *WorldMap::getNearestTriggerInRange(Actor *actor, QPoint position, int r
     QVector<Trigger*> testedTriggers = actor->getAllTriggers();
     QPoint actorLocation = actor->getLocation();
     int nearestDistance = radius;
-    Trigger* nearestTrigger = {};
+    Trigger* nearestTrigger = nullptr;
     for (auto trigger : testedTriggers)
     {
         int testedDistance = getDistance(actorLocation + trigger->getRelativeLocation(), position);

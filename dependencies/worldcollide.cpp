@@ -114,13 +114,13 @@ int WorldCollide::getSizeOfTrainChannel()
     return trainChannel.size();
 }
 
-void WorldCollide::addTriggerToActor(Actor* actor, int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation)
+void WorldCollide::addTriggerToActor(Actor* actor, int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius)
 {
     for (auto channel : channels)
     {
             addActorToCollideLists(actor, channel);
     }
-    actor->addTriggerComponent(indexOfType, channels, relativeLocation, relativeRotation);
+    actor->addTriggerComponent(indexOfType, channels, relativeLocation, relativeRotation, radius);
 }
 
 

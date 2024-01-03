@@ -80,58 +80,80 @@ void mwlogic::constructRail(QPoint point)
     RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
 
     int zoom = world->getWorldView()->getZoomLevel();
-    int maxRadius = 40;
-    if (zoom > 0) maxRadius += zoom * 15; //increase radius on zoom in
+    int maxRadius = 5;
+    if (zoom > 0) maxRadius += zoom * 20; //increase radius on zoom
 
-    if (actors.size() == 0)
+    if (actors.size() == 0 && actualRailConstructor != nullptr)
     {
-        if (actualRailConstructor != nullptr && actualRailConstructor->getOwnedRail() == nullptr)
+        actualRailConstructor->actualizeConstructor(point);
+        if (actualRailConstructor->getOwnedRail() == nullptr)
         {
             actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,point,nullptr)));
             actualRailConstructor->underConstruction(true);
         }
         else if (actualRailConstructor != nullptr)
         {
+
             Rail* createdRail = actualRailConstructor->getOwnedRail();
-            world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f); //for P0 point
-            world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f);//for P3 point
-            world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f);//create object BoxCollider
+            world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f, 120); //for P0 point
+            world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
+            world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f, 1);//create object BoxCollider
             actualRailConstructor->setObjectBoxCollider();
+            actualRailConstructor->actualizeConstructor(point); //duplicied due to P3 point actualize
             actualRailConstructor->underConstruction(false);
+
         }
     }
-    else
+    else if (actualRailConstructor != nullptr)
     {
-        if (actualRailConstructor != nullptr && actualRailConstructor->getOwnedRail() == nullptr)
+        Actor* nearestActor = nullptr;
+        Trigger* testedTrigger = nullptr;
+        Trigger* nearestTrigger = nullptr;
+        int distance = 99999999;
+        int testedDistance = 99999998;
+        for (int i = 0; i < actors.size(); i++)
         {
-            Actor* nearestActor = nullptr;
-            int distance = 99999999;
-            for (int i = 0; i < actors.size(); i++)
+            if (dynamic_cast<Rail*>(actors[i]))
             {
-                Trigger* nearestTrigger = {};
-                if (dynamic_cast<Rail*>(actors[i]))
+                testedTrigger = world->getNearestTriggerInRange(actors[i], point, maxRadius);
+                if (testedTrigger != nullptr) //all triggers are out of range?
                 {
-                    nearestTrigger = world->getNearestTriggerInRange(actors[i], point, maxRadius);
-                    if (nearestTrigger == nullptr) continue; //all triggers are out of range
-                    int testedDistance = world->getDistance(nearestTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
-                    if (distance > testedDistance) //nearest actor by trigger
+                    testedDistance = world->getDistance(testedTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
+                    if (testedDistance < distance) //nearest actor by trigger
                     {
+                        nearestTrigger = testedTrigger;
                         nearestActor = actors[i];
                         distance = testedDistance;
                     }
                 }
             }
-            if (nearestActor != nullptr) //all actors are out of range
+        }
+        if (actualRailConstructor->getOwnedRail() == nullptr)
+        {
+
+            if (nearestActor != nullptr && nearestTrigger != nullptr) //all actors are out of range
             {
-                Trigger* nearestTrigger = world->getNearestTriggerInRange(nearestActor, point, maxRadius);
+                //re-calculate nearest trigger from nearest actor
+                nearestTrigger = world->getNearestTriggerInRange(nearestActor, point, maxRadius);
+                QPoint newPoint = nearestActor->getLocation() + nearestTrigger->getRelativeLocation();
                 actualRailConstructor->setConnectedRail(dynamic_cast<Rail*>(nearestActor));
+                actualRailConstructor->actualizeConstructor(newPoint);
 
                 //ADD RAIL ACTOR
-                qDebug() << "point: " << point;
-                qDebug() << "conect: " << nearestActor->getLocation() + nearestTrigger->getRelativeLocation();
-                actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,nearestActor->getLocation() + nearestTrigger->getRelativeLocation(),nullptr)));
+                actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,newPoint,nullptr)));
+                actualRailConstructor->getOwnedRail()->setLocation(newPoint, true);
+                actualRailConstructor->getOwnedRail()->connectRails(dynamic_cast<Rail*>(nearestActor), true);
+                actualRailConstructor->underConstruction(true);
             }
-            actualRailConstructor->underConstruction(true);
+        }
+        else
+        {
+            //connect to second rail
+            QPoint newPoint = nearestActor->getLocation() + nearestTrigger->getRelativeLocation();
+            actualRailConstructor->actualizeConstructor(newPoint);
+            actualRailConstructor->getOwnedRail()->connectRails(dynamic_cast<Rail*>(nearestActor), false);
+            actualRailConstructor->smoothEndPoint();
+            actualRailConstructor->underConstruction(false);
         }
     }
 }
