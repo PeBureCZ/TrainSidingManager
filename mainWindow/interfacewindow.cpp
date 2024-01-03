@@ -28,36 +28,35 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
     {
         switch (menuSelected)
         {
-            //case 0: same as default
-            case RAIL_SPAWN_MODE: //add Rail (RailConstructor)
-                addConstructor(1, world->getRelativeWorldPos(event->pos()));
-                break;
-            case RAIL_ADD_MODE: //constructing rail (RailConstructor)
-                constructRail(event->pos());
-                break;
-            case SIGNAL_ADD_MODE:
-                constructSignal();
-                break;
-            default: break;//incl. 0
-                //nothing yet...;
+        //case 0: same as default
+        case RAIL_ADD_MODE: //add Rail (RailConstructor)
+            constructRail(world->getRelativeWorldPos(event->pos()));
+            break;
+        case NOT_USED_NOW: //constructing rail (RailConstructor)
+            break;
+        case SIGNAL_ADD_MODE:
+            constructSignal();
+            break;
+        default: break;//incl. 0
+            //nothing yet...;
         }
     }
     else if (event->button() == Qt::RightButton)
     {
         switch (menuSelected)
         {
-            case PLAY_MODE: //add Rail (constructor)
-                //nothing?
-                break;
-            case RAIL_ADD_MODE: //constructing rail (RailConstructor)
-                world->deleteConstructor(true);
-                menuSelected = EDIT_MODE;
-                break;
-            case SIGNAL_ADD_MODE: //constructing signal (SignalConstructor)
-                world->deleteConstructor(true);
-                menuSelected = EDIT_MODE;
-                break;
-            default: break;//incl. 0 = default
+        case PLAY_MODE: //add Rail (constructor)
+            //nothing?
+            break;
+        case RAIL_ADD_MODE: //constructing rail (RailConstructor)
+            world->deleteConstructor(true);
+            menuSelected = EDIT_MODE;
+            break;
+        case SIGNAL_ADD_MODE: //constructing signal (SignalConstructor)
+            world->deleteConstructor(true);
+            menuSelected = EDIT_MODE;
+            break;
+        default: break;//incl. 0 = default
         }
     }
 }
@@ -101,8 +100,9 @@ void InterfaceWindow::on_MultiFuncBut1_clicked()
 {
     if (menuSelected == 0 || (menuSelected >= 100 && menuSelected <= 199))
     {
-        menuSelected = RAIL_SPAWN_MODE; //if editMode -> constructiong Rail
+        menuSelected = RAIL_ADD_MODE; //if editMode -> constructiong Rail
         world->deleteConstructor(true);
+        addConstructor(1, world->getRelativeWorldPos({0,0}));
     }
 }
 
@@ -132,5 +132,3 @@ void InterfaceWindow::on_MultiFuncBut24_clicked()
         else managerConsole->printToConsole("No item to delete", 99, 400);
     }
 }
-
-

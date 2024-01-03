@@ -12,32 +12,6 @@ mwlogic::mwlogic(MainWindow *parent)
     0-99 = menu option
     100-199 = edit mode functionss
     200-299 = play mode functions
-
-    OLD
-    0 = editMode
-    1 = prepare to add constructor (e.g. SignalConstructor)
-    2 = under constructing (e.g. RailConstructor)
-    3 = playMode
-
-    NEW
-    0 = editMode
-    1 = playMode
-
-    100 = free
-    101 = prepare to add rail constructor
-    102 = under constructing rail
-    103 = spawn SignalConstructor and prepare to add Signals
-
-    0-99 = menu option
-    100-199 = edit mode functionss
-    200-299 = play mode functions
-
-    #define EDIT_MODE 0
-    #define PLAY_MODE 1
-    #define FREE_MODE 100
-    #define RAIL_SPAWN_MODE 101
-    #define RAIL_ADD_MODE 102
-    #define SIGNAL_ADD_MODE 103
     */
 }
 
@@ -84,92 +58,80 @@ void mwlogic::addConstructor(int constructorType, QPoint point)
     int zoom = world->getWorldView()->getZoomLevel();
     int maxRadius = 150;
     if (zoom > 0) maxRadius += zoom * 150; //increase radius on zoom in
-    QVector<Actor*> actors = world->getActorUnderClick({2});
-    if (actors.size() == 0)
+    QVector<Actor*> actors = world->getActorsUnderClick({2});
+    switch (constructorType)
     {
-        switch (constructorType)
-        {
-        case 1: //1 = add Rail (RailConstructor)
-            world->addRailConstructor(point, nullptr);
-            managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB).", 99, 500);
-            managerConsole->printToConsole("(To connect to another track, use the left mouse button (LMB) near the end of another track)", 99, 500);
-            menuSelected = RAIL_ADD_MODE; //set menu "under constructor
-            break;
-        case 2:
-            world->addSignalConstructor(point);
-            managerConsole->printToConsole("To place a signal, move the mouse cursor closer to the breakpoints of one of the tracks. The track with the placed signal will be marked with a changed color", 99, 500);
-            managerConsole->printToConsole("(To confirm the placement of a signal on the track, use the left mouse button (LMB))", 99, 500);
-        default: {}
-        }
-    }
-    else
-    {
-        Actor* nearestActor = nullptr;
-        int distance = 99999999;
-        for (int i = 0; i < actors.size(); i++)
-        {
-            Trigger* nearestTrigger = {};
-            if (dynamic_cast<Rail*>(actors[i]))
-            {
-                nearestTrigger = world->getNearestTriggerInRange(actors[i], point, maxRadius);
-                if (nearestTrigger == nullptr) continue; //all triggers are out of range
-                int testedDistance = world->getDistance(nearestTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
-                if (distance > testedDistance) //nearest actor by trigger
-                {
-                    nearestActor = actors[i];
-                    distance = testedDistance;
-                }
-            }
-        }
-        if (nearestActor != nullptr) //all actors are out of range
-        {
-            Trigger* nearestTrigger = world->getNearestTriggerInRange(nearestActor, point, maxRadius);
-            world->addRailConstructor(nearestActor->getLocation() + nearestTrigger->getRelativeLocation(), dynamic_cast<Rail*>(nearestActor));
-            menuSelected = RAIL_ADD_MODE;
-        }
+    case 1: //1 = add Rail (RailConstructor)
+        world->addRailConstructor(point, nullptr);
+        managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB).", 99, 500);
+        managerConsole->printToConsole("(To connect to another track, use the left mouse button (LMB) near the end of another track)", 99, 500);
+        break;
+    case 2:
+        world->addSignalConstructor(point);
+        managerConsole->printToConsole("To place a signal, move the mouse cursor closer to the breakpoints of one of the tracks. The track with the placed signal will be marked with a changed color", 99, 500);
+        managerConsole->printToConsole("(To confirm the placement of a signal on the track, use the left mouse button (LMB))", 99, 500);
+    default: {}
     }
 }
 
 void mwlogic::constructRail(QPoint point)
 {
-    QVector<Actor*> actors = world->getActorUnderClick({2});
+    QVector<Actor*> actors = world->getActorsUnderClick({2});
     RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
-    Rail* createdRail = dynamic_cast<Rail*>(actualRailConstructor->getActorConstructing());
-
-    //bug exception (connect self connected Rail)
-    for (auto actor : actors)
-    {
-        if (dynamic_cast<Rail*>(actor) && -1 != dynamic_cast<Rail*>(actor)->getConnection(createdRail)) return;
-        //true = Rail construction continue with actual Constructor
-    }
 
     int zoom = world->getWorldView()->getZoomLevel();
     int maxRadius = 40;
     if (zoom > 0) maxRadius += zoom * 15; //increase radius on zoom in
-    world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f); //for P0 point
-    world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f);//for P3 point
-    world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f);//create object BoxCollider
+
     if (actors.size() == 0)
     {
-        actualRailConstructor->setObjectBoxCollider();
-        world->deleteConstructor(false);
-        menuSelected = RAIL_SPAWN_MODE;
+        if (actualRailConstructor != nullptr && actualRailConstructor->getOwnedRail() == nullptr)
+        {
+            actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,point,nullptr)));
+            actualRailConstructor->underConstruction(true);
+        }
+        else if (actualRailConstructor != nullptr)
+        {
+            Rail* createdRail = actualRailConstructor->getOwnedRail();
+            world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f); //for P0 point
+            world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f);//for P3 point
+            world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f);//create object BoxCollider
+            actualRailConstructor->setObjectBoxCollider();
+            actualRailConstructor->underConstruction(false);
+        }
     }
     else
     {
-        for (int i = 0; i < actors.size(); ++i)
+        if (actualRailConstructor != nullptr && actualRailConstructor->getOwnedRail() == nullptr)
         {
-            if (dynamic_cast<Rail*>(actors[i]))
+            Actor* nearestActor = nullptr;
+            int distance = 99999999;
+            for (int i = 0; i < actors.size(); i++)
             {
-                Actor* actor = actors[i];
-                Trigger* nearestTrigger = world->getNearestTriggerInRange(actor, world->getRelativeWorldPos(point), maxRadius);
-                actualRailConstructor->actualizeConstructor(actor->getLocation() + nearestTrigger->getRelativeLocation());
-                actualRailConstructor->getOwnedRail()->connectRails(dynamic_cast<Rail*>(actors[i]), false);
-                actualRailConstructor->smoothEndPoint();
-                dynamic_cast<RailConstructor*>(world->getActualConstructor())->setObjectBoxCollider(); //actualize
-                world->deleteConstructor(false);
-                menuSelected = RAIL_SPAWN_MODE;
+                Trigger* nearestTrigger = {};
+                if (dynamic_cast<Rail*>(actors[i]))
+                {
+                    nearestTrigger = world->getNearestTriggerInRange(actors[i], point, maxRadius);
+                    if (nearestTrigger == nullptr) continue; //all triggers are out of range
+                    int testedDistance = world->getDistance(nearestTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
+                    if (distance > testedDistance) //nearest actor by trigger
+                    {
+                        nearestActor = actors[i];
+                        distance = testedDistance;
+                    }
+                }
             }
+            if (nearestActor != nullptr) //all actors are out of range
+            {
+                Trigger* nearestTrigger = world->getNearestTriggerInRange(nearestActor, point, maxRadius);
+                actualRailConstructor->setConnectedRail(dynamic_cast<Rail*>(nearestActor));
+
+                //ADD RAIL ACTOR
+                qDebug() << "point: " << point;
+                qDebug() << "conect: " << nearestActor->getLocation() + nearestTrigger->getRelativeLocation();
+                actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,nearestActor->getLocation() + nearestTrigger->getRelativeLocation(),nullptr)));
+            }
+            actualRailConstructor->underConstruction(true);
         }
     }
 }

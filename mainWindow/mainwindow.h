@@ -10,7 +10,7 @@
 #define EDIT_MODE 0
 #define PLAY_MODE 1
 #define FREE_MODE 100
-#define RAIL_SPAWN_MODE 101
+#define NOT_USED_NOW 101
 #define RAIL_ADD_MODE 102
 #define SIGNAL_ADD_MODE 103
 

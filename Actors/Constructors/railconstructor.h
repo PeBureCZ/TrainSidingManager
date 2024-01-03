@@ -11,7 +11,7 @@ Q_OBJECT
 protected:
     bool startAtSpawnPos; //define if start (percent 0 in percentRange 0-1) is at spawn position (=click pos) or at "tick mouse target" position
     bool lined;
-    Rail *connectedRailActor;
+    Rail *connectedRail;
     Rail* ownedRail;
     QGraphicsPathItem* ownedPath;
 
@@ -26,25 +26,25 @@ protected:
 public:
     RailConstructor
     (QObject* parent = nullptr
-    ,QGraphicsItem* newGraphicItem = nullptr
+    , QGraphicsItem* newGraphicItem = nullptr
     , Actor *actorToConstructing = nullptr
-    , QPoint spawnPos = {0,0}
-    , Rail* connectedRail = nullptr
     );
 
     //FCE - public
-    QString testFce();
     QPointF getP0Point();
     QPointF getP1Point();
     QPointF getP2Point();
     QPointF getP3Point();
     Rail* getOwnedRail();
     Rail* getConnectedRail();
+    void underConstruction(bool constructingNow);
     void actualizePathVisual();
     void actualizeRail();
     void smoothEndPoint();
     void actualizeConstructor(QPoint newPoint) override;
     void setObjectBoxCollider() override;
+    void setOwnedRail(Rail* newOwnedRail);
+    void setConnectedRail(Rail* newConnectedRail);
     ~ RailConstructor();
 signals:
 

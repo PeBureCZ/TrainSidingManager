@@ -116,12 +116,14 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
 
 void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
 {
-    Actor* rail = addRailwaylActor(1, mapLocation, connectedRail); //rail created
+    //Actor* rail = addRailwaylActor(1, mapLocation, connectedRail); //rail created
 
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
-    QGraphicsItem* emptyItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
-    Actor* railConstructor = new RailConstructor(nullptr, emptyItem, rail, mapLocation, connectedRail); //add actor
+    QGraphicsItem* railGraphicItem = new QGraphicsPixmapItem(newSprite.rail()); //sprite from struct
+    worldScene->addItem(railGraphicItem);
+    Actor* railConstructor = new RailConstructor(nullptr, railGraphicItem, nullptr); //add actor
+    railConstructor->setLocation(mapLocation,true);
     addActorToLists(railConstructor);
     setConstructor(railConstructor);
 }
@@ -158,8 +160,8 @@ void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
 
 Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* connectedRail) //need to refract later!
 {
-    switch (indexOfActor)
-    {
+        switch (indexOfActor)
+        {
         case 1:
         {
            //ADD PATH FOR RAIL ACTOR = GRAPHIC ITEM
@@ -179,20 +181,20 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
         }
         case 2:
         {
-            //ADD GRAPHIC FOR SIGNAL
-            SpriteColection newSprite;
-            QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(newSprite.noPlaceSignal()); //sprite from struct
-            worldScene->addItem(signalGraphic);
+           //ADD GRAPHIC FOR SIGNAL
+           SpriteColection newSprite;
+           QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(newSprite.noPlaceSignal()); //sprite from struct
+           worldScene->addItem(signalGraphic);
 
-            //ADD SIGNAL ACTOR
-            Actor* newSignal = new Signal(nullptr, signalGraphic);
-            newSignal->setLocation(mapLocation, true);
-            newSignal->actualizeGraphicLocation();
-            addActorToLists(newSignal);
-            return newSignal;
+           //ADD SIGNAL ACTOR
+           Actor* newSignal = new Signal(nullptr, signalGraphic);
+           newSignal->setLocation(mapLocation, true);
+           newSignal->actualizeGraphicLocation();
+           addActorToLists(newSignal);
+           return newSignal;
         }
         default:{}
-    }
+        }
 }
 
 void WorldMap::addActorToLists(Actor* addedActor)
@@ -284,7 +286,7 @@ int WorldMap::getActorListSize()
     return actorList.size();
 }
 
-QVector<Actor*> WorldMap::getActorUnderClick(QVector<int> useBlockChannels)
+QVector<Actor*> WorldMap::getActorsUnderClick(QVector<int> useBlockChannels)
 {
     QVector<Actor*> actorsToReturn = {};
     QPoint mousePosition = worldView->getRelativeFromCursor();

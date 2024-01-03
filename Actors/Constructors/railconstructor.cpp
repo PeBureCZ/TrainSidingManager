@@ -1,28 +1,19 @@
 #include "railconstructor.h"
 
 RailConstructor::RailConstructor
-    (QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing, QPoint spawnPos, Rail* connectedRail)
+    (QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing)
     : ActorConstructor(parent, newGraphicItem, actorToConstructing)
 {
-    ownedRail = dynamic_cast<Rail*>(actorConstructing);
-    connectedRailActor = connectedRail;
-    ownedPath = dynamic_cast<QGraphicsPathItem*>(dynamic_cast<Actor*>(ownedRail)->getGraphicItem());
-    location = spawnPos;
     P0 = {0,0};
     P1 = {0,0};
     P2 = {0,0};
     P3 = {0,0};
 
-    if (connectedRail == nullptr)
-    {
-        lined = true;
-    }
-    else
-    {
-        lined = false;
-        ownedRail->connectRails(connectedRail,true);
-        ownedRail->setLined(false);
-    }
+    ownedRail = nullptr;
+    connectedRail = nullptr;
+    ownedRail = nullptr;
+    ownedPath = nullptr;
+    lined = true;
 }
 
 void RailConstructor::actualizePathVisual() // NEED REBUILD
@@ -43,23 +34,26 @@ void RailConstructor::actualizeRail()
 
 void RailConstructor::smoothEndPoint()
 {
-    ownedRail->smoothP3PointByC1();
+    if (ownedRail != nullptr) ownedRail->smoothP3PointByC1();
 }
 
 void RailConstructor::actualizeConstructor(QPoint newPoint)
 {
-    actualizeRail();
-    setPoints(newPoint);
-    actualizePathVisual();
-    if (ownedRail->getAllTriggers().size() > 0)
+    if (ownedRail != nullptr)
     {
-        dynamic_cast<Component*>(ownedRail->getAllTriggers()[1])->setRelativeLocation(newPoint - ownedRail->getLocation()); //p3 trigger
+        actualizeRail();
+        setPoints(newPoint);
+        actualizePathVisual();
+        if (ownedRail->getAllTriggers().size() > 0)
+        {
+            dynamic_cast<Component*>(ownedRail->getAllTriggers()[1])->setRelativeLocation(newPoint - ownedRail->getLocation()); //p3 trigger
+        }
     }
-}
-
-QString RailConstructor::testFce()
-{
-    return QString::number(P3.x());
+    else
+    {
+        setLocation(newPoint,true);
+        actualizeGraphicLocation();
+    }
 }
 
 void RailConstructor::setPoints(QPoint endP)
@@ -71,7 +65,7 @@ void RailConstructor::setPoints(QPoint endP)
     P3 = {x,y}; //relative
 
     //set P1 and P2
-    if (connectedRailActor == nullptr)
+    if (connectedRail == nullptr)
     {
         P1 = {(x)/2,y/2}; //relative
         P2 = P1; //relative
@@ -80,8 +74,8 @@ void RailConstructor::setPoints(QPoint endP)
     {
         QLineF line(P0, P3+location); //line between P0/P3 (Rail being created by this constructor.)
         QPoint connectedP2world;
-        (P0 == connectedRailActor->getLocation()) ? connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP1RelativeLocation().toPoint()
-        : connectedP2world = connectedRailActor->getLocation() + connectedRailActor->getP2RelativeLocation().toPoint();
+        (P0 == connectedRail->getLocation()) ? connectedP2world = connectedRail->getLocation() + connectedRail->getP1RelativeLocation().toPoint()
+        : connectedP2world = connectedRail->getLocation() + connectedRail->getP2RelativeLocation().toPoint();
 
         QLineF lineP2(connectedP2world, P0);
         float reduction = line.length() / lineP2.length();
@@ -118,12 +112,43 @@ QPointF RailConstructor::getP3Point()
 
 Rail *RailConstructor::getOwnedRail()
 {
-    return dynamic_cast<Rail*>(ownedRail); //for return actor call "getActorConstructing()"
+    return ownedRail; //for return actor call "getActorConstructing()"
 }
 
 Rail *RailConstructor::getConnectedRail()
 {
-    return connectedRailActor;
+    return connectedRail;
+}
+
+void RailConstructor::underConstruction(bool constructingNow)
+{
+    if (constructingNow) graphicItem->setVisible(false);
+    else
+    {
+        setOwnedRail(nullptr);
+        setConnectedRail(nullptr);
+        graphicItem->setVisible(true);
+    }
+}
+
+void RailConstructor::setOwnedRail(Rail *newOwnedRail)
+{
+    ownedRail = newOwnedRail;
+    if (newOwnedRail != nullptr)
+    {
+        ownedPath = dynamic_cast<QGraphicsPathItem*>(ownedRail->getGraphicItem());
+        actorConstructing = dynamic_cast<Actor*>(ownedRail);
+    }
+    else
+    {
+        ownedPath = nullptr;
+        actorConstructing = nullptr;
+    }
+}
+
+void RailConstructor::setConnectedRail(Rail *newConnectedRail)
+{
+    connectedRail = newConnectedRail;
 }
 
 void RailConstructor::setObjectBoxCollider()
