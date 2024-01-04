@@ -17,25 +17,31 @@ protected:
     Rail* conectionC1;
     Rail* conectionD1;
     bool lined;
+    QGraphicsItem *startArea;
+    QGraphicsItem* endArea;
 public:
     Rail(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
     QPointF getP0WorldLocation();
     QPointF getP1RelativeLocation();
     QPointF getP2RelativeLocation();
     QPointF getP3RelativeLocation();
-    Rail* getConnectedRail(int connection);
+    Rail* getConnectedRail(const int connection);
 
     bool getLined();
     int getRailLength();
     int getConnection(Rail* rail);
 
-    void setConnectedRail(Rail *connectedRail, int connection);
-    void setP0WorldLocation(QPoint newPoint);
-    void setP1RelativeLocation(QPoint newPoint);
-    void setP2RelativeLocation(QPoint newPoint);
-    void setP3RelativeLocation(QPoint newPoint);
-    void setLined(bool newBool);
-    void connectRails(Rail* connectedRail, bool connectedAtStart);
+    void setConnectedRail(Rail *connectedRail, const int connection);
+    void setP0WorldLocation(const QPoint newPoint);
+    void setP1RelativeLocation(const QPoint newPoint);
+    void setP2RelativeLocation(const QPoint newPoint);
+    void setP3RelativeLocation(const QPoint newPoint);
+    void setLined(const bool newBool);
+    void createArea(const int area, QGraphicsItem* graphicItem);
+    void deleteArea(const int area);
+    void setVisibilityOfArea(const int area, const bool visible);
+    void actualizeAreasPosition();
+    void connectRails(Rail* connectedRail, const bool connectedAtStart);
     void unconnectRails(Rail* unconnectedRail);
     void smoothP3PointByC1();
     ~Rail();

@@ -6,8 +6,10 @@ Actor::Actor(QObject *parent, QGraphicsItem* newGraphicItem) : QObject(parent), 
     location = {0,0};
     graphicLocation = {0,0};
     rotation = 0.0f;
-    triggers = {};
-    collisionEnabled = false;
+    collisionRecieveEnabled = false;
+    collisionCallEnabled = false;
+    calledCollisions = {};
+    triggers = {}; //triggers -> recieve collisions
 }
 
 void Actor::setGraphicLocation(QPoint newLocation)
@@ -39,9 +41,16 @@ QString Actor::getName()
     return name;
 }
 
-void Actor::setRotation(float newRotation)
+void Actor::setRotation(const float newRotation)
 {
     rotation = newRotation;
+}
+
+void Actor::setCallCollisions(const QVector<int> newCollisions)
+{
+    calledCollisions = newCollisions;
+    if (newCollisions.size() > 0) collisionCallEnabled = true;
+    else collisionCallEnabled = false;
 }
 
 void Actor::setLocation(QPoint newLocation, bool setGraphic)
@@ -66,7 +75,8 @@ QVector<Trigger*> Actor::getAllTriggers()
 
 void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius)
 {
-    collisionEnabled = true;
+    //for recieve collision ONLY!!!
+    collisionRecieveEnabled = true;
     Trigger* component = {};
     switch (indexOfType)
     {
@@ -98,7 +108,7 @@ void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint r
     }
 }
 
-QVector<int> Actor::getCollideChannels()
+QVector<int> Actor::recieveCollideChannels()
 {
     QVector<int> allChannelsUsed = {};
     QVector<int> testedChannels = {};
@@ -116,9 +126,19 @@ QVector<int> Actor::getCollideChannels()
     return allChannelsUsed;
 }
 
-bool Actor::canCollide()
+QVector<int> Actor::callCollideChannels()
 {
-    return collisionEnabled;
+    return calledCollisions;
+}
+
+bool Actor::canRecieveCollision()
+{
+    return collisionRecieveEnabled;
+}
+
+bool Actor::canCallCollision()
+{
+    return collisionCallEnabled;
 }
 
 void Actor::setObjectBoxCollider()

@@ -136,6 +136,7 @@ void WorldMap::addSignalConstructor(QPoint mapLocation)
     worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
+    signalConstructor->setCallCollisions({2}); //call collisions with rail ends (railConnectionChannel)
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
 }
@@ -173,11 +174,31 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
            worldScene->addItem(pathItem);
 
            //ADD RAIL ACTOR
-           Actor* rail = new Rail(nullptr, pathItem); //add actor
-           addActorToLists(rail);
-           if (connectedRail != nullptr) dynamic_cast<Rail*>(rail)->setLined(false); // = rail is connected, start as béziere
-           rail->setLocation(mapLocation, true);
-           return rail;
+           Actor* railActor = new Rail(nullptr, pathItem); //add actor
+           Rail* railDynamic = dynamic_cast<Rail*>(railActor);
+
+           addActorToLists(railActor);
+           if (connectedRail != nullptr) railDynamic->setLined(false); // = rail is connected, start as béziere
+           railActor->setLocation(mapLocation, true);
+
+           //ADD GRAPHIC AREA OF RAIL ENDS
+           QPen pen;
+           pen.setWidth(6);
+           pen.setColor(Qt::red);
+           QPainterPath rect;
+           rect.addRect(0, 0, 100, 100);
+           QGraphicsItem* pathArea0 = new QGraphicsPathItem(rect);
+           QGraphicsItem* pathArea1 = new QGraphicsPathItem(rect);
+           dynamic_cast<QGraphicsPathItem*>(pathArea0)->setPen(pen);
+           dynamic_cast<QGraphicsPathItem*>(pathArea1)->setPen(pen);
+           railDynamic->createArea(0, pathArea0);
+           railDynamic->createArea(1, pathArea1);
+           railDynamic->setVisibilityOfArea(0,false); //set to invisible
+           railDynamic->setVisibilityOfArea(1,false); //set to invisible
+           worldScene->addItem(pathArea0);
+           worldScene->addItem(pathArea1);
+
+           return railActor;
         }
         case 2:
         {
@@ -190,6 +211,7 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
            Actor* newSignal = new Signal(nullptr, signalGraphic);
            newSignal->setLocation(mapLocation, true);
            addActorToLists(newSignal);
+
            return newSignal;
         }
         default:{}
@@ -206,7 +228,7 @@ void WorldMap::deleteActor(Actor *actor)
 {
     if (dynamic_cast<Actor*>(actor))
     {
-        if (actor->canCollide())
+        if (actor->canRecieveCollision())
         {
             worldCollide->removeActorFromCollideLists(actor);
         }
@@ -227,8 +249,16 @@ void WorldMap::actualizeEditor()
 {
     if (actualConstructor != nullptr)
     {
-       dynamic_cast<ActorConstructor*>(actualConstructor)->actualizeConstructor(worldView->getRelativeFromCursor());
+        actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
+        if (actualConstructor->canCallCollision())
+        {
+            //constructors (Actor) with collisionCallEnabled = true
+            QVector<int> collideChannels = actualConstructor->callCollideChannels();
+            QVector<Actor*> actors = getActorsUnderCursor(collideChannels);
+            qDebug() << actors.size();
+        }
     }
+
 }
 
 void WorldMap::actualizePlayMode()
@@ -248,6 +278,7 @@ void WorldMap::updateWorld()
     for (auto actor : tickedActorsList)
     {
         actor->actualizeGraphicLocation();
+       //not call collisions implemented yet!
     }
     worldScene->update();
     worldView->update();
@@ -285,7 +316,7 @@ int WorldMap::getActorListSize()
     return actorList.size();
 }
 
-QVector<Actor*> WorldMap::getActorsUnderClick(QVector<int> useBlockChannels)
+QVector<Actor*> WorldMap::getActorsUnderCursor(QVector<int> useBlockChannels)
 {
     QVector<Actor*> actorsToReturn = {};
     QPoint mousePosition = worldView->getRelativeFromCursor();

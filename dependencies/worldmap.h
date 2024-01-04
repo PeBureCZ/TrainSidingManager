@@ -60,7 +60,7 @@ public:
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
     Actor* addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor *connectedRail);
     ActorConstructor *getActualConstructor();
-    QVector<Actor *> getActorsUnderClick(QVector<int> useBlockChannels);
+    QVector<Actor *> getActorsUnderCursor(QVector<int> useBlockChannels);
     QVector<Rail*> findPath(Train* train, Rail* destinationRail);
     WorldCollide* getWorldCollide();
     Trigger *getNearestTriggerInRange(Actor *actor, QPoint position, int radius);

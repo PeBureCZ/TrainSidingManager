@@ -40,7 +40,7 @@ void WorldCollide::addActorToCollideLists(Actor *actor, int channel)
 
 void WorldCollide::removeActorFromCollideLists(Actor *removedActor)
 {
-    QVector<int> channels = removedActor->getCollideChannels(); //all channels what actor use
+    QVector<int> channels = removedActor->recieveCollideChannels(); //all channels what actor use
     for (auto channel : channels)
     {
         switch(channel)

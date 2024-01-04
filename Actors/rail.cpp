@@ -11,6 +11,8 @@ Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(paren
     conectionC1 = {}; //connection 2
     conectionD1 = {}; //connection 3
     lined = true;
+    startArea = nullptr;
+    endArea = nullptr;
 }
 
 QPointF Rail::getP0WorldLocation()
@@ -33,7 +35,7 @@ QPointF Rail::getP3RelativeLocation()
     return {P3};
 }
 
-Rail *Rail::getConnectedRail(int connection)
+Rail *Rail::getConnectedRail(const int connection)
 {
     switch (connection)
     {
@@ -59,7 +61,7 @@ Rail *Rail::getConnectedRail(int connection)
     }
 }
 
-void Rail::setConnectedRail(Rail* connectedRail, int connection)
+void Rail::setConnectedRail(Rail* connectedRail, const int connection)
 {
     switch (connection)
     {
@@ -85,32 +87,69 @@ void Rail::setConnectedRail(Rail* connectedRail, int connection)
     }
 }
 
-void Rail::setP0WorldLocation(QPoint newPoint)
+void Rail::setP0WorldLocation(const QPoint newPoint)
 {
     P0 = newPoint;
 }
 
-void Rail::setP1RelativeLocation(QPoint newPoint)
+void Rail::setP1RelativeLocation(const QPoint newPoint)
 {
     P1 = newPoint;
 }
 
-void Rail::setP2RelativeLocation(QPoint newPoint)
+void Rail::setP2RelativeLocation(const QPoint newPoint)
 {
     P2 = newPoint;
 }
 
-void Rail::setP3RelativeLocation(QPoint newPoint)
+void Rail::setP3RelativeLocation(const QPoint newPoint)
 {
     P3 = newPoint;
 }
 
-void Rail::setLined(bool newBool)
+void Rail::setLined(const bool newBool)
 {
     lined = newBool;
 }
 
-void Rail::connectRails(Rail *connectedRail, bool connectedAtStart) //connectedRail have to be always created by constructor
+void Rail::createArea(const int area, QGraphicsItem *graphicItem)
+{
+    if (area == 0 && startArea != nullptr) deleteArea(0);
+    else if (area == 1 && endArea != nullptr) deleteArea(1);
+    if (area == 0) startArea = graphicItem;
+    else if (area == 1) endArea = graphicItem;
+}
+
+void Rail::deleteArea(const int area)
+{
+    if (area == 0 && startArea != nullptr)
+    {
+        delete startArea;
+        startArea = nullptr;
+        return;
+    }
+    if (area == 1 && endArea != nullptr)
+    {
+        delete endArea;
+        endArea = nullptr;
+    }
+}
+
+void Rail::setVisibilityOfArea(const int area, const bool visible)
+{
+    if (area == 0 && startArea != nullptr) startArea->setVisible(visible);
+    if (area == 1 && endArea != nullptr) endArea->setVisible(visible);
+    qDebug() << "need complete visualisation of rail areas!!!";
+}
+
+void Rail::actualizeAreasPosition()
+{
+    if (startArea != nullptr) startArea->setPos(P0.toPointF());
+    if (endArea != nullptr) endArea->setPos((P0+P3).toPointF());
+
+}
+
+void Rail::connectRails(Rail *connectedRail, const bool connectedAtStart) //connectedRail have to be always created by constructor
 {
     //conect rail function always conect P3 point from constructor
     QPoint connectedRailP3 = connectedRail->getLocation() + connectedRail->getP3RelativeLocation().toPoint(); //world coordinate
@@ -312,5 +351,7 @@ Rail::~Rail()
     if (conectionB0 != nullptr) conectionB0->unconnectRails(dynamic_cast<Rail*>(this));
     if (conectionC1 != nullptr) conectionC1->unconnectRails(dynamic_cast<Rail*>(this));
     if (conectionD1 != nullptr) conectionD1->unconnectRails(dynamic_cast<Rail*>(this));
+    deleteArea(0);
+    deleteArea(1);
 }
 

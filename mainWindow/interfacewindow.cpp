@@ -14,6 +14,7 @@ InterfaceWindow::InterfaceWindow(mwlogic *parent)
 
 void InterfaceWindow::on_TestButton1_clicked() //temporary
 {
+    menuSelected = NOT_USED_NOW;
 }
 
 void InterfaceWindow::on_PlayBut_clicked()
@@ -28,17 +29,24 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
     {
         switch (menuSelected)
         {
-        //case 0: same as default
-        case RAIL_ADD_MODE: //add Rail (RailConstructor)
-            constructRail(world->getRelativeWorldPos(event->pos()));
-            break;
-        case NOT_USED_NOW: //constructing rail (RailConstructor)
-            break;
-        case SIGNAL_ADD_MODE:
-            constructSignal();
-            break;
-        default: break;//incl. 0
-            //nothing yet...;
+            //case 0: same as default
+            case RAIL_ADD_MODE: //add Rail (RailConstructor)
+                constructRail(world->getRelativeWorldPos(event->pos()));
+                break;
+            case NOT_USED_NOW: //constructing rail (RailConstructor)
+            {
+
+                QVector<Actor*> actors = world->getActorsUnderCursor({0});
+                qDebug() << actors.size();
+                qDebug() << "_______";
+                if (actors.size() > 0) world->deleteActor(actors[0]);
+                break;
+            }
+            case SIGNAL_ADD_MODE:
+                constructSignal();
+                break;
+            default: {}break;//incl. 0
+                //nothing yet...;
         }
     }
     else if (event->button() == Qt::RightButton)
@@ -74,7 +82,7 @@ void InterfaceWindow::playButSwitch(bool editMode)
         menuSelected = EDIT_MODE;
         managerConsole->printToConsole("switch to edit mode", 6, 140);
     }
-    else if(!editMode)
+    else
     {
         menuSelected = PLAY_MODE;
         managerConsole->printToConsole("switch to play mode", 6, 140);

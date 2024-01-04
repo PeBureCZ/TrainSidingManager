@@ -151,7 +151,6 @@ void RailConstructor::setConnectedRail(Rail *newConnectedRail)
 
 void RailConstructor::setObjectBoxCollider()
 {
-
     BoxCollider* boxCollider = {};
     for (auto trigger : ownedRail->getAllTriggers())
     {
@@ -209,9 +208,7 @@ void RailConstructor::setObjectBoxCollider()
 
         //set coordination and rotations
         boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);
-
     }
-
 }
 
 RailConstructor::~RailConstructor()
