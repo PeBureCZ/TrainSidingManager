@@ -17,22 +17,22 @@ Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(paren
 
 QPointF Rail::getP0WorldLocation()
 {
-    return {P0};
+    return P0;
 }
 
 QPointF Rail::getP1RelativeLocation()
 {
-    return {P1};
+    return P1;
 }
 
 QPointF Rail::getP2RelativeLocation()
 {
-    return {P2};
+    return P2;
 }
 
 QPointF Rail::getP3RelativeLocation()
 {
-    return {P3};
+    return P3;
 }
 
 Rail *Rail::getConnectedRail(const int connection)
@@ -139,14 +139,13 @@ void Rail::setVisibilityOfArea(const int area, const bool visible)
 {
     if (area == 0 && startArea != nullptr) startArea->setVisible(visible);
     if (area == 1 && endArea != nullptr) endArea->setVisible(visible);
-    qDebug() << "need complete visualisation of rail areas!!!";
 }
 
 void Rail::actualizeAreasPosition()
 {
-    if (startArea != nullptr) startArea->setPos(P0.toPointF());
-    if (endArea != nullptr) endArea->setPos((P0+P3).toPointF());
-
+    QPoint reduction = {VISUAL_AREA_SIZE/2,VISUAL_AREA_SIZE/2};
+    if (startArea != nullptr) startArea->setPos((P0 - reduction).toPointF());
+    if (endArea != nullptr) endArea->setPos((P0+P3-reduction).toPointF());
 }
 
 void Rail::connectRails(Rail *connectedRail, const bool connectedAtStart) //connectedRail have to be always created by constructor
@@ -343,6 +342,11 @@ int Rail::getConnection(Rail *rail)
     if (conectionC1 == rail) return 2; //connection 2
     if (conectionD1 == rail) return 3; //connection 3
     return -1;
+}
+
+int Rail::getVisualAreaSize()
+{
+    return VISUAL_AREA_SIZE;
 }
 
 Rail::~Rail()

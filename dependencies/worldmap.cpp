@@ -136,7 +136,7 @@ void WorldMap::addSignalConstructor(QPoint mapLocation)
     worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
-    signalConstructor->setCallCollisions({2}); //call collisions with rail ends (railConnectionChannel)
+    signalConstructor->setCallCollisionChannels({2}); //call collisions with rail ends (railConnectionChannel)
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
 }
@@ -163,7 +163,7 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
 {
         switch (indexOfActor)
         {
-        case 1:
+        case 1: //Rail
         {
            //ADD PATH FOR RAIL ACTOR = GRAPHIC ITEM
            QPainterPath path;
@@ -186,7 +186,8 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
            pen.setWidth(6);
            pen.setColor(Qt::red);
            QPainterPath rect;
-           rect.addRect(0, 0, 100, 100);
+           int size = railDynamic->getVisualAreaSize();
+           rect.addRect(0, 0, size, size);
            QGraphicsItem* pathArea0 = new QGraphicsPathItem(rect);
            QGraphicsItem* pathArea1 = new QGraphicsPathItem(rect);
            dynamic_cast<QGraphicsPathItem*>(pathArea0)->setPen(pen);
@@ -200,11 +201,15 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
 
            return railActor;
         }
-        case 2:
+        case 2: //Signal
         {
            //ADD GRAPHIC FOR SIGNAL
            SpriteColection newSprite;
-           QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(newSprite.noPlaceSignal()); //sprite from struct
+           QPixmap pixmap;
+           if (dynamic_cast<SignalConstructor*>(actualConstructor)->holdRail()) pixmap = newSprite.redSignal();
+           else pixmap = newSprite.noPlaceSignal();
+
+           QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct
            worldScene->addItem(signalGraphic);
 
            //ADD SIGNAL ACTOR
@@ -254,8 +259,8 @@ void WorldMap::actualizeEditor()
         {
             //constructors (Actor) with collisionCallEnabled = true
             QVector<int> collideChannels = actualConstructor->callCollideChannels();
-            QVector<Actor*> actors = getActorsUnderCursor(collideChannels);
-            qDebug() << actors.size();
+            QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
+            actualConstructor->actorCollide(actors);
         }
     }
 
@@ -316,10 +321,9 @@ int WorldMap::getActorListSize()
     return actorList.size();
 }
 
-QVector<Actor*> WorldMap::getActorsUnderCursor(QVector<int> useBlockChannels)
+QVector<Actor*> WorldMap::getActorsCollideInLocation(QVector<int> useBlockChannels, QPoint point)
 {
     QVector<Actor*> actorsToReturn = {};
-    QPoint mousePosition = worldView->getRelativeFromCursor();
     for (auto channel : useBlockChannels)
     {
         switch(channel)
@@ -328,7 +332,7 @@ QVector<Actor*> WorldMap::getActorsUnderCursor(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfStaticChannel(); i++)
                 {
-                   Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition, channel);
+                   Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), point, channel);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -337,7 +341,7 @@ QVector<Actor*> WorldMap::getActorsUnderCursor(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfTrainChannel(); i++)
                 {
-                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition, channel);
+                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), point, channel);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -346,7 +350,7 @@ QVector<Actor*> WorldMap::getActorsUnderCursor(QVector<int> useBlockChannels)
             {
                 for (int i = 0; i < worldCollide->getSizeOfRailChannel(); i++)
                 {
-                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), mousePosition, channel);
+                    Actor* testedActor = getActorFromTriggersInCollide(worldCollide->getActorFromTriggerList(channel,i), point, channel);
                     if (testedActor != nullptr) actorsToReturn.push_back(testedActor);
                 }
                 break;
@@ -370,7 +374,7 @@ Actor *WorldMap::getActorFromTriggersInCollide(Actor *testedActor, QPoint positi
                 {
                     QPoint relativePosition = testedActor->getLocation() + trigger->getRelativeLocation();
                     int radius = dynamic_cast<SphereCollider*>(trigger)->getRadius();
-                    if (getDistance(relativePosition, position) <= radius) return testedActor;
+                    if (getWorldDistance(relativePosition, position) <= radius) return testedActor;
                 }
                 else if (dynamic_cast<BoxCollider*>(trigger))
                 {
@@ -395,7 +399,7 @@ Trigger *WorldMap::getNearestTriggerInRange(Actor *actor, QPoint position, int r
     Trigger* nearestTrigger = nullptr;
     for (auto trigger : testedTriggers)
     {
-        int testedDistance = getDistance(actorLocation + trigger->getRelativeLocation(), position);
+        int testedDistance = getWorldDistance(actorLocation + trigger->getRelativeLocation(), position);
         if (testedDistance <= nearestDistance)
         {
             nearestTrigger = trigger;
@@ -455,7 +459,7 @@ QVector<Rail*> WorldMap::findPath(Train *train, Rail* destinationRail)
     return rails;
 }
 
-int WorldMap::getDistance(QPoint pointOne, QPoint pointTwo)
+int WorldMap::getWorldDistance(QPoint pointOne, QPoint pointTwo)
 {
     QLineF line(pointOne, pointTwo);
     return line.length();

@@ -58,7 +58,7 @@ void mwlogic::addConstructor(int constructorType, QPoint point)
     int zoom = world->getWorldView()->getZoomLevel();
     int maxRadius = 150;
     if (zoom > 0) maxRadius += zoom * 150; //increase radius on zoom in
-    QVector<Actor*> actors = world->getActorsUnderCursor({2});
+    QVector<Actor*> actors = world->getActorsCollideInLocation({2}, world->getWorldView()->getRelativeFromCursor());
     switch (constructorType)
     {
     case 1: //1 = add Rail (RailConstructor)
@@ -76,7 +76,7 @@ void mwlogic::addConstructor(int constructorType, QPoint point)
 
 void mwlogic::constructRail(QPoint point)
 {
-    QVector<Actor*> actors = world->getActorsUnderCursor({2});
+    QVector<Actor*> actors = world->getActorsCollideInLocation({2},world->getWorldView()->getRelativeFromCursor());
     RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
     Actor* nearestActor = nullptr;
     Trigger* testedTrigger = nullptr;
@@ -105,7 +105,7 @@ void mwlogic::constructRail(QPoint point)
                 testedTrigger = world->getNearestTriggerInRange(actors[i], point, maxRadius);
                 if (testedTrigger != nullptr) //all triggers are out of range?
                 {
-                    testedDistance = world->getDistance(testedTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
+                    testedDistance = world->getWorldDistance(testedTrigger->getRelativeLocation() + dynamic_cast<Actor*>(actors[i])->getLocation(), point);
                     if (testedDistance < distance) //nearest actor by trigger
                     {
                         nearestTrigger = testedTrigger;
@@ -191,6 +191,8 @@ void mwlogic::constructSignal()
     if (dynamic_cast<SignalConstructor*>(world->getActualConstructor()))
     {
         SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(world->getActualConstructor());
+        if (!actualSignalConstructor->holdRail()) managerConsole->printToConsole("Signal is not connected to any rail!", 1, 500);
+
         world->addRailwaylActor(2, actualSignalConstructor->getLocation(), nullptr); //create signal actor
     }
 }

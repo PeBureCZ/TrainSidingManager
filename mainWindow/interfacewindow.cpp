@@ -36,7 +36,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             case NOT_USED_NOW: //constructing rail (RailConstructor)
             {
 
-                QVector<Actor*> actors = world->getActorsUnderCursor({0});
+                QVector<Actor*> actors = world->getActorsCollideInLocation({0},  world->getWorldView()->getRelativeFromCursor());
                 qDebug() << actors.size();
                 qDebug() << "_______";
                 if (actors.size() > 0) world->deleteActor(actors[0]);

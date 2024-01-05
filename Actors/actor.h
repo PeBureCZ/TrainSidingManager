@@ -35,15 +35,21 @@ public:
     QPoint getLocation();
     QVector<Trigger*> getAllTriggers();
 
-    virtual void actualizeGraphicLocation();
     void setRotation(const float newRotation);
-    float getRotation();
-    void setCallCollisions(const QVector<int> newCollisions);
+    void setCallCollisionChannels(const QVector<int> newCollisions);
     void setLocation(QPoint newLocation, bool setGraphic);
     void addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius);
-    virtual void setName(QString newName); //virtual need for polymorph
+
+    float getRotation();
+    int getDistance(QPoint pointA, QPoint pointB);
+
     bool canRecieveCollision();
     bool canCallCollision();
+
+    //public virtual
+    virtual void setName(QString newName); //virtual need for polymorph
+    virtual void actualizeGraphicLocation();
+    virtual void actorCollide(const QList<Actor*> actorsInCollision); //overrided
     virtual void setObjectBoxCollider(); //overrided
     virtual void tickEvent();
     virtual ~Actor();

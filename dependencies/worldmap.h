@@ -56,17 +56,17 @@ public:
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
-    int getActorListSize();
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
     Actor* addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor *connectedRail);
     ActorConstructor *getActualConstructor();
-    QVector<Actor *> getActorsUnderCursor(QVector<int> useBlockChannels);
+    QVector<Actor *> getActorsCollideInLocation(QVector<int> useBlockChannels, QPoint point);
     QVector<Rail*> findPath(Train* train, Rail* destinationRail);
     WorldCollide* getWorldCollide();
     Trigger *getNearestTriggerInRange(Actor *actor, QPoint position, int radius);
     int getWorldWidth();
     int getWorldHeight();
-    int getDistance(QPoint pointOne, QPoint pointTwo);
+    int getWorldDistance(QPoint pointOne, QPoint pointTwo);
+    int getActorListSize();
 
     //FCE - TICK
     void actualizeEditor();

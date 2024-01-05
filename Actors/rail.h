@@ -1,6 +1,8 @@
 #ifndef RAIL_H
 #define RAIL_H
 
+#define VISUAL_AREA_SIZE 40
+
 #include "railwayobject.h"
 #include <QGraphicsPathItem>
 
@@ -30,6 +32,7 @@ public:
     bool getLined();
     int getRailLength();
     int getConnection(Rail* rail);
+    int getVisualAreaSize();
 
     void setConnectedRail(Rail *connectedRail, const int connection);
     void setP0WorldLocation(const QPoint newPoint);
@@ -37,7 +40,7 @@ public:
     void setP2RelativeLocation(const QPoint newPoint);
     void setP3RelativeLocation(const QPoint newPoint);
     void setLined(const bool newBool);
-    void createArea(const int area, QGraphicsItem* graphicItem);
+    void createArea(const int area, QGraphicsItem *graphicItem);
     void deleteArea(const int area);
     void setVisibilityOfArea(const int area, const bool visible);
     void actualizeAreasPosition();

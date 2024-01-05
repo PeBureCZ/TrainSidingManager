@@ -106,7 +106,7 @@ void MainWindow::on_MultiFuncBut1_clicked() {}//overrided
 void MainWindow::on_MultiFuncBut2_clicked() {}//overrided
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided
-void MainWindow::on_MultiFuncBut24_clicked() {}//overrided
+void MainWindow::on_MultiFuncBut24_clicked() {}
 
 void MainWindow::InterfaceSet(int menuSelected)
 {

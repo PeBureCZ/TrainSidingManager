@@ -26,6 +26,11 @@ void Actor::actualizeGraphicLocation()
     graphicItem->setPos(graphicLocation);
 }
 
+void Actor::actorCollide(const QList<Actor *> actorsInCollision)
+{
+    //overrided
+}
+
 QGraphicsItem *Actor::getGraphicItem()
 {
     return graphicItem;
@@ -46,7 +51,7 @@ void Actor::setRotation(const float newRotation)
     rotation = newRotation;
 }
 
-void Actor::setCallCollisions(const QVector<int> newCollisions)
+void Actor::setCallCollisionChannels(const QVector<int> newCollisions)
 {
     calledCollisions = newCollisions;
     if (newCollisions.size() > 0) collisionCallEnabled = true;
@@ -106,6 +111,12 @@ void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint r
         component->setBlockChannels(channels);
         triggers.push_back(component);
     }
+}
+
+int Actor::getDistance(QPoint pointA, QPoint pointB)
+{
+    QLineF line(pointA, pointB);
+    return line.length();
 }
 
 QVector<int> Actor::recieveCollideChannels()
