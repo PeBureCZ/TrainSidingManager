@@ -37,8 +37,6 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             {
 
                 QVector<Actor*> actors = world->getActorsCollideInLocation({0},  world->getWorldView()->getRelativeFromCursor());
-                qDebug() << actors.size();
-                qDebug() << "_______";
                 if (actors.size() > 0) world->deleteActor(actors[0]);
                 break;
             }

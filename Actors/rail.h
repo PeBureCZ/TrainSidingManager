@@ -4,7 +4,9 @@
 #define VISUAL_AREA_SIZE 40
 
 #include "railwayobject.h"
-#include <QGraphicsPathItem>
+#include <QGraphicsItem>
+
+#include <QPen>
 
 class Rail : public RailwayObject
 {
@@ -28,6 +30,7 @@ public:
     QPointF getP2RelativeLocation();
     QPointF getP3RelativeLocation();
     Rail* getConnectedRail(const int connection);
+    QGraphicsItem *getAreaGraphic(const int area);
 
     bool getLined();
     int getRailLength();
@@ -42,7 +45,7 @@ public:
     void setLined(const bool newBool);
     void createArea(const int area, QGraphicsItem *graphicItem);
     void deleteArea(const int area);
-    void setVisibilityOfArea(const int area, const bool visible);
+    void setVisibilityOfArea(const int area, const bool visible, QColor color);
     void actualizeAreasPosition();
     void connectRails(Rail* connectedRail, const bool connectedAtStart);
     void unconnectRails(Rail* unconnectedRail);

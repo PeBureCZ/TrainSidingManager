@@ -58,7 +58,14 @@ Rail *Rail::getConnectedRail(const int connection)
         {
             return conectionD1;
         }
-    }
+        }
+}
+
+QGraphicsItem *Rail::getAreaGraphic(const int area)
+{
+        if (area == 0) return startArea;
+        else if (area == 1) return endArea;
+        else return nullptr;
 }
 
 void Rail::setConnectedRail(Rail* connectedRail, const int connection)
@@ -135,10 +142,47 @@ void Rail::deleteArea(const int area)
     }
 }
 
-void Rail::setVisibilityOfArea(const int area, const bool visible)
+void Rail::setVisibilityOfArea(const int area, const bool visible, QColor color)
 {
-    if (area == 0 && startArea != nullptr) startArea->setVisible(visible);
-    if (area == 1 && endArea != nullptr) endArea->setVisible(visible);
+    if (area == 0 && startArea != nullptr)
+    {
+        if (color != nullptr)
+        {
+            QPen newPen(color);
+            if (color == Qt::green)
+            {
+                startArea->setZValue(0);
+                newPen.setWidth(8);
+            }
+            else
+            {
+                startArea->setZValue(2);
+                newPen.setWidth(3);
+            }
+            dynamic_cast<QGraphicsPathItem*>(startArea)->setPen(newPen);
+        }
+        startArea->setVisible(visible);
+    }
+    if (area == 1 && endArea != nullptr)
+    {
+        if (color != nullptr)
+        {
+            QPen newPen(color);
+
+            if (color == Qt::green)
+            {
+                endArea->setZValue(0);
+                newPen.setWidth(8);
+            }
+            else
+            {
+                endArea->setZValue(2);
+                newPen.setWidth(3);
+            }
+            dynamic_cast<QGraphicsPathItem*>(endArea)->setPen(newPen);
+        }
+        endArea->setVisible(visible);
+    }
 }
 
 void Rail::actualizeAreasPosition()

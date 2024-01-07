@@ -10,7 +10,8 @@ class SignalConstructor : public RailobjectConstructor
 {
     Q_OBJECT
 protected:
-    Rail* holdedRail;
+    QList<Rail*> holdedRail;
+    QGraphicsItem* nearestArea;
 public:
     explicit SignalConstructor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     void actualizeConstructor(QPoint newPoint) override;

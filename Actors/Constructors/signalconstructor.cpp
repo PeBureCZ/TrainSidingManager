@@ -3,7 +3,8 @@
 SignalConstructor::SignalConstructor(QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing)
     : RailobjectConstructor(parent, newGraphicItem, actorToConstructing)
 {
-    holdedRail = nullptr;
+    holdedRail = {};
+    nearestArea = nullptr;
 }
 
 void SignalConstructor::actualizeConstructor(QPoint newPoint)
@@ -16,17 +17,36 @@ void SignalConstructor::actualizeConstructor(QPoint newPoint)
 void SignalConstructor::actorCollide(const QList<Actor*> actorsInCollision)
 {
     //overrided function (Actor)
-    Rail* nearestRail= nullptr;
+    Rail* nearestRail = nullptr;
     int nearestPoint = -1;
 
-    int distance = 99999999;
+    int distance = 120;
 
-    for (auto actor : actorsInCollision)
+    for (auto rail : holdedRail) //hidde no longer collided rails
+    {
+        int index = actorsInCollision.indexOf(rail);
+        if (index == -1) //rail is no longer in actorsInCollision QList
+        {
+            rail->setVisibilityOfArea(0, false, nullptr);
+            rail->setVisibilityOfArea(1, false, nullptr);
+            holdedRail.removeOne(rail);
+        }
+    }
+
+    for (auto actor : actorsInCollision) //show newly collided rail
     {
         if (dynamic_cast<Rail*>(actor))
-        {
+        {        
             Rail* rail = dynamic_cast<Rail*>(actor);
+            int index = holdedRail.indexOf(rail);
+            if (index == -1) //actor->rail is not in holdedRail QList -> need add
+            {
+                holdedRail.push_back(rail);
+                rail->setVisibilityOfArea(0, true, Qt::red);
+                rail->setVisibilityOfArea(1, true, Qt::red);
+            }
 
+            //try to find nearest area (end of rail)
             QPoint testedPoint1 = rail->getP0WorldLocation().toPoint();
             QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();
             int testedDistance1 = getDistance(location, testedPoint1);
@@ -46,29 +66,54 @@ void SignalConstructor::actorCollide(const QList<Actor*> actorsInCollision)
             }
         }
     }
-    if (nearestRail != holdedRail) freeHoldedRail(); //need rework!
     if (nearestRail != nullptr)
-    {   
-        holdedRail = nearestRail;
-        (nearestPoint == 0) ? nearestRail->setVisibilityOfArea(0, true) : nearestRail->setVisibilityOfArea(0, false);
-        (nearestPoint == 1) ? nearestRail->setVisibilityOfArea(1, true) : nearestRail->setVisibilityOfArea(1, false);
+    {
+        QGraphicsItem* areaItem = nearestRail->getAreaGraphic(nearestPoint);
+        if (areaItem != nullptr && areaItem != nearestArea)
+        {
+            QPen newPen(Qt::red);
+            (nearestPoint == -1) ? newPen.setWidth(3) : newPen.setWidth(8);
+            if (nearestArea != nullptr) dynamic_cast<QGraphicsPathItem*>(nearestArea)->setPen(newPen);
+            nearestArea = areaItem;
+        }
+        if (nearestPoint == 0)
+        {
+            nearestRail->setVisibilityOfArea(0, true, Qt::green);
+            nearestArea->setZValue(0);
+        }
+        else if (nearestPoint == 1)
+        {
+            nearestRail->setVisibilityOfArea(1, true, Qt::green);
+            nearestArea->setZValue(0);
+        }
     }
+    else if (nearestArea != nullptr)
+    {
+        QPen newPen(Qt::red);
+        newPen.setWidth(3);
+        dynamic_cast<QGraphicsPathItem*>(nearestArea)->setPen(newPen);
+        nearestArea->setZValue(2);
+        nearestArea = nullptr;
+
+    }
+
 }
 
 void SignalConstructor::freeHoldedRail()
 {
-    if (holdedRail != nullptr)
+    for (auto rail : holdedRail)
     {
-        holdedRail->setVisibilityOfArea(0, false);
-        holdedRail->setVisibilityOfArea(1, false);
-        holdedRail = nullptr;
+        rail->setVisibilityOfArea(0, false, nullptr);
+        rail->setVisibilityOfArea(1, false, nullptr);
     }
+    holdedRail.clear();
+    nearestArea = nullptr;
 }
 
 bool SignalConstructor::holdRail()
 {
-    if (holdedRail == nullptr) return false;
-    return true;
+    if (nearestArea != nullptr) return true;
+    return false;
 }
 
 SignalConstructor::~SignalConstructor()

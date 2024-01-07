@@ -136,7 +136,7 @@ void WorldMap::addSignalConstructor(QPoint mapLocation)
     worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
-    signalConstructor->setCallCollisionChannels({2}); //call collisions with rail ends (railConnectionChannel)
+    signalConstructor->setCallCollisionChannels({0,2}); //call collisions with rail ends (railConnectionChannel)
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
 }
@@ -183,7 +183,7 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
 
            //ADD GRAPHIC AREA OF RAIL ENDS
            QPen pen;
-           pen.setWidth(6);
+           pen.setWidth(3);
            pen.setColor(Qt::red);
            QPainterPath rect;
            int size = railDynamic->getVisualAreaSize();
@@ -194,8 +194,8 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
            dynamic_cast<QGraphicsPathItem*>(pathArea1)->setPen(pen);
            railDynamic->createArea(0, pathArea0);
            railDynamic->createArea(1, pathArea1);
-           railDynamic->setVisibilityOfArea(0,false); //set to invisible
-           railDynamic->setVisibilityOfArea(1,false); //set to invisible
+           railDynamic->setVisibilityOfArea(0,false, Qt::blue); //set to invisible
+           railDynamic->setVisibilityOfArea(1,false, Qt::blue); //set to invisible
            worldScene->addItem(pathArea0);
            worldScene->addItem(pathArea1);
 
@@ -303,7 +303,6 @@ void WorldMap::setMap(int xSize, int ySize)
 void WorldMap::setActorLocation(QPoint newLocation, Actor* actor)
 {
     actor->setLocation(newLocation, true);
-    qDebug() << "setActorLoc";
 }
 
 Rail* WorldMap::getRailFromList(int index)
