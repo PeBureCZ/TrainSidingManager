@@ -58,7 +58,7 @@ Rail *Rail::getConnectedRail(const int connection)
         {
             return conectionD1;
         }
-        }
+    }
 }
 
 QGraphicsItem *Rail::getAreaGraphic(const int area)
@@ -144,45 +144,34 @@ void Rail::deleteArea(const int area)
 
 void Rail::setVisibilityOfArea(const int area, const bool visible, QColor color)
 {
-    if (area == 0 && startArea != nullptr)
+    QGraphicsItem* changedGraphic = nullptr;
+    if (area == 0) changedGraphic = startArea;
+    else if (area == 1) changedGraphic = endArea;
+    if (visible)
     {
-        if (color != nullptr)
-        {
-            QPen newPen(color);
-            if (color == Qt::green)
-            {
-                startArea->setZValue(0);
-                newPen.setWidth(8);
-            }
-            else
-            {
-                startArea->setZValue(2);
-                newPen.setWidth(3);
-            }
-            dynamic_cast<QGraphicsPathItem*>(startArea)->setPen(newPen);
-        }
-        startArea->setVisible(visible);
-    }
-    if (area == 1 && endArea != nullptr)
-    {
-        if (color != nullptr)
-        {
-            QPen newPen(color);
+        QPen newPen;
+        (color != nullptr) ? newPen.setColor(color) : newPen.setColor(Qt::red);
 
-            if (color == Qt::green)
+        if (changedGraphic != nullptr)
+        {
+            if (color != nullptr)
             {
-                endArea->setZValue(0);
-                newPen.setWidth(8);
+                if (color == Qt::green)
+                {
+                    changedGraphic->setZValue(4);
+                    newPen.setWidth(8);
+                }
+                else
+                {
+                    changedGraphic->setZValue(0);
+                    newPen.setWidth(3);
+                }
+                dynamic_cast<QGraphicsPathItem*>(changedGraphic)->setPen(newPen);
             }
-            else
-            {
-                endArea->setZValue(2);
-                newPen.setWidth(3);
-            }
-            dynamic_cast<QGraphicsPathItem*>(endArea)->setPen(newPen);
         }
-        endArea->setVisible(visible);
     }
+    changedGraphic->setVisible(visible);
+
 }
 
 void Rail::actualizeAreasPosition()

@@ -22,7 +22,8 @@ void SignalConstructor::actorCollide(const QList<Actor*> actorsInCollision)
 
     int distance = 120;
 
-    for (auto rail : holdedRail) //hidde no longer collided rails
+    //hidde no longer collided rail
+    for (auto rail : holdedRail)
     {
         int index = actorsInCollision.indexOf(rail);
         if (index == -1) //rail is no longer in actorsInCollision QList
@@ -33,7 +34,8 @@ void SignalConstructor::actorCollide(const QList<Actor*> actorsInCollision)
         }
     }
 
-    for (auto actor : actorsInCollision) //show newly collided rail
+     //show newly collided rail
+    for (auto actor : actorsInCollision)
     {
         if (dynamic_cast<Rail*>(actor))
         {        
@@ -52,7 +54,7 @@ void SignalConstructor::actorCollide(const QList<Actor*> actorsInCollision)
             int testedDistance1 = getDistance(location, testedPoint1);
             int testedDistance2 = getDistance(location, testedPoint2);
 
-            if (distance > testedDistance1 && testedDistance1 <= testedDistance2)
+            if (distance >= testedDistance1 && testedDistance1 <= testedDistance2)
             {
                 distance = testedDistance1;
                 nearestPoint = 0;
@@ -66,37 +68,28 @@ void SignalConstructor::actorCollide(const QList<Actor*> actorsInCollision)
             }
         }
     }
-    if (nearestRail != nullptr)
+
+    if (nearestRail != nullptr && nearestPoint != -1)
     {
         QGraphicsItem* areaItem = nearestRail->getAreaGraphic(nearestPoint);
-        if (areaItem != nullptr && areaItem != nearestArea)
+        if (nearestArea != areaItem && nearestArea != nullptr)
         {
             QPen newPen(Qt::red);
-            (nearestPoint == -1) ? newPen.setWidth(3) : newPen.setWidth(8);
-            if (nearestArea != nullptr) dynamic_cast<QGraphicsPathItem*>(nearestArea)->setPen(newPen);
-            nearestArea = areaItem;
-        }
-        if (nearestPoint == 0)
-        {
-            nearestRail->setVisibilityOfArea(0, true, Qt::green);
+            newPen.setWidth(3);
+            dynamic_cast<QGraphicsPathItem*>(nearestArea)->setPen(newPen);
             nearestArea->setZValue(0);
         }
-        else if (nearestPoint == 1)
-        {
-            nearestRail->setVisibilityOfArea(1, true, Qt::green);
-            nearestArea->setZValue(0);
-        }
+        nearestArea = areaItem;
+        if (nearestArea != nullptr) nearestRail->setVisibilityOfArea(nearestPoint, true, Qt::green);
     }
     else if (nearestArea != nullptr)
     {
         QPen newPen(Qt::red);
         newPen.setWidth(3);
         dynamic_cast<QGraphicsPathItem*>(nearestArea)->setPen(newPen);
-        nearestArea->setZValue(2);
+        nearestArea->setZValue(0);
         nearestArea = nullptr;
-
     }
-
 }
 
 void SignalConstructor::freeHoldedRail()
