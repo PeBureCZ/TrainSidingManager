@@ -22,6 +22,45 @@ WorldMap::WorldMap(QObject* parent) : QObject(parent)
     setMap(25000, 20000); //set map x,y border size
 }
 
+void WorldMap::actualizeEditor()
+{
+    if (actualConstructor != nullptr)
+    {
+        actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
+        if (actualConstructor->canCallCollision())
+        {
+            //constructors (Actor) with collisionCallEnabled = true
+            QVector<int> collideChannels = actualConstructor->callCollideChannels();
+            QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
+            actualConstructor->actorCollide(actors);
+        }
+    }
+}
+
+void WorldMap::actualizePlayMode()
+{
+    for (auto actor : tickedActorsList)
+    {
+        QThread *thread = QThread::create(actualizeActor, actor);
+        connect(thread, SIGNAL(finished()), thread, SLOT(quit()));
+        connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+        //connect(thread, &QThread::destroyed, this, &WorldMap::printMessage);
+        thread->start();
+    }
+}
+
+void WorldMap::updateWorld()
+{
+    for (auto actor : tickedActorsList)
+    {
+        actor->actualizeGraphicLocation();
+        //not call collisions implemented yet!
+    }
+    worldScene->update();
+    worldView->update();
+}
+
+
 CustomQGraphicsView *WorldMap::getWorldView() //return view of scene (QGraphicsView)
 {
     return worldView;
@@ -248,45 +287,6 @@ void WorldMap::deleteActor(Actor *actor)
         delete actorList[actorIndex];
         actorList.remove(actorIndex);
     }
-}
-
-void WorldMap::actualizeEditor()
-{
-    if (actualConstructor != nullptr)
-    {
-        actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
-        if (actualConstructor->canCallCollision())
-        {
-            //constructors (Actor) with collisionCallEnabled = true
-            QVector<int> collideChannels = actualConstructor->callCollideChannels();
-            QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
-            actualConstructor->actorCollide(actors);
-        }
-    }
-
-}
-
-void WorldMap::actualizePlayMode()
-{
-    for (auto actor : tickedActorsList)
-    {
-       QThread *thread = QThread::create(actualizeActor, actor);
-       connect(thread, SIGNAL(finished()), thread, SLOT(quit()));
-       connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-       //connect(thread, &QThread::destroyed, this, &WorldMap::printMessage);
-       thread->start();
-    }
-}
-
-void WorldMap::updateWorld()
-{
-    for (auto actor : tickedActorsList)
-    {
-        actor->actualizeGraphicLocation();
-       //not call collisions implemented yet!
-    }
-    worldScene->update();
-    worldView->update();
 }
 
 void WorldMap::setMap(int xSize, int ySize)

@@ -28,6 +28,12 @@
 class WorldMap : public QObject
 {
 Q_OBJECT
+private:
+    CustomQGraphicsView *worldView;
+    ActorConstructor* actualConstructor;
+    QGraphicsScene *worldScene;
+    WorldCollide* worldCollide;
+
 public:
     WorldMap(QObject *parent = nullptr);
 
@@ -75,11 +81,6 @@ public:
 
     //DESTRUCTOR
     ~WorldMap();
-private:
-    CustomQGraphicsView *worldView;
-    ActorConstructor* actualConstructor;
-    QGraphicsScene *worldScene;
-    WorldCollide* worldCollide;
 
 public slots:
     printMessage();

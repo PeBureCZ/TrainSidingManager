@@ -37,14 +37,18 @@ public:
     QPointF getP3Point();
     Rail* getOwnedRail();
     Rail* getConnectedRail();
+
     void underConstruction(bool constructingNow);
     void actualizePathVisual();
     void actualizeRail();
     void smoothEndPoint();
-    void actualizeConstructor(QPoint newPoint) override;
-    void setObjectBoxCollider() override;
     void setOwnedRail(Rail* newOwnedRail);
     void setConnectedRail(Rail* newConnectedRail);
+
+    void setObjectBoxCollider() override;
+    void actualizeConstructor(QPoint newPoint) override;
+    void actorCollide(const QList<Actor *> isInCollision) override;
+
     ~ RailConstructor();
 signals:
 

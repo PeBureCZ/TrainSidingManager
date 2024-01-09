@@ -8,7 +8,6 @@
 #include <QGraphicsPathItem>
 #include "Components/spherecollider.h"
 #include "Components/boxcollider.h"
-
 #include <QObject>
 
 class Actor : public QObject
@@ -21,10 +20,11 @@ protected:
     QGraphicsItem* graphicItem;
     QVector<Trigger*> triggers;
     QVector<int> calledCollisions;
+    QList<Actor*> actorsInCollision;
     float rotation;
     bool collisionRecieveEnabled;
     bool collisionCallEnabled;
-    void setGraphicLocation(QPoint newLocation);
+
 private:
 public:
     Actor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr);
@@ -35,6 +35,7 @@ public:
     QPoint getLocation();
     QVector<Trigger*> getAllTriggers();
 
+    void setGraphicLocation(QPoint newLocation);
     void setRotation(const float newRotation);
     void setCallCollisionChannels(const QVector<int> newCollisions);
     void setLocation(QPoint newLocation, bool setGraphic);
@@ -46,12 +47,13 @@ public:
     bool canRecieveCollision();
     bool canCallCollision();
 
-    //public virtual
     virtual void setName(QString newName); //virtual need for polymorph
     virtual void actualizeGraphicLocation();
-    virtual void actorCollide(const QList<Actor*> actorsInCollision); //overrided
+    virtual void actorCollide(const QList<Actor*> isInCollision); //overrided
     virtual void setObjectBoxCollider(); //overrided
     virtual void tickEvent();
+    virtual void actorLeaveFromCollision(Actor* actor);
+    virtual void actorEnterInCollision(Actor* actor);
     virtual ~Actor();
 signals:
 

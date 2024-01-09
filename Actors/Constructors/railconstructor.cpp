@@ -55,6 +55,14 @@ void RailConstructor::actualizeConstructor(QPoint newPoint)
     }
 }
 
+void RailConstructor::actorCollide(const QList<Actor *> isInCollision)
+{
+    for (auto actor : isInCollision)
+    {
+
+    }
+}
+
 void RailConstructor::setPoints(QPoint endP)
 {
     //P0 = WORLD, P1-3 = RELATIVE

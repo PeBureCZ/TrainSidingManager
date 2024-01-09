@@ -10,6 +10,7 @@ Actor::Actor(QObject *parent, QGraphicsItem* newGraphicItem) : QObject(parent), 
     collisionCallEnabled = false;
     calledCollisions = {};
     triggers = {}; //triggers -> recieve collisions
+    actorsInCollision = {};
 }
 
 void Actor::setGraphicLocation(QPoint newLocation)
@@ -26,9 +27,31 @@ void Actor::actualizeGraphicLocation()
     graphicItem->setPos(graphicLocation);
 }
 
-void Actor::actorCollide(const QList<Actor *> actorsInCollision)
+void Actor::actorCollide(const QList<Actor *> isInCollision)
 {
-    //overrided
+    //hidde no longer collided rail
+    for (auto actor : actorsInCollision)
+    {
+        int index = isInCollision.indexOf(actor);
+        if (index == -1) actorLeaveFromCollision(actor); //is no longer in actorsInCollision QList
+    }
+
+    //show newly collided rail
+    for (auto actor : isInCollision)
+    {
+        int index = actorsInCollision.indexOf(actor);
+        if (index == -1) actorEnterInCollision(actor);//actor is not in holdedRail QList -> need add
+    }
+}
+
+void Actor::actorLeaveFromCollision(Actor* actor)
+{
+    actorsInCollision.removeOne(actor);
+}
+
+void Actor::actorEnterInCollision(Actor *actor)
+{
+    actorsInCollision.push_back(actor);
 }
 
 QGraphicsItem *Actor::getGraphicItem()
@@ -161,6 +184,7 @@ void Actor::tickEvent()
 {
     //overrided
 }
+
 
 Actor::~Actor()
 {
