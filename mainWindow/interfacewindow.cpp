@@ -4,11 +4,11 @@ InterfaceWindow::InterfaceWindow(mwlogic *parent)
     : mwlogic{parent}
 {}
 
-
+/*
 void InterfaceWindow::on_TestButton1_clicked() //temporary
 {
     menuSelected = NOT_USED_NOW;
-}
+}*/
 
 void InterfaceWindow::on_PlayBut_clicked()
 {

@@ -11,6 +11,7 @@ class SignalConstructor : public RailobjectConstructor
     Q_OBJECT
 protected:
     QGraphicsItem* nearestArea;
+    Rail* nearestRail;
 public:
     explicit SignalConstructor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     void actualizeConstructor(QPoint newPoint) override;

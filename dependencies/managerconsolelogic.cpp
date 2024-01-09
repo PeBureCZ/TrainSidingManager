@@ -10,7 +10,7 @@ ManagerConsoleLogic::ManagerConsoleLogic(QObject *parent)
     consoleText = {};
 }
 
-ManagerConsoleLogic::addToConsole(QString text, int timeToHidden)
+void ManagerConsoleLogic::addToConsole(QString text, int timeToHidden)
 {
     //visual size = max 14 rows
     timeSpan.push_back(timeToHidden);
@@ -27,12 +27,12 @@ ManagerConsoleLogic::addToConsole(QString text, int timeToHidden)
     actualizeConsoleText();
 }
 
-ManagerConsoleLogic::setConsolePos(QPoint point, int sizeX, int sizeY)
+void ManagerConsoleLogic::setConsolePos(QPoint point, int sizeX, int sizeY)
 {
     consoleTextObject->setGeometry(point.x(), point.y(), sizeX, sizeY);
 }
 
-ManagerConsoleLogic::reduceTimeSpan(int reduction)
+void ManagerConsoleLogic::reduceTimeSpan(int reduction)
 {
     bool actualize = false;
     if (consoleText.size() > 0)
@@ -53,7 +53,7 @@ ManagerConsoleLogic::reduceTimeSpan(int reduction)
     if (actualize) actualizeConsoleText();
 }
 
-ManagerConsoleLogic::actualizeConsoleText()
+void ManagerConsoleLogic::actualizeConsoleText()
 {
     QString textInConsole = "";
     consoleTextObject->clear();

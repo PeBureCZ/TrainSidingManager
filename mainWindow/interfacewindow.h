@@ -12,7 +12,7 @@ class InterfaceWindow : public mwlogic
 public:
     InterfaceWindow(mwlogic *parent = nullptr);
 private slots:
-    void on_TestButton1_clicked() override;
+    //void on_TestButton1_clicked();
     void on_PlayBut_clicked() override;
     void on_SubBut_clicked() override;
     void on_AddBut_clicked() override;

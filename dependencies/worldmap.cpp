@@ -430,7 +430,7 @@ WorldMap::~WorldMap()
     delete worldCollide;
 }
 
-WorldMap::printMessage()
+void WorldMap::printMessage()
 {
     qDebug() << "message send";
 }

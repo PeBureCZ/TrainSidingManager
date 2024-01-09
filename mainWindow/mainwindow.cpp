@@ -107,7 +107,27 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 }
 
 void MainWindow::on_PlayBut_clicked() {}//overrided
-void MainWindow::on_TestButton1_clicked() {}//overrided
+void MainWindow::on_TestButton1_clicked()
+{
+    if (world->getActorListSize()>0)
+    {
+        for (auto actor : world->actorList)
+        {
+            if (dynamic_cast<Rail*>(actor))
+            {
+                Rail* rail = dynamic_cast<Rail*>(actor);
+                qDebug() << rail->getP0WorldLocation();
+                qDebug() << rail->getP0WorldLocation() + rail->getP3RelativeLocation();
+            }
+            if (dynamic_cast<Signal*>(actor))
+            {
+                Signal* constructor = dynamic_cast<Signal*>(actor);
+                qDebug() << constructor->getLocation();
+                qDebug() << "___";
+            }
+        }
+    }
+}
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided
 void MainWindow::on_AddMenuBut_clicked(){}//overrided

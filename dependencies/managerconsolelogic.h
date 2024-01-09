@@ -16,10 +16,10 @@ protected:
     QList<QString> consoleText;
 public:
     explicit ManagerConsoleLogic(QObject *parent = nullptr);
-    addToConsole(QString text, int timeToHidden);
-    setConsolePos(QPoint point, int sizeX, int sizeY);
-    reduceTimeSpan(int reduction);
-    actualizeConsoleText();
+    void addToConsole(QString text, int timeToHidden);
+    void setConsolePos(QPoint point, int sizeX, int sizeY);
+    void reduceTimeSpan(int reduction);
+    void actualizeConsoleText();
     ~ManagerConsoleLogic();
 
 signals:

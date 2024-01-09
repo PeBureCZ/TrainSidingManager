@@ -5,6 +5,7 @@
 
 #include "railwayobject.h"
 #include <QGraphicsItem>
+#include <QColor>
 
 #include <QPen>
 
@@ -23,6 +24,8 @@ protected:
     bool lined;
     QGraphicsItem *startArea;
     QGraphicsItem* endArea;
+    bool occupied;
+    bool visuallyOccupied;
 public:
     Rail(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
     QPointF getP0WorldLocation();
@@ -33,6 +36,7 @@ public:
     QGraphicsItem *getAreaGraphic(const int area);
 
     bool getLined();
+    bool getOccupied();
     int getRailLength();
     int getConnection(Rail* rail);
     int getVisualAreaSize();
@@ -50,6 +54,10 @@ public:
     void connectRails(Rail* connectedRail, const bool connectedAtStart);
     void unconnectRails(Rail* unconnectedRail);
     void smoothP3PointByC1();
+    void setOccupied(const bool newOccupied, bool setVisualToOccupied);
+    void setVisualOccupied(const bool newsVisualState);
+
+
     ~Rail();
 signals:
 

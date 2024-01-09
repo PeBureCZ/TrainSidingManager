@@ -13,6 +13,8 @@ Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(paren
     lined = true;
     startArea = nullptr;
     endArea = nullptr;
+    occupied = false;
+    visuallyOccupied = false;
 }
 
 QPointF Rail::getP0WorldLocation()
@@ -361,6 +363,37 @@ void Rail::smoothP3PointByC1() //call only if conected to C1 point
 bool Rail::getLined()
 {
     return lined;
+}
+
+bool Rail::getOccupied()
+{
+    return occupied;
+}
+
+void Rail::setOccupied(const bool newOccupied, bool setVisualToOccupied)
+{
+    occupied = newOccupied;
+    if (setVisualToOccupied) setVisualOccupied(newOccupied);
+}
+
+void Rail::setVisualOccupied(const bool newsVisualState)
+{
+    visuallyOccupied = newsVisualState;
+    if (newsVisualState)
+    {
+        //change visual to new = true
+        QGraphicsPathItem* graphicPath = dynamic_cast<QGraphicsPathItem*>(graphicItem);
+        QPen newPen = graphicPath->pen();
+        newPen.setColor(QColor(0,255,255,255));
+        graphicPath->setPen(newPen);
+    }
+    else
+    {
+        QGraphicsPathItem* graphicPath = dynamic_cast<QGraphicsPathItem*>(graphicItem);
+        QPen newPen = graphicPath->pen();
+        newPen.setColor(Qt::blue);
+        graphicPath->setPen(newPen);
+    }
 }
 
 int Rail::getRailLength()

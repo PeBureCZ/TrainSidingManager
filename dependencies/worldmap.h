@@ -83,7 +83,7 @@ public:
     ~WorldMap();
 
 public slots:
-    printMessage();
+    void printMessage();
 
 };
 
