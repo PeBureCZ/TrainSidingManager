@@ -88,18 +88,6 @@ void SignalConstructor::actorEnterInCollision(Actor *actor)
     }
 }
 
-void SignalConstructor::freeHoldedRail()
-{
-    for (auto railActor : actorsInCollision)
-    {
-        Rail* rail = dynamic_cast<Rail*>(railActor);
-        rail->setVisibilityOfArea(0, false, nullptr);
-        rail->setVisibilityOfArea(1, false, nullptr);
-    }
-    actorsInCollision.clear();
-    nearestArea = nullptr;
-}
-
 bool SignalConstructor::holdRail()
 {
     if (nearestArea != nullptr) return true;
@@ -108,7 +96,12 @@ bool SignalConstructor::holdRail()
 
 SignalConstructor::~SignalConstructor()
 {
-    freeHoldedRail();
+    for (auto railActor : actorsInCollision)
+    {
+        Rail* rail = dynamic_cast<Rail*>(railActor);
+        rail->setVisibilityOfArea(0, false, nullptr);
+        rail->setVisibilityOfArea(1, false, nullptr);
+    }
 }
 
 

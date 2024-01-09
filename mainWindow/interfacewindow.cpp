@@ -131,7 +131,7 @@ void InterfaceWindow::on_MultiFuncBut24_clicked()
         {
             //delete last created actor
             Actor* deletedActor = world->actorList[world->actorList.size()-1];
-            if (dynamic_cast<ActorConstructor*>(deletedActor)) world->deleteConstructor(deletedActor);
+            if (world->getActualConstructor() != nullptr) world->deleteConstructor(true);
             else world->deleteActor(deletedActor);
             managerConsole->printToConsole("Last item deleted", 7, 160);
         }

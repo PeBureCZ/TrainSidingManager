@@ -162,6 +162,7 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     QGraphicsItem* railGraphicItem = new QGraphicsPixmapItem(newSprite.rail()); //sprite from struct
     worldScene->addItem(railGraphicItem);
     Actor* railConstructor = new RailConstructor(nullptr, railGraphicItem, nullptr); //add actor
+    railConstructor->setCallCollisionChannels({0,2});
     railConstructor->setLocation(mapLocation,true);
     addActorToLists(railConstructor);
     setConstructor(railConstructor);
@@ -175,7 +176,7 @@ void WorldMap::addSignalConstructor(QPoint mapLocation)
     worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
-    signalConstructor->setCallCollisionChannels({0,2}); //call collisions with rail ends (railConnectionChannel)
+    signalConstructor->setCallCollisionChannels({0,2}); //call collisions with rail ends and railObject(railConnectionChannel)
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
 }

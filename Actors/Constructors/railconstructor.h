@@ -47,7 +47,9 @@ public:
 
     void setObjectBoxCollider() override;
     void actualizeConstructor(QPoint newPoint) override;
-    void actorCollide(const QList<Actor *> isInCollision) override;
+    //void actorCollide(const QList<Actor *> isInCollision) override;
+    void actorLeaveFromCollision(Actor* actor) override;
+    void actorEnterInCollision(Actor* actor) override;
 
     ~ RailConstructor();
 signals:

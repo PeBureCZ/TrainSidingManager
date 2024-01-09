@@ -55,11 +55,22 @@ void RailConstructor::actualizeConstructor(QPoint newPoint)
     }
 }
 
-void RailConstructor::actorCollide(const QList<Actor *> isInCollision)
+void RailConstructor::actorLeaveFromCollision(Actor *actor)
 {
-    for (auto actor : isInCollision)
-    {
+    Actor::actorLeaveFromCollision(actor);
+    Rail* rail = dynamic_cast<Rail*>(actor);
+    rail->setVisibilityOfArea(0, false, nullptr);
+    rail->setVisibilityOfArea(1, false, nullptr);
+}
 
+void RailConstructor::actorEnterInCollision(Actor *actor)
+{
+    Actor::actorEnterInCollision(actor);
+    if (dynamic_cast<Rail*>(actor))
+    {
+        Rail* rail = dynamic_cast<Rail*>(actor);
+        rail->setVisibilityOfArea(0, true, Qt::red);
+        rail->setVisibilityOfArea(1, true, Qt::red);
     }
 }
 
@@ -220,6 +231,13 @@ void RailConstructor::setObjectBoxCollider()
 }
 
 RailConstructor::~RailConstructor()
-{}
+{
+    for (auto railActor : actorsInCollision)
+    {
+        Rail* rail = dynamic_cast<Rail*>(railActor);
+        rail->setVisibilityOfArea(0, false, nullptr);
+        rail->setVisibilityOfArea(1, false, nullptr);
+    }
+}
 
 
