@@ -1,12 +1,5 @@
 #include "interfacewindow.h"
 
-/*
-    menuSelected:
-    0-99 = menu option
-    100-199 = edit mode functionss
-    200-299 = play mode functions
-    */
-
 InterfaceWindow::InterfaceWindow(mwlogic *parent)
     : mwlogic{parent}
 {}
@@ -19,7 +12,7 @@ void InterfaceWindow::on_TestButton1_clicked() //temporary
 
 void InterfaceWindow::on_PlayBut_clicked()
 {
-    playButSwitch(menuSelected == PLAY_MODE);
+    playButSwitch(menuSelected == PLAY_MODE_FREE);
 }
 
 void InterfaceWindow::mousePressEvent(QMouseEvent *event)
@@ -51,16 +44,16 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
     {
         switch (menuSelected)
         {
-        case PLAY_MODE: //add Rail (constructor)
+        case PLAY_MODE_FREE: //add Rail (constructor)
             //nothing?
             break;
         case RAIL_ADD_MODE: //constructing rail (RailConstructor)
             world->deleteConstructor(true);
-            menuSelected = EDIT_MODE;
+            menuSelected = EDIT_MODE_FREE;
             break;
         case SIGNAL_ADD_MODE: //constructing signal (SignalConstructor)
             world->deleteConstructor(true);
-            menuSelected = EDIT_MODE;
+            menuSelected = EDIT_MODE_FREE;
             break;
         default: break;//incl. 0 = default
         }
@@ -74,21 +67,44 @@ void InterfaceWindow::wheelEvent(QWheelEvent *event)
 
 void InterfaceWindow::playButSwitch(bool editMode)
 {
-    mwlogic::playButSwitch(editMode);
-    if (editMode)
-    {
-        menuSelected = EDIT_MODE;
-        managerConsole->printToConsole("switch to edit mode", 6, 140);
-    }
+    if (editMode) menuSelected = EDIT_MODE_FREE;
     else
     {
-        menuSelected = PLAY_MODE;
-        managerConsole->printToConsole("switch to play mode", 6, 140);
-        if (world->railList.size() > 0)
+        menuSelected = PLAY_MODE_FREE;
+        if (world->railList.size() > 0) world->addTrainActor(world->railList[0]);
+    }
+    mwlogic::playButSwitch(editMode);
+}
+
+void InterfaceWindow::selectMenuSwitch(bool selectMode)
+{
+    if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_MODE_END)
+    {
+        if (selectMode)
         {
-            world->addTrainActor(world->railList[0]);
+            managerConsole->printToConsole("switch to select option in edit mode", 6, 140);
+            menuSelected = SELECT_EDIT_START;
+        }
+        else
+        {
+            managerConsole->printToConsole("switch to add option in edit mode", 6, 140);
+            menuSelected = EDIT_MODE_FREE;
         }
     }
+    else if(menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_MODE_END)
+    {
+        if (selectMode)
+        {
+            managerConsole->printToConsole("switch to select option in play mode", 6, 140);
+            menuSelected = SELECT_PLAY_START;
+        }
+        else
+        {
+            managerConsole->printToConsole("switch to add option in play mode", 6, 140);
+            menuSelected = PLAY_MODE_FREE;
+        }
+    }
+    mwlogic::selectMenuSwitch(selectMode);
 }
 
 void InterfaceWindow::on_SubBut_clicked()
@@ -123,10 +139,10 @@ void InterfaceWindow::on_MultiFuncBut2_clicked()
 
 void InterfaceWindow::on_MultiFuncBut24_clicked()
 {
-    if (menuSelected != PLAY_MODE)
+    if (menuSelected != PLAY_MODE_FREE)
     {
         //delete button
-        menuSelected = EDIT_MODE;
+        menuSelected = EDIT_MODE_FREE;
         if (world->actorList.size() > 0)
         {
             //delete last created actor
@@ -137,4 +153,15 @@ void InterfaceWindow::on_MultiFuncBut24_clicked()
         }
         else managerConsole->printToConsole("No item to delete", 99, 400);
     }
+}
+
+void InterfaceWindow::on_AddMenuBut_clicked()
+{
+    selectMenuSwitch(false);
+}
+
+
+void InterfaceWindow::on_EditMenuBut_clicked()
+{
+    selectMenuSwitch(true);
 }

@@ -3,22 +3,14 @@
 mwlogic::mwlogic(MainWindow *parent)
     : MainWindow{parent}
 {
-    menuSelected = EDIT_MODE;
+    menuSelected = EDIT_MODE_FREE;
     playModeActualized = false;
     elapsedTime = 0;
-    /*
-    menuSelected:
-    FOR #define values: "mwlogic.h"
-    0-99 = menu option
-    100-199 = edit mode functionss
-    200-299 = play mode functions
-    */
 }
-
 
 void mwlogic::actualizeMap()
 {
-    if (menuSelected == PLAY_MODE)
+    if (menuSelected == PLAY_MODE_FREE)
     {
         if (!playModeActualized) //actualize only one time per "updateWorld" function
         {
@@ -43,12 +35,18 @@ void mwlogic::actualizeMap()
 
 void mwlogic::actualizeDeltaTime(qint64 deltaTime)
 {
-    if (menuSelected == PLAY_MODE) elapsedTime += deltaTime;
+    if (menuSelected == PLAY_MODE_FREE) elapsedTime += deltaTime;
 }
 
 void mwlogic::playButSwitch(bool editMode)
 {
     MainWindow::playButSwitch(editMode);
+    InterfaceSet(menuSelected);
+}
+
+void mwlogic::selectMenuSwitch(bool selectMode)
+{
+    MainWindow::selectMenuSwitch(selectMode);
     InterfaceSet(menuSelected);
 }
 

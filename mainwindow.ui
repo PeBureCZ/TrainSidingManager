@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1004</width>
-    <height>706</height>
+    <height>715</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QFrame" name="frame_3">
+          <widget class="QFrame" name="UpMenu">
            <property name="maximumSize">
             <size>
              <width>120</width>
@@ -96,7 +96,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame_2">
+          <widget class="QFrame" name="DownMenu">
            <property name="minimumSize">
             <size>
              <width>120</width>
@@ -116,6 +116,24 @@
             <enum>QFrame::Plain</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QPushButton" name="AddMenuBut">
+                <property name="text">
+                 <string>ADD</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="EditMenuBut">
+                <property name="text">
+                 <string>EDIT</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
             <item>
              <widget class="QLabel" name="MenuName">
               <property name="maximumSize">

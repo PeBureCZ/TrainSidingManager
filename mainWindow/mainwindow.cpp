@@ -83,6 +83,12 @@ void MainWindow::playButSwitch(bool editMode)
 {
     if (editMode) ui->PlayBut->setText("PlayMode");
     else ui->PlayBut->setText("EditMode");
+    selectMenuSwitch(false);
+}
+
+void MainWindow::selectMenuSwitch(bool selectMode)
+{
+    (selectMode) ? ui->MenuName->setText("EDIT MENU") : ui->MenuName->setText("ADD MENU");
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -102,27 +108,43 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked() {}//overrided
-void MainWindow::on_MultiFuncBut1_clicked() {}//overrided
-void MainWindow::on_MultiFuncBut2_clicked() {}//overrided
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided
-void MainWindow::on_MultiFuncBut24_clicked() {}
+void MainWindow::on_AddMenuBut_clicked(){}//overrided
+void MainWindow::on_EditMenuBut_clicked(){}//overrided
+void MainWindow::on_MultiFuncBut1_clicked() {}//overrided
+void MainWindow::on_MultiFuncBut2_clicked() {}//overrided
+void MainWindow::on_MultiFuncBut24_clicked() {}//overrided
 
 void MainWindow::InterfaceSet(int menuSelected)
 {
-    switch (menuSelected)
+    if (menuSelected >= OPTION_MODE_START && menuSelected <= OPTION_MODE_END) setBasicMenuInterface(menuSelected);
+    else if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END) setEditAddInterface(menuSelected);
+    else if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END) setEditSelectInterface(menuSelected);
+    else if (menuSelected >= PLAY_MODE_START && menuSelected <= ADD_PLAY_END) setPlayAddInterface(menuSelected);
+    else if (menuSelected >= SELECT_PLAY_START && menuSelected <= PLAY_MODE_END) setPlaySelectInterface(menuSelected);
+}
+
+void MainWindow::setBasicMenuInterface(int menu)
+{
+   setDefaultInterface();
+}
+
+void MainWindow::setEditSelectInterface(int menu)
+{
+    switch (menu)
     {
-    case EDIT_MODE:
-        ui->MultiFuncBut1->setText("");
-        ui->MultiFuncBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-        ui->MultiFuncBut2->setText("");
-        ui->MultiFuncBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-        ui->MultiFuncBut24->setText("");
-        ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-        break;
-    case RAIL_ADD_MODE:
-        break;
-    case PLAY_MODE:
+    //case 0:
+    //    break;
+    default: setDefaultInterface();
+    }
+}
+
+void MainWindow::setEditAddInterface(int menu)
+{
+    switch (menu)
+    {
+    case EDIT_MODE_FREE:
         ui->MultiFuncBut1->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
         ui->MultiFuncBut1->setText("Rails");
         ui->MultiFuncBut2->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
@@ -130,15 +152,40 @@ void MainWindow::InterfaceSet(int menuSelected)
         ui->MultiFuncBut24->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
         ui->MultiFuncBut24->setText("Delete");
         break;
-    default:
+    default: setDefaultInterface();
+    }
+}
+
+void MainWindow::setPlaySelectInterface(int menu)
+{
+    switch (menu)
+    {
+    default: setDefaultInterface();
+    }
+}
+
+void MainWindow::setPlayAddInterface(int menu)
+{
+    switch (menu)
+    {
+    case PLAY_MODE_FREE:
         ui->MultiFuncBut1->setText("");
         ui->MultiFuncBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
         ui->MultiFuncBut2->setText("");
         ui->MultiFuncBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
         ui->MultiFuncBut24->setText("");
         ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+        break;
+    default: setDefaultInterface();
     }
 }
 
-
-
+void MainWindow::setDefaultInterface()
+{
+    ui->MultiFuncBut1->setText("");
+    ui->MultiFuncBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->MultiFuncBut2->setText("");
+    ui->MultiFuncBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    ui->MultiFuncBut24->setText("");
+    ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+}
