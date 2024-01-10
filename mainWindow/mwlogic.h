@@ -7,7 +7,7 @@
 #include <QWheelEvent>
 #include <QGraphicsView>
 #include <QHBoxLayout>
-#include "Actors/actor.h"
+#include "Actors/rail.h"
 
 class mwlogic : public MainWindow
 {

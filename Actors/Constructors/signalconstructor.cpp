@@ -26,9 +26,7 @@ void SignalConstructor::actorCollide(const QList<Actor*> isInCollision)
     //try to find nearest area (end of actual rail)
     for (auto actor : actorsInCollision)
     {
-        //try to find nearest area (end of rail)
         Rail* rail = dynamic_cast<Rail*>(actor);
-
         QPoint testedPoint1 = rail->getP0WorldLocation().toPoint();
         QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();
         int testedDistance1 = getDistance(correctedLocation, testedPoint1);
@@ -47,7 +45,7 @@ void SignalConstructor::actorCollide(const QList<Actor*> isInCollision)
         }
     }
 
-    //check nearest conected rails (= rail exist in the same point/area)
+    //check nearest conected rails (if rail exist in the same point/area)
     if (nearestPoint != -1)
     {
         Rail* retestedRail = nullptr;
