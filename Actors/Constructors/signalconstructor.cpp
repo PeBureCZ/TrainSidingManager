@@ -17,24 +17,24 @@ void SignalConstructor::actualizeConstructor(QPoint newPoint)
 
 void SignalConstructor::actorCollide(const QList<Actor*> isInCollision)
 {
-    Actor::actorCollide(isInCollision); //re-fill actors in collide list and run functions "leave or enter actors"
+    Actor::actorCollide(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
     int nearestPoint = -1;
     int distance = 99999999;
     Rail* testedNearestRail = nullptr;
-    //try to find nearest area (end of rail)
+    QPoint correctedLocation = location + QPoint(0,0);
+
+    //try to find nearest area (end of actual rail)
     for (auto actor : actorsInCollision)
     {
         //try to find nearest area (end of rail)
         Rail* rail = dynamic_cast<Rail*>(actor);
-        QPoint correctedLocation = location + QPoint(0,0);
+
         QPoint testedPoint1 = rail->getP0WorldLocation().toPoint();
         QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();
         int testedDistance1 = getDistance(correctedLocation, testedPoint1);
         int testedDistance2 = getDistance(correctedLocation, testedPoint2);
-        if (distance >= testedDistance1 && testedDistance1 <= testedDistance2)
+        if (distance > testedDistance1 && testedDistance1 <= testedDistance2)
         {
-            qDebug() << "NEED REWORK: SignalConstructor";
-            //->path().pointAtPercent(percent).toPoint());
             distance = testedDistance1;
             nearestPoint = 0;
             testedNearestRail = rail;
@@ -47,6 +47,38 @@ void SignalConstructor::actorCollide(const QList<Actor*> isInCollision)
         }
     }
 
+    //check nearest conected rails (= rail exist in the same point/area)
+    if (nearestPoint != -1)
+    {
+        Rail* retestedRail = nullptr;
+        QPoint retestedPoint;
+        int testedDistance = 99999999;
+        for (int i = 0; i < 2; i++)
+        {
+            int conectionValue = i;
+            if (nearestPoint == 1) conectionValue +=2;
+            if(testedNearestRail->getConnectedRail(conectionValue) != nullptr)
+            {
+                retestedRail = testedNearestRail->getConnectedRail(conectionValue);
+                retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.01f).toPoint() + retestedRail->getLocation();
+                testedDistance = getDistance(correctedLocation, retestedPoint);
+                if (distance > testedDistance)
+                {
+                    testedNearestRail = retestedRail;
+                    distance = testedDistance;
+                }
+                retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.99f).toPoint() + retestedRail->getLocation();
+                testedDistance = getDistance(correctedLocation, retestedPoint);
+                if (distance > testedDistance)
+                {
+                    testedNearestRail = retestedRail;
+                    distance = testedDistance;
+                }
+            }
+        }
+    }
+
+    //set visual change (occupied rail)
     if (testedNearestRail != nullptr)
     {
         if (nearestRail != nullptr && testedNearestRail != nearestRail) nearestRail->setOccupied(false,true);
@@ -59,6 +91,7 @@ void SignalConstructor::actorCollide(const QList<Actor*> isInCollision)
         nearestRail = nullptr;
     }
 
+    //set visual area of nearest rail
     if (nearestRail != nullptr && nearestPoint != -1 && distance <= 120)
     {
         QGraphicsItem* areaItem = nearestRail->getAreaGraphic(nearestPoint);

@@ -109,6 +109,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
+    /*
     if (world->getActorListSize()>0)
     {
         for (auto actor : world->actorList)
@@ -124,6 +125,22 @@ void MainWindow::on_TestButton1_clicked()
                 Signal* constructor = dynamic_cast<Signal*>(actor);
                 qDebug() << constructor->getLocation();
                 qDebug() << "___";
+            }
+        }
+    }
+    */
+    if (world->getActorListSize()>0)
+    {
+        for (auto actor : world->actorList)
+        {
+            if (dynamic_cast<Rail*>(actor))
+            {
+                Rail* rail = dynamic_cast<Rail*>(actor);
+                if (rail->getConnectedRail(0) == nullptr )qDebug() << "connection0 = nullptr";
+                if (rail->getConnectedRail(1) == nullptr )qDebug() << "connection1 = nullptr";
+                if (rail->getConnectedRail(2) == nullptr )qDebug() << "connection2 = nullptr";
+                if (rail->getConnectedRail(3) == nullptr )qDebug() << "connection3 = nullptr";
+                qDebug() << "_____";
             }
         }
     }
