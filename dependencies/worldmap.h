@@ -21,6 +21,7 @@
 #include "Actors/signal.h"
 #include "Actors/Constructors/signalconstructor.h"
 #include "Actors/Constructors/railconstructor.h"
+#include "Actors/Constructors/railselector.h"
 
 //STATIC OBJECTS
 #include "Actors/rail.h"
@@ -45,8 +46,9 @@ public:
     //FCE - BASIC
     void setMap(int xSize, int ySize);
     void addTrainActor(Rail *spawnOnRail);
-    void addRailConstructor(QPoint mapLocation, Rail *connectedRail);
-    void addSignalConstructor(QPoint mapLocation);
+    void addRailConstructor();
+    void addSignalConstructor();
+    void addRailSelector();
     void addStaticlActor(QPoint spawnPos, int indexOfActor);
     void addVehicleActor(Train* ownerTrain, int indexOfVehicle);
     void deleteAllActors(); //QGraphicsItem* item, QString name

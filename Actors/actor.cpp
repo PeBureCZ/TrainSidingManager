@@ -24,7 +24,7 @@ void Actor::actualizeGraphicLocation()
 {
     //this function is called from world with function "updateWorld"
     //location (graphicLocation variable) is changed in QThreads and have to be changed in main thread
-    graphicItem->setPos(graphicLocation);
+    if (graphicItem != nullptr) graphicItem->setPos(graphicLocation);
 }
 
 void Actor::calledCollisionEvent(const QList<Actor *> isInCollision)
@@ -192,7 +192,7 @@ Actor::~Actor()
     {
         delete trigger;
     }
-    delete graphicItem;
+    if (graphicItem != nullptr) delete graphicItem;
 }
 
 

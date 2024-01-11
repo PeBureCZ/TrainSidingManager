@@ -29,7 +29,7 @@ void WorldMap::actualizeEditor()
         actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
         if (actualConstructor->canCallCollision())
         {
-            //constructors (Actor) with collisionCallEnabled = true
+            //constructors (Actors) with collisionCallEnabled = true
             QVector<int> collideChannels = actualConstructor->callCollideChannels();
             QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
             actualConstructor->calledCollisionEvent(actors);
@@ -54,7 +54,6 @@ void WorldMap::updateWorld()
     for (auto actor : tickedActorsList)
     {
         actor->actualizeGraphicLocation();
-        //not call collisions implemented yet!
     }
     worldScene->update();
     worldView->update();
@@ -153,7 +152,7 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
     }
 }
 
-void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
+void WorldMap::addRailConstructor()
 {
     //Actor* rail = addRailwaylActor(1, mapLocation, connectedRail); //rail created
 
@@ -163,12 +162,12 @@ void WorldMap::addRailConstructor(QPoint mapLocation, Rail* connectedRail)
     worldScene->addItem(railGraphicItem);
     Actor* railConstructor = new RailConstructor(nullptr, railGraphicItem, nullptr); //add actor
     railConstructor->setCallCollisionChannels({0,2});
-    railConstructor->setLocation(mapLocation,true);
+    //railConstructor->setLocation(mapLocation,true);
     addActorToLists(railConstructor);
     setConstructor(railConstructor);
 }
 
-void WorldMap::addSignalConstructor(QPoint mapLocation)
+void WorldMap::addSignalConstructor()
 {
     //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
     SpriteColection newSprite;
@@ -179,6 +178,16 @@ void WorldMap::addSignalConstructor(QPoint mapLocation)
     signalConstructor->setCallCollisionChannels({0,2}); //call collisions with rail ends and railObject(railConnectionChannel)
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
+}
+
+void WorldMap::addRailSelector()
+{
+    //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR = NULL
+    //ADD SELECTOR (CONSTRUCTOR)
+    Actor* railSelector = new RailSelector(nullptr, nullptr, nullptr); //without acttor to construct
+    railSelector->setCallCollisionChannels({0,2});
+    addActorToLists(railSelector);
+    setConstructor(railSelector);
 }
 
 void WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)

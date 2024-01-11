@@ -7,7 +7,6 @@
 #include <QWheelEvent>
 #include <QGraphicsView>
 #include <QHBoxLayout>
-//#include "Actors/Constructors/railconstructor.h"
 #include "Actors/rail.h"
 
 class mwlogic : public MainWindow
@@ -30,7 +29,7 @@ public:
     void actualizeDeltaTime(qint64 deltaTime);
     void playButSwitch(bool editMode) override;
     void selectMenuSwitch(bool selectMode) override;
-    void addConstructor(int constructorType, QPoint point);
+    void addConstructor(int constructorType);
     void constructRail(QPoint point);
     void constructSignal();
 

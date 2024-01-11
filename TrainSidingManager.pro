@@ -12,6 +12,8 @@ SOURCES += \
     Actors/Constructors/actorconstructor.cpp \
     Actors/Constructors/railconstructor.cpp \
     Actors/Constructors/railobjectconstructor.cpp \
+    Actors/Constructors/railselector.cpp \
+    Actors/Constructors/selectconstructor.cpp \
     Actors/Constructors/signalconstructor.cpp \
     Actors/actor.cpp \
     Actors/cd730.cpp \
@@ -48,6 +50,8 @@ HEADERS += \
     Actors/Constructors/actorconstructor.h \
     Actors/Constructors/railconstructor.h \
     Actors/Constructors/railobjectconstructor.h \
+    Actors/Constructors/railselector.h \
+    Actors/Constructors/selectconstructor.h \
     Actors/Constructors/signalconstructor.h \
     Actors/actor.h \
     Actors/cd730.h \

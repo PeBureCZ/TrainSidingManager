@@ -17,6 +17,7 @@ private slots:
     void on_SubBut_clicked() override;
     void on_AddBut_clicked() override;
     void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void playButSwitch(bool editMode) override;
     void selectMenuSwitch(bool selectMode) override;

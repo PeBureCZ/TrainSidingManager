@@ -109,41 +109,6 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
-    /*
-    if (world->getActorListSize()>0)
-    {
-        for (auto actor : world->actorList)
-        {
-            if (dynamic_cast<Rail*>(actor))
-            {
-                Rail* rail = dynamic_cast<Rail*>(actor);
-                qDebug() << rail->getP0WorldLocation();
-                qDebug() << rail->getP0WorldLocation() + rail->getP3RelativeLocation();
-            }
-            if (dynamic_cast<Signal*>(actor))
-            {
-                Signal* constructor = dynamic_cast<Signal*>(actor);
-                qDebug() << constructor->getLocation();
-                qDebug() << "___";
-            }
-        }
-    }
-    */
-    if (world->getActorListSize()>0)
-    {
-        for (auto actor : world->actorList)
-        {
-            if (dynamic_cast<Rail*>(actor))
-            {
-                Rail* rail = dynamic_cast<Rail*>(actor);
-                if (rail->getConnectedRail(0) == nullptr )qDebug() << "connection0 = nullptr";
-                if (rail->getConnectedRail(1) == nullptr )qDebug() << "connection1 = nullptr";
-                if (rail->getConnectedRail(2) == nullptr )qDebug() << "connection2 = nullptr";
-                if (rail->getConnectedRail(3) == nullptr )qDebug() << "connection3 = nullptr";
-                qDebug() << "_____";
-            }
-        }
-    }
 }
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided
@@ -171,8 +136,14 @@ void MainWindow::setEditSelectInterface(int menu)
 {
     switch (menu)
     {
-    //case 0:
-    //    break;
+    case SELECT_EDIT_START:
+        ui->MultiFuncBut1->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
+        ui->MultiFuncBut1->setText("Rails");
+        ui->MultiFuncBut2->setText("");
+        ui->MultiFuncBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+        ui->MultiFuncBut24->setText("");
+        ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+        break;
     default: setDefaultInterface();
     }
 }

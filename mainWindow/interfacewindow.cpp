@@ -17,18 +17,26 @@ void InterfaceWindow::on_PlayBut_clicked()
 
 void InterfaceWindow::mousePressEvent(QMouseEvent *event)
 {
-    //mouseEvent(event);
     if (event->button() == Qt::LeftButton)
     {
-        switch (menuSelected)
+        if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
         {
+            ActorConstructor* selector = world->getActualConstructor();
+            if (selector != nullptr && dynamic_cast<SelectConstructor*>(selector))
+            {
+                dynamic_cast<SelectConstructor*>(selector)->setUnderSelect(true);
+            }
+        }
+        else //edit mode
+        {
+            switch (menuSelected)
+            {
             //case 0: same as default
             case RAIL_ADD_MODE: //add Rail (RailConstructor)
                 constructRail(world->getRelativeWorldPos(event->pos()));
                 break;
-            case NOT_USED_NOW: //constructing rail (RailConstructor)
+            case NOT_USED_NOW:
             {
-
                 QVector<Actor*> actors = world->getActorsCollideInLocation({0},  world->getWorldView()->getRelativeFromCursor());
                 if (actors.size() > 0) world->deleteActor(actors[0]);
                 break;
@@ -38,6 +46,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 break;
             default: {}break;//incl. 0
                 //nothing yet...;
+            }
         }
     }
     else if (event->button() == Qt::RightButton)
@@ -58,6 +67,22 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
         default: break;//incl. 0 = default
         }
     }
+}
+
+void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
+        {
+            ActorConstructor* selector = world->getActualConstructor();
+            if (selector != nullptr && dynamic_cast<SelectConstructor*>(selector))
+            {
+                dynamic_cast<SelectConstructor*>(selector)->setUnderSelect(false);
+            }
+        }
+    }
+    else if (event->button() == Qt::RightButton) qDebug() << "release RMB";
 }
 
 void InterfaceWindow::wheelEvent(QWheelEvent *event)
@@ -120,11 +145,15 @@ void InterfaceWindow::on_AddBut_clicked()
 
 void InterfaceWindow::on_MultiFuncBut1_clicked()
 {
-    if (menuSelected == 0 || (menuSelected >= 100 && menuSelected <= 199))
+    if (menuSelected == OPTION_MODE_START || (menuSelected >= 100 && menuSelected <= EDIT_ADD_END))
     {
         menuSelected = RAIL_ADD_MODE; //if editMode -> constructiong Rail
-        world->deleteConstructor(true);
-        addConstructor(1, world->getRelativeWorldPos({0,0}));
+        addConstructor(RAIL_CONSTRUCTOR);
+    }
+    if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
+    {
+        menuSelected = RAIL_SELECTOR_MODE;
+        addConstructor(RAIL_SELECTOR);
     }
 }
 
@@ -133,7 +162,7 @@ void InterfaceWindow::on_MultiFuncBut2_clicked()
     if (menuSelected == 0 || (menuSelected >= 100 && menuSelected <= 199))
     {
         menuSelected = SIGNAL_ADD_MODE; //if editMode -> constructiong signals
-        addConstructor(2, {0,0}); //delete constructor included
+        addConstructor(SIGNAL_CONSTRUCTOR); //delete constructor included
     }
 }
 

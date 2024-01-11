@@ -7,6 +7,8 @@
 #include <QLayout>
 #include "dependencies/managerconsole.h"
 
+#include "Actors/Constructors/railselector.h"
+
 /*
 menuSelected:
 0-99 = menu option
@@ -26,6 +28,8 @@ menuSelected:
 #define EDIT_ADD_END 199
 //EDIT+SELECT
 #define SELECT_EDIT_START 200
+#define RAIL_SELECTOR_MODE 201
+//#define ANY_SELECTOR_UNDER_SELECT 298
 #define EDIT_MODE_END 299
 //PLAY+ADD
 #define PLAY_MODE_START 300
@@ -34,6 +38,11 @@ menuSelected:
 //PLAY+SELECT
 #define SELECT_PLAY_START 400
 #define PLAY_MODE_END 499
+
+//CONSTRUCTORS
+#define RAIL_CONSTRUCTOR 1
+#define SIGNAL_CONSTRUCTOR 2
+#define RAIL_SELECTOR 3
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
