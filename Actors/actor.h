@@ -49,7 +49,7 @@ public:
 
     virtual void setName(QString newName); //virtual need for polymorph
     virtual void actualizeGraphicLocation();
-    virtual void actorCollide(const QList<Actor*> isInCollision); //overrided
+    virtual void calledCollisionEvent(const QList<Actor*> isInCollision); //overrided
     virtual void setObjectBoxCollider(); //overrided
     virtual void tickEvent();
     virtual void actorLeaveFromCollision(Actor* actor);

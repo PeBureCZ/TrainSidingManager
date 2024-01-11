@@ -11,9 +11,9 @@ RailConstructor::RailConstructor
 
     ownedRail = nullptr;
     connectedRail = nullptr;
-    ownedRail = nullptr;
     ownedPath = nullptr;
     lined = true;
+    nearestRail = nullptr;
 }
 
 void RailConstructor::actualizePathVisual() // NEED REBUILD
@@ -55,10 +55,102 @@ void RailConstructor::actualizeConstructor(QPoint newPoint)
     }
 }
 
+void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
+{
+    Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
+    int nearestPoint = -1;
+    int distance = 99999999;
+    Rail* testedNearestRail = nullptr;
+    QPoint correctedLocation = location;
+    if (ownedPath != nullptr) correctedLocation += ownedRail->getP3RelativeLocation().toPoint();
+
+    //try to find nearest area (end of actual rail)
+    for (auto actor : actorsInCollision)
+    {
+        if (dynamic_cast<Rail*>(actor) && actor != ownedRail)
+        {
+            Rail* rail = dynamic_cast<Rail*>(actor);
+            QPoint testedPoint1 = rail->getP0WorldLocation().toPoint();
+            QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();
+            int testedDistance1 = getDistance(correctedLocation, testedPoint1);
+            int testedDistance2 = getDistance(correctedLocation, testedPoint2);
+            if (distance > testedDistance1 && testedDistance1 <= testedDistance2)
+            {
+                distance = testedDistance1;
+                nearestPoint = 0;
+                testedNearestRail = rail;
+            }
+            else if (distance > testedDistance2 && testedDistance2 < testedDistance1)
+            {
+                distance = testedDistance2;
+                nearestPoint = 1;
+                testedNearestRail = rail;
+            }
+        }
+    }
+
+    //check nearest conected rails (if rail exist in the same point/area)
+    if (nearestPoint != -1)
+    {
+        Rail* retestedRail = nullptr;
+        QPoint retestedPoint;
+        int testedDistance = 99999999;
+        for (int i = 0; i < 2; i++)
+        {
+            int conectionValue = i;
+            if (nearestPoint == 1) conectionValue +=2;
+            if(testedNearestRail->getConnectedRail(conectionValue) != nullptr)
+            {
+                retestedRail = testedNearestRail->getConnectedRail(conectionValue);
+                retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.01f).toPoint() + retestedRail->getLocation();
+                testedDistance = getDistance(correctedLocation, retestedPoint);
+                if (distance > testedDistance)
+                {
+                    testedNearestRail = retestedRail;
+                    distance = testedDistance;
+                }
+                retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.99f).toPoint() + retestedRail->getLocation();
+                testedDistance = getDistance(correctedLocation, retestedPoint);
+                if (distance > testedDistance)
+                {
+                    testedNearestRail = retestedRail;
+                    distance = testedDistance;
+                }
+            }
+        }
+    }
+
+    //set visual change (occupied rail)
+    if (testedNearestRail != nullptr)
+    {
+        if (nearestRail != nullptr)
+        {
+            if (testedNearestRail != nearestRail)
+            {
+                nearestRail->setOccupied(false,true);
+                nearestRail = testedNearestRail;
+                nearestRail->setOccupied(true,true);
+            }
+            //else = no change
+        }
+        else
+        {
+            nearestRail = testedNearestRail;
+            nearestRail->setOccupied(true,true);
+        }
+    }
+    else
+    {
+        if (nearestRail != nullptr) nearestRail->setOccupied(false,true);
+        nearestRail = nullptr;
+    }
+}
+
 void RailConstructor::actorLeaveFromCollision(Actor *actor)
 {
     Actor::actorLeaveFromCollision(actor);
     Rail* rail = dynamic_cast<Rail*>(actor);
+    rail->setOccupied(false,true);
     rail->setVisibilityOfArea(0, false, nullptr);
     rail->setVisibilityOfArea(1, false, nullptr);
 }
@@ -135,6 +227,11 @@ Rail *RailConstructor::getOwnedRail()
 Rail *RailConstructor::getConnectedRail()
 {
     return connectedRail;
+}
+
+Rail *RailConstructor::getNearestRail()
+{
+    return nearestRail;
 }
 
 void RailConstructor::underConstruction(bool constructingNow)
@@ -238,6 +335,7 @@ RailConstructor::~RailConstructor()
         rail->setVisibilityOfArea(0, false, nullptr);
         rail->setVisibilityOfArea(1, false, nullptr);
     }
+    if (nearestRail != nullptr) nearestRail->setOccupied(false,true);
 }
 
 

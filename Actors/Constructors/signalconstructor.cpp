@@ -9,19 +9,18 @@ SignalConstructor::SignalConstructor(QObject* parent, QGraphicsItem* newGraphicI
 
 void SignalConstructor::actualizeConstructor(QPoint newPoint)
 {
-    //QPoint slideLocation = {5,-50};
-    QPoint slideLocation = {0,0};
+    QPoint slideLocation = {5,-50};
     setLocation(newPoint + slideLocation, true);
     actualizeGraphicLocation();
 }
 
-void SignalConstructor::actorCollide(const QList<Actor*> isInCollision)
+void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
 {
-    Actor::actorCollide(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
+    Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
     int nearestPoint = -1;
     int distance = 99999999;
     Rail* testedNearestRail = nullptr;
-    QPoint correctedLocation = location + QPoint(0,0);
+    QPoint correctedLocation = location + QPoint(-5,50); //graphics is slided
 
     //try to find nearest area (end of actual rail)
     for (auto actor : actorsInCollision)

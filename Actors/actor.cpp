@@ -27,7 +27,7 @@ void Actor::actualizeGraphicLocation()
     graphicItem->setPos(graphicLocation);
 }
 
-void Actor::actorCollide(const QList<Actor *> isInCollision)
+void Actor::calledCollisionEvent(const QList<Actor *> isInCollision)
 {
     //hidde no longer collided rail
     for (auto actor : actorsInCollision)

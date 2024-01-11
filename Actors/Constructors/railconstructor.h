@@ -14,6 +14,7 @@ protected:
     Rail *connectedRail;
     Rail* ownedRail;
     QGraphicsPathItem* ownedPath;
+    Rail* nearestRail;
 
     QPoint P0; //start point
     QPoint P1; //first curve control point
@@ -37,6 +38,7 @@ public:
     QPointF getP3Point();
     Rail* getOwnedRail();
     Rail* getConnectedRail();
+    Rail* getNearestRail();
 
     void underConstruction(bool constructingNow);
     void actualizePathVisual();
@@ -47,7 +49,7 @@ public:
 
     void setObjectBoxCollider() override;
     void actualizeConstructor(QPoint newPoint) override;
-    //void actorCollide(const QList<Actor *> isInCollision) override;
+    void calledCollisionEvent(const QList<Actor *> isInCollision) override;
     void actorLeaveFromCollision(Actor* actor) override;
     void actorEnterInCollision(Actor* actor) override;
 

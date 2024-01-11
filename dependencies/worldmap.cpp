@@ -32,7 +32,7 @@ void WorldMap::actualizeEditor()
             //constructors (Actor) with collisionCallEnabled = true
             QVector<int> collideChannels = actualConstructor->callCollideChannels();
             QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
-            actualConstructor->actorCollide(actors);
+            actualConstructor->calledCollisionEvent(actors);
         }
     }
 }

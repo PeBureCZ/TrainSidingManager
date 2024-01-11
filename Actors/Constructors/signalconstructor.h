@@ -15,7 +15,7 @@ protected:
 public:
     explicit SignalConstructor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     void actualizeConstructor(QPoint newPoint) override;
-    void actorCollide(const QList<Actor *> isInCollision) override; //overrided
+    void calledCollisionEvent(const QList<Actor *> isInCollision) override; //overrided
     bool holdRail();
     void actorLeaveFromCollision(Actor* actor) override;
     void actorEnterInCollision(Actor* actor) override;

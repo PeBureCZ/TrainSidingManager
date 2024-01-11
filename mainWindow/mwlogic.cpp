@@ -74,6 +74,7 @@ void mwlogic::addConstructor(int constructorType, QPoint point)
 
 void mwlogic::constructRail(QPoint point)
 {
+    /*
     QVector<Actor*> actors = world->getActorsCollideInLocation({2},world->getWorldView()->getRelativeFromCursor());
     RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
 
@@ -227,6 +228,114 @@ void mwlogic::constructRail(QPoint point)
         }
         default: {}
     }
+    */
+
+    RailConstructor* actualRailConstructor = dynamic_cast<RailConstructor*>(world->getActualConstructor());
+
+    int createRailByStyle = -1;
+    int zoom = world->getWorldView()->getZoomLevel();
+    int maxRadius = 5;
+    if (zoom > 0) maxRadius += zoom * 20; //increase "snap radius" derived from zoom
+    int nearestPoint = -1;
+    Rail* nearestRail = actualRailConstructor->getNearestRail();
+
+    if (actualRailConstructor != nullptr && nearestRail != nullptr)
+    {
+        //constructing béziere rail or near ends of exist rail or combinated
+
+        //check if connect nearest Rail
+        Rail* testedRail = dynamic_cast<Rail*>(actualRailConstructor->getNearestRail());
+        QPoint testedPoint1 = testedRail->getP0WorldLocation().toPoint();
+        QPoint testedPoint2 = (testedRail->getP0WorldLocation() + testedRail->getP3RelativeLocation()).toPoint();
+        int testedDistance1 = world->getWorldDistance(point, testedPoint1);
+        int testedDistance2 = world->getWorldDistance(point, testedPoint2);
+        if (maxRadius > testedDistance1 && testedDistance1 <= testedDistance2)
+        {
+            nearestPoint = 0; //P0 is finded
+        }
+        else if (maxRadius > testedDistance2 && testedDistance2 < testedDistance1)
+        {
+            nearestPoint = 1; //P3 is finded
+        }
+    }
+
+    //check if rail is under construction or must be created
+    if (actualRailConstructor->getOwnedRail() == nullptr) //not created yet
+    {
+        if (nearestRail != nullptr && nearestPoint != -1) createRailByStyle = 2;
+        else createRailByStyle = 0;
+    }
+    else
+    {
+        if (nearestRail == nullptr || nearestPoint == -1) createRailByStyle = 1;
+        else createRailByStyle = 3;
+    }
+
+    //choose creating style from previous condition (e.g. connected, lined, etc.)
+    switch (createRailByStyle)
+    {
+    case 0:
+    {
+        //create new lined rail and start constructing
+        actualRailConstructor->actualizeConstructor(point);
+        actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,point,nullptr)));
+        actualRailConstructor->underConstruction(true);
+        break;
+    }
+    case 1:
+    {
+        //comnplete lined rail
+        actualRailConstructor->actualizeConstructor(point);
+        Rail* createdRail = actualRailConstructor->getOwnedRail();
+        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f, 120); //for P0 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f, 1);//create object BoxCollider
+        actualRailConstructor->setObjectBoxCollider();
+        actualRailConstructor->actualizeConstructor(point); //duplicied due to P3 point actualize
+        actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
+        actualRailConstructor->underConstruction(false);
+        break;
+    }
+    case 2:
+    {
+        //create new béziere rail
+        //re-calculate nearest trigger from nearest actor
+        QPoint newPoint = nearestRail->getLocation();
+        if (nearestPoint == 1) newPoint += nearestRail->getP3RelativeLocation().toPoint();
+
+        actualRailConstructor->setConnectedRail(nearestRail);
+        actualRailConstructor->actualizeConstructor(newPoint);
+
+        //ADD RAIL ACTOR
+        actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,newPoint,nullptr)));
+        actualRailConstructor->getOwnedRail()->setLocation(newPoint, true);
+        actualRailConstructor->getOwnedRail()->connectRails(nearestRail, true);
+        actualRailConstructor->underConstruction(true);
+        break;
+    }
+    case 3:
+    {
+        //complete béziere rail and connect to second (before created) rail
+        Rail* createdRail = actualRailConstructor->getOwnedRail();
+        QPoint newPoint = nearestRail->getLocation();
+        if (nearestPoint == 1) newPoint += nearestRail->getP3RelativeLocation().toPoint();
+        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f, 120); //for P0 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f, 1);//create object BoxCollider
+        actualRailConstructor->actualizeConstructor(newPoint);
+        actualRailConstructor->getOwnedRail()->connectRails(nearestRail, false);
+        actualRailConstructor->smoothEndPoint();
+        actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
+        actualRailConstructor->setObjectBoxCollider();
+        actualRailConstructor->underConstruction(false);
+        break;
+    }
+    default: {}
+    }
+
+
+
+
 }
 
 void mwlogic::constructSignal()
