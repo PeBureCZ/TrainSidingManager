@@ -16,7 +16,7 @@ RailConstructor::RailConstructor
     nearestRail = nullptr;
 }
 
-void RailConstructor::actualizePathVisual() // NEED REBUILD
+void RailConstructor::actualizePathVisual()
 {
     ownedPath->setPos(P0.x(),P0.y());
     QPainterPath customPath;

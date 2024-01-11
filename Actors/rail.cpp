@@ -396,6 +396,36 @@ void Rail::setVisualOccupied(const bool newsVisualState)
     }
 }
 
+void Rail::moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)
+{
+    setP0WorldLocation(newP0);
+    setP1RelativeLocation(newP1);
+    setP2RelativeLocation(newP2);
+    setP3RelativeLocation(newP3);
+    actualizeAreasPosition();
+
+    QPainterPath newPath;
+    newPath.cubicTo(newP1.x(),newP1.y(),newP2.x(), newP2.y(),newP3.x(), newP3.y());
+    dynamic_cast<QGraphicsPathItem*>(getGraphicItem())->setPath(newPath);
+
+    //getP3Trigger()->setRelativeLocation();
+    // UNCOMPLETE!!!! NEED SET TRIGGERS IN WORLD!
+}
+
+Trigger *Rail::getP0Trigger()
+{
+    QList<Trigger*> allTriggers = getAllTriggers();
+    if (allTriggers.size() > 0) return allTriggers[0];
+    return nullptr;
+}
+
+Trigger* Rail::getP3Trigger()
+{
+    QList<Trigger*> allTriggers = getAllTriggers();
+    if (allTriggers.size() > 1) return allTriggers[1];
+    return nullptr;
+}
+
 int Rail::getRailLength()
 {
     return dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().length();

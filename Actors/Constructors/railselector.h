@@ -10,6 +10,7 @@ class RailSelector : public SelectConstructor
     Q_OBJECT
 protected:
     Rail* nearestRail;
+    int nearestPoint;
 public:
     explicit RailSelector(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     ~RailSelector();

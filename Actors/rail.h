@@ -5,6 +5,7 @@
 
 #include "railwayobject.h"
 #include <QGraphicsItem>
+#include "Components/trigger.h"
 #include <QColor>
 
 #include <QPen>
@@ -34,6 +35,8 @@ public:
     QPointF getP3RelativeLocation();
     Rail* getConnectedRail(const int connection);
     QGraphicsItem *getAreaGraphic(const int area);
+    Trigger* getP0Trigger();
+    Trigger *getP3Trigger();
 
     bool getLined();
     bool getOccupied();
@@ -56,7 +59,7 @@ public:
     void smoothP3PointByC1();
     void setOccupied(const bool newOccupied, bool setVisualToOccupied);
     void setVisualOccupied(const bool newsVisualState);
-
+    void moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);
 
     ~Rail();
 signals:

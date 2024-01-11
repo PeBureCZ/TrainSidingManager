@@ -5,17 +5,42 @@ RailSelector::RailSelector(QObject* parent, QGraphicsItem* newGraphicItem, Actor
     SelectConstructor(parent, newGraphicItem, actorToConstructing)
 {
     nearestRail = nullptr;
+    nearestPoint = -1;
 }
 
 void RailSelector::callSelectEvent(QPoint point)
 {
-    qDebug() << "selecting";
+    qDebug() << "try";
+    if (nearestRail != nullptr && nearestPoint != -1)
+    {
+        if (nearestPoint == 1)
+        {
+            if (nearestRail->getLined())
+            {
+                qDebug() << "newLoc";
+
+                QPoint newP0 = nearestRail->getLocation();
+                QPoint newP3 = point - nearestRail->getLocation();
+
+                QPoint newP1 = {newP3.x()/2,newP3.y()/2};
+                QPoint newP2 = newP1;
+
+                nearestRail->moveRailPoint(newP0, newP1, newP2, newP3);
+            }
+            else
+            {
+
+            }
+
+        }
+
+    }
 }
 
 void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
 {
     Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
-    int nearestPoint = -1;
+    int testedNearestPoint = -1;
     int distance = 99999999;
     Rail* testedNearestRail = nullptr;
 
@@ -32,20 +57,20 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
             if (distance > testedDistance1 && testedDistance1 <= testedDistance2)
             {
                 distance = testedDistance1;
-                nearestPoint = 0;
+                testedNearestPoint = 0;
                 testedNearestRail = rail;
             }
             else if (distance > testedDistance2 && testedDistance2 < testedDistance1)
             {
                 distance = testedDistance2;
-                nearestPoint = 1;
+                testedNearestPoint = 1;
                 testedNearestRail = rail;
             }
         }
     }
 
     //check nearest conected rails (if rail exist in the same point/area)
-    if (nearestPoint != -1)
+    if (testedNearestPoint != -1)
     {
         Rail* retestedRail = nullptr;
         QPoint retestedPoint;
@@ -53,7 +78,7 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
         for (int i = 0; i < 2; i++)
         {
             int conectionValue = i;
-            if (nearestPoint == 1) conectionValue +=2;
+            if (testedNearestPoint == 1) conectionValue +=2;
             if(testedNearestRail->getConnectedRail(conectionValue) != nullptr)
             {
                 retestedRail = testedNearestRail->getConnectedRail(conectionValue);
@@ -61,6 +86,7 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
                 testedDistance = getDistance(location, retestedPoint);
                 if (distance > testedDistance)
                 {
+                    testedNearestPoint = 0;
                     testedNearestRail = retestedRail;
                     distance = testedDistance;
                 }
@@ -68,12 +94,16 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
                 testedDistance = getDistance(location, retestedPoint);
                 if (distance > testedDistance)
                 {
+                    testedNearestPoint = 1;
                     testedNearestRail = retestedRail;
                     distance = testedDistance;
                 }
             }
         }
     }
+
+    //if nearestPoint is <= 20, points can be mooved by RailSelector
+    (distance <= 20) ? nearestPoint = testedNearestPoint : nearestPoint = -1;
 
     //set visual change (occupied rail)
     if (testedNearestRail != nullptr)
