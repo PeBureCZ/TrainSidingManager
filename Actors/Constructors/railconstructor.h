@@ -47,7 +47,6 @@ public:
     void setOwnedRail(Rail* newOwnedRail);
     void setConnectedRail(Rail* newConnectedRail);
 
-    void setObjectBoxCollider() override;
     void actualizeConstructor(QPoint newPoint) override;
     void calledCollisionEvent(const QList<Actor *> isInCollision) override;
     void actorLeaveFromCollision(Actor* actor) override;

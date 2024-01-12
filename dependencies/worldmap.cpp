@@ -64,6 +64,11 @@ CustomQGraphicsView *WorldMap::getWorldView() //return view of scene (QGraphicsV
     return worldView;
 }
 
+QGraphicsScene *WorldMap::getWorldScene()
+{
+    return worldScene;
+}
+
 QString WorldMap::testFunction()
 {
     if (railList.size() > 0)

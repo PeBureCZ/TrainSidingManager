@@ -11,15 +11,20 @@ class RailSelector : public SelectConstructor
 protected:
     Rail* nearestRail;
     int nearestPoint;
+    QGraphicsPathItem* visualP1;
+    QGraphicsPathItem* visualP2;
 public:
     explicit RailSelector(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
+    QGraphicsPathItem* getP1VisualPoint();
+    QGraphicsPathItem *getP2VisualPoint();
     ~RailSelector();
     void calledCollisionEvent(const QList<Actor *> isInCollision) override;
     void actorLeaveFromCollision(Actor *actor) override;
     void actorEnterInCollision(Actor *actor) override;
     void callSelectEvent(QPoint point) override;
     void setUnderSelect(bool newUnderSelect) override;
-    void resetObjectBoxCollider();
+    void deleteMiddleVisualPoints();
+
 };
 
 #endif // RAILSELECTOR_H

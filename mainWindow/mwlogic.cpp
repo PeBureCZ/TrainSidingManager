@@ -134,7 +134,7 @@ void mwlogic::constructRail(QPoint point)
         world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f, 120); //for P0 point
         world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
         world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f, 1);//create object BoxCollider
-        actualRailConstructor->setObjectBoxCollider();
+        actualRailConstructor->getOwnedRail()->setObjectBoxCollider();
         actualRailConstructor->actualizeConstructor(point); //duplicied due to P3 point actualize
         actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
         actualRailConstructor->underConstruction(false);
@@ -170,7 +170,7 @@ void mwlogic::constructRail(QPoint point)
         actualRailConstructor->getOwnedRail()->connectRails(nearestRail, false);
         actualRailConstructor->smoothEndPoint();
         actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
-        actualRailConstructor->setObjectBoxCollider();
+        actualRailConstructor->getOwnedRail()->setObjectBoxCollider();
         actualRailConstructor->underConstruction(false);
         break;
     }

@@ -88,8 +88,15 @@ void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
                 SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
                 if (selector->getUnderSelect() == false)
                 {
+
                     selector->setUnderSelect(true);
+                    if (dynamic_cast<RailSelector*>(selector))
+                    {
+                        world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP1VisualPoint());
+                        world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP2VisualPoint());
+                    }
                     managerConsole->printToConsole("under select = true", 9, 600);
+
                 }
                 else if (selector->getUnderEdit() == true)
                 {

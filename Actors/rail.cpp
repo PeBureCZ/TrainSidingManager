@@ -413,6 +413,69 @@ void Rail::moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)
     getP0Trigger()->setRelativeLocation(newP0);
 }
 
+void Rail::setObjectBoxCollider()
+{
+    qDebug() << "set object box collide box in Rail";
+    BoxCollider* boxCollider = {};
+    for (auto trigger : getAllTriggers())
+    {
+        if (dynamic_cast<BoxCollider*>(trigger))
+        {
+            boxCollider = dynamic_cast<BoxCollider*>(trigger);
+            break;
+        }
+    }
+    if (boxCollider != nullptr)
+    {
+        //get and make rotation
+        float radian = atan2(static_cast<double>(P3.y()),P3.x());
+        float basicRotation = qRadiansToDegrees(radian);
+        float correctedRotation = fmod(360 - basicRotation, 360);
+
+        QTransform rotationTransform;
+        rotationTransform.rotate(correctedRotation);
+
+        QVector<QPoint> relativeLocations = {};
+
+        //make 10 points on path declare box (still in "rotated" coordinate)
+        for (int i = 0; i <= 10; i++)
+        {
+            float percent = i*0.1f;
+            relativeLocations.push_back(dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().pointAtPercent(percent).toPoint()); //relative
+        }
+
+        //make points "unrotated" to check bounds
+        for (auto &point : relativeLocations)
+        {
+            point = rotationTransform.map(point);
+        }
+
+        //make size of box
+        int maxX = 0;
+        int minX = 0;
+        int maxY = 0;
+        int minY = 0;
+        for (auto point : relativeLocations)
+        {
+            if (maxX < point.x()) maxX = point.x();
+            if (minX > point.x()) minX = point.x();
+            if (maxY < point.y()) maxY = point.y();
+            if (minY > point.y()) minY = point.y();
+        }
+
+        maxX += 40; //decimeters
+        minX -= 40; //decimeters
+        maxY += 40; //decimeters
+        minY -= 40; //decimeters
+
+        QPoint leftUpCorner = {minX, minY};
+        QPoint rightDownCorner = {maxX, maxY};
+
+        //set coordination and rotations
+        boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);
+    }
+}
+
 Trigger *Rail::getP0Trigger()
 {
     QList<Trigger*> allTriggers = getAllTriggers();

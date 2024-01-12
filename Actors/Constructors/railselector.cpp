@@ -6,7 +6,8 @@ RailSelector::RailSelector(QObject* parent, QGraphicsItem* newGraphicItem, Actor
 {
     nearestRail = nullptr;
     nearestPoint = -1;
-    qDebug() << "need add boxColider update!";
+    visualP1 = nullptr;
+    visualP2 = nullptr;
 }
 
 void RailSelector::callSelectEvent(QPoint point)
@@ -18,17 +19,18 @@ void RailSelector::callSelectEvent(QPoint point)
             bool isNear = (250 >= getDistance(point, nearestRail->getLocation() + nearestRail->getP3RelativeLocation().toPoint()));
             if (nearestRail->getLined() && isNear)
             {
+                nearestRail->setLined(false);
+
+            }
+            else if (isNear)
+            {
+                QPoint oldP1 = nearestRail->getP1RelativeLocation().toPoint();
                 QPoint newP0 = nearestRail->getLocation();
                 QPoint newP3 = point - nearestRail->getLocation();
-
-                QPoint newP1 = {newP3.x()/2,newP3.y()/2};
-                QPoint newP2 = newP1;
-
-                nearestRail->moveRailPoint(newP0, newP1, newP2, newP3);
-            }
-            else
-            {
-
+                nearestRail->moveRailPoint(newP0, oldP1, oldP1, newP3);
+                nearestRail->setObjectBoxCollider();
+                visualP1->setPos(oldP1 + nearestRail->getLocation());
+                visualP2->setPos(oldP1 + nearestRail->getLocation());
             }
         }
         else
@@ -36,21 +38,20 @@ void RailSelector::callSelectEvent(QPoint point)
             bool isNear = (250 >= getDistance(point, nearestRail->getLocation()));
             if (nearestRail->getLined() && isNear)
             {
-                QPoint P3world = nearestRail->getLocation() + nearestRail->getP3RelativeLocation().toPoint();
-                QPoint newP0 = point;
-                QPoint newP3 = P3world - newP0;
+                nearestRail->setLined(false);
 
-                QPoint newP1 = {newP3.x()/2,newP3.y()/2};
-                QPoint newP2 = newP1;
-
-                nearestRail->moveRailPoint(newP0, newP1, newP2, newP3);
             }
-            else
+            else if (isNear)
             {
-
+                QPoint newP3 = nearestRail->getP3RelativeLocation().toPoint() + nearestRail->getLocation() - point;
+                QPoint newP1 = nearestRail->getP1RelativeLocation().toPoint() + nearestRail->getLocation() - point;
+                QPoint newP0 = point;
+                nearestRail->moveRailPoint(newP0, newP1, newP1, newP3);
+                nearestRail->setObjectBoxCollider();
+                visualP1->setPos(newP1 + nearestRail->getLocation());
+                visualP2->setPos(newP1 + nearestRail->getLocation());
             }
         }
-
     }
 }
 
@@ -187,70 +188,39 @@ void RailSelector::setUnderSelect(bool newUnderSelect)
             }
         }
     }
+    if (visualP1 != nullptr) delete visualP1;
+    if (visualP2 != nullptr) delete visualP2;
+    if (nearestRail != nullptr)
+    {
+        QPen pen;
+        pen.setWidth(3);
+        pen.setColor(Qt::red);
+        QPainterPath rect;
+        int size = 30;
+        rect.addRect(0, 0, size, size);
+        visualP1 = new QGraphicsPathItem(rect);
+        visualP2 = new QGraphicsPathItem(rect);
+        visualP1->setPen(pen);
+        visualP2->setPen(pen);
+        visualP1->setPos(nearestRail->getP1RelativeLocation() + nearestRail->getLocation());
+        visualP2->setPos(nearestRail->getP2RelativeLocation() + nearestRail->getLocation());
+    }
 }
 
-void RailSelector::resetObjectBoxCollider()
+QGraphicsPathItem* RailSelector::getP1VisualPoint()
 {
-    if (nearestRail == nullptr) return;
-    BoxCollider* boxCollider = {};
-    for (auto trigger : nearestRail->getAllTriggers())
-    {
-        if (dynamic_cast<BoxCollider*>(trigger))
-        {
-            boxCollider = dynamic_cast<BoxCollider*>(trigger);
-            break;
-        }
-    }
-    if (boxCollider != nullptr)
-    {
-        //get and make rotation
-        QPoint copyOfP3 = nearestRail->getP3RelativeLocation().toPoint();
-        float radian = atan2(static_cast<double>(copyOfP3.y()),copyOfP3.x());
-        float basicRotation = qRadiansToDegrees(radian);
-        float correctedRotation = fmod(360 - basicRotation, 360);
+    return visualP1;
+}
 
-        QTransform rotationTransform;
-        rotationTransform.rotate(correctedRotation);
+QGraphicsPathItem* RailSelector::getP2VisualPoint()
+{
+    return visualP2;
+}
 
-        QVector<QPoint> relativeLocations = {};
-
-        //make 10 points on path declare box (still in "rotated" coordinate)
-        for (int i = 0; i <= 10; i++)
-        {
-            float percent = i*0.1f;
-            relativeLocations.push_back(dynamic_cast<QGraphicsPathItem*>(nearestRail->getGraphicItem())->path().pointAtPercent(percent).toPoint()); //relative
-        }
-
-        //make points "unrotated" to check bounds
-        for (auto &point : relativeLocations)
-        {
-            point = rotationTransform.map(point);
-        }
-
-        //make size of box
-        int maxX = 0;
-        int minX = 0;
-        int maxY = 0;
-        int minY = 0;
-        for (auto point : relativeLocations)
-        {
-            if (maxX < point.x()) maxX = point.x();
-            if (minX > point.x()) minX = point.x();
-            if (maxY < point.y()) maxY = point.y();
-            if (minY > point.y()) minY = point.y();
-        }
-
-        maxX += 40; //decimeters
-        minX -= 40; //decimeters
-        maxY += 40; //decimeters
-        minY -= 40; //decimeters
-
-        QPoint leftUpCorner = {minX, minY};
-        QPoint rightDownCorner = {maxX, maxY};
-
-        //set coordination and rotations
-        boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);
-    }
+void RailSelector::deleteMiddleVisualPoints()
+{
+    if (visualP1 != nullptr) delete visualP1;
+    if (visualP2 != nullptr) delete visualP2;
 }
 
 RailSelector::~RailSelector()
@@ -261,6 +231,8 @@ RailSelector::~RailSelector()
         nearestRail->setVisibilityOfArea(0, false, nullptr);
         nearestRail->setVisibilityOfArea(1, false, nullptr);
     }
+    deleteMiddleVisualPoints();
+    qDebug() << "if selector is \"active\" and destroyed in run app = bug"
 }
 
 

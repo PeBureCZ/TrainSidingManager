@@ -61,6 +61,7 @@ public:
     //FCE - RETURN
     QString testFunction();
     CustomQGraphicsView* getWorldView();
+    QGraphicsScene* getWorldScene();
     QPoint getRelativeWorldPos(QPoint point);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
