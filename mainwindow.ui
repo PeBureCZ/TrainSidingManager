@@ -782,6 +782,9 @@
       </property>
       <item>
        <widget class="QPushButton" name="SubBut">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="minimumSize">
          <size>
           <width>40</width>
@@ -810,6 +813,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="AddBut">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="minimumSize">
          <size>
           <width>40</width>

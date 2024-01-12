@@ -21,10 +21,16 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
     {
         if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
         {
-            ActorConstructor* selector = world->getActualConstructor();
-            if (selector != nullptr && dynamic_cast<SelectConstructor*>(selector))
+            ActorConstructor* constructor = world->getActualConstructor();
+            bool sharedBool = (constructor != nullptr && dynamic_cast<SelectConstructor*>(constructor));
+            if (sharedBool)
             {
-                dynamic_cast<SelectConstructor*>(selector)->setUnderSelect(true);
+                SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
+                if (selector->getUnderSelect() == true)
+                {
+                    selector->setUnderEdit(true);
+                    managerConsole->printToConsole("under edit = true", 9, 600);
+                }
             }
         }
         else //edit mode
@@ -75,14 +81,44 @@ void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
     {
         if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
         {
-            ActorConstructor* selector = world->getActualConstructor();
-            if (selector != nullptr && dynamic_cast<SelectConstructor*>(selector))
+            ActorConstructor* constructor = world->getActualConstructor();
+            bool sharedBool = (constructor != nullptr && dynamic_cast<SelectConstructor*>(constructor));
+            if (sharedBool)
             {
-                dynamic_cast<SelectConstructor*>(selector)->setUnderSelect(false);
+                SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
+                if (selector->getUnderSelect() == false)
+                {
+                    selector->setUnderSelect(true);
+                    managerConsole->printToConsole("under select = true", 9, 600);
+                }
+                else if (selector->getUnderEdit() == true)
+                {
+                    selector->setUnderEdit(false);
+                    managerConsole->printToConsole("under edit = false", 9, 600);
+                }
+                else managerConsole->printToConsole("nothing", 9, 600);
+
             }
         }
     }
-    else if (event->button() == Qt::RightButton) qDebug() << "release RMB";
+    else if (event->button() == Qt::RightButton)
+    {
+        if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
+        {
+            ActorConstructor* constructor = world->getActualConstructor();
+            bool sharedBool = (constructor != nullptr && dynamic_cast<SelectConstructor*>(constructor));
+            if (sharedBool)
+            {
+                SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
+                if (selector->getUnderSelect() == true)
+                {
+                    selector->setUnderSelect(false);
+                    selector->setUnderEdit(false);
+                    managerConsole->printToConsole("under select and edit = false", 9, 600);
+                }
+            }
+        }
+    }
 }
 
 void InterfaceWindow::wheelEvent(QWheelEvent *event)

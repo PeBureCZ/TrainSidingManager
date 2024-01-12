@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "mainWindow/mwlogic.h"
+#include "Actors/Constructors/railselector.h"
 
 
 
@@ -11,7 +12,7 @@ class InterfaceWindow : public mwlogic
     Q_OBJECT
 public:
     InterfaceWindow(mwlogic *parent = nullptr);
-private slots:
+protected slots:
     //void on_TestButton1_clicked();
     void on_PlayBut_clicked() override;
     void on_SubBut_clicked() override;

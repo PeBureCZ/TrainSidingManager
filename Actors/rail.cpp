@@ -398,6 +398,7 @@ void Rail::setVisualOccupied(const bool newsVisualState)
 
 void Rail::moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)
 {
+    setLocation(newP0, true);
     setP0WorldLocation(newP0);
     setP1RelativeLocation(newP1);
     setP2RelativeLocation(newP2);
@@ -408,8 +409,8 @@ void Rail::moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)
     newPath.cubicTo(newP1.x(),newP1.y(),newP2.x(), newP2.y(),newP3.x(), newP3.y());
     dynamic_cast<QGraphicsPathItem*>(getGraphicItem())->setPath(newPath);
 
-    //getP3Trigger()->setRelativeLocation();
-    // UNCOMPLETE!!!! NEED SET TRIGGERS IN WORLD!
+    getP3Trigger()->setRelativeLocation(newP3);
+    getP0Trigger()->setRelativeLocation(newP0);
 }
 
 Trigger *Rail::getP0Trigger()

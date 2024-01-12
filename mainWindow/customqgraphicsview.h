@@ -21,6 +21,8 @@ protected:
     int mapSizeX;
     int mapSizeY;
 
+protected slots:
+    void mouseReleaseEvent(QMouseEvent* event);
 public:
     CustomQGraphicsView(QWidget *parent = nullptr);
     void zoomIn(bool sideways);

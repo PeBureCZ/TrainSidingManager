@@ -6,19 +6,18 @@ RailSelector::RailSelector(QObject* parent, QGraphicsItem* newGraphicItem, Actor
 {
     nearestRail = nullptr;
     nearestPoint = -1;
+    qDebug() << "need add boxColider update!";
 }
 
 void RailSelector::callSelectEvent(QPoint point)
 {
-    qDebug() << "try";
     if (nearestRail != nullptr && nearestPoint != -1)
     {
         if (nearestPoint == 1)
         {
-            if (nearestRail->getLined())
+            bool isNear = (250 >= getDistance(point, nearestRail->getLocation() + nearestRail->getP3RelativeLocation().toPoint()));
+            if (nearestRail->getLined() && isNear)
             {
-                qDebug() << "newLoc";
-
                 QPoint newP0 = nearestRail->getLocation();
                 QPoint newP3 = point - nearestRail->getLocation();
 
@@ -31,7 +30,25 @@ void RailSelector::callSelectEvent(QPoint point)
             {
 
             }
+        }
+        else
+        {
+            bool isNear = (250 >= getDistance(point, nearestRail->getLocation()));
+            if (nearestRail->getLined() && isNear)
+            {
+                QPoint P3world = nearestRail->getLocation() + nearestRail->getP3RelativeLocation().toPoint();
+                QPoint newP0 = point;
+                QPoint newP3 = P3world - newP0;
 
+                QPoint newP1 = {newP3.x()/2,newP3.y()/2};
+                QPoint newP2 = newP1;
+
+                nearestRail->moveRailPoint(newP0, newP1, newP2, newP3);
+            }
+            else
+            {
+
+            }
         }
 
     }
@@ -39,7 +56,7 @@ void RailSelector::callSelectEvent(QPoint point)
 
 void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
 {
-    Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
+    Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision
     int testedNearestPoint = -1;
     int distance = 99999999;
     Rail* testedNearestRail = nullptr;
@@ -106,7 +123,7 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
     (distance <= 20) ? nearestPoint = testedNearestPoint : nearestPoint = -1;
 
     //set visual change (occupied rail)
-    if (testedNearestRail != nullptr)
+    if (testedNearestRail != nullptr && !underSelectMode)
     {
         if (nearestRail != nullptr)
         {
@@ -124,7 +141,7 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
             nearestRail->setOccupied(true,true);
         }
     }
-    else
+    else if (!underSelectMode)
     {
         if (nearestRail != nullptr) nearestRail->setOccupied(false,true);
         nearestRail = nullptr;
@@ -133,6 +150,7 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
 
 void RailSelector::actorLeaveFromCollision(Actor *actor)
 {
+    if (underSelectMode) return;
     Actor::actorLeaveFromCollision(actor);
     Rail* rail = dynamic_cast<Rail*>(actor);
     rail->setOccupied(false,true);
@@ -142,6 +160,7 @@ void RailSelector::actorLeaveFromCollision(Actor *actor)
 
 void RailSelector::actorEnterInCollision(Actor *actor)
 {
+    if (underSelectMode) return;
     Actor::actorEnterInCollision(actor);
     if (dynamic_cast<Rail*>(actor))
     {
@@ -151,6 +170,97 @@ void RailSelector::actorEnterInCollision(Actor *actor)
     }
 }
 
+void RailSelector::setUnderSelect(bool newUnderSelect)
+{
+    underSelectMode = newUnderSelect;
+    if (underSelectMode)
+    {
+        for (auto kickedActor : actorsInCollision)
+        {
+            if (dynamic_cast<Rail*>(kickedActor) != nearestRail)
+            {
+                actorsInCollision.removeOne(kickedActor);
+                Rail* rail = dynamic_cast<Rail*>(kickedActor);
+                rail->setOccupied(false,true);
+                rail->setVisibilityOfArea(0, false, nullptr);
+                rail->setVisibilityOfArea(1, false, nullptr);
+            }
+        }
+    }
+}
+
+void RailSelector::resetObjectBoxCollider()
+{
+    if (nearestRail == nullptr) return;
+    BoxCollider* boxCollider = {};
+    for (auto trigger : nearestRail->getAllTriggers())
+    {
+        if (dynamic_cast<BoxCollider*>(trigger))
+        {
+            boxCollider = dynamic_cast<BoxCollider*>(trigger);
+            break;
+        }
+    }
+    if (boxCollider != nullptr)
+    {
+        //get and make rotation
+        QPoint copyOfP3 = nearestRail->getP3RelativeLocation().toPoint();
+        float radian = atan2(static_cast<double>(copyOfP3.y()),copyOfP3.x());
+        float basicRotation = qRadiansToDegrees(radian);
+        float correctedRotation = fmod(360 - basicRotation, 360);
+
+        QTransform rotationTransform;
+        rotationTransform.rotate(correctedRotation);
+
+        QVector<QPoint> relativeLocations = {};
+
+        //make 10 points on path declare box (still in "rotated" coordinate)
+        for (int i = 0; i <= 10; i++)
+        {
+            float percent = i*0.1f;
+            relativeLocations.push_back(dynamic_cast<QGraphicsPathItem*>(nearestRail->getGraphicItem())->path().pointAtPercent(percent).toPoint()); //relative
+        }
+
+        //make points "unrotated" to check bounds
+        for (auto &point : relativeLocations)
+        {
+            point = rotationTransform.map(point);
+        }
+
+        //make size of box
+        int maxX = 0;
+        int minX = 0;
+        int maxY = 0;
+        int minY = 0;
+        for (auto point : relativeLocations)
+        {
+            if (maxX < point.x()) maxX = point.x();
+            if (minX > point.x()) minX = point.x();
+            if (maxY < point.y()) maxY = point.y();
+            if (minY > point.y()) minY = point.y();
+        }
+
+        maxX += 40; //decimeters
+        minX -= 40; //decimeters
+        maxY += 40; //decimeters
+        minY -= 40; //decimeters
+
+        QPoint leftUpCorner = {minX, minY};
+        QPoint rightDownCorner = {maxX, maxY};
+
+        //set coordination and rotations
+        boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);
+    }
+}
+
 RailSelector::~RailSelector()
 {
+    if (nearestRail != nullptr)
+    {
+        nearestRail->setOccupied(false,true);
+        nearestRail->setVisibilityOfArea(0, false, nullptr);
+        nearestRail->setVisibilityOfArea(1, false, nullptr);
+    }
 }
+
+

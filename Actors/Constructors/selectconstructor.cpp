@@ -4,17 +4,28 @@ SelectConstructor::SelectConstructor(QObject* parent, QGraphicsItem* newGraphicI
 :
 ActorConstructor(parent, newGraphicItem, actorToConstructing)
 {
-    underSelectEvent = false;
+    underSelectMode = false;
+    underEditMode = false;
 }
 
 bool SelectConstructor::getUnderSelect()
 {
-    return underSelectEvent;
+    return underSelectMode;
+}
+
+bool SelectConstructor::getUnderEdit()
+{
+    return underEditMode;
 }
 
 void SelectConstructor::setUnderSelect(bool newUnderSelect)
 {
-    underSelectEvent = newUnderSelect;
+    underSelectMode = newUnderSelect;
+}
+
+void SelectConstructor::setUnderEdit(bool newUnderEdit)
+{
+    underEditMode = newUnderEdit;
 }
 
 void SelectConstructor::callSelectEvent(QPoint point)
@@ -23,5 +34,5 @@ void SelectConstructor::callSelectEvent(QPoint point)
 void SelectConstructor::actualizeConstructor(QPoint newPoint)
 {
     setLocation(newPoint,false);
-    if (underSelectEvent) callSelectEvent(newPoint);
+    if (underEditMode) callSelectEvent(newPoint);
 }

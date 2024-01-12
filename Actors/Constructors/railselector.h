@@ -18,6 +18,8 @@ public:
     void actorLeaveFromCollision(Actor *actor) override;
     void actorEnterInCollision(Actor *actor) override;
     void callSelectEvent(QPoint point) override;
+    void setUnderSelect(bool newUnderSelect) override;
+    void resetObjectBoxCollider();
 };
 
 #endif // RAILSELECTOR_H

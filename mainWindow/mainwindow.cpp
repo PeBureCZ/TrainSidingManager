@@ -57,8 +57,9 @@ void MainWindow::initializeInterface()
     managerConsole = new ManagerConsole(this); //add custom manager console
 
     //zoom option in map
-    mapZoomLayout = new QHBoxLayout;
-    widgetWithLayout = new QWidget;
+
+    mapZoomLayout = new QHBoxLayout();
+    widgetWithLayout = new QWidget();
     mapZoomLayout->addWidget(ui->SubBut);
     mapZoomLayout->addWidget(ui->AddBut);
     widgetWithLayout->setLayout(mapZoomLayout);
@@ -76,7 +77,8 @@ void MainWindow::initializeInterface()
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QSize sizeView = world->getWorldView()->size();
-    managerConsole->setConsolePos({160,sizeView.height()-250},750,250);
+    managerConsole->setConsolePos({160,0},sizeView.width(),sizeView.height());
+    managerConsole->printToConsole("bugged console (you have to resize window), affects response to mouse events", 1, 200);
 }
 
 void MainWindow::playButSwitch(bool editMode)
@@ -109,11 +111,13 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
+    qDebug() << "____________";
 }
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided
 void MainWindow::on_AddMenuBut_clicked(){}//overrided
 void MainWindow::on_EditMenuBut_clicked(){}//overrided
+
 void MainWindow::on_MultiFuncBut1_clicked() {}//overrided
 void MainWindow::on_MultiFuncBut2_clicked() {}//overrided
 void MainWindow::on_MultiFuncBut24_clicked() {}//overrided

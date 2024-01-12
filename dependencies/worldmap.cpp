@@ -29,7 +29,6 @@ void WorldMap::actualizeEditor()
         actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
         if (actualConstructor->canCallCollision())
         {
-            //constructors (Actors) with collisionCallEnabled = true
             QVector<int> collideChannels = actualConstructor->callCollideChannels();
             QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
             actualConstructor->calledCollisionEvent(actors);

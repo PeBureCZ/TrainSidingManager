@@ -68,6 +68,7 @@ public:
     virtual void playButSwitch(bool editMode);
     virtual void selectMenuSwitch(bool selectMode);
     void InterfaceSet(int menuSelected);
+
     QVBoxLayout *consoleLayout;
     ManagerConsole* managerConsole;
     QHBoxLayout *mapZoomLayout;
@@ -85,6 +86,8 @@ private slots:
     virtual void on_MultiFuncBut24_clicked();
     virtual void on_AddMenuBut_clicked();
     virtual void on_EditMenuBut_clicked();
+
+
 
 protected:
     Ui::MainWindow *ui;
