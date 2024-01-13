@@ -56,13 +56,15 @@ public:
     void actualizeAreasPosition();
     void connectRails(Rail* connectedRail, const bool connectedAtStart);
     void unconnectRails(Rail* unconnectedRail);
-    void smoothP3PointByC1();
+    void smoothConnectionA0();
+    void smoothConnectionC1();
     void setOccupied(const bool newOccupied, bool setVisualToOccupied);
     void setVisualOccupied(const bool newsVisualState);
-    void moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);
+    void moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);
     void setObjectBoxCollider() override;
 
     ~Rail();
+
 signals:
 
 public slots:

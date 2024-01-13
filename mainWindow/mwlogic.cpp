@@ -57,7 +57,7 @@ void mwlogic::addConstructor(int constructorType)
     {
     case RAIL_CONSTRUCTOR:
         world->addRailConstructor();
-        managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB).", 99, 500);
+        managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB)", 99, 500);
         managerConsole->printToConsole("(To connect to another track, use the left mouse button (LMB) near the end of another track)", 99, 500);
         break;
     case SIGNAL_CONSTRUCTOR:
@@ -66,8 +66,8 @@ void mwlogic::addConstructor(int constructorType)
         managerConsole->printToConsole("(To confirm the placement of a signal on the track, use the left mouse button (LMB))", 99, 500);
         break;
     case RAIL_SELECTOR:
-        qDebug() << "rail selector created";
         world->addRailSelector();
+        managerConsole->printToConsole("For marking the track, click the left mouse button on the light blue highlighted track", 99, 500);
         break;
     default: {}
     }
@@ -153,6 +153,7 @@ void mwlogic::constructRail(QPoint point)
         //ADD RAIL ACTOR
         actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,newPoint,nullptr)));
         actualRailConstructor->getOwnedRail()->setLocation(newPoint, true);
+        actualRailConstructor->getOwnedRail()->setP0WorldLocation(newPoint);
         actualRailConstructor->getOwnedRail()->connectRails(nearestRail, true);
         actualRailConstructor->underConstruction(true);
         break;

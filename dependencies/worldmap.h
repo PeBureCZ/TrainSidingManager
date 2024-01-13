@@ -82,7 +82,7 @@ public:
     void actualizePlayMode();
     void updateWorld();
 
-    //DESTRUCTOR
+    //DESTRUCTORs
     ~WorldMap();
 
 public slots:

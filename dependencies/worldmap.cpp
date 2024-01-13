@@ -435,14 +435,6 @@ void WorldMap::deleteAllActors()
     }
 }
 
-WorldMap::~WorldMap()
-{
-    deleteAllActors();
-    delete worldScene;
-    delete worldView;
-    delete worldCollide;
-}
-
 void WorldMap::printMessage()
 {
     qDebug() << "message send";
@@ -476,4 +468,15 @@ int WorldMap::getWorldDistance(QPoint pointOne, QPoint pointTwo)
 {
     QLineF line(pointOne, pointTwo);
     return line.length();
+}
+
+WorldMap::~WorldMap()
+{
+    //constructor have to delete first! (contains a ptr* to a deleted Actor = just "constructed actor")
+    if (getActualConstructor() != nullptr) deleteConstructor(true);
+    //the rest...
+    deleteAllActors();
+    delete worldScene;
+    delete worldView;
+    delete worldCollide;
 }

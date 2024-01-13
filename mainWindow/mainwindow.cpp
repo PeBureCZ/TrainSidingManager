@@ -111,7 +111,18 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
-    qDebug() << "____________";
+    for (auto actor : world->actorList)
+    {
+        if (dynamic_cast<Rail*>(actor))
+        {
+            qDebug() << "___";
+            Rail* rail = dynamic_cast<Rail*>(actor);
+            if (rail->getConnectedRail(0) != nullptr) qDebug()  <<  "A0";
+            if (rail->getConnectedRail(1) != nullptr) qDebug()  << "B0";
+            if (rail->getConnectedRail(2) != nullptr) qDebug()  << "C1";
+            if (rail->getConnectedRail(3) != nullptr) qDebug()  << "D1";
+        }
+    }
 }
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided

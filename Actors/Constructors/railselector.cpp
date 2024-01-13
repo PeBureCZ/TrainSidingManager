@@ -27,7 +27,7 @@ void RailSelector::callSelectEvent(QPoint point)
                 QPoint oldP1 = nearestRail->getP1RelativeLocation().toPoint();
                 QPoint newP0 = nearestRail->getLocation();
                 QPoint newP3 = point - nearestRail->getLocation();
-                nearestRail->moveRailPoint(newP0, oldP1, oldP1, newP3);
+                nearestRail->moveRailPoints(newP0, oldP1, oldP1, newP3);
                 nearestRail->setObjectBoxCollider();
                 visualP1->setPos(oldP1 + nearestRail->getLocation());
                 visualP2->setPos(oldP1 + nearestRail->getLocation());
@@ -46,10 +46,27 @@ void RailSelector::callSelectEvent(QPoint point)
                 QPoint newP3 = nearestRail->getP3RelativeLocation().toPoint() + nearestRail->getLocation() - point;
                 QPoint newP1 = nearestRail->getP1RelativeLocation().toPoint() + nearestRail->getLocation() - point;
                 QPoint newP0 = point;
-                nearestRail->moveRailPoint(newP0, newP1, newP1, newP3);
+                nearestRail->moveRailPoints(newP0, newP1, newP1, newP3);
                 nearestRail->setObjectBoxCollider();
                 visualP1->setPos(newP1 + nearestRail->getLocation());
                 visualP2->setPos(newP1 + nearestRail->getLocation());
+            }
+        }
+        for (int connection = 0; connection < 4; connection++)
+        {
+            Rail* connectedRail = nearestRail->getConnectedRail(connection);
+            if (connectedRail != nullptr)
+            {
+                int connectionOf2 = connectedRail->getConnection(nearestRail);
+                if (connectionOf2 == 0 || connectionOf2 == 1)
+                {
+                    connectedRail->smoothConnectionA0();
+                }
+                else if (connectionOf2 != -1)
+                {
+
+                    connectedRail->smoothConnectionC1();
+                }
             }
         }
     }
@@ -205,6 +222,11 @@ void RailSelector::setUnderSelect(bool newUnderSelect)
         visualP1->setPos(nearestRail->getP1RelativeLocation() + nearestRail->getLocation());
         visualP2->setPos(nearestRail->getP2RelativeLocation() + nearestRail->getLocation());
     }
+    else
+    {
+        visualP1 = nullptr;
+        visualP2 = nullptr;
+    }
 }
 
 QGraphicsPathItem* RailSelector::getP1VisualPoint()
@@ -232,7 +254,6 @@ RailSelector::~RailSelector()
         nearestRail->setVisibilityOfArea(1, false, nullptr);
     }
     deleteMiddleVisualPoints();
-    qDebug() << "if selector is \"active\" and destroyed in run app = bug"
 }
 
 

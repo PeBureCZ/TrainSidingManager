@@ -172,8 +172,7 @@ void Rail::setVisibilityOfArea(const int area, const bool visible, QColor color)
             }
         }
     }
-    changedGraphic->setVisible(visible);
-
+    if (changedGraphic != nullptr) changedGraphic->setVisible(visible);
 }
 
 void Rail::actualizeAreasPosition()
@@ -328,36 +327,74 @@ void Rail::unconnectRails(Rail *unconnectedRail)
     if (conectionD1 == unconnectedRail) conectionD1 = {};
 }
 
-void Rail::smoothP3PointByC1() //call only if conected to C1 point
+void Rail::smoothConnectionC1()
 {
+    lined = false;
+    QPoint negativeVectorP2 = {999999,999999};
+    QPoint interpolationP2;
+
+    //always smooth only A0 or C1 (B & D) is always conection
+
     if (conectionC1 != nullptr)
     {
-        lined = false;
-        QLineF distanceOne(conectionC1->getP0WorldLocation(), getLocation() + P3); //P3 to connectedP0
-        QLineF distanceTwo(conectionC1->getLocation() + conectionC1->getP3RelativeLocation(), getLocation() + P3); //P3 to connected P3
-        float reduction = 0.05f;
-        QLineF vectorDistance;
-        if (distanceOne.length() < distanceTwo.length()) //P3 to connectedP0
+        if (conectionC1->getConnection(this) == 0 || conectionC1->getConnection(this) == 1)
         {
-            P3 = conectionC1->getLocation() - location;
-            vectorDistance.setPoints(conectionC1->getP1RelativeLocation() + conectionC1->getLocation(), P0 + P3 ); //in world coordinate
+            interpolationP2 = conectionC1->getLocation();
+            negativeVectorP2 = conectionC1->getLocation() + conectionC1->getP1RelativeLocation().toPoint();
         }
-        else //P3 to connected P3
+        else if (conectionC1->getConnection(this) == 2 || conectionC1->getConnection(this) == 3) //this(P3) is connected to P3(connected)
         {
-            QPoint connectedP3world = conectionC1->getLocation() + conectionC1->getP3RelativeLocation().toPoint();
-            P3 = connectedP3world - location;
-            vectorDistance.setPoints(conectionC1->getP2RelativeLocation() + conectionC1->getLocation(), P0 + P3); //in world coordinate
+            negativeVectorP2 = conectionC1->getLocation() + conectionC1->getP2RelativeLocation().toPoint();
+            interpolationP2 = conectionC1->getLocation() + conectionC1->getP3RelativeLocation().toPoint();
         }
-        QLineF fromP0ToP3(P0, P0 + P3);
-        reduction = fromP0ToP3.length() / 2 / vectorDistance.length();
-        if (reduction < 0.05f)  reduction = 0.05f;
-        QPoint negativeVector = vectorDistance.pointAt(1-reduction).toPoint();
-        QPoint vectorP2world = ((P0 + P3) - (negativeVector - (P0 + P3)));
-        P2 = vectorP2world  - location;
-        QPainterPath smoothPath;
-        smoothPath.cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y());
-        dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPath(smoothPath);
     }
+
+    QPainterPath smoothPath;
+    if (negativeVectorP2 != QPoint(999999,999999))
+    {
+        P2 = (2*interpolationP2) - negativeVectorP2  - P0;
+        P3 = interpolationP2 - P0;
+    }
+
+    smoothPath.cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y());
+    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPath(smoothPath);
+
+    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPos(P0);
+
+}
+
+void Rail::smoothConnectionA0()
+{
+    lined = false;
+    QPoint negativeVectorP1 = {999999, 999999};
+    QPoint interpolationP1;
+
+    //always smooth only A0 or C1 (B & D) is always conection
+    if (conectionA0 != nullptr)
+    {
+        if (conectionA0->getConnection(this) == 0 || conectionA0->getConnection(this) == 1)
+        {
+            negativeVectorP1 = conectionA0->getLocation() + conectionA0->getP1RelativeLocation().toPoint();
+            interpolationP1 = conectionA0->getLocation();
+        }
+        else if (conectionA0->getConnection(this) == 2 || conectionA0->getConnection(this) == 3)//this (P0) is connected to P3(connected)
+        {
+            interpolationP1 = conectionA0->getLocation() + conectionA0->getP3RelativeLocation().toPoint();
+            negativeVectorP1 = conectionA0->getLocation() + conectionA0->getP2RelativeLocation().toPoint();
+        }
+    }
+
+    QPoint oldP3World = P0+P3;
+    QPainterPath smoothPath;
+    if (negativeVectorP1 != QPoint(999999,999999))
+    {
+        P0 = interpolationP1; //position is not actualized yet
+        P1 = (2*interpolationP1) - negativeVectorP1 - P0;
+        P3 = oldP3World-P0;
+    }
+    smoothPath.cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y());
+    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPath(smoothPath);
+    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPos(P0);
 }
 
 bool Rail::getLined()
@@ -396,7 +433,7 @@ void Rail::setVisualOccupied(const bool newsVisualState)
     }
 }
 
-void Rail::moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)
+void Rail::moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)
 {
     setLocation(newP0, true);
     setP0WorldLocation(newP0);
@@ -415,7 +452,6 @@ void Rail::moveRailPoint(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)
 
 void Rail::setObjectBoxCollider()
 {
-    qDebug() << "set object box collide box in Rail";
     BoxCollider* boxCollider = {};
     for (auto trigger : getAllTriggers())
     {
