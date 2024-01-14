@@ -111,6 +111,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
+    /*
     for (auto actor : world->actorList)
     {
         if (dynamic_cast<Rail*>(actor))
@@ -121,6 +122,18 @@ void MainWindow::on_TestButton1_clicked()
             if (rail->getConnectedRail(1) != nullptr) qDebug()  << "B0";
             if (rail->getConnectedRail(2) != nullptr) qDebug()  << "C1";
             if (rail->getConnectedRail(3) != nullptr) qDebug()  << "D1";
+        }
+    }
+    */
+
+    //spawnTrain
+    for (auto actor : world->actorList)
+    {
+        if (dynamic_cast<Rail*>(actor))
+        {
+            world->addTrainActor(dynamic_cast<Rail*>(actor));
+            qDebug() << "train spawned";
+            break;
         }
     }
 }

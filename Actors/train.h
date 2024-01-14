@@ -34,6 +34,7 @@ public:
     void setTrainPath(QVector<Rail*> newTrainPath);
     void tickEvent() override;
     void moveTrain();
+    void startAutopilot();
 
     virtual ~Train();
 

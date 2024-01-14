@@ -14,7 +14,7 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
 
 void Train::actualizeGraphicLocation()
 {
-    //this function is called from world with function "updateWorld"
+    //this function is called from worldmap (class) with function "updateWorld"
     //location (graphicLocation variable) is changed in QThreads and have to be visually changed in main thread
     dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(graphicLocation); //only index 0 vehicle for now
 }
@@ -130,6 +130,12 @@ void Train::moveTrain()
     onPathLength = newOnPathLength;
 }
 
+void Train::startAutopilot()
+{
+    TrainNavigation navigation;
+    trainPath = navigation.autopilotCheck(1000,5,actualRail,directionToEnd);
+}
+
 void Train::setTrainPath(QVector<Rail*> newTrainPath)
 {
     trainPath = newTrainPath;
@@ -139,3 +145,5 @@ void Train::tickEvent()
 {
     moveTrain();
 }
+
+

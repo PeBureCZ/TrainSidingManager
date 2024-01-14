@@ -9,6 +9,7 @@ class TrainNavigation
 public:
     TrainNavigation();
     bool checkNewDirection(bool actualDirection, Rail* actualRail, Rail* newRail);
+    QList<Rail*> autopilotCheck(int minDistanceCheck, const int minimalPathSegments, Rail *actualRail, bool direction);
 };
 
 #endif // TRAINNAVIGATION_H

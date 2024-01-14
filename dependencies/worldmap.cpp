@@ -126,15 +126,21 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, spawnOnRail);
         addVehicleActor(dynamic_cast<Train*>(newTrain), 1);
-        //invisible = not added to scene, only to list (indexed)
-        actorList.push_back(newTrain); //indexed with graphicsItemListIndexed
+
+
+        addActorToLists(newTrain);
         tickedActorsList.push_back(newTrain); //actor with tick update
         dynamic_cast<Train*>(newTrain)->setActualSpeed(1300); //centimeters/s
+
+        dynamic_cast<Train*>(newTrain)->startAutopilot();
+
+        /*
         if (railList.size()>1)
         {
             QVector<Rail*> temporaryTrainPath(railList.begin()+1,railList.end()); //will be changed with RailNavigation
             dynamic_cast<Train*>(newTrain)->setTrainPath(temporaryTrainPath);
         }
+        */
     }
 }
 

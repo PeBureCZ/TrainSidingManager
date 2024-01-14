@@ -12,7 +12,24 @@ RailSelector::RailSelector(QObject* parent, QGraphicsItem* newGraphicItem, Actor
 
 void RailSelector::callSelectEvent(QPoint point)
 {
-    if (nearestRail != nullptr && nearestPoint != -1)
+    int distanceToP1 = getDistance(point, (visualP1->pos() + QPoint{15,15}).toPoint());
+    int distanceToP2 = getDistance(point, (visualP2->pos() + QPoint{15,15}).toPoint());
+    if (distanceToP1 <= 50)
+    {
+        QPoint newP1 = point - nearestRail->getP0WorldLocation().toPoint();
+        nearestRail->setLined(false);
+        nearestRail->moveRailPoints(nearestRail->getP0WorldLocation().toPoint(), newP1, nearestRail->getP2RelativeLocation().toPoint(), nearestRail->getP3RelativeLocation().toPoint());
+        visualP1->setPos(point - QPoint{15,15});
+
+    }
+    else if (distanceToP2 <= 50)
+    {
+        QPoint newP2 = point - nearestRail->getP0WorldLocation().toPoint();
+        nearestRail->setLined(false);
+        nearestRail->moveRailPoints(nearestRail->getP0WorldLocation().toPoint(),nearestRail->getP1RelativeLocation().toPoint(), newP2, nearestRail->getP3RelativeLocation().toPoint());
+        visualP2->setPos(point - QPoint{15,15});
+    }
+    else if (nearestRail != nullptr && nearestPoint != -1)
     {
         if (nearestPoint == 1)
         {
@@ -28,7 +45,6 @@ void RailSelector::callSelectEvent(QPoint point)
                 QPoint newP0 = nearestRail->getLocation();
                 QPoint newP3 = point - nearestRail->getLocation();
                 nearestRail->moveRailPoints(newP0, oldP1, oldP1, newP3);
-                nearestRail->setObjectBoxCollider();
                 visualP1->setPos(oldP1 + nearestRail->getLocation());
                 visualP2->setPos(oldP1 + nearestRail->getLocation());
             }
@@ -46,28 +62,29 @@ void RailSelector::callSelectEvent(QPoint point)
                 QPoint newP3 = nearestRail->getP3RelativeLocation().toPoint() + nearestRail->getLocation() - point;
                 QPoint newP1 = nearestRail->getP1RelativeLocation().toPoint() + nearestRail->getLocation() - point;
                 QPoint newP0 = point;
-                nearestRail->moveRailPoints(newP0, newP1, newP1, newP3);
-                nearestRail->setObjectBoxCollider();
+                nearestRail->moveRailPoints(newP0, newP1, newP1, newP3);            
                 visualP1->setPos(newP1 + nearestRail->getLocation());
                 visualP2->setPos(newP1 + nearestRail->getLocation());
-            }
+            }        
         }
-        for (int connection = 0; connection < 4; connection++)
-        {
-            Rail* connectedRail = nearestRail->getConnectedRail(connection);
-            if (connectedRail != nullptr)
-            {
-                int connectionOf2 = connectedRail->getConnection(nearestRail);
-                if (connectionOf2 == 0 || connectionOf2 == 1)
-                {
-                    connectedRail->smoothConnectionA0();
-                }
-                else if (connectionOf2 != -1)
-                {
 
-                    connectedRail->smoothConnectionC1();
-                }
+
+    }
+    for (int connection = 0; connection < 4; connection++)
+    {
+        Rail* connectedRail = nearestRail->getConnectedRail(connection);
+        if (connectedRail != nullptr)
+        {
+            int connectionOf2 = connectedRail->getConnection(nearestRail);
+            if (connectionOf2 == 0 || connectionOf2 == 1)
+            {
+                connectedRail->smoothConnectionA0();
             }
+            else if (connectionOf2 != -1)
+            {
+                connectedRail->smoothConnectionC1();
+            }
+            connectedRail->setObjectBoxCollider();
         }
     }
 }
@@ -221,6 +238,7 @@ void RailSelector::setUnderSelect(bool newUnderSelect)
         visualP2->setPen(pen);
         visualP1->setPos(nearestRail->getP1RelativeLocation() + nearestRail->getLocation());
         visualP2->setPos(nearestRail->getP2RelativeLocation() + nearestRail->getLocation());
+        nearestRail->actualizeAreasPosition();
     }
     else
     {

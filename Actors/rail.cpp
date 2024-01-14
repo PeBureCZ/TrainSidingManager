@@ -37,7 +37,7 @@ QPointF Rail::getP3RelativeLocation()
     return P3;
 }
 
-Rail *Rail::getConnectedRail(const int connection)
+Rail *Rail:: getConnectedRail(const int connection)
 {
     switch (connection)
     {
@@ -333,8 +333,7 @@ void Rail::smoothConnectionC1()
     QPoint negativeVectorP2 = {999999,999999};
     QPoint interpolationP2;
 
-    //always smooth only A0 or C1 (B & D) is always conection
-
+    //always smooth only A0 or C1 (B & D) is always conection smoothed like A or C
     if (conectionC1 != nullptr)
     {
         if (conectionC1->getConnection(this) == 0 || conectionC1->getConnection(this) == 1)
@@ -348,19 +347,12 @@ void Rail::smoothConnectionC1()
             interpolationP2 = conectionC1->getLocation() + conectionC1->getP3RelativeLocation().toPoint();
         }
     }
-
-    QPainterPath smoothPath;
     if (negativeVectorP2 != QPoint(999999,999999))
     {
         P2 = (2*interpolationP2) - negativeVectorP2  - P0;
         P3 = interpolationP2 - P0;
     }
-
-    smoothPath.cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y());
-    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPath(smoothPath);
-
-    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPos(P0);
-
+    moveRailPoints(P0,P1,P2,P3);
 }
 
 void Rail::smoothConnectionA0()
@@ -369,7 +361,7 @@ void Rail::smoothConnectionA0()
     QPoint negativeVectorP1 = {999999, 999999};
     QPoint interpolationP1;
 
-    //always smooth only A0 or C1 (B & D) is always conection
+    //always smooth only A0 or C1 (B & D) is always conection smoothed like A or C
     if (conectionA0 != nullptr)
     {
         if (conectionA0->getConnection(this) == 0 || conectionA0->getConnection(this) == 1)
@@ -383,18 +375,16 @@ void Rail::smoothConnectionA0()
             negativeVectorP1 = conectionA0->getLocation() + conectionA0->getP2RelativeLocation().toPoint();
         }
     }
-
     QPoint oldP3World = P0+P3;
-    QPainterPath smoothPath;
+    QPoint oldP2World= P0+P2;
     if (negativeVectorP1 != QPoint(999999,999999))
     {
         P0 = interpolationP1; //position is not actualized yet
         P1 = (2*interpolationP1) - negativeVectorP1 - P0;
-        P3 = oldP3World-P0;
+        P2 = oldP2World - P0;
+        P3 = oldP3World - P0;
     }
-    smoothPath.cubicTo(P1.x(),P1.y(),P2.x(), P2.y(),P3.x(), P3.y());
-    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPath(smoothPath);
-    dynamic_cast<QGraphicsPathItem*>(graphicItem)->setPos(P0);
+    moveRailPoints(P0,P1,P2,P3);
 }
 
 bool Rail::getLined()
@@ -448,6 +438,8 @@ void Rail::moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3
 
     getP3Trigger()->setRelativeLocation(newP3);
     getP0Trigger()->setRelativeLocation(newP0);
+
+    setObjectBoxCollider();
 }
 
 void Rail::setObjectBoxCollider()
