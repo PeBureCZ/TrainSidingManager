@@ -572,10 +572,7 @@ int Rail::getRailLength()
 
 int Rail::getConnection(Rail *rail)
 {
-    if (dynamic_cast<Rail*>(rail)) qDebug() << "problem";
-    else qDebug() << "xy";
     if (conectionA0 == rail) return 0; //connection 0
-    else qDebug() << "xyz";
     if (conectionB0 == rail) return 1; //connection 1
     if (conectionC1 == rail) return 2; //connection 2
     if (conectionD1 == rail) return 3; //connection 3
