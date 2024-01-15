@@ -101,8 +101,7 @@ void Train::moveTrain()
             if (trainPath.size() > 0)
             {
                 (directionToEnd) ? newOnPathLength -= actualRail->getRailLength()*10 : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(trainPath[0])->getRailLength()*10;
-                TrainNavigation navigation;
-                directionToEnd = navigation.checkNewDirection(directionToEnd, actualRail, trainPath[0]); //check direction for new path segment
+                directionToEnd = TrainNavigation::checkNewDirection(directionToEnd, actualRail, trainPath[0]); //check direction for new path segment
                 actualRail = trainPath[0];
                 trainPath.remove(0);
                 actualPath = dynamic_cast<QGraphicsPathItem*>(actualRail->getGraphicItem());
@@ -132,8 +131,9 @@ void Train::moveTrain()
 
 void Train::startAutopilot()
 {
-    TrainNavigation navigation;
-    trainPath = navigation.autopilotCheck(1000,5,actualRail,directionToEnd);
+    //TrainNavigation navigation;
+    //trainPath = navigation.autopilotCheck(1000,5,actualRail,directionToEnd);
+    trainPath = TrainNavigation::autopilotCheck(10000,10,actualRail,directionToEnd);
 }
 
 void Train::setTrainPath(QVector<Rail*> newTrainPath)

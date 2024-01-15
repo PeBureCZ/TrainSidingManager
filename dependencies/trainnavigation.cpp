@@ -1,9 +1,47 @@
 #include "dependencies/trainnavigation.h"
 
-TrainNavigation::TrainNavigation()
+QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const int minimalPathSegments ,Rail* actualRail, bool direction)
 {
+    int distanceChecked = 0;
+    Rail* testedRail;
+    (direction) ? testedRail = actualRail->getConnectedRail(2) : testedRail = actualRail->getConnectedRail(0);
+    if (testedRail != nullptr && testedRail->getConnection(actualRail) == 2|| testedRail->getConnection(testedRail) == 3) direction = !direction;
+    QList<Rail*> trainPath = {};
+    bool condition1 = testedRail != nullptr;
+    bool condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
+    bool condition3 = distanceChecked < 50000;
+    while (condition1 && condition2 && condition3)
+    {
+        distanceChecked += testedRail->getRailLength();
+        trainPath.push_back(testedRail);
+        if (direction)
+        {
+            Rail* newConnectedRail = testedRail->getConnectedRail(2);
+            if (newConnectedRail != nullptr && newConnectedRail->getConnection(testedRail) == 2 || newConnectedRail->getConnection(testedRail) == 3)
+            {
+                direction = !direction;
 
+            }
+            testedRail = newConnectedRail;
+        }
+        else
+        {
+            Rail* newConnectedRail = testedRail->getConnectedRail(0);
+            if (newConnectedRail != nullptr && newConnectedRail->getConnection(testedRail) == 0 || newConnectedRail->getConnection(testedRail) == 1)
+            {
+                direction = !direction;
+
+            }
+            testedRail = newConnectedRail;
+        }
+        condition1 = testedRail != nullptr;
+        condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
+        condition3 = distanceChecked < 50000;
+    }
+    return trainPath;
 }
+
+
 bool TrainNavigation::checkNewDirection(bool actualDirection, Rail *actualRail, Rail* newRail)
 {
     QPoint railEndPosition;
@@ -20,35 +58,5 @@ bool TrainNavigation::checkNewDirection(bool actualDirection, Rail *actualRail, 
     return true; //set direction to "from P0 to P3" = "directionToEnd" in Train(Actor)
 }
 
-QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const int minimalPathSegments ,Rail* actualRail, bool direction)
-{
-    int distanceChecked = 0;
-    Rail* testedRail;
-    (direction) ? testedRail = actualRail->getConnectedRail(2) : testedRail = actualRail->getConnectedRail(0);
 
-    QList<Rail*> trainPath = {};
-    bool condition1 = testedRail != nullptr;
-    bool condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
-    bool condition3 = distanceChecked < 50000;
-    while (condition1 && condition2 && condition3)
-    {
-        qDebug() << "check path";
-        distanceChecked += testedRail->getRailLength();
-        trainPath.push_back(testedRail);
-        if (direction)
-        {
-            qDebug() << "1";
-            testedRail = testedRail->getConnectedRail(2);
-        }
-        else
-        {
-            qDebug() << "2";
-            testedRail = testedRail->getConnectedRail(0);
-        }
-        condition1 = testedRail != nullptr;
-        condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
-        condition3 = distanceChecked < 50000;
-    }
-    return trainPath;
-}
 

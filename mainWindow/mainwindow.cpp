@@ -111,7 +111,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
-    /*
+    qDebug() << "connections: ";
     for (auto actor : world->actorList)
     {
         if (dynamic_cast<Rail*>(actor))
@@ -124,8 +124,8 @@ void MainWindow::on_TestButton1_clicked()
             if (rail->getConnectedRail(3) != nullptr) qDebug()  << "D1";
         }
     }
-    */
 
+    /*
     //spawnTrain
     for (auto actor : world->actorList)
     {
@@ -136,6 +136,7 @@ void MainWindow::on_TestButton1_clicked()
             break;
         }
     }
+    */
 }
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided

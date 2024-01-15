@@ -127,7 +127,7 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         Actor* newTrain = new Train(nullptr, trainItem, spawnOnRail);
         addVehicleActor(dynamic_cast<Train*>(newTrain), 1);
 
-
+        qDebug() << "spawn train - temporary solution";
         addActorToLists(newTrain);
         tickedActorsList.push_back(newTrain); //actor with tick update
         dynamic_cast<Train*>(newTrain)->setActualSpeed(1300); //centimeters/s

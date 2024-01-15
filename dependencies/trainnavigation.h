@@ -4,12 +4,15 @@
 
 #include "Actors/rail.h"
 
+
+
 class TrainNavigation
 {
 public:
-    TrainNavigation();
-    bool checkNewDirection(bool actualDirection, Rail* actualRail, Rail* newRail);
-    QList<Rail*> autopilotCheck(int minDistanceCheck, const int minimalPathSegments, Rail *actualRail, bool direction);
+    //TrainNavigation();
+    static bool checkNewDirection(bool actualDirection, Rail* actualRail, Rail* newRail);
+    static QList<Rail*> autopilotCheck(int minDistanceCheck, const int minimalPathSegments, Rail *actualRail, bool direction);
+
 };
 
 #endif // TRAINNAVIGATION_H
