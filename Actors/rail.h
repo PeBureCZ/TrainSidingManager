@@ -56,8 +56,8 @@ public:
     void actualizeAreasPosition();
     void connectRails(Rail* connectedRail, const bool connectedAtStart);
     void unconnectRails(Rail* unconnectedRail);
-    void smoothConnectionA0();
-    void smoothConnectionC1();
+    void smoothConnectionA0(bool changeP1Distance);
+    void smoothConnectionC1(bool changeP2Distance);
     void setOccupied(const bool newOccupied, bool setVisualToOccupied);
     void setVisualOccupied(const bool newsVisualState);
     void moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);

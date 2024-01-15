@@ -34,7 +34,7 @@ void RailConstructor::actualizeRail()
 
 void RailConstructor::smoothEndPoint()
 {
-    if (ownedRail != nullptr) ownedRail->smoothConnectionC1();
+    if (ownedRail != nullptr) ownedRail->smoothConnectionC1(true);
 }
 
 void RailConstructor::actualizeConstructor(QPoint newPoint)

@@ -30,7 +30,6 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
             if (newConnectedRail != nullptr && newConnectedRail->getConnection(testedRail) == 0 || newConnectedRail->getConnection(testedRail) == 1)
             {
                 direction = !direction;
-
             }
             testedRail = newConnectedRail;
         }
@@ -40,7 +39,6 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
     }
     return trainPath;
 }
-
 
 bool TrainNavigation::checkNewDirection(bool actualDirection, Rail *actualRail, Rail* newRail)
 {

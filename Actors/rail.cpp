@@ -327,60 +327,107 @@ void Rail::unconnectRails(Rail *unconnectedRail)
     if (conectionD1 == unconnectedRail) conectionD1 = {};
 }
 
-void Rail::smoothConnectionC1()
+void Rail::smoothConnectionC1(bool changeP2Distance)
 {
     lined = false;
     QPoint negativeVectorP2 = {999999,999999};
-    QPoint interpolationP2;
+    QPoint mirrorCenterPoint;
 
-    //always smooth only A0 or C1 (B & D) is always conection smoothed like A or C
+    //always smooth only A0 or C1 (B & D is always conection smoothed like A or C)
     if (conectionC1 != nullptr)
     {
         if (conectionC1->getConnection(this) == 0 || conectionC1->getConnection(this) == 1)
         {
-            interpolationP2 = conectionC1->getLocation();
+            mirrorCenterPoint = conectionC1->getLocation();
             negativeVectorP2 = conectionC1->getLocation() + conectionC1->getP1RelativeLocation().toPoint();
         }
         else if (conectionC1->getConnection(this) == 2 || conectionC1->getConnection(this) == 3) //this(P3) is connected to P3(connected)
         {
             negativeVectorP2 = conectionC1->getLocation() + conectionC1->getP2RelativeLocation().toPoint();
-            interpolationP2 = conectionC1->getLocation() + conectionC1->getP3RelativeLocation().toPoint();
+            mirrorCenterPoint = conectionC1->getLocation() + conectionC1->getP3RelativeLocation().toPoint();
         }
     }
     if (negativeVectorP2 != QPoint(999999,999999))
     {
-        P2 = (2*interpolationP2) - negativeVectorP2  - P0;
-        P3 = interpolationP2 - P0;
+        if (changeP2Distance)
+        {
+            P2 = (2*mirrorCenterPoint) - negativeVectorP2  - P0;
+        }
+        else
+        {
+            QPoint oldP2World= P0+P2;
+            int oldInterpolationDistance = getDistance(mirrorCenterPoint,oldP2World);  //původní vzdálenost od P1
+            QPoint newP2 = (2*mirrorCenterPoint) - negativeVectorP2;
+            int newInterpolationDistance = getDistance(mirrorCenterPoint,newP2);  //nová vzdálenost od P1
+            float interpolationFactor = static_cast<float>(oldInterpolationDistance) / static_cast<float>(newInterpolationDistance);
+
+            //correction in big differences to minimal / maximal values
+            if (interpolationFactor > 5.0) interpolationFactor = 5.0;
+            if (interpolationFactor < 0.2) interpolationFactor = 0.2;
+
+            int x = static_cast<float>(mirrorCenterPoint.x()) + interpolationFactor * (static_cast<float>(newP2.x()) - static_cast<float>(mirrorCenterPoint.x()));
+            int y = static_cast<float>(mirrorCenterPoint.y()) + interpolationFactor * (static_cast<float>(newP2.y()) - static_cast<float>(mirrorCenterPoint.y()));
+            QPoint shortedP2 = QPoint(x,y);  //A + t * (B - A);
+            P2 = shortedP2 - P0;
+        }
+        P3 = mirrorCenterPoint - P0;
     }
+
     moveRailPoints(P0,P1,P2,P3);
 }
 
-void Rail::smoothConnectionA0()
+void Rail::smoothConnectionA0(bool changeP1Distance)
 {
     lined = false;
     QPoint negativeVectorP1 = {999999, 999999};
-    QPoint interpolationP1;
+    int negativeVectorDistance = 0;
+    QPoint mirrorCenterPoint;
 
-    //always smooth only A0 or C1 (B & D) is always conection smoothed like A or C
+    //always smooth only A0 or C1 (B & D is always conection smoothed like A or C)
     if (conectionA0 != nullptr)
     {
         if (conectionA0->getConnection(this) == 0 || conectionA0->getConnection(this) == 1)
         {
             negativeVectorP1 = conectionA0->getLocation() + conectionA0->getP1RelativeLocation().toPoint();
-            interpolationP1 = conectionA0->getLocation();
+            mirrorCenterPoint = conectionA0->getLocation();
+
         }
         else if (conectionA0->getConnection(this) == 2 || conectionA0->getConnection(this) == 3)//this (P0) is connected to P3(connected)
         {
-            interpolationP1 = conectionA0->getLocation() + conectionA0->getP3RelativeLocation().toPoint();
+            mirrorCenterPoint = conectionA0->getLocation() + conectionA0->getP3RelativeLocation().toPoint();
             negativeVectorP1 = conectionA0->getLocation() + conectionA0->getP2RelativeLocation().toPoint();
         }
+        negativeVectorDistance = getDistance(negativeVectorP1, mirrorCenterPoint);
     }
-    QPoint oldP3World = P0+P3;
-    QPoint oldP2World= P0+P2;
+
     if (negativeVectorP1 != QPoint(999999,999999))
     {
-        P0 = interpolationP1; //position is not actualized yet
-        P1 = (2*interpolationP1) - negativeVectorP1 - P0;
+        QPoint oldP3World = P0+P3;
+        QPoint oldP2World= P0+P2;
+        if (changeP1Distance)
+        { 
+            P1 = (2*mirrorCenterPoint) - negativeVectorP1 - P0;
+        }
+        else
+        {
+            QPoint oldP1World= P0+P1;
+            int oldInterpolationDistance = getDistance(mirrorCenterPoint,oldP1World);  //původní vzdálenost od P1
+            QPoint newP1 = (2*mirrorCenterPoint) - negativeVectorP1;
+            int newInterpolationDistance = getDistance(mirrorCenterPoint,newP1);  //nová vzdálenost od P1
+            float interpolationFactor = static_cast<float>(oldInterpolationDistance) / static_cast<float>(newInterpolationDistance);
+
+            //correction in big differences to minimal / maximal values
+            if (interpolationFactor > 5.0) interpolationFactor = 5.0;
+            if (interpolationFactor < 0.2) interpolationFactor = 0.2;
+
+            int x = static_cast<float>(mirrorCenterPoint.x()) + interpolationFactor * (static_cast<float>(newP1.x()) - static_cast<float>(mirrorCenterPoint.x()));
+            int y = static_cast<float>(mirrorCenterPoint.y()) + interpolationFactor * (static_cast<float>(newP1.y()) - static_cast<float>(mirrorCenterPoint.y()));
+            QPoint shortedP1 = QPoint(x,y);  //A + t * (B - A);
+            P1 = shortedP1 - P0;
+
+
+        }
+        P0 = mirrorCenterPoint; //position is not actualized yet
         P2 = oldP2World - P0;
         P3 = oldP3World - P0;
     }

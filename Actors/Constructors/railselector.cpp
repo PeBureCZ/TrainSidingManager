@@ -65,10 +65,8 @@ void RailSelector::callSelectEvent(QPoint point)
                 nearestRail->moveRailPoints(newP0, newP1, newP1, newP3);            
                 visualP1->setPos(newP1 + nearestRail->getLocation());
                 visualP2->setPos(newP1 + nearestRail->getLocation());
-            }        
+            }
         }
-
-
     }
     for (int connection = 0; connection < 4; connection++)
     {
@@ -78,11 +76,11 @@ void RailSelector::callSelectEvent(QPoint point)
             int connectionOf2 = connectedRail->getConnection(nearestRail);
             if (connectionOf2 == 0 || connectionOf2 == 1)
             {
-                connectedRail->smoothConnectionA0();
+                connectedRail->smoothConnectionA0(false);
             }
             else if (connectionOf2 != -1)
             {
-                connectedRail->smoothConnectionC1();
+                connectedRail->smoothConnectionC1(false);
             }
             connectedRail->setObjectBoxCollider();
         }
