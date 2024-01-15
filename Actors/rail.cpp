@@ -6,10 +6,10 @@ Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(paren
     P1 = {0,0};
     P2 = {0,0};
     P3 = {0,0};
-    conectionA0 = {}; //connection 0
-    conectionB0 = {}; //connection 1
-    conectionC1 = {}; //connection 2
-    conectionD1 = {}; //connection 3
+    conectionA0 = nullptr; //connection 0
+    conectionB0 = nullptr; //connection 1
+    conectionC1 = nullptr; //connection 2
+    conectionD1 = nullptr; //connection 3
     lined = true;
     startArea = nullptr;
     endArea = nullptr;
@@ -572,7 +572,10 @@ int Rail::getRailLength()
 
 int Rail::getConnection(Rail *rail)
 {
+    if (dynamic_cast<Rail*>(rail)) qDebug() << "problem";
+    else qDebug() << "xy";
     if (conectionA0 == rail) return 0; //connection 0
+    else qDebug() << "xyz";
     if (conectionB0 == rail) return 1; //connection 1
     if (conectionC1 == rail) return 2; //connection 2
     if (conectionD1 == rail) return 3; //connection 3

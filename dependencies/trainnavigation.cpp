@@ -5,7 +5,7 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
     int distanceChecked = 0;
     Rail* testedRail;
     (direction) ? testedRail = actualRail->getConnectedRail(2) : testedRail = actualRail->getConnectedRail(0);
-    if (testedRail != nullptr && testedRail->getConnection(actualRail) == 2|| testedRail->getConnection(testedRail) == 3) direction = !direction;
+    if (testedRail != nullptr && (testedRail->getConnection(actualRail) == 2|| testedRail->getConnection(testedRail) == 3)) direction = !direction;
     QList<Rail*> trainPath = {};
     bool condition1 = testedRail != nullptr;
     bool condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
@@ -17,17 +17,16 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
         if (direction)
         {
             Rail* newConnectedRail = testedRail->getConnectedRail(2);
-            if (newConnectedRail != nullptr && newConnectedRail->getConnection(testedRail) == 2 || newConnectedRail->getConnection(testedRail) == 3)
+            if (newConnectedRail != nullptr && (newConnectedRail->getConnection(testedRail) == 2 || newConnectedRail->getConnection(testedRail) == 3))
             {
                 direction = !direction;
-
             }
             testedRail = newConnectedRail;
         }
         else
         {
             Rail* newConnectedRail = testedRail->getConnectedRail(0);
-            if (newConnectedRail != nullptr && newConnectedRail->getConnection(testedRail) == 0 || newConnectedRail->getConnection(testedRail) == 1)
+            if (newConnectedRail != nullptr && (newConnectedRail->getConnection(testedRail) == 0 || newConnectedRail->getConnection(testedRail) == 1))
             {
                 direction = !direction;
             }
