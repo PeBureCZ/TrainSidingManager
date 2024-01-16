@@ -60,7 +60,7 @@ public:
     void setVisibilityOfArea(const int area, const bool visible, QColor color);
     void actualizeAreasPosition();
     void connectRails(Rail* connectedRail, const bool connectedAtStart);
-    void unconnectRails(Rail* unconnectedRail);
+    void unconnectRail(Rail* unconnectedRail);
     void smoothConnectionA0(bool changeP1Distance);
     void smoothConnectionC1(bool changeP2Distance);
     void setOccupied(const bool newOccupied, bool setVisualToOccupied);

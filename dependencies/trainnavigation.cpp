@@ -4,34 +4,56 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
 {
     int distanceChecked = 0;
     Rail* testedRail;
+    QList<Rail*> trainPath = {};
+    Signal* signal = nullptr;
+    (direction) ? signal = actualRail->getSignal(1) : signal = actualRail->getSignal(0);
+
+    //autopilot end on red signal state
+    if (signal != nullptr)
+    {
+        if (signal->getState() == 0) return trainPath;
+    }
+
     (direction) ? testedRail = actualRail->getConnectedRail(2) : testedRail = actualRail->getConnectedRail(0);
     if (testedRail != nullptr && (testedRail->getConnection(actualRail) == 2|| testedRail->getConnection(testedRail) == 3)) direction = !direction;
-    QList<Rail*> trainPath = {};
+
     bool condition1 = testedRail != nullptr;
     bool condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
     bool condition3 = distanceChecked < 50000;
+
+    //
     while (condition1 && condition2 && condition3)
     {
         distanceChecked += testedRail->getRailLength();
         trainPath.push_back(testedRail);
-        if (direction)
+
+        int connectionNumber = 0;
+        if (direction) connectionNumber +=2;
+        Rail* newConnectedRail = testedRail->getConnectedRail(connectionNumber);
+        if (newConnectedRail != nullptr && (newConnectedRail->getConnection(testedRail) == connectionNumber || newConnectedRail->getConnection(testedRail) == connectionNumber +1))
         {
-            Rail* newConnectedRail = testedRail->getConnectedRail(2);
-            if (newConnectedRail != nullptr && (newConnectedRail->getConnection(testedRail) == 2 || newConnectedRail->getConnection(testedRail) == 3))
-            {
-                direction = !direction;
-            }
-            testedRail = newConnectedRail;
+            direction = !direction;
         }
-        else
+        testedRail = newConnectedRail;
+
+        int endAreaNumber = -1;
+        (direction) ? endAreaNumber = 1 : endAreaNumber = 0;
+
+        if (testedRail != nullptr)
         {
-            Rail* newConnectedRail = testedRail->getConnectedRail(0);
-            if (newConnectedRail != nullptr && (newConnectedRail->getConnection(testedRail) == 0 || newConnectedRail->getConnection(testedRail) == 1))
+            signal = testedRail->getSignal(endAreaNumber);
+            if (signal != nullptr)
             {
-                direction = !direction;
+                if (signal->getState() == 0)
+                {
+                    trainPath.push_back(testedRail);
+                    return trainPath; //if signal on end point = 0 -> path end on this signal
+                }
             }
-            testedRail = newConnectedRail;
         }
+        else signal = nullptr;
+
+        //new set of conditions
         condition1 = testedRail != nullptr;
         condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
         condition3 = distanceChecked < 50000;

@@ -321,7 +321,7 @@ void Rail::connectRails(Rail *connectedRail, const bool connectedAtStart) //conn
     }
 }
 
-void Rail::unconnectRails(Rail *unconnectedRail)
+void Rail::unconnectRail(Rail *unconnectedRail)
 {
     if (conectionA0 == unconnectedRail) conectionA0 = {};
     if (conectionB0 == unconnectedRail) conectionB0 = {};
@@ -557,22 +557,19 @@ void Rail::addSignal(int numberOfEndPoint, Signal* signalActor)
 {
     if (numberOfEndPoint == 0) signalP0 = signalActor;
     else if (numberOfEndPoint == 1) signalP3 = signalActor;
-    if (signalP0 != nullptr) qDebug() << "signalP0 is not nullptr - ADD FUNCTION";
-    if (signalP3 != nullptr) qDebug() << "signalP1 is not nullptr - ADD FUNCTION";
 }
 
 void Rail::releaseSignal(int numberOfEndPoint)
 {
     if (numberOfEndPoint == 0) signalP0 = nullptr;
     else if (numberOfEndPoint == 1) signalP3 = nullptr;
-    if (signalP0 != nullptr) qDebug() << "signalP0 is not nullptr - RELEASE FUNCTION";
-    if (signalP3 != nullptr) qDebug() << "signalP1 is not nullptr - RELEASE FUNCTION";
 }
 
 Signal *Rail::getSignal(int numberOfEndPoint)
 {
     if (numberOfEndPoint == 0) return signalP0;
     else if (numberOfEndPoint == 1) return signalP3;
+    return nullptr;
 }
 
 Trigger *Rail::getP0Trigger()
@@ -610,10 +607,10 @@ int Rail::getVisualAreaSize()
 
 Rail::~Rail()
 {
-    if (conectionA0 != nullptr) conectionA0->unconnectRails(dynamic_cast<Rail*>(this));
-    if (conectionB0 != nullptr) conectionB0->unconnectRails(dynamic_cast<Rail*>(this));
-    if (conectionC1 != nullptr) conectionC1->unconnectRails(dynamic_cast<Rail*>(this));
-    if (conectionD1 != nullptr) conectionD1->unconnectRails(dynamic_cast<Rail*>(this));
+    if (conectionA0 != nullptr) conectionA0->unconnectRail(dynamic_cast<Rail*>(this));
+    if (conectionB0 != nullptr) conectionB0->unconnectRail(dynamic_cast<Rail*>(this));
+    if (conectionC1 != nullptr) conectionC1->unconnectRail(dynamic_cast<Rail*>(this));
+    if (conectionD1 != nullptr) conectionD1->unconnectRail(dynamic_cast<Rail*>(this));
     deleteArea(0);
     deleteArea(1);
 }

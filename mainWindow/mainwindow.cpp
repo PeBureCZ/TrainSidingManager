@@ -118,10 +118,15 @@ void MainWindow::on_TestButton1_clicked()
         {
             qDebug() << "___";
             Rail* rail = dynamic_cast<Rail*>(actor);
-            if (rail->getConnectedRail(0) != nullptr) qDebug()  <<  "A0";
-            if (rail->getConnectedRail(1) != nullptr) qDebug()  << "B0";
-            if (rail->getConnectedRail(2) != nullptr) qDebug()  << "C1";
-            if (rail->getConnectedRail(3) != nullptr) qDebug()  << "D1";
+            //if (rail->getConnectedRail(0) != nullptr) qDebug()  <<  "A0";
+            //if (rail->getConnectedRail(1) != nullptr) qDebug()  << "B0";
+            //if (rail->getConnectedRail(2) != nullptr) qDebug()  << "C1";
+            //if (rail->getConnectedRail(3) != nullptr) qDebug()  << "D1";
+            if (rail->getSignal(0) == nullptr) qDebug() << "nullptr";
+            else qDebug() << "NO nullptr";
+            if (rail->getSignal(1) == nullptr) qDebug() << "nullptr";
+            else qDebug() << "NO nullptr";
+
         }
     }
 
