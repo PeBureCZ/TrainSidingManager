@@ -164,8 +164,6 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
 
 void WorldMap::addRailConstructor()
 {
-    //Actor* rail = addRailwaylActor(1, mapLocation, connectedRail); //rail created
-
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
     QGraphicsItem* railGraphicItem = new QGraphicsPixmapItem(newSprite.rail()); //sprite from struct
@@ -262,20 +260,27 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
         }
         case 2: //Signal
         {
-           //ADD GRAPHIC FOR SIGNAL
-           SpriteColection newSprite;
-           QPixmap pixmap;
-           if (dynamic_cast<SignalConstructor*>(actualConstructor)->holdRail()) pixmap = newSprite.redSignal();
-           else pixmap = newSprite.noPlaceSignal();
+            //ADD GRAPHIC FOR SIGNAL
+            SpriteColection newSprite;
+            QPixmap pixmap;
+            SignalConstructor* constructor = dynamic_cast<SignalConstructor*>(actualConstructor);
+            int nearestEndArea = constructor->getNearestEndArea();
 
-           QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct
-           worldScene->addItem(signalGraphic);
+            if (constructor->getNearestAreaGraphic() != nullptr) pixmap = newSprite.redSignal();
+            else pixmap = newSprite.noPlaceSignal();
 
-           //ADD SIGNAL ACTOR
-           Actor* newSignal = new Signal(nullptr, signalGraphic);
-           newSignal->setLocation(mapLocation, true);
-           addActorToLists(newSignal);
+            QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct
+            worldScene->addItem(signalGraphic);
 
+            //ADD SIGNAL ACTOR
+            Actor* newSignal = new Signal(nullptr, signalGraphic);
+            newSignal->setLocation(mapLocation, true);
+            addActorToLists(newSignal);
+
+            if (connectedRail != nullptr && (nearestEndArea == 0 || nearestEndArea == 1))
+            {
+                dynamic_cast<Rail*>(connectedRail)->addSignal(nearestEndArea, dynamic_cast<Signal*>(newSignal));
+            }
            return newSignal;
         }
         default:{}

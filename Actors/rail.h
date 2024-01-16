@@ -6,6 +6,7 @@
 #include "railwayobject.h"
 #include <QGraphicsItem>
 #include "Components/trigger.h"
+#include "Actors/signal.h"
 #include <QColor>
 
 #include <QPen>
@@ -22,6 +23,8 @@ protected:
     Rail* conectionB0;
     Rail* conectionC1;
     Rail* conectionD1;
+    Signal* signalP0;
+    Signal* signalP3;
     bool lined;
     QGraphicsItem *startArea;
     QGraphicsItem* endArea;
@@ -37,9 +40,11 @@ public:
     QGraphicsItem *getAreaGraphic(const int area);
     Trigger* getP0Trigger();
     Trigger *getP3Trigger();
+    Signal* getSignal(int numberOfEndPoint);
 
     bool getLined();
     bool getOccupied();
+
     int getRailLength();
     int getConnection(Rail* rail);
     int getVisualAreaSize();
@@ -62,6 +67,8 @@ public:
     void setVisualOccupied(const bool newsVisualState);
     void moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);
     void setObjectBoxCollider() override;
+    void addSignal(int numberOfEndPoint, Signal *signalActor);
+    void releaseSignal(int numberOfEndPoint);
 
     ~Rail();
 

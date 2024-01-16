@@ -3,7 +3,8 @@
 SignalConstructor::SignalConstructor(QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing)
     : RailobjectConstructor(parent, newGraphicItem, actorToConstructing)
 {
-    nearestArea = nullptr;
+    nearestAreaGraphicItem = nullptr;
+    nearestEndArea = -1;
     nearestRail = nullptr;
 }
 
@@ -17,7 +18,7 @@ void SignalConstructor::actualizeConstructor(QPoint newPoint)
 void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
 {
     Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
-    int nearestPoint = -1;
+    int testedNearestEndArea = -1;
     int distance = 99999999;
     Rail* testedNearestRail = nullptr;
     QPoint correctedLocation = location + QPoint(-5,50); //graphics is slided
@@ -33,19 +34,19 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
         if (distance > testedDistance1 && testedDistance1 <= testedDistance2)
         {
             distance = testedDistance1;
-            nearestPoint = 0;
+            testedNearestEndArea = 0;
             testedNearestRail = rail;
         }
         else if (distance > testedDistance2 && testedDistance2 < testedDistance1)
         {
             distance = testedDistance2;
-            nearestPoint = 1;
+            testedNearestEndArea = 1;
             testedNearestRail = rail;
         }
     }
 
     //check nearest conected rails (if rail exist in the same point/area)
-    if (nearestPoint != -1)
+    if (testedNearestEndArea != -1)
     {
         Rail* retestedRail = nullptr;
         QPoint retestedPoint;
@@ -53,7 +54,7 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
         for (int i = 0; i < 2; i++)
         {
             int conectionValue = i;
-            if (nearestPoint == 1) conectionValue +=2;
+            if (testedNearestEndArea == 1) conectionValue +=2;
             if(testedNearestRail->getConnectedRail(conectionValue) != nullptr)
             {
                 retestedRail = testedNearestRail->getConnectedRail(conectionValue);
@@ -89,27 +90,28 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
     }
 
     //set visual area of nearest rail
-    if (nearestRail != nullptr && nearestPoint != -1 && distance <= 120)
+    if (nearestRail != nullptr && testedNearestEndArea != -1 && distance <= 120)
     {
-        QGraphicsItem* areaItem = nearestRail->getAreaGraphic(nearestPoint);
-        if (nearestArea != areaItem && nearestArea != nullptr)
+        QGraphicsItem* areaItem = nearestRail->getAreaGraphic(testedNearestEndArea);
+        if (nearestAreaGraphicItem != areaItem && nearestAreaGraphicItem != nullptr)
         {
             QPen newPen(Qt::red);
             newPen.setWidth(3);
-            dynamic_cast<QGraphicsPathItem*>(nearestArea)->setPen(newPen);
-            nearestArea->setZValue(0);
+            dynamic_cast<QGraphicsPathItem*>(nearestAreaGraphicItem)->setPen(newPen);
+            nearestAreaGraphicItem->setZValue(0);
         }
-        nearestArea = areaItem;
-        if (nearestArea != nullptr) nearestRail->setVisibilityOfArea(nearestPoint, true, Qt::green);
+        nearestAreaGraphicItem = areaItem;
+        if (nearestAreaGraphicItem != nullptr) nearestRail->setVisibilityOfArea(testedNearestEndArea, true, Qt::green);
     }
-    else if (nearestArea != nullptr)
+    else if (nearestAreaGraphicItem != nullptr)
     {
         QPen newPen(Qt::red);
         newPen.setWidth(3);
-        dynamic_cast<QGraphicsPathItem*>(nearestArea)->setPen(newPen);
-        nearestArea->setZValue(0);
-        nearestArea = nullptr;
+        dynamic_cast<QGraphicsPathItem*>(nearestAreaGraphicItem)->setPen(newPen);
+        nearestAreaGraphicItem->setZValue(0);
+        nearestAreaGraphicItem = nullptr;
     }
+    nearestEndArea = testedNearestEndArea;
 }
 
 void SignalConstructor::actorLeaveFromCollision(Actor *actor)
@@ -132,10 +134,19 @@ void SignalConstructor::actorEnterInCollision(Actor *actor)
     }
 }
 
-bool SignalConstructor::holdRail()
+int SignalConstructor::getNearestEndArea()
 {
-    if (nearestArea != nullptr) return true;
-    return false;
+    return nearestEndArea;
+}
+
+Rail *SignalConstructor::getNearestRail()
+{
+    return nearestRail;
+}
+
+QGraphicsItem *SignalConstructor::getNearestAreaGraphic()
+{
+    return nearestAreaGraphicItem;
 }
 
 SignalConstructor::~SignalConstructor()

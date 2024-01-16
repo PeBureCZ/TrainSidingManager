@@ -10,15 +10,18 @@ class SignalConstructor : public RailobjectConstructor
 {
     Q_OBJECT
 protected:
-    QGraphicsItem* nearestArea;
+    QGraphicsItem* nearestAreaGraphicItem;
     Rail* nearestRail;
+    int nearestEndArea;
 public:
     explicit SignalConstructor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     void actualizeConstructor(QPoint newPoint) override;
     void calledCollisionEvent(const QList<Actor *> isInCollision) override; //overrided
-    bool holdRail();
+    Rail* getNearestRail();
+    QGraphicsItem* getNearestAreaGraphic();
     void actorLeaveFromCollision(Actor* actor) override;
     void actorEnterInCollision(Actor* actor) override;
+    int getNearestEndArea();
     ~SignalConstructor();
 };
 

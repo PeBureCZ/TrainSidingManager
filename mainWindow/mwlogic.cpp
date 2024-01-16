@@ -184,9 +184,19 @@ void mwlogic::constructSignal()
     if (dynamic_cast<SignalConstructor*>(world->getActualConstructor()))
     {
         SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(world->getActualConstructor());
-        if (!actualSignalConstructor->holdRail()) managerConsole->printToConsole("Signal is not connected to any rail!", 1, 500);
+        Rail* nearestRail = actualSignalConstructor->getNearestRail();
+        if (nearestRail == nullptr) managerConsole->printToConsole("Signal is not connected to any rail!", 1, 500);
+        else
+        {
+            int nearestEndArea = actualSignalConstructor->getNearestEndArea();
+            if (nearestRail->getSignal(actualSignalConstructor->getNearestEndArea()) == nullptr)
+            {
+                managerConsole->printToConsole("Signal is not connected to any rail!", 1, 500);
+            }
+            world->addRailwaylActor(2, actualSignalConstructor->getLocation(), nearestRail); //create signal actor
 
-        world->addRailwaylActor(2, actualSignalConstructor->getLocation(), nullptr); //create signal actor
+        }
+
     }
 }
 

@@ -15,6 +15,8 @@ Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(paren
     endArea = nullptr;
     occupied = false;
     visuallyOccupied = false;
+    signalP0 = nullptr;
+    signalP3 = nullptr;
 }
 
 QPointF Rail::getP0WorldLocation()
@@ -549,6 +551,28 @@ void Rail::setObjectBoxCollider()
         //set coordination and rotations
         boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);
     }
+}
+
+void Rail::addSignal(int numberOfEndPoint, Signal* signalActor)
+{
+    if (numberOfEndPoint == 0) signalP0 = signalActor;
+    else if (numberOfEndPoint == 1) signalP3 = signalActor;
+    if (signalP0 != nullptr) qDebug() << "signalP0 is not nullptr - ADD FUNCTION";
+    if (signalP3 != nullptr) qDebug() << "signalP1 is not nullptr - ADD FUNCTION";
+}
+
+void Rail::releaseSignal(int numberOfEndPoint)
+{
+    if (numberOfEndPoint == 0) signalP0 = nullptr;
+    else if (numberOfEndPoint == 1) signalP3 = nullptr;
+    if (signalP0 != nullptr) qDebug() << "signalP0 is not nullptr - RELEASE FUNCTION";
+    if (signalP3 != nullptr) qDebug() << "signalP1 is not nullptr - RELEASE FUNCTION";
+}
+
+Signal *Rail::getSignal(int numberOfEndPoint)
+{
+    if (numberOfEndPoint == 0) return signalP0;
+    else if (numberOfEndPoint == 1) return signalP3;
 }
 
 Trigger *Rail::getP0Trigger()
