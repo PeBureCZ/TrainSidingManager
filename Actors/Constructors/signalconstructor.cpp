@@ -58,11 +58,13 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
             if(testedNearestRail->getConnectedRail(conectionValue) != nullptr)
             {
                 retestedRail = testedNearestRail->getConnectedRail(conectionValue);
+                int newTestedNearestPoint = (retestedRail->getConnection(testedNearestRail)+2)/2-1; //transfer connection point(0-3) to endPoint (0-1)
                 retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.01f).toPoint() + retestedRail->getLocation();
                 testedDistance = getDistance(correctedLocation, retestedPoint);
                 if (distance > testedDistance)
                 {
                     testedNearestRail = retestedRail;
+                    testedNearestEndArea = newTestedNearestPoint;
                     distance = testedDistance;
                 }
                 retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.99f).toPoint() + retestedRail->getLocation();
@@ -70,6 +72,7 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
                 if (distance > testedDistance)
                 {
                     testedNearestRail = retestedRail;
+                    testedNearestEndArea = newTestedNearestPoint;
                     distance = testedDistance;
                 }
             }
@@ -99,9 +102,15 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
             newPen.setWidth(3);
             dynamic_cast<QGraphicsPathItem*>(nearestAreaGraphicItem)->setPen(newPen);
             nearestAreaGraphicItem->setZValue(0);
+        }   
+        if (areaItem != nullptr && nearestAreaGraphicItem != areaItem)
+        {
+            QPen newPen(Qt::green);
+            newPen.setWidth(3);
+            nearestRail->setVisibilityOfArea(testedNearestEndArea, true, Qt::green);
+            areaItem->setZValue(3);
         }
         nearestAreaGraphicItem = areaItem;
-        if (nearestAreaGraphicItem != nullptr) nearestRail->setVisibilityOfArea(testedNearestEndArea, true, Qt::green);
     }
     else if (nearestAreaGraphicItem != nullptr)
     {
