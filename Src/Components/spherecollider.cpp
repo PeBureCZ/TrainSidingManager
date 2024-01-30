@@ -1,6 +1,6 @@
 #include "spherecollider.h"
 
-SphereCollider::SphereCollider()
+SphereCollider::SphereCollider(Collider *parent)
 {
     radius = 0;
 }

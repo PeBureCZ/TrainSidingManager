@@ -1,6 +1,6 @@
 #include "component.h"
 
-Component::Component()
+Component::Component(QObject *parent)
 {
     relativeLocation = {0,0};
     relativeRotation = 0.0f;

@@ -7,11 +7,12 @@
 
 class BoxCollider : public Collider
 {
+Q_OBJECT
 protected:
     QPoint leftUpCorner;
     QPoint rightDownCorner;
 public:
-    BoxCollider();
+    BoxCollider(Collider *parent = nullptr);
     void setBoxCollider(QPoint newLeftUpCorner, QPoint newRightDownCorner, float newRotation); //pivot = middle relative P0/P3
     bool isInCollision(QPoint relativeLocation);
 };

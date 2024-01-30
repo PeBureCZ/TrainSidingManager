@@ -5,8 +5,9 @@
 
 class Collider : public Trigger
 {
+Q_OBJECT
 public:
-    Collider();
+    Collider(Trigger *parent = nullptr);
 };
 
 #endif // COLLIDER_H

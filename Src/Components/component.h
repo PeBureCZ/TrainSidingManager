@@ -2,14 +2,16 @@
 #define COMPONENT_H
 
 #include <QPoint>
+#include <QObject>
 
-class Component
+class Component : public QObject
 {
+Q_OBJECT
 protected:
     QPoint relativeLocation;
     float relativeRotation;
 public:
-    Component();
+    Component(QObject *parent = nullptr);
     void setRelativeLocation(QPoint newPosition);
     void setRelativeRotation(float newRotation);
     QPoint getRelativeLocation();

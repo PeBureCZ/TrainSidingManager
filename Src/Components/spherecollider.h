@@ -2,13 +2,15 @@
 #define SPHERECOLLIDER_H
 
 #include "collider.h"
+#include <QObject>
 
 class SphereCollider : public Collider
 {
+Q_OBJECT
 protected:
     int radius;
 public:
-    SphereCollider();
+    SphereCollider(Collider *parent = nullptr);
     void setRadius(int newRadius);
     int getRadius();
 };

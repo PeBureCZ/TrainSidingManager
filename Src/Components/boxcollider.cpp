@@ -1,6 +1,6 @@
 #include "boxcollider.h"
 
-BoxCollider::BoxCollider()
+BoxCollider::BoxCollider(Collider *parent)
 {
     leftUpCorner = {0,0};
     rightDownCorner = {0,0};

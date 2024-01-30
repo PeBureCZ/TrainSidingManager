@@ -7,10 +7,11 @@
 
 class Trigger : public Component
 {
+ Q_OBJECT
 protected:
     QVector<int> blockedChannels;
 public:
-    Trigger();
+    Trigger(Component *parent = nullptr);
     void setBlockChannels(QVector<int> newBlockChannels);
     QVector<int> getBlockChannels();
     virtual ~Trigger();

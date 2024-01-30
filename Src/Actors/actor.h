@@ -6,8 +6,8 @@
 #include <QString>
 #include <QPoint>
 #include <QGraphicsPathItem>
-#include "Components/spherecollider.h"
-#include "Components/boxcollider.h"
+#include "../Components/spherecollider.h"
+#include "../Components/boxcollider.h"
 #include <QObject>
 
 class Actor : public QObject
