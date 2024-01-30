@@ -26,8 +26,6 @@ nor will it utilize efficient GPU computation."
 
 ABOUT THE AUTHOR:
 bures.peter@email.cz
-"I am an enthusiastic, slightly advanced beginner - junior, who is trying to combine my hobby with a potential future career as a C++ programmer. 
-I enjoy programming and dedicate most of my free time to it."
 
 > ## 2)
 POPIS PROGRAMU:
@@ -50,6 +48,4 @@ ani využívat efektivního výpočtu pomocí GPU.
 
 O AUTOROVI:
 bures.peter@email.cz
-Jsem zapáleným mírně pokročilým začátečníkem - juniorem, který se snaží spojit svůj koníček s případnou budoucí kariérou C++ programátora. 
-Programování mě baví a proto mu věnuji i většinu svého volného času. 
 
