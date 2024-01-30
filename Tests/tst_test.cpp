@@ -1,7 +1,7 @@
 #include <QtTest>
 #include <QCoreApplication>
 
-// add necessary includes here
+#include "Actors/actor.h"
 
 class TEST : public QObject
 {
@@ -12,7 +12,7 @@ public:
     ~TEST();
 
 private slots:
-    void test_case1();
+    void test_getActorName();
 
 };
 
@@ -26,9 +26,11 @@ TEST::~TEST()
 
 }
 
-void TEST::test_case1()
+void TEST::test_getActorName()
 {
-
+    Actor testedActor;
+    testedActor.setName("testedName");
+    QVERIFY(testedActor.getName() == "testedName");
 }
 
 QTEST_MAIN(TEST)
