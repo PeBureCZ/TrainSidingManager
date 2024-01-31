@@ -1,8 +1,11 @@
 #include <QtTest>
 #include <QCoreApplication>
-#include "Actors_tests/actor_test.h"
 
-#include "Actors/actor.h"
+#include "Actors_tests/actor_test.h"
+#include "Actors_tests/rail_test.h"
+
+
+
 
 class TEST : public QObject
 {
@@ -14,6 +17,7 @@ public:
 
 private slots:
     void fullActor_test();
+    void fullRail_test();
 
 };
 
@@ -29,7 +33,12 @@ TEST::~TEST()
 
 void TEST::fullActor_test()
 {
-    Actor_test actor;
+    Actor_test test;
+}
+
+void TEST::fullRail_test()
+{
+    Rail_test test;
 }
 
 QTEST_MAIN(TEST)
