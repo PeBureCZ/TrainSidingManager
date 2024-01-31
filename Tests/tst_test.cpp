@@ -1,5 +1,6 @@
 #include <QtTest>
 #include <QCoreApplication>
+#include "Actors_tests/actor_test.h"
 
 #include "Actors/actor.h"
 
@@ -12,7 +13,7 @@ public:
     ~TEST();
 
 private slots:
-    void test_getActorName();
+    void fullActor_test();
 
 };
 
@@ -26,11 +27,9 @@ TEST::~TEST()
 
 }
 
-void TEST::test_getActorName()
+void TEST::fullActor_test()
 {
-    Actor testedActor;
-    testedActor.setName("testedName");
-    QVERIFY(testedActor.getName() == "testedName");
+    Actor_test actor;
 }
 
 QTEST_MAIN(TEST)

@@ -91,6 +91,11 @@ void Actor::setLocation(QPoint newLocation, bool setGraphic)
     }
 }
 
+void Actor::setLocation(QPointF newLocation, bool setGraphic)
+{
+    setLocation(newLocation.toPoint(), setGraphic);
+}
+
 QPoint Actor::getLocation()
 {
     return location;

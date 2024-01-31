@@ -38,7 +38,8 @@ public:
     void setGraphicLocation(QPoint newLocation);
     void setRotation(const float newRotation);
     void setCallCollisionChannels(const QVector<int> newCollisions);
-    void setLocation(QPoint newLocation, bool setGraphic);
+    void setLocation(QPoint newLocation, bool setGraphic); //overloaded function
+    void setLocation(QPointF newLocation, bool setGraphic); //overloaded function
     void addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius);
 
     float getRotation();

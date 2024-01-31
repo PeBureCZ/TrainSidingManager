@@ -1,4 +1,4 @@
-QT += testlib
+QT += testlib core gui widgets
 QT += core gui
 CONFIG += qt warn_on depend_includepath testcase
 
@@ -15,7 +15,8 @@ SOURCES +=  tst_test.cpp \
     ../Src/Components/component.cpp \
     ../Src/Components/spherecollider.cpp \
     ../Src/Components/spheretrigger.cpp \
-    ../Src/Components/trigger.cpp
+    ../Src/Components/trigger.cpp \
+    Actors_tests/actor_test.cpp \
 
 HEADERS += \
     ../Src/Actors/actor.h \
@@ -24,7 +25,8 @@ HEADERS += \
     ../Src/Components/component.h \
     ../Src/Components/spherecollider.h \
     ../Src/Components/spheretrigger.h \
-    ../Src/Components/trigger.h
+    ../Src/Components/trigger.h \
+    Actors_tests/actor_test.h
 
 
 
