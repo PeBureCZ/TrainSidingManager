@@ -3,6 +3,7 @@
 
 #include <QTest>
 #include "Actors/actor.h"
+#include "Actors_tests/rail_test.h"
 
 class Actor_test : public QObject
 {
@@ -11,10 +12,13 @@ public:
     explicit Actor_test(QObject *parent = nullptr);
 
 private slots:
+    void initTestCase(); //not used
+    void cleanupTestCase(); //not used
     void getName_test();
     void location_test();
+
 public slots:
-    void full_test();
+
 
 signals:
 

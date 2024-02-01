@@ -25,6 +25,4 @@ void Rail_test::full_test()
 
 Rail_test::~Rail_test()
 {
-
-
 }
