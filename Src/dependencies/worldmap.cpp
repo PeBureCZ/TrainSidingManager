@@ -1,7 +1,6 @@
 #include "worldmap.h"
 #include <QDebug>
 
-
 void actualizeActor(Actor* actor) //global function - threated
 {
     actor->tickEvent();
@@ -125,7 +124,7 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         SpriteColection newSprite; //struct
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, spawnOnRail);
-        addVehicleActor(dynamic_cast<Train*>(newTrain), 1);
+        addVehicleActor(dynamic_cast<Train*>(newTrain), TRAIN_CD730);
 
         qDebug() << "spawn train - temporary solution";
         addActorToLists(newTrain);
@@ -146,19 +145,30 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
 
 void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
 {
+    SpriteColection newSprite; //struct
+    QGraphicsItem* vehicleGraphicsItem = nullptr;
+    Vehicle* newVehicle = nullptr;
     switch (indexOfVehicle)
     {
-        case 1:
-            {
-                SpriteColection newSprite; //struct
-                QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.cd730()); //sprite from struct
-                Vehicle* newVehicle = new CD730(nullptr, vehicleGraphicsItem);
-                worldScene->addItem(vehicleGraphicsItem);
-                dynamic_cast<Train*>(ownerTrain)->addVehicle(newVehicle, vehicleGraphicsItem); //need for destructor!
-                break;
-            }
-        //case 2: ....
+        case TRAIN_CD730:
+        {
+            vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.cd730()); //sprite from struct
+            newVehicle = new CD730(nullptr, vehicleGraphicsItem);
+            break;
+        }
+        case VAGON_EAS:
+        {
+            vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.eas()); //sprite from struct
+            newVehicle = new Eas(nullptr, vehicleGraphicsItem);
+            break;
+        }
+        //case x: ....
         default: {}
+    }
+    if (vehicleGraphicsItem != nullptr && newVehicle != nullptr)
+    {
+            worldScene->addItem(vehicleGraphicsItem);
+            dynamic_cast<Train*>(ownerTrain)->addVehicle(newVehicle, vehicleGraphicsItem); //needed for destructor!
     }
 }
 

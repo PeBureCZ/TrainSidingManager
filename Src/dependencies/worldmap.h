@@ -18,6 +18,7 @@
 #include "Actors/actor.h"
 #include "Actors/train.h"
 #include "Actors/cd730.h"
+#include "Actors/Vagons/eas.h"
 #include "Actors/signal.h"
 #include "Actors/Constructors/signalconstructor.h"
 #include "Actors/Constructors/railconstructor.h"
@@ -25,6 +26,9 @@
 
 //STATIC OBJECTS
 #include "Actors/rail.h"
+
+//ENUMS
+#include "Enums/TrainsEnum.h"
 
 class WorldMap : public QObject
 {

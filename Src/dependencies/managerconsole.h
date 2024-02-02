@@ -2,7 +2,7 @@
 #define MANAGERCONSOLE_H
 
 #include "managerconsolelogic.h"
-#include <QObject>
+#include "Enums/ColorsEnum.h"
 
 class ManagerConsole : public ManagerConsoleLogic
 {

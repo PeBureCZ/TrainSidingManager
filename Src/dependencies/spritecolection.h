@@ -22,6 +22,7 @@ struct SpriteColection
     QPixmap rail();
     QPixmap fullSignal();
     QPixmap noPlaceSignal();
+    QPixmap eas();
 public slots:
 };
 

@@ -65,3 +65,9 @@ QPixmap SpriteColection::noPlaceSignal()
     QPixmap pixmap(relativeDirectory + "/images/signal_full_noPlace.png");
     return pixmap;
 }
+
+QPixmap SpriteColection::eas()
+{
+    QPixmap pixmap(relativeDirectory + "/images/Eas.png");
+    return pixmap;
+}

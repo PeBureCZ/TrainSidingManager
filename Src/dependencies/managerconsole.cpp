@@ -7,50 +7,49 @@ ManagerConsole::ManagerConsole(QObject *parent)
 }
 
 void ManagerConsole::printToConsole(QString text, int color, int timeToHidden)
-{
+{ 
     QString colorizedText = "";
     switch(color)
     {
-    case 1: //red-bold
+    case RED_BOLD_COLOR:
         colorizedText += "<font style=\"font-weight: bold; color: red;\">" + text + "</font>";
         break;
-    case 2: //blue-bold
+    case BLUE_BOLD_COLOR:
         colorizedText += "<font style=\"font-weight: bold; color: blue;\">" + text + "</font>";
         break;
-    case 3: //green-bold
+    case GREEN_BOLD_COLOR:
         colorizedText += "<font style=\"font-weight: bold; color: green;\">" + text + "</font>";
         break;
-    case 4: //black-bold
+    case BLACK_BOLD_COLOR:
         colorizedText += "<font style=\"font-weight: bold; color: black;\">" + text + "</font>";
         break;
-    case 5: //white-bold
+    case WHITE_BOLD_COLOR:
         colorizedText += "<font style=\"font-weight: bold; color: white;\">" + text + "</font>";
         break;
-    case 6: //yellow-bold
+    case YELLOW_BOLD_COLOR:
         colorizedText += "<font style=\"font-weight: bold; color: yellow;\">" + text + "</font>";
         break;
-    case 7: //red
+    case RED_COLOR:
         colorizedText += "<font color=\"red\">" + text + "</font>";
         break;
-    case 8: //blue
+    case BLUE_COLOR:
         colorizedText += "<font color=\"blue\">" + text + "</font>";
         break;
-    case 9: //green
+    case GREEN_COLOR:
         colorizedText += "<font color=\"green\">" + text + "</font>";
         break;
-    case 10: //black
+    case BLACK_COLOR:
         colorizedText += "<font color=\"black\">" + text + "</font>";
         break;
-    case 11: //white
+    case WHITE_COLOR:
         colorizedText += "<font color=\"white\">" + text + "</font>";
         break;
-    case 12: //yellow
+    case YELLOW_COLOR:
         colorizedText += "<font color=\"yellow\">" + text + "</font>";
         break;
     default:
         colorizedText += "<font color=\"gray\">" + text + "</font>";
         //
-
     }
     addToConsole(colorizedText, timeToHidden);
 }

@@ -15,6 +15,8 @@ SOURCES += \
     Actors/Constructors/railselector.cpp \
     Actors/Constructors/selectconstructor.cpp \
     Actors/Constructors/signalconstructor.cpp \
+    Actors/Vagons/eas.cpp \
+    Actors/Vagons/vagon.cpp \
     Actors/actor.cpp \
     Actors/cd730.cpp \
     Actors/diesellocomotive.cpp \
@@ -53,6 +55,8 @@ HEADERS += \
     Actors/Constructors/railselector.h \
     Actors/Constructors/selectconstructor.h \
     Actors/Constructors/signalconstructor.h \
+    Actors/Vagons/eas.h \
+    Actors/Vagons/vagon.h \
     Actors/actor.h \
     Actors/cd730.h \
     Actors/diesellocomotive.h \
@@ -70,6 +74,8 @@ HEADERS += \
     Components/spherecollider.h \
     Components/spheretrigger.h \
     Components/trigger.h \
+    dependencies/Enums/ColorsEnum.h \
+    dependencies/Enums/TrainsEnum.h \
     dependencies/interfacewindow.h \
     dependencies/managerconsole.h \
     dependencies/managerconsolelogic.h \
