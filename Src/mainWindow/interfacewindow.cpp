@@ -42,7 +42,8 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             {
                 int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
                 int yBarValue = world->getWorldView()->verticalScrollBar()->value();
-                constructRail(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue));
+                int zoomLevel = world->getWorldView()->getZoomLevel();
+                constructRail(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
                 break;
             }
             case NOT_USED_NOW:

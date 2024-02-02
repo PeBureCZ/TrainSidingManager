@@ -11,7 +11,7 @@ void WorldCollide::addActorToCollideLists(Actor *actor, int channel)
 {
     switch(channel)
     {
-        case 0: //staticChannel
+        case STATIC_CHANNEL:
         {
             if (staticChannel.indexOf(actor) == -1)
             {
@@ -19,7 +19,7 @@ void WorldCollide::addActorToCollideLists(Actor *actor, int channel)
             }
             break;
         }
-        case 1: //trainChannel
+        case TRAIN_CHANNEL:
         {
             if (trainChannel.indexOf(actor) == -1)
             {
@@ -27,7 +27,7 @@ void WorldCollide::addActorToCollideLists(Actor *actor, int channel)
             break;
             }
         }
-        case 2: //railChannel
+        case RAIL_CHANNEL:
         {
             if (railConnectionChannel.indexOf(actor) == -1)
             {
@@ -45,19 +45,19 @@ void WorldCollide::removeActorFromCollideLists(Actor *removedActor)
     {
         switch(channel)
         {
-            case 0: //staticChannel
+            case STATIC_CHANNEL:
             {
                 int removedIndex = staticChannel.indexOf(removedActor);
                 if (removedIndex != -1) staticChannel.remove(removedIndex);
                 break;
             }
-            case 1: //trainChannel
+            case TRAIN_CHANNEL:
             {
                 int removedIndex = trainChannel.indexOf(removedActor);
                 if (removedIndex != -1) trainChannel.remove(removedIndex);
                 break;
             }
-            case 2: //railChannel
+            case RAIL_CHANNEL:
             {
                 int removedIndex = railConnectionChannel.indexOf(removedActor);
                 if (removedIndex != -1) railConnectionChannel.remove(removedIndex);
@@ -71,7 +71,7 @@ Actor *WorldCollide::getActorFromTriggerList(int inChannel, int index)
 {
     switch (inChannel)
     {
-        case 0: //staticChannel
+        case STATIC_CHANNEL:
         {
             if (staticChannel.size() > index)
             {
@@ -79,7 +79,7 @@ Actor *WorldCollide::getActorFromTriggerList(int inChannel, int index)
             }
             break;
         }
-        case 1: //trainChannel
+        case TRAIN_CHANNEL:
         {
             if (trainChannel.size() > index)
             {
@@ -87,7 +87,7 @@ Actor *WorldCollide::getActorFromTriggerList(int inChannel, int index)
             }
             break;
         }
-        case 2: //railChannel
+        case RAIL_CHANNEL:
         {
             if (railConnectionChannel.size() > index)
             {

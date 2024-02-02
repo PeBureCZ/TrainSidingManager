@@ -1,9 +1,14 @@
 #ifndef WORLDMAP_TEST_H
 #define WORLDMAP_TEST_H
 
+#include <QtTest>
 #include <QObject>
 #include "dependencies/worldmap.h"
-#include <QtTest>
+#include "dependencies/worldcollide.h"
+#include "mainWindow/customqgraphicsview.h"
+
+#include <QGraphicsItem>
+
 
 class WorldMap_test : public QObject
 {

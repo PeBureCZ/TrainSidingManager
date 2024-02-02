@@ -74,7 +74,10 @@ HEADERS += \
     Components/spherecollider.h \
     Components/spheretrigger.h \
     Components/trigger.h \
+    dependencies/Enums/ActorsEnum.h \
+    dependencies/Enums/BlockChannels.h \
     dependencies/Enums/ColorsEnum.h \
+    dependencies/Enums/ComponentsEnum.h \
     dependencies/Enums/TrainsEnum.h \
     dependencies/interfacewindow.h \
     dependencies/managerconsole.h \

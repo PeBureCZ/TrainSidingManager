@@ -8,6 +8,9 @@
 #include <QLineF>
 #include "Actors/actor.h"
 
+//ENUMS
+#include "Enums/BlockChannels.h"
+
 class WorldCollide : public QObject
 {
 Q_OBJECT

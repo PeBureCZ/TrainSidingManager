@@ -10,6 +10,9 @@
 #include "../Components/boxcollider.h"
 #include <QObject>
 
+//ENUMS
+#include "dependencies/Enums/ComponentsEnum.h"
+
 class Actor : public QObject
 {
 Q_OBJECT

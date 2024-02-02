@@ -131,9 +131,9 @@ void mwlogic::constructRail(QPoint point)
         //comnplete lined rail
         actualRailConstructor->actualizeConstructor(point);
         Rail* createdRail = actualRailConstructor->getOwnedRail();
-        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f, 120); //for P0 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f, 1);//create object BoxCollider
+        world->getWorldCollide()->addTriggerToActor(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, QPoint(0,0), 0.0f, 120); //for P0 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, BOX_COLLIDER, {STATIC_CHANNEL},  QPoint(0,0), 0.0f, 1);//create object BoxCollider
         actualRailConstructor->getOwnedRail()->setObjectBoxCollider();
         actualRailConstructor->actualizeConstructor(point); //duplicied due to P3 point actualize
         actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
@@ -164,9 +164,9 @@ void mwlogic::constructRail(QPoint point)
         Rail* createdRail = actualRailConstructor->getOwnedRail();
         QPoint newPoint = nearestRail->getLocation();
         if (nearestPoint == 1) newPoint += nearestRail->getP3RelativeLocation().toPoint();
-        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, {0,0}, 0.0f, 120); //for P0 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {2}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, 1, {0}, {0,0}, 0.0f, 1);//create object BoxCollider
+        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {RAIL_CHANNEL}, {0,0}, 0.0f, 120); //for P0 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
+        world->getWorldCollide()->addTriggerToActor(createdRail, 1, {STATIC_CHANNEL}, {0,0}, 0.0f, 1);//create object BoxCollider
         actualRailConstructor->actualizeConstructor(newPoint);
         actualRailConstructor->getOwnedRail()->connectRails(nearestRail, false);
         actualRailConstructor->smoothEndPoint();

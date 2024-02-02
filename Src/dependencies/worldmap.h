@@ -29,6 +29,7 @@
 
 //ENUMS
 #include "Enums/TrainsEnum.h"
+#include "Enums/BlockChannels.h"
 
 class WorldMap : public QObject
 {
@@ -69,7 +70,7 @@ public:
     QString testFunction();
     CustomQGraphicsView* getWorldView();
     QGraphicsScene* getWorldScene();
-    QPoint getRelativeWorldPos(QPoint point, int xBarValue, int yBarValue);
+    QPoint getRelativeWorldPos(QPoint point, int xBarValue, int yBarValue, int zoomLevel);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);

@@ -9,6 +9,9 @@
 #include <QHBoxLayout>
 #include "Actors/rail.h"
 
+//ENUM
+#include "dependencies/Enums/BlockChannels.h"
+
 class mwlogic : public MainWindow
 {
     Q_OBJECT

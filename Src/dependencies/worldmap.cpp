@@ -7,23 +7,29 @@ void actualizeActor(Actor* actor) //global function - threated
 }
 
 WorldMap::WorldMap(QObject* parent, QGraphicsScene* scene, CustomQGraphicsView* view, WorldCollide* collide)
-    : QObject(parent)
-    , worldScene(scene)
-    , worldView (view)
-    , worldCollide(collide)
 {
-    qDebug() << "x1";
-    worldView->setBackgroundBrush(QBrush(Qt::gray));
-    worldView->setViewportUpdateMode(QGraphicsView::NoViewportUpdate); //stop update screen automatically
-    actualConstructor = nullptr;
-    qDebug() << "x2";
-    worldView->setScene(worldScene);
+    actualConstructor = nullptr;    
     actorList = {};
     railList = {};
-    qDebug() << "x3";
     tickedActorsList = {}; //list of actor with any tick event (animation, move, etc.)
-    setMap(25000, 20000); //set map x,y border size
-    qDebug() << "x4";
+
+    if (scene != nullptr) //inicialize graphic elements
+    {
+        worldScene = scene;
+        worldView = view;
+        worldCollide =collide;
+
+        worldView->setScene(worldScene);
+        worldView->setBackgroundBrush(QBrush(Qt::gray));
+        worldView->setViewportUpdateMode(QGraphicsView::NoViewportUpdate); //stop update screen automatically
+        setMap(25000, 20000); //set map x,y border size
+    }
+    else //for example - in unit testing
+    {
+        worldScene = nullptr;
+        worldView = nullptr;
+        worldCollide = nullptr;
+    }
 }
 
 void WorldMap::actualizeEditor()
@@ -81,10 +87,9 @@ QString WorldMap::testFunction()
     return "nothing";
 }
 
-QPoint WorldMap::getRelativeWorldPos(QPoint point, int xBarValue, int yBarValue)
+QPoint WorldMap::getRelativeWorldPos(QPoint point, int xBarValue, int yBarValue, int zoomLevel)
 //transfer position from (e.g.) mouse click event in mainwindow (relative to scene) to scene coordination
 {
-    int zoomLevel = worldView->getZoomLevel();
     int x = point.x();
     int y = point.y();
     QPoint newPoint = {0,0};
@@ -362,7 +367,7 @@ QVector<Actor*> WorldMap::getActorsCollideInLocation(QVector<int> useBlockChanne
     {
         switch(channel)
         {
-            case 0: //staticChannel
+            case STATIC_CHANNEL:
             {
                 for (int i = 0; i < worldCollide->getSizeOfStaticChannel(); i++)
                 {
@@ -371,7 +376,7 @@ QVector<Actor*> WorldMap::getActorsCollideInLocation(QVector<int> useBlockChanne
                 }
                 break;
             }
-            case 1: //trainChannel
+            case TRAIN_CHANNEL:
             {
                 for (int i = 0; i < worldCollide->getSizeOfTrainChannel(); i++)
                 {
@@ -380,7 +385,7 @@ QVector<Actor*> WorldMap::getActorsCollideInLocation(QVector<int> useBlockChanne
                 }
                 break;
             }
-            case 2: //railChannel
+            case RAIL_CHANNEL:
             {
                 for (int i = 0; i < worldCollide->getSizeOfRailChannel(); i++)
                 {

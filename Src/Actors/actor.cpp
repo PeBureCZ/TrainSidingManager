@@ -115,21 +115,17 @@ void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint r
     Trigger* component = {};
     switch (indexOfType)
     {
-        case 0: //SphereCollider
+        case SPHERE_COLLIDER:
         {
             Trigger* newComponent = new SphereCollider();
             dynamic_cast<SphereCollider*>(newComponent)->setRadius(radius);
             component = newComponent;
             break;
         }
-        case 1: //BoxCollider
+        case BOX_COLLIDER:
         {
             Trigger* newComponent = new BoxCollider();
             component = newComponent;
-            break;
-        }
-        case 2:
-        {
             break;
         }
         defaul: {}
