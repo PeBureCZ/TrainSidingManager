@@ -6,19 +6,24 @@ void actualizeActor(Actor* actor) //global function - threated
     actor->tickEvent();
 }
 
-WorldMap::WorldMap(QObject* parent) : QObject(parent)
+WorldMap::WorldMap(QObject* parent, QGraphicsScene* scene, CustomQGraphicsView* view, WorldCollide* collide)
+    : QObject(parent)
+    , worldScene(scene)
+    , worldView (view)
+    , worldCollide(collide)
 {
-    worldScene = new QGraphicsScene;
-    worldView = new CustomQGraphicsView;
+    qDebug() << "x1";
     worldView->setBackgroundBrush(QBrush(Qt::gray));
     worldView->setViewportUpdateMode(QGraphicsView::NoViewportUpdate); //stop update screen automatically
-    worldCollide = new WorldCollide;
     actualConstructor = nullptr;
+    qDebug() << "x2";
     worldView->setScene(worldScene);
     actorList = {};
     railList = {};
+    qDebug() << "x3";
     tickedActorsList = {}; //list of actor with any tick event (animation, move, etc.)
     setMap(25000, 20000); //set map x,y border size
+    qDebug() << "x4";
 }
 
 void WorldMap::actualizeEditor()
@@ -42,7 +47,6 @@ void WorldMap::actualizePlayMode()
         QThread *thread = QThread::create(actualizeActor, actor);
         connect(thread, SIGNAL(finished()), thread, SLOT(quit()));
         connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-        //connect(thread, &QThread::destroyed, this, &WorldMap::printMessage);
         thread->start();
     }
 }
@@ -77,31 +81,27 @@ QString WorldMap::testFunction()
     return "nothing";
 }
 
-QPoint WorldMap::getRelativeWorldPos(QPoint point)
+QPoint WorldMap::getRelativeWorldPos(QPoint point, int xBarValue, int yBarValue)
 //transfer position from (e.g.) mouse click event in mainwindow (relative to scene) to scene coordination
 {
     int zoomLevel = worldView->getZoomLevel();
     int x = point.x();
     int y = point.y();
-    QScrollBar* xBar = worldView->horizontalScrollBar();
-    QScrollBar* yBar = worldView->verticalScrollBar();
     QPoint newPoint = {0,0};
     if (zoomLevel > 0)
     {
-        int xBarValue = xBar->value()*pow(1.25,zoomLevel);
-        int yBarValue = yBar->value()*pow(1.25,zoomLevel);
+        xBarValue = xBarValue*pow(1.25,zoomLevel);
+        yBarValue = yBarValue*pow(1.25,zoomLevel);
         newPoint = {static_cast<int>((x-160)*pow(1.25,zoomLevel) + xBarValue),static_cast<int>((y-20)*pow(1.25,zoomLevel) + yBarValue)};
     }
     else if (zoomLevel == 0)
     {
-        int xBarValue = xBar->value();
-        int yBarValue = yBar->value();
         newPoint = {x-160 + xBarValue,y-20 + yBarValue};
     }
     else
     {
-        int xBarValue = xBar->value()*pow(0.8,zoomLevel*-1);
-        int yBarValue = yBar->value()*pow(0.8,zoomLevel*-1);
+        xBarValue = xBarValue*pow(0.8,zoomLevel*-1);
+        yBarValue = yBarValue*pow(0.8,zoomLevel*-1);
         newPoint = {static_cast<int>((x-160)*pow(0.8,zoomLevel*-1) + xBarValue),static_cast<int>((y-20)*pow(0.8,zoomLevel*-1) + yBarValue)};
     }
     return newPoint;
@@ -456,11 +456,6 @@ void WorldMap::deleteAllActors()
     }
 }
 
-void WorldMap::printMessage()
-{
-    qDebug() << "message send";
-}
-
 void WorldMap::setConstructor(Actor * actor)
 {
     actualConstructor = dynamic_cast<ActorConstructor*>(actor);
@@ -495,7 +490,7 @@ WorldMap::~WorldMap()
 {
     //constructor have to delete first! (contains a ptr* to a deleted Actor = just "constructed actor")
     if (getActualConstructor() != nullptr) deleteConstructor(true);
-    //the rest...
+
     deleteAllActors();
     delete worldScene;
     delete worldView;

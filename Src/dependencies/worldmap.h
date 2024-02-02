@@ -40,7 +40,10 @@ private:
     WorldCollide* worldCollide;
 
 public:
-    WorldMap(QObject *parent = nullptr);
+    WorldMap(QObject *parent = nullptr
+            , QGraphicsScene* scene = nullptr
+            , CustomQGraphicsView* view = nullptr
+            , WorldCollide* collide = nullptr);
 
     //LISTS
     QVector<Actor*> tickedActorsList;
@@ -66,7 +69,7 @@ public:
     QString testFunction();
     CustomQGraphicsView* getWorldView();
     QGraphicsScene* getWorldScene();
-    QPoint getRelativeWorldPos(QPoint point);
+    QPoint getRelativeWorldPos(QPoint point, int xBarValue, int yBarValue);
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
@@ -90,7 +93,6 @@ public:
     ~WorldMap();
 
 public slots:
-    void printMessage();
 
 };
 

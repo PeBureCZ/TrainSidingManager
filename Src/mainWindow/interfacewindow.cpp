@@ -39,8 +39,12 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             {
             //case 0: same as default
             case RAIL_ADD_MODE: //add Rail (RailConstructor)
-                constructRail(world->getRelativeWorldPos(event->pos()));
+            {
+                int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
+                int yBarValue = world->getWorldView()->verticalScrollBar()->value();
+                constructRail(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue));
                 break;
+            }
             case NOT_USED_NOW:
             {
                 QVector<Actor*> actors = world->getActorsCollideInLocation({0},  world->getWorldView()->getRelativeFromCursor());

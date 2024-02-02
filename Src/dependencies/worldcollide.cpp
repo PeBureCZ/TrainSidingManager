@@ -1,6 +1,6 @@
 #include "worldcollide.h"
 
-WorldCollide::WorldCollide()
+WorldCollide::WorldCollide(QObject *parent)
 {
     staticChannel ={}; //channel0
     trainChannel ={}; //channel1

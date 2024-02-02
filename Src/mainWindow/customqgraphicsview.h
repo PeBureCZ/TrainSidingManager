@@ -15,7 +15,7 @@
 
 class CustomQGraphicsView : public QGraphicsView
 {
-
+Q_OBJECT
 protected:
     int zoomLevel;
     int mapSizeX;

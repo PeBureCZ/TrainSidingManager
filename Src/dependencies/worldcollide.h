@@ -8,15 +8,16 @@
 #include <QLineF>
 #include "Actors/actor.h"
 
-class WorldCollide
+class WorldCollide : public QObject
 {
+Q_OBJECT
 protected:
     QVector<Actor*> railConnectionChannel; //0
     QVector<Actor*> staticChannel; //1
     QVector<Actor*> trainChannel; //2
     void addActorToCollideLists(Actor* actor, int channel);
 public:
-    WorldCollide();
+    WorldCollide(QObject *parent = nullptr);
     void removeActorFromCollideLists(Actor* removedActor);
     Actor* getActorFromTriggerList(int inChannel, int index);
     int getSizeOfRailChannel();
