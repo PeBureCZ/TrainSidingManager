@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QLayout>
 #include "dependencies/managerconsole.h"
-
+#include "dependencies/Enums/MainWindowEnum.h"
 #include "Actors/Constructors/railselector.h"
 
 /*
@@ -17,32 +17,6 @@ menuSelected:
 300-399 = play add mode
 400-499 = play select/edit mode
 */
-#define OPTION_MODE_START 0
-#define OPTION_MODE_END 99
-//EDIT+ADD
-#define EDIT_MODE_START 100
-#define EDIT_MODE_FREE 101
-#define RAIL_ADD_MODE 102
-#define SIGNAL_ADD_MODE 103
-#define NOT_USED_NOW 104
-#define EDIT_ADD_END 199
-//EDIT+SELECT
-#define SELECT_EDIT_START 200
-#define RAIL_SELECTOR_MODE 201
-//#define ANY_SELECTOR_UNDER_SELECT 298
-#define EDIT_MODE_END 299
-//PLAY+ADD
-#define PLAY_MODE_START 300
-#define PLAY_MODE_FREE 301
-#define ADD_PLAY_END 399
-//PLAY+SELECT
-#define SELECT_PLAY_START 400
-#define PLAY_MODE_END 499
-
-//CONSTRUCTORS
-#define RAIL_CONSTRUCTOR 1
-#define SIGNAL_CONSTRUCTOR 2
-#define RAIL_SELECTOR 3
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

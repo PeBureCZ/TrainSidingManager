@@ -9,7 +9,7 @@ class Train : public Movable
 {
 Q_OBJECT
 protected:
-    QGraphicsPathItem* actualPath;
+    QGraphicsPathItem* actualPathGraphic;
     Rail* actualRail;
     QVector<Rail*> trainPath;
     float onPathValue;
@@ -35,8 +35,13 @@ public:
     void tickEvent() override;
     void moveTrain();
     void startAutopilot();
+    void setActualPathGraphic(Rail *actualRail);
 
     virtual ~Train();
+
+
+    QVector<Vehicle *> getVehicles() const;
+
 
 
 signals:

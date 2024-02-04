@@ -3,6 +3,7 @@
 #include <Actors_tests/rail_test.h>
 #include "dependencies_tests/worldmap_test.h"
 #include "Actors_tests/signal_test.h"
+#include "Actors_tests/train_test.h"
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
     runTest(new Actor_test);
     runTest(new Rail_test);
     runTest(new Signal_test);
+    runTest(new Train_test);
     return status;
 
 

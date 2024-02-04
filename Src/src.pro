@@ -78,6 +78,7 @@ HEADERS += \
     dependencies/Enums/BlockChannels.h \
     dependencies/Enums/ColorsEnum.h \
     dependencies/Enums/ComponentsEnum.h \
+    dependencies/Enums/MainWindowEnum.h \
     dependencies/Enums/SignalEnum.h \
     dependencies/Enums/TrainsEnum.h \
     dependencies/interfacewindow.h \
