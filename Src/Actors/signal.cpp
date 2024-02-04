@@ -1,10 +1,15 @@
 #include "signal.h"
 
+
+
 Signal::Signal(QObject *parent, QGraphicsItem *newGraphicItem)
     : RailwayObject(parent, newGraphicItem)
 {
     signalState = 0;
-    allowedSignalState = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+    for (int i = 0; i <= SignalState::SIGNAL_CUSTOM8; i++)
+    {
+        allowedSignalState.push_back(i);
+    }
 }
 
 void Signal::setState(int newSignState)
@@ -17,6 +22,10 @@ int Signal::getState()
     return signalState;
 }
 
+QList<int> Signal::getAllowedSignalState() const
+{
+    return allowedSignalState;
+}
 
 Signal::~Signal()
 {}

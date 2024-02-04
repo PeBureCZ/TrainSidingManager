@@ -36,6 +36,8 @@ SOURCES += \
     ../Src/dependencies/worldmap.cpp \
     ../Src/dependencies/worldviewmap.cpp \
     ../Src/mainWindow/customqgraphicsview.cpp \
+    Actors_tests/Signal_test.cpp \
+    Actors_tests/rail_test.cpp \
     dependencies_tests/worldmap_test.cpp \
     main.cpp \
     ../Src/Actors/actor.cpp \
@@ -47,7 +49,6 @@ SOURCES += \
     ../Src/Components/spherecollider.cpp \
     ../Src/Components/spheretrigger.cpp \
     ../Src/Components/trigger.cpp \
-    Actors_tests/rail_test.cpp \
     Actors_tests/actor_test.cpp \
 
 
@@ -77,6 +78,7 @@ HEADERS += \
     ../Src/Components/spherecollider.h \
     ../Src/Components/spheretrigger.h \
     ../Src/Components/trigger.h \
+    ../Src/dependencies/Enums/SignalEnum.h \
     ../Src/dependencies/managerconsole.h \
     ../Src/dependencies/managerconsolelogic.h \
     ../Src/dependencies/railnavigation.h \
@@ -87,6 +89,7 @@ HEADERS += \
     ../Src/dependencies/worldmap.h \
     ../Src/dependencies/worldviewmap.h \
     ../Src/mainWindow/customqgraphicsview.h \
-    Actors_tests/rail_test.h \
     Actors_tests/actor_test.h \
+    Actors_tests/rail_test.h \
+    Actors_tests/signal_test.h \
     dependencies_tests/worldmap_test.h
