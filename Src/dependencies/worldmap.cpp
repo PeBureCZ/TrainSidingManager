@@ -137,14 +137,6 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
         dynamic_cast<Train*>(newTrain)->setActualSpeed(1300); //centimeters/s
 
         dynamic_cast<Train*>(newTrain)->startAutopilot();
-
-        /*
-        if (railList.size()>1)
-        {
-            QVector<Rail*> temporaryTrainPath(railList.begin()+1,railList.end()); //will be changed with RailNavigation
-            dynamic_cast<Train*>(newTrain)->setTrainPath(temporaryTrainPath);
-        }
-        */
     }
 }
 
