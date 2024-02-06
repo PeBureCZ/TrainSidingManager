@@ -29,7 +29,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 if (selector->getUnderSelect() == true)
                 {
                     selector->setUnderEdit(true);
-                    managerConsole->printToConsole("under edit = true", 9, 600);
+                    managerConsole->printToConsole("under edit = true", GREEN_COLOR, VERY_LONG_DURATION);
                 }
             }
         }
@@ -100,15 +100,15 @@ void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
                         world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP1VisualPoint());
                         world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP2VisualPoint());
                     }
-                    managerConsole->printToConsole("under select = true", 9, 600);
+                    managerConsole->printToConsole("under select = true", GREEN_COLOR, VERY_LONG_DURATION);
 
                 }
                 else if (selector->getUnderEdit() == true)
                 {
                     selector->setUnderEdit(false);
-                    managerConsole->printToConsole("under edit = false", 9, 600);
+                    managerConsole->printToConsole("under edit = false", GREEN_COLOR, VERY_LONG_DURATION);
                 }
-                else managerConsole->printToConsole("nothing", 9, 600);
+                else managerConsole->printToConsole("nothing", GREEN_COLOR, VERY_LONG_DURATION);
 
             }
         }
@@ -126,7 +126,7 @@ void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
                 {
                     selector->setUnderSelect(false);
                     selector->setUnderEdit(false);
-                    managerConsole->printToConsole("under select and edit = false", 9, 600);
+                    managerConsole->printToConsole("under select and edit = false", GREEN_COLOR, VERY_LONG_DURATION);
                 }
             }
         }
@@ -155,12 +155,12 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
     {
         if (selectMode)
         {
-            managerConsole->printToConsole("switch to select option in edit mode", 6, 140);
+            managerConsole->printToConsole("switch to select option in edit mode", YELLOW_BOLD_COLOR, 140);
             menuSelected = SELECT_EDIT_START;
         }
         else
         {
-            managerConsole->printToConsole("switch to add option in edit mode", 6, 140);
+            managerConsole->printToConsole("switch to add option in edit mode", YELLOW_BOLD_COLOR, 140);
             menuSelected = EDIT_MODE_FREE;
         }
     }
@@ -168,12 +168,12 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
     {
         if (selectMode)
         {
-            managerConsole->printToConsole("switch to select option in play mode", 6, 140);
+            managerConsole->printToConsole("switch to select option in play mode", YELLOW_BOLD_COLOR, 140);
             menuSelected = SELECT_PLAY_START;
         }
         else
         {
-            managerConsole->printToConsole("switch to add option in play mode", 6, 140);
+            managerConsole->printToConsole("switch to add option in play mode", YELLOW_BOLD_COLOR, 140);
             menuSelected = PLAY_MODE_FREE;
         }
     }
@@ -193,7 +193,7 @@ void InterfaceWindow::on_AddBut_clicked()
 
 void InterfaceWindow::on_MultiFuncBut1_clicked()
 {
-    if (menuSelected == OPTION_MODE_START || (menuSelected >= 100 && menuSelected <= EDIT_ADD_END))
+    if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
     {
         menuSelected = RAIL_ADD_MODE; //if editMode -> constructiong Rail
         addConstructor(RAIL_CONSTRUCTOR);
@@ -207,11 +207,116 @@ void InterfaceWindow::on_MultiFuncBut1_clicked()
 
 void InterfaceWindow::on_MultiFuncBut2_clicked()
 {
-    if (menuSelected == 0 || (menuSelected >= 100 && menuSelected <= 199))
+    if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
     {
         menuSelected = SIGNAL_ADD_MODE; //if editMode -> constructiong signals
         addConstructor(SIGNAL_CONSTRUCTOR); //delete constructor included
     }
+}
+
+void InterfaceWindow::on_MultiFuncBut3_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut4_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut5_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut6_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut7_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut8_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut9_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut10_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut11_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut12_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut13_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut14_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut15_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut16_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut17_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut18_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut19_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut20_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut21_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut22_clicked()
+{
+
+}
+
+void InterfaceWindow::on_MultiFuncBut23_clicked()
+{
+
 }
 
 void InterfaceWindow::on_MultiFuncBut24_clicked()
@@ -226,9 +331,9 @@ void InterfaceWindow::on_MultiFuncBut24_clicked()
             Actor* deletedActor = world->actorList[world->actorList.size()-1];
             if (world->getActualConstructor() != nullptr) world->deleteConstructor(true);
             else world->deleteActor(deletedActor);
-            managerConsole->printToConsole("Last item deleted", 7, 160);
+            managerConsole->printToConsole("Last item deleted", RED_COLOR, MIDDLE_DURATION);
         }
-        else managerConsole->printToConsole("No item to delete", 99, 400);
+        else managerConsole->printToConsole("No item to delete", DEFAULT_COLOR, VERY_LONG_DURATION);
     }
 }
 

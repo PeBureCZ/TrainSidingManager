@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Actors/Constructors/actorconstructor.cpp \
+    Actors/Constructors/portalconstructor.cpp \
     Actors/Constructors/railconstructor.cpp \
     Actors/Constructors/railobjectconstructor.cpp \
     Actors/Constructors/railselector.cpp \
@@ -43,6 +44,7 @@ SOURCES += \
     dependencies/worldcollide.cpp \
     dependencies/worldmap.cpp \
     dependencies/worldviewmap.cpp \
+    mainWindow/buttonfunctions.cpp \
     mainWindow/interfacewindow.cpp \
     mainWindow/customqgraphicsview.cpp \
     mainWindow/mwlogic.cpp \
@@ -50,6 +52,7 @@ SOURCES += \
 
 HEADERS += \
     Actors/Constructors/actorconstructor.h \
+    Actors/Constructors/portalconstructor.h \
     Actors/Constructors/railconstructor.h \
     Actors/Constructors/railobjectconstructor.h \
     Actors/Constructors/railselector.h \
@@ -76,8 +79,8 @@ HEADERS += \
     Components/trigger.h \
     dependencies/Enums/ActorsEnum.h \
     dependencies/Enums/BlockChannels.h \
-    dependencies/Enums/ColorsEnum.h \
     dependencies/Enums/ComponentsEnum.h \
+    dependencies/Enums/ConsoleEnums.h \
     dependencies/Enums/MainWindowEnum.h \
     dependencies/Enums/SignalEnum.h \
     dependencies/Enums/TrainsEnum.h \
@@ -90,6 +93,7 @@ HEADERS += \
     dependencies/worldcollide.h \
     dependencies/worldmap.h \
     dependencies/worldviewmap.h \
+    mainWindow/buttonfunctions.h \
     mainWindow/interfacewindow.h \
     mainWindow/customqgraphicsview.h \
     mainWindow/mwlogic.h \

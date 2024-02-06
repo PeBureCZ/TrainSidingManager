@@ -57,17 +57,17 @@ void mwlogic::addConstructor(int constructorType)
     {
     case RAIL_CONSTRUCTOR:
         world->addRailConstructor();
-        managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB)", 99, 500);
-        managerConsole->printToConsole("(To connect to another track, use the left mouse button (LMB) near the end of another track)", 99, 500);
+        managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB)", DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole("(To connect to another track, use the left mouse button (LMB) near the end of another track)", DEFAULT_COLOR, LONG_DURATION);
         break;
     case SIGNAL_CONSTRUCTOR:
         world->addSignalConstructor();
         managerConsole->printToConsole("To place a signal, move the mouse cursor closer to the breakpoints of one of the tracks. The track with the placed signal will be marked with a changed color", 99, 500);
-        managerConsole->printToConsole("(To confirm the placement of a signal on the track, use the left mouse button (LMB))", 99, 500);
+        managerConsole->printToConsole("(To confirm the placement of a signal on the track, use the left mouse button (LMB))", DEFAULT_COLOR, LONG_DURATION);
         break;
     case RAIL_SELECTOR:
         world->addRailSelector();
-        managerConsole->printToConsole("For marking the track, click the left mouse button on the light blue highlighted track", 99, 500);
+        managerConsole->printToConsole("For marking the track, click the left mouse button on the light blue highlighted track", DEFAULT_COLOR, LONG_DURATION);
         break;
     default: {}
     }
@@ -188,13 +188,13 @@ void mwlogic::constructSignal()
         int nearestEndArea = actualSignalConstructor->getNearestEndArea();
         if (nearestRail == nullptr)
         {
-            managerConsole->printToConsole("Signal is not connected to any rail!", 1, 500);
+            managerConsole->printToConsole("Signal is not connected to any rail!", RED_BOLD_COLOR, LONG_DURATION);
         }
         else
         {
             if (nearestRail->getSignal(actualSignalConstructor->getNearestEndArea()) != nullptr)
             {
-                managerConsole->printToConsole("Cant create signal on this rail point!", 1, 500);
+                managerConsole->printToConsole("Cant create signal on this rail point!", RED_BOLD_COLOR, LONG_DURATION);
                 return; //signal is not created in this condition
             }
             world->addRailwaylActor(2, actualSignalConstructor->getLocation(), nearestRail); //create signal actor

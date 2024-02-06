@@ -1,5 +1,5 @@
-#ifndef COLORSENUM_H
-#define COLORSENUM_H
+#ifndef CONSOLEENUMS_H
+#define CONSOLEENUMS_H
 
 
 enum colors
@@ -19,4 +19,14 @@ enum colors
     YELLOW_COLOR
 };
 
-#endif // COLORSENUM_H
+enum durationOfText //IN TICK TIME (30ms)
+{
+    INSTANT_DURATION = 10,
+    SHORT_DURATION = 50,
+    MIDDLE_DURATION = 150,
+    LONG_DURATION = 400,
+    VERY_LONG_DURATION = 800,
+
+};
+
+#endif // CONSOLEENUMS_H

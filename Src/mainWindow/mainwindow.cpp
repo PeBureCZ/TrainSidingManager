@@ -21,17 +21,10 @@ MainWindow::~MainWindow()
 void MainWindow::initializeInterface()
 {
     //ui
-    ui->MultiFuncBut1->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
-    ui->MultiFuncBut1->setText("Rails");
-    ui->MultiFuncBut2->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
-    ui->MultiFuncBut2->setText("Signals");
-    ui->MultiFuncBut24->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
-    ui->MultiFuncBut24->setText("Delete");
+    setEditAddInterface(EDIT_MODE_FREE);
     //Map
     ui->MapViewLayout->addWidget(world->getWorldView(),1);
     //unused button
-
-    ui->MultiFuncBut3->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut4->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut5->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut6->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
@@ -52,12 +45,9 @@ void MainWindow::initializeInterface()
     ui->MultiFuncBut21->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut22->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut23->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-
     //console
     managerConsole = new ManagerConsole(this); //add custom manager console
-
     //zoom option in map
-
     mapZoomLayout = new QHBoxLayout();
     widgetWithLayout = new QWidget();
     mapZoomLayout->addWidget(ui->SubBut);
@@ -78,7 +68,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QSize sizeView = world->getWorldView()->size();
     managerConsole->setConsolePos({160,0},sizeView.width(),sizeView.height());
-    managerConsole->printToConsole("bugged console (you have to resize window), affects response to mouse events", 1, 200);
+    managerConsole->printToConsole("bugged console (you have to resize window), affects response to mouse events", RED_BOLD_COLOR, MIDDLE_DURATION);
 }
 
 void MainWindow::playButSwitch(bool editMode)
@@ -111,37 +101,6 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
-    qDebug() << "connections: ";
-    for (auto actor : world->actorList)
-    {
-        if (dynamic_cast<Rail*>(actor))
-        {
-            qDebug() << "___";
-            Rail* rail = dynamic_cast<Rail*>(actor);
-            //if (rail->getConnectedRail(0) != nullptr) qDebug()  <<  "A0";
-            //if (rail->getConnectedRail(1) != nullptr) qDebug()  << "B0";
-            //if (rail->getConnectedRail(2) != nullptr) qDebug()  << "C1";
-            //if (rail->getConnectedRail(3) != nullptr) qDebug()  << "D1";
-            if (rail->getSignal(0) == nullptr) qDebug() << "nullptr";
-            else qDebug() << "NO nullptr";
-            if (rail->getSignal(1) == nullptr) qDebug() << "nullptr";
-            else qDebug() << "NO nullptr";
-
-        }
-    }
-
-    /*
-    //spawnTrain
-    for (auto actor : world->actorList)
-    {
-        if (dynamic_cast<Rail*>(actor))
-        {
-            world->addTrainActor(dynamic_cast<Rail*>(actor));
-            qDebug() << "train spawned";
-            break;
-        }
-    }
-    */
 }
 void MainWindow::on_SubBut_clicked() {}//overrided
 void MainWindow::on_AddBut_clicked() {}//overrided
@@ -150,20 +109,44 @@ void MainWindow::on_EditMenuBut_clicked(){}//overrided
 
 void MainWindow::on_MultiFuncBut1_clicked() {}//overrided
 void MainWindow::on_MultiFuncBut2_clicked() {}//overrided
+void MainWindow::on_MultiFuncBut3_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut4_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut5_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut6_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut7_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut8_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut9_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut10_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut11_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut12_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut13_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut14_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut15_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut16_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut17_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut18_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut19_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut20_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut21_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut22_clicked() {} //overrided;
+void MainWindow::on_MultiFuncBut23_clicked() {} //overrided;
 void MainWindow::on_MultiFuncBut24_clicked() {}//overrided
 
 void MainWindow::InterfaceSet(int menuSelected)
 {
-    if (menuSelected >= OPTION_MODE_START && menuSelected <= OPTION_MODE_END) setBasicMenuInterface(menuSelected);
+    if (menuSelected >= OPTION_MODE_START && menuSelected <= OPTION_MODE_END) setBasicMenuInterface();
     else if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END) setEditAddInterface(menuSelected);
     else if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END) setEditSelectInterface(menuSelected);
     else if (menuSelected >= PLAY_MODE_START && menuSelected <= ADD_PLAY_END) setPlayAddInterface(menuSelected);
     else if (menuSelected >= SELECT_PLAY_START && menuSelected <= PLAY_MODE_END) setPlaySelectInterface(menuSelected);
 }
 
-void MainWindow::setBasicMenuInterface(int menu)
+void MainWindow::setBasicMenuInterface()
 {
-   setDefaultInterface();
+    freeButton(ui->MultiFuncBut1);
+    freeButton(ui->MultiFuncBut2);
+    freeButton(ui->MultiFuncBut3);
+    freeButton(ui->MultiFuncBut24);
 }
 
 void MainWindow::setEditSelectInterface(int menu)
@@ -171,14 +154,12 @@ void MainWindow::setEditSelectInterface(int menu)
     switch (menu)
     {
     case SELECT_EDIT_START:
-        ui->MultiFuncBut1->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
-        ui->MultiFuncBut1->setText("Rails");
-        ui->MultiFuncBut2->setText("");
-        ui->MultiFuncBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-        ui->MultiFuncBut24->setText("");
-        ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+        setButtonText("Rails", ui->MultiFuncBut1);
+        freeButton(ui->MultiFuncBut2);
+        freeButton(ui->MultiFuncBut3);
+        freeButton(ui->MultiFuncBut24);
         break;
-    default: setDefaultInterface();
+    default: setBasicMenuInterface();
     }
 }
 
@@ -187,14 +168,12 @@ void MainWindow::setEditAddInterface(int menu)
     switch (menu)
     {
     case EDIT_MODE_FREE:
-        ui->MultiFuncBut1->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
-        ui->MultiFuncBut1->setText("Rails");
-        ui->MultiFuncBut2->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
-        ui->MultiFuncBut2->setText("Signals");
-        ui->MultiFuncBut24->setStyleSheet("background-color: rgba(240, 240, 240, 255);");
-        ui->MultiFuncBut24->setText("Delete");
+        setButtonText("Rails", ui->MultiFuncBut1);
+        setButtonText("Signals", ui->MultiFuncBut2);
+        setButtonText("Portals", ui->MultiFuncBut3);
+        setButtonText("Delete", ui->MultiFuncBut24);
         break;
-    default: setDefaultInterface();
+    default: setBasicMenuInterface();
     }
 }
 
@@ -202,7 +181,8 @@ void MainWindow::setPlaySelectInterface(int menu)
 {
     switch (menu)
     {
-    default: setDefaultInterface();
+        //not yet
+        default: setBasicMenuInterface();
     }
 }
 
@@ -211,23 +191,11 @@ void MainWindow::setPlayAddInterface(int menu)
     switch (menu)
     {
     case PLAY_MODE_FREE:
-        ui->MultiFuncBut1->setText("");
-        ui->MultiFuncBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-        ui->MultiFuncBut2->setText("");
-        ui->MultiFuncBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-        ui->MultiFuncBut24->setText("");
-        ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+        freeButton(ui->MultiFuncBut1);
+        freeButton(ui->MultiFuncBut2);
+        freeButton(ui->MultiFuncBut3);
+        freeButton(ui->MultiFuncBut24);
         break;
-    default: setDefaultInterface();
+    default: setBasicMenuInterface();
     }
-}
-
-void MainWindow::setDefaultInterface()
-{
-    ui->MultiFuncBut1->setText("");
-    ui->MultiFuncBut1->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-    ui->MultiFuncBut2->setText("");
-    ui->MultiFuncBut2->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
-    ui->MultiFuncBut24->setText("");
-    ui->MultiFuncBut24->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
 }
