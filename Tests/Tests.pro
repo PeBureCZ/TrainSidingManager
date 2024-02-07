@@ -39,6 +39,7 @@ SOURCES += \
     Actors_tests/Signal_test.cpp \
     Actors_tests/rail_test.cpp \
     Actors_tests/train_test.cpp \
+    dependencies_tests/trainnavigation_test.cpp \
     dependencies_tests/worldmap_test.cpp \
     main.cpp \
     ../Src/Actors/actor.cpp \
@@ -94,4 +95,5 @@ HEADERS += \
     Actors_tests/rail_test.h \
     Actors_tests/signal_test.h \
     Actors_tests/train_test.h \
+    dependencies_tests/trainnavigation_test.h \
     dependencies_tests/worldmap_test.h
