@@ -127,7 +127,7 @@ void WorldMap::addTrainActor(Rail* spawnOnRail)
     if (railList.size() > 0)
     {
         SpriteColection newSprite; //struct
-        QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.empty()); //sprite from struct
+        QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, spawnOnRail);
         addVehicleActor(dynamic_cast<Train*>(newTrain), TRAIN_CD730);
 
@@ -149,13 +149,13 @@ void WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
     {
         case TRAIN_CD730:
         {
-            vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.cd730()); //sprite from struct
+        vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(CD730_SPRITE)); //sprite from struct
             newVehicle = new CD730(nullptr, vehicleGraphicsItem);
             break;
         }
         case VAGON_EAS:
         {
-            vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.eas()); //sprite from struct
+            vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(EAS_SPRITE)); //sprite from struct
             newVehicle = new Eas(nullptr, vehicleGraphicsItem);
             break;
         }
@@ -173,7 +173,7 @@ void WorldMap::addRailConstructor()
 {
     //ADD CONSTRUCTOR ACTOR
     SpriteColection newSprite;
-    QGraphicsItem* railGraphicItem = new QGraphicsPixmapItem(newSprite.rail()); //sprite from struct
+    QGraphicsItem* railGraphicItem = new QGraphicsPixmapItem(newSprite.getSprite(RAIL_SPRITE)); //sprite from struct
     worldScene->addItem(railGraphicItem);
     Actor* railConstructor = new RailConstructor(nullptr, railGraphicItem, nullptr); //add actor
     railConstructor->setCallCollisionChannels({0,2});
@@ -186,7 +186,7 @@ void WorldMap::addSignalConstructor()
 {
     //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
     SpriteColection newSprite;
-    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.redSignal()); //sprite from struct
+    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.getSprite(RED_SIGNAL_SPRITE)); //sprite from struct
     worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
@@ -273,8 +273,8 @@ Actor *WorldMap::addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor* c
             SignalConstructor* constructor = dynamic_cast<SignalConstructor*>(actualConstructor);
             int nearestEndArea = constructor->getNearestEndArea();
 
-            if (constructor->getNearestAreaGraphic() != nullptr) pixmap = newSprite.redSignal();
-            else pixmap = newSprite.noPlaceSignal();
+            if (constructor->getNearestAreaGraphic() != nullptr) pixmap = newSprite.getSprite(RED_SIGNAL_SPRITE);
+            else pixmap = newSprite.getSprite(NO_SIGNAL_SPRITE);
 
             QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct
             worldScene->addItem(signalGraphic);
