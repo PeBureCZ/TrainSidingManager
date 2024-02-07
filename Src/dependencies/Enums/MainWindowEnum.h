@@ -11,7 +11,7 @@ enum OptionMode
     EDIT_MODE_FREE,
     RAIL_ADD_MODE,
     SIGNAL_ADD_MODE,
-    NOT_USED_NOW,
+    PORTAL_ADD_MODE,
     EDIT_ADD_END = 199,
 
     //EDIT+SELECT
@@ -27,8 +27,6 @@ enum OptionMode
     //PLAY+SELECT
     SELECT_PLAY_START = 400,
     PLAY_MODE_END = 499,
-
-
 };
 
 enum ConstructorsEnum
@@ -37,6 +35,7 @@ enum ConstructorsEnum
     RAIL_CONSTRUCTOR = 1,
     SIGNAL_CONSTRUCTOR,
     RAIL_SELECTOR,
+    PORTAL_CONSTRUCTOR,
 };
 
 

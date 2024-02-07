@@ -11,6 +11,7 @@ INCLUDEPATH += ../Src
 
 SOURCES += \
     ../Src/Actors/Constructors/actorconstructor.cpp \
+    ../Src/Actors/Constructors/portalconstructor.cpp \
     ../Src/Actors/Constructors/railconstructor.cpp \
     ../Src/Actors/Constructors/railobjectconstructor.cpp \
     ../Src/Actors/Constructors/railselector.cpp \
@@ -56,6 +57,7 @@ SOURCES += \
 
 HEADERS += \
     ../Src/Actors/Constructors/actorconstructor.h \
+    ../Src/Actors/Constructors/portalconstructor.h \
     ../Src/Actors/Constructors/railconstructor.h \
     ../Src/Actors/Constructors/railobjectconstructor.h \
     ../Src/Actors/Constructors/railselector.h \

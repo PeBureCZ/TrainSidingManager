@@ -9,7 +9,13 @@ class PortalConstructor : public ActorConstructor
 {
     Q_OBJECT
 public:
-    explicit PortalConstructor(QObject *parent = nullptr);
+    PortalConstructor
+    (QObject *parent = nullptr,
+    QGraphicsItem *newGraphicItem = nullptr,
+    Actor *actorToConstructing = nullptr);
+
+    void actualizeConstructor(QPoint newPoint) override;
+    ~PortalConstructor();
 };
 
 #endif // PORTALCONSTRUCTOR_H

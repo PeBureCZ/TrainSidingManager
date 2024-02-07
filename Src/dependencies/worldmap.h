@@ -23,6 +23,7 @@
 #include "Actors/Constructors/signalconstructor.h"
 #include "Actors/Constructors/railconstructor.h"
 #include "Actors/Constructors/railselector.h"
+#include "Actors/Constructors/portalconstructor.h"
 
 //STATIC OBJECTS
 #include "Actors/rail.h"
@@ -54,8 +55,12 @@ public:
     //FCE - BASIC
     void setMap(int xSize, int ySize);
     void addTrainActor(Rail *spawnOnRail);
+
+    //add constructors
     void addRailConstructor();
     void addSignalConstructor();
+    void addPortalConstructor();
+
     void addRailSelector();
     void addStaticlActor(QPoint spawnPos, int indexOfActor);
     void addVehicleActor(Train* ownerTrain, int indexOfVehicle);

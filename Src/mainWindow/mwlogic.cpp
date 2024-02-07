@@ -53,21 +53,27 @@ void mwlogic::selectMenuSwitch(bool selectMode)
 void mwlogic::addConstructor(int constructorType)
 {
     world->deleteConstructor(true);
+    ConsoleTextsStruct console;
     switch (constructorType)
     {
     case RAIL_CONSTRUCTOR:
         world->addRailConstructor();
-        managerConsole->printToConsole("To place a track, click the left mouse button (LMB) on the surface. To delete, use the right mouse button (RMB)", DEFAULT_COLOR, LONG_DURATION);
-        managerConsole->printToConsole("(To connect to another track, use the left mouse button (LMB) near the end of another track)", DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole(console.messageText[RAIL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole(console.messageText[RAIL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
         break;
     case SIGNAL_CONSTRUCTOR:
         world->addSignalConstructor();
-        managerConsole->printToConsole("To place a signal, move the mouse cursor closer to the breakpoints of one of the tracks. The track with the placed signal will be marked with a changed color", 99, 500);
-        managerConsole->printToConsole("(To confirm the placement of a signal on the track, use the left mouse button (LMB))", DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole(console.messageText[SIGNAL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole(console.messageText[SIGNAL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
         break;
     case RAIL_SELECTOR:
         world->addRailSelector();
-        managerConsole->printToConsole("For marking the track, click the left mouse button on the light blue highlighted track", DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole(console.messageText[RAIL_SELECTOR_CONSOLE_TEXT], DEFAULT_COLOR, LONG_DURATION);
+        break;
+    case PORTAL_CONSTRUCTOR:
+        world->addPortalConstructor();
+        managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
         break;
     default: {}
     }

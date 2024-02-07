@@ -1,9 +1,8 @@
 #include "actorconstructor.h"
 
 ActorConstructor::ActorConstructor(QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing)
-:
-Actor(parent, newGraphicItem)
-,actorConstructing (actorToConstructing)
+    : Actor(parent, newGraphicItem)
+    , actorConstructing (actorToConstructing)
 {
 }
 

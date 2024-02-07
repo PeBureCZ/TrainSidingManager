@@ -21,13 +21,14 @@ enum spriteEnums
     FULL_SIGNAL_SPRITE,
     NO_SIGNAL_SPRITE,
     EAS_SPRITE,
-    PORTAL_SPRITE
+    PORTAL_SPRITE,
 };
 
 struct SpriteColection
 {
     const QVector<QString>relativePaths =
     {
+        "",
         "/images/loco.png",
         "/images/CD730.png",
         "/images/signal_red.png",

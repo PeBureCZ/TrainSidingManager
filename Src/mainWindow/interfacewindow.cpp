@@ -46,7 +46,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 constructRail(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
                 break;
             }
-            case NOT_USED_NOW:
+            case PORTAL_ADD_MODE:
             {
                 QVector<Actor*> actors = world->getActorsCollideInLocation({0},  world->getWorldView()->getRelativeFromCursor());
                 if (actors.size() > 0) world->deleteActor(actors[0]);
@@ -151,6 +151,7 @@ void InterfaceWindow::playButSwitch(bool editMode)
 
 void InterfaceWindow::selectMenuSwitch(bool selectMode)
 {
+    ConsoleTextsStruct console;
     if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_MODE_END)
     {
         if (selectMode)
@@ -160,7 +161,7 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
         }
         else
         {
-            managerConsole->printToConsole("switch to add option in edit mode", YELLOW_BOLD_COLOR, 140);
+            managerConsole->printToConsole("Switch to add option in edit mode", YELLOW_BOLD_COLOR, 140);
             menuSelected = EDIT_MODE_FREE;
         }
     }
@@ -216,7 +217,11 @@ void InterfaceWindow::on_MultiFuncBut2_clicked()
 
 void InterfaceWindow::on_MultiFuncBut3_clicked()
 {
-
+    if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
+    {
+        menuSelected = PORTAL_ADD_MODE; //if editMode -> constructiong signals
+        addConstructor(PORTAL_CONSTRUCTOR); //delete constructor included
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut4_clicked()

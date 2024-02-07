@@ -186,13 +186,26 @@ void WorldMap::addSignalConstructor()
 {
     //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
     SpriteColection newSprite;
-    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.getSprite(RED_SIGNAL_SPRITE)); //sprite from struct
+    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.getSprite(RED_SIGNAL_SPRITE));
     worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
     signalConstructor->setCallCollisionChannels({0,2}); //call collisions with rail ends and railObject(railConnectionChannel)
     addActorToLists(signalConstructor);
     setConstructor(signalConstructor);
+}
+
+void WorldMap::addPortalConstructor()
+{
+    //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
+    SpriteColection newSprite;
+    QGraphicsItem* portalConstructorGraphic = new QGraphicsPixmapItem(newSprite.getSprite(PORTAL_SPRITE));
+    worldScene->addItem(portalConstructorGraphic);
+    //ADD CONSTRUCTOR ACTOR
+    Actor* portalConstructor = new PortalConstructor(nullptr, portalConstructorGraphic, nullptr);
+    //portalConstructor->setCallCollisionChannels({0,2});
+    addActorToLists(portalConstructor);
+    setConstructor(portalConstructor);
 }
 
 void WorldMap::addRailSelector()
