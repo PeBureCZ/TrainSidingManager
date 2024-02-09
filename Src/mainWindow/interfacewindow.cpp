@@ -48,8 +48,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             }
             case PORTAL_ADD_MODE:
             {
-                QVector<Actor*> actors = world->getActorsCollideInLocation({0},  world->getWorldView()->getRelativeFromCursor());
-                if (actors.size() > 0) world->deleteActor(actors[0]);
+                world->addActor(PORTAL_ACTOR);
                 break;
             }
             case SIGNAL_ADD_MODE:
@@ -62,20 +61,10 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
     }
     else if (event->button() == Qt::RightButton)
     {
-        switch (menuSelected)
+        if (menuSelected >= menuSelected && menuSelected <= PORTAL_ADD_MODE)
         {
-        case PLAY_MODE_FREE: //add Rail (constructor)
-            //nothing?
-            break;
-        case RAIL_ADD_MODE: //constructing rail (RailConstructor)
             world->deleteConstructor(true);
             menuSelected = EDIT_MODE_FREE;
-            break;
-        case SIGNAL_ADD_MODE: //constructing signal (SignalConstructor)
-            world->deleteConstructor(true);
-            menuSelected = EDIT_MODE_FREE;
-            break;
-        default: break;//incl. 0 = default
         }
     }
 }
@@ -86,49 +75,56 @@ void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
     {
         if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
         {
-            ActorConstructor* constructor = world->getActualConstructor();
-            bool sharedBool = (constructor != nullptr && dynamic_cast<SelectConstructor*>(constructor));
-            if (sharedBool)
-            {
-                SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
-                if (selector->getUnderSelect() == false)
-                {
-
-                    selector->setUnderSelect(true);
-                    if (dynamic_cast<RailSelector*>(selector))
-                    {
-                        world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP1VisualPoint());
-                        world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP2VisualPoint());
-                    }
-                    managerConsole->printToConsole("under select = true", GREEN_COLOR, VERY_LONG_DURATION);
-
-                }
-                else if (selector->getUnderEdit() == true)
-                {
-                    selector->setUnderEdit(false);
-                    managerConsole->printToConsole("under edit = false", GREEN_COLOR, VERY_LONG_DURATION);
-                }
-                else managerConsole->printToConsole("nothing", GREEN_COLOR, VERY_LONG_DURATION);
-
-            }
+            leftMouseRelease();
         }
     }
     else if (event->button() == Qt::RightButton)
     {
         if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
         {
-            ActorConstructor* constructor = world->getActualConstructor();
-            bool sharedBool = (constructor != nullptr && dynamic_cast<SelectConstructor*>(constructor));
-            if (sharedBool)
+            rightMouseRelease();
+        }
+    }
+}
+
+void InterfaceWindow::leftMouseRelease()
+{
+    ActorConstructor* constructor = world->getActualConstructor();
+    bool sharedBool = (constructor != nullptr && dynamic_cast<SelectConstructor*>(constructor));
+    if (sharedBool)
+    {
+        SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
+        if (selector->getUnderSelect() == false)
+        {
+            selector->setUnderSelect(true);
+            if (dynamic_cast<RailSelector*>(selector))
             {
-                SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
-                if (selector->getUnderSelect() == true)
-                {
-                    selector->setUnderSelect(false);
-                    selector->setUnderEdit(false);
-                    managerConsole->printToConsole("under select and edit = false", GREEN_COLOR, VERY_LONG_DURATION);
-                }
+                world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP1VisualPoint());
+                world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP2VisualPoint());
             }
+            managerConsole->printToConsole("under select = true", GREEN_COLOR, VERY_LONG_DURATION);
+        }
+        else if (selector->getUnderEdit() == true)
+        {
+            selector->setUnderEdit(false);
+            managerConsole->printToConsole("under edit = false", GREEN_COLOR, VERY_LONG_DURATION);
+        }
+        else managerConsole->printToConsole("nothing", GREEN_COLOR, VERY_LONG_DURATION);
+    }
+}
+
+void InterfaceWindow::rightMouseRelease()
+{
+    ActorConstructor* constructor = world->getActualConstructor();
+    bool sharedBool = (constructor != nullptr && dynamic_cast<SelectConstructor*>(constructor));
+    if (sharedBool)
+    {
+        SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
+        if (selector->getUnderSelect() == true)
+        {
+            selector->setUnderSelect(false);
+            selector->setUnderEdit(false);
+            managerConsole->printToConsole("under select and edit = false", GREEN_COLOR, VERY_LONG_DURATION);
         }
     }
 }
@@ -141,11 +137,7 @@ void InterfaceWindow::wheelEvent(QWheelEvent *event)
 void InterfaceWindow::playButSwitch(bool editMode)
 {
     if (editMode) menuSelected = EDIT_MODE_FREE;
-    else
-    {
-        menuSelected = PLAY_MODE_FREE;
-        if (world->railList.size() > 0) world->addTrainActor(world->railList[0]);
-    }
+    else menuSelected = PLAY_MODE_FREE;
     mwlogic::playButSwitch(editMode);
 }
 
@@ -190,7 +182,6 @@ void InterfaceWindow::on_AddBut_clicked()
 {
     world->getWorldView()->zoomIn(false); //false = sideways by mouse
 }
-
 
 void InterfaceWindow::on_MultiFuncBut1_clicked()
 {

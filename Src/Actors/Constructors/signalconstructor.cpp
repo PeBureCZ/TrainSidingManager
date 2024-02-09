@@ -12,7 +12,6 @@ void SignalConstructor::actualizeConstructor(QPoint newPoint)
 {
     QPoint slideLocation = {5,-50};
     setLocation(newPoint + slideLocation, true);
-    actualizeGraphicLocation();
 }
 
 void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)

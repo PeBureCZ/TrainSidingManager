@@ -9,6 +9,8 @@
 #include <QHBoxLayout>
 #include "Actors/rail.h"
 
+#include "dependencies/WorldMapActorLogic.h"
+
 //ENUM
 #include "dependencies/Enums/BlockChannels.h"
 
@@ -35,6 +37,7 @@ public:
     void addConstructor(int constructorType);
     void constructRail(QPoint point);
     void constructSignal();
+    void constructPortal();
 
 };
 

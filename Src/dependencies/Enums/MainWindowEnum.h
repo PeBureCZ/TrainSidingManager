@@ -9,9 +9,11 @@ enum OptionMode
     //EDIT+ADD
     EDIT_MODE_START = 100,
     EDIT_MODE_FREE,
+    //constructors start
     RAIL_ADD_MODE,
     SIGNAL_ADD_MODE,
     PORTAL_ADD_MODE,
+    //constructors end
     EDIT_ADD_END = 199,
 
     //EDIT+SELECT
@@ -28,15 +30,5 @@ enum OptionMode
     SELECT_PLAY_START = 400,
     PLAY_MODE_END = 499,
 };
-
-enum ConstructorsEnum
-{
-    //CONSTRUCTORS
-    RAIL_CONSTRUCTOR = 1,
-    SIGNAL_CONSTRUCTOR,
-    RAIL_SELECTOR,
-    PORTAL_CONSTRUCTOR,
-};
-
 
 #endif // MAINWINDOWENUM_H

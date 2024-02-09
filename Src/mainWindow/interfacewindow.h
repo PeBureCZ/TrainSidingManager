@@ -19,6 +19,8 @@ protected slots:
     void on_AddBut_clicked() override;
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void leftMouseRelease();
+    void rightMouseRelease();
     void wheelEvent(QWheelEvent *event);
     void playButSwitch(bool editMode) override;
     void selectMenuSwitch(bool selectMode) override;

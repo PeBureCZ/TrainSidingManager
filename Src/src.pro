@@ -24,11 +24,13 @@ SOURCES += \
     Actors/electriclocomotive.cpp \
     Actors/locomotive.cpp \
     Actors/movable.cpp \
+    Actors/portal.cpp \
     Actors/rail.cpp \
     Actors/railwayobject.cpp \
     Actors/signal.cpp \
     Actors/train.cpp \
     Actors/vehicle.cpp \
+    dependencies/WorldMapActorLogic.cpp \
     main.cpp \
     Components/boxcollider.cpp \
     Components/collider.cpp \
@@ -66,6 +68,7 @@ HEADERS += \
     Actors/electriclocomotive.h \
     Actors/locomotive.h \
     Actors/movable.h \
+    Actors/portal.h \
     Actors/rail.h \
     Actors/railwayobject.h \
     Actors/signal.h \
@@ -84,6 +87,7 @@ HEADERS += \
     dependencies/Enums/MainWindowEnum.h \
     dependencies/Enums/SignalEnum.h \
     dependencies/Enums/TrainsEnum.h \
+    dependencies/WorldMapActorLogic.h \
     dependencies/interfacewindow.h \
     dependencies/managerconsole.h \
     dependencies/managerconsolelogic.h \

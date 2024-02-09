@@ -57,21 +57,22 @@ void mwlogic::addConstructor(int constructorType)
     switch (constructorType)
     {
     case RAIL_CONSTRUCTOR:
-        world->addRailConstructor();
+
+        world->addActor(RAIL_CONSTRUCTOR);
         managerConsole->printToConsole(console.messageText[RAIL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
         managerConsole->printToConsole(console.messageText[RAIL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
         break;
     case SIGNAL_CONSTRUCTOR:
-        world->addSignalConstructor();
+        world->addActor(SIGNAL_CONSTRUCTOR);
         managerConsole->printToConsole(console.messageText[SIGNAL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
         managerConsole->printToConsole(console.messageText[SIGNAL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
         break;
     case RAIL_SELECTOR:
-        world->addRailSelector();
+        world->addActor(RAIL_SELECTOR);
         managerConsole->printToConsole(console.messageText[RAIL_SELECTOR_CONSOLE_TEXT], DEFAULT_COLOR, LONG_DURATION);
         break;
     case PORTAL_CONSTRUCTOR:
-        world->addPortalConstructor();
+        world->addActor(PORTAL_CONSTRUCTOR);
         managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
         managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
         break;
@@ -128,7 +129,7 @@ void mwlogic::constructRail(QPoint point)
     {
         //create new lined rail and start constructing
         actualRailConstructor->actualizeConstructor(point);
-        actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,point,nullptr)));
+        actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addActor(RAIL_ACTOR)));
         actualRailConstructor->underConstruction(true);
         break;
     }
@@ -157,7 +158,7 @@ void mwlogic::constructRail(QPoint point)
         actualRailConstructor->actualizeConstructor(newPoint);
 
         //ADD RAIL ACTOR
-        actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addRailwaylActor(1,newPoint,nullptr)));
+        actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addActor(RAIL_ACTOR)));
         actualRailConstructor->getOwnedRail()->setLocation(newPoint, true);
         actualRailConstructor->getOwnedRail()->setP0WorldLocation(newPoint);
         actualRailConstructor->getOwnedRail()->connectRails(nearestRail, true);
@@ -187,6 +188,7 @@ void mwlogic::constructRail(QPoint point)
 
 void mwlogic::constructSignal()
 {
+
     if (dynamic_cast<SignalConstructor*>(world->getActualConstructor()))
     {
         SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(world->getActualConstructor());
@@ -202,9 +204,9 @@ void mwlogic::constructSignal()
             {
                 managerConsole->printToConsole("Cant create signal on this rail point!", RED_BOLD_COLOR, LONG_DURATION);
                 return; //signal is not created in this condition
-            }
-            world->addRailwaylActor(2, actualSignalConstructor->getLocation(), nearestRail); //create signal actor
-        }   
+            }   
+            world->addActor(SIGNAL_ACTOR);
+        }
     }
 }
 

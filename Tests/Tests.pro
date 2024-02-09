@@ -27,6 +27,7 @@ SOURCES += \
     ../Src/Actors/signal.cpp \
     ../Src/Actors/train.cpp \
     ../Src/Actors/vehicle.cpp \
+    ../Src/dependencies/WorldMapActorLogic.cpp \
     ../Src/dependencies/managerconsole.cpp \
     ../Src/dependencies/managerconsolelogic.cpp \
     ../Src/dependencies/railnavigation.cpp \
@@ -82,7 +83,9 @@ HEADERS += \
     ../Src/Components/spherecollider.h \
     ../Src/Components/spheretrigger.h \
     ../Src/Components/trigger.h \
+    ../Src/dependencies/Enums/ActorsEnum.h \
     ../Src/dependencies/Enums/SignalEnum.h \
+    ../Src/dependencies/WorldMapActorLogic.h \
     ../Src/dependencies/managerconsole.h \
     ../Src/dependencies/managerconsolelogic.h \
     ../Src/dependencies/railnavigation.h \

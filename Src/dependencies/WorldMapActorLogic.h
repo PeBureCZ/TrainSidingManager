@@ -1,0 +1,6 @@
+#ifndef WORLDMAPACTORLOGIC_H
+#define WORLDMAPACTORLOGIC_H
+
+#include "worldmap.h"
+
+#endif // WORLDMAPACTORLOGIC_H

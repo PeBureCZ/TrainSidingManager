@@ -6,6 +6,7 @@
 #include <QPen>
 #include <QThread>
 #include "mainWindow/customqgraphicsview.h"
+//#include "dependencies/addactorlogic.cpp"
 
 //BASIC OBJECTS
 #include <QGraphicsView>
@@ -31,6 +32,7 @@
 //ENUMS
 #include "Enums/TrainsEnum.h"
 #include "Enums/BlockChannels.h"
+#include "Enums/ActorsEnum.h"
 
 class WorldMap : public QObject
 {
@@ -40,6 +42,25 @@ private:
     ActorConstructor* actualConstructor;
     QGraphicsScene *worldScene;
     WorldCollide* worldCollide;
+
+    //WorldActorLogic.cpp
+    void addActorToLists(Actor *addedActor);
+
+    //constructors
+    Actor* addRailConstructor();
+    Actor* addSignalConstructor();
+    Actor* addPortalConstructor();
+
+    //selectors
+    Actor* addRailSelector();
+
+    //trains
+    Actor* addTrainActor(Rail *spawnOnRail);
+
+    //multi-type actor switch
+    Actor* addStaticlActor(QPoint spawnPos, int indexOfActor);
+    Actor* addVehicleActor(Train* ownerTrain, int indexOfVehicle);
+    Actor* addRailwaylActor(int indexOfActor);
 
 public:
     WorldMap(QObject *parent = nullptr
@@ -54,19 +75,11 @@ public:
 
     //FCE - BASIC
     void setMap(int xSize, int ySize);
-    void addTrainActor(Rail *spawnOnRail);
 
-    //add constructors
-    void addRailConstructor();
-    void addSignalConstructor();
-    void addPortalConstructor();
-
-    void addRailSelector();
-    void addStaticlActor(QPoint spawnPos, int indexOfActor);
-    void addVehicleActor(Train* ownerTrain, int indexOfVehicle);
+    //WorldActorLogic.cpp
+    Actor* addActor(int indexOfActor);
     void deleteAllActors(); //QGraphicsItem* item, QString name
     void setActorLocation(QPoint newLocation, Actor* actor);
-    void addActorToLists(Actor *addedActor);
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor(bool deleteCreation);
@@ -79,7 +92,6 @@ public:
     Rail* getRailFromList(int index);
     Actor* getActorFromList(int index);
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
-    Actor* addRailwaylActor(int indexOfActor, QPoint mapLocation, Actor *connectedRail);
     ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorsCollideInLocation(QVector<int> useBlockChannels, QPoint point);
     QVector<Rail*> findPath(Train* train, Rail* destinationRail);
