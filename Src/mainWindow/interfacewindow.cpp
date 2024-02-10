@@ -37,25 +37,25 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
         {
             switch (menuSelected)
             {
-            //case 0: same as default
-            case RAIL_ADD_MODE: //add Rail (RailConstructor)
-            {
-                int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
-                int yBarValue = world->getWorldView()->verticalScrollBar()->value();
-                int zoomLevel = world->getWorldView()->getZoomLevel();
-                constructRail(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
-                break;
-            }
-            case PORTAL_ADD_MODE:
-            {
-                world->addActor(PORTAL_ACTOR);
-                break;
-            }
-            case SIGNAL_ADD_MODE:
-                constructSignal();
-                break;
-            default: {}break;//incl. 0
-                //nothing yet...;
+                //case 0: same as default
+                case RAIL_ADD_MODE: //add Rail (RailConstructor)
+                {
+                    int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
+                    int yBarValue = world->getWorldView()->verticalScrollBar()->value();
+                    int zoomLevel = world->getWorldView()->getZoomLevel();
+                    constructRail(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
+                    break;
+                }
+                case PORTAL_ADD_MODE:
+                {
+                    world->addActor(PORTAL_ACTOR);
+                    break;
+                }
+                case SIGNAL_ADD_MODE:
+                    constructSignal();
+                    break;
+                default: {}break;//incl. 0
+                    //nothing yet...;
             }
         }
     }

@@ -3,7 +3,7 @@
 
 enum TrainsEnum
 {
-    TRAIN_CD730,
+    LOCO_CD730,
     VAGON_EAS
 };
 

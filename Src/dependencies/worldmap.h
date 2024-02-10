@@ -59,7 +59,7 @@ private:
 
     //multi-type actor switch
     Actor* addStaticlActor(QPoint spawnPos, int indexOfActor);
-    Actor* addVehicleActor(Train* ownerTrain, int indexOfVehicle);
+    void *addVehicleActor(Train* ownerTrain, int indexOfVehicle);
     Actor* addRailwaylActor(int indexOfActor);
 
 public:
@@ -70,8 +70,8 @@ public:
 
     //LISTS
     QVector<Actor*> tickedActorsList;
-    QVector<Actor*> actorList; //indexed with graphicsItemList
-    QVector<Rail*> railList; //indexed with pathList
+    QVector<Actor*> actorList;
+    QVector<Rail*> railList;
 
     //FCE - BASIC
     void setMap(int xSize, int ySize);

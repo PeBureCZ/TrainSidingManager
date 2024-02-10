@@ -188,25 +188,9 @@ void mwlogic::constructRail(QPoint point)
 
 void mwlogic::constructSignal()
 {
-
-    if (dynamic_cast<SignalConstructor*>(world->getActualConstructor()))
+    if (world->addActor(SIGNAL_ACTOR) == nullptr)
     {
-        SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(world->getActualConstructor());
-        Rail* nearestRail = actualSignalConstructor->getNearestRail();
-        int nearestEndArea = actualSignalConstructor->getNearestEndArea();
-        if (nearestRail == nullptr)
-        {
-            managerConsole->printToConsole("Signal is not connected to any rail!", RED_BOLD_COLOR, LONG_DURATION);
-        }
-        else
-        {
-            if (nearestRail->getSignal(actualSignalConstructor->getNearestEndArea()) != nullptr)
-            {
-                managerConsole->printToConsole("Cant create signal on this rail point!", RED_BOLD_COLOR, LONG_DURATION);
-                return; //signal is not created in this condition
-            }   
-            world->addActor(SIGNAL_ACTOR);
-        }
+        managerConsole->printToConsole("Signal is not connected to any rail point!", RED_BOLD_COLOR, LONG_DURATION);
     }
 }
 

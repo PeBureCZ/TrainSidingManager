@@ -22,7 +22,7 @@ void Train_test::addVehicle_oneVehicle_test()
     testedVehicle1->setMaxSpeed(8001);
 
     Train* testedTrain = new Train;
-    testedTrain->addVehicle(testedVehicle1, nullptr);
+    testedTrain->addVehicleToTrain(testedVehicle1, nullptr);
     QVERIFY(testedTrain->getMaxSpeed() == 8001);
     QVERIFY(testedTrain->getVehicles().size() == 1);
 
@@ -38,8 +38,8 @@ void Train_test::addVehicle_twoVehicle_test()
     testedVehicle2->setMaxSpeed(505);
 
     Train* testedTrain = new Train;
-    testedTrain->addVehicle(testedVehicle1, nullptr);
-    testedTrain->addVehicle(testedVehicle2, nullptr);
+    testedTrain->addVehicleToTrain(testedVehicle1, nullptr);
+    testedTrain->addVehicleToTrain(testedVehicle2, nullptr);
     QVERIFY(testedTrain->getMaxSpeed() == 505);
     QVERIFY(testedTrain->getVehicles().size() == 2);
 

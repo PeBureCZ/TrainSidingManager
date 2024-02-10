@@ -18,7 +18,7 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
 {
     Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
     int testedNearestEndArea = -1;
-    int distance = 99999999;
+    int maxDistance = MAX_SIGNAL_DISTANCE;
     Rail* testedNearestRail = nullptr;
     QPoint correctedLocation = location + QPoint(-5,50); //graphics is slided
 
@@ -30,15 +30,15 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
         QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();
         int testedDistance1 = getDistance(correctedLocation, testedPoint1);
         int testedDistance2 = getDistance(correctedLocation, testedPoint2);
-        if (distance > testedDistance1 && testedDistance1 <= testedDistance2)
+        if (maxDistance > testedDistance1 && testedDistance1 <= testedDistance2)
         {
-            distance = testedDistance1;
+            maxDistance = testedDistance1;
             testedNearestEndArea = 0;
             testedNearestRail = rail;
         }
-        else if (distance > testedDistance2 && testedDistance2 < testedDistance1)
+        else if (maxDistance > testedDistance2 && testedDistance2 < testedDistance1)
         {
-            distance = testedDistance2;
+            maxDistance = testedDistance2;
             testedNearestEndArea = 1;
             testedNearestRail = rail;
         }
@@ -60,19 +60,19 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
                 int newTestedNearestPoint = (retestedRail->getConnection(testedNearestRail)+2)/2-1; //transfer connection point(0-3) to endPoint (0-1)
                 retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.01f).toPoint() + retestedRail->getLocation();
                 testedDistance = getDistance(correctedLocation, retestedPoint);
-                if (distance > testedDistance)
+                if (maxDistance > testedDistance)
                 {
                     testedNearestRail = retestedRail;
                     testedNearestEndArea = newTestedNearestPoint;
-                    distance = testedDistance;
+                    maxDistance = testedDistance;
                 }
                 retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.99f).toPoint() + retestedRail->getLocation();
                 testedDistance = getDistance(correctedLocation, retestedPoint);
-                if (distance > testedDistance)
+                if (maxDistance > testedDistance)
                 {
                     testedNearestRail = retestedRail;
                     testedNearestEndArea = newTestedNearestPoint;
-                    distance = testedDistance;
+                    maxDistance = testedDistance;
                 }
             }
         }
@@ -92,7 +92,7 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
     }
 
     //set visual area of nearest rail
-    if (nearestRail != nullptr && testedNearestEndArea != -1 && distance <= 120)
+    if (nearestRail != nullptr && testedNearestEndArea != -1 && maxDistance <= MAX_SIGNAL_DISTANCE)
     {
         QGraphicsItem* areaItem = nearestRail->getAreaGraphic(testedNearestEndArea);
         if (nearestAreaGraphicItem != areaItem && nearestAreaGraphicItem != nullptr)

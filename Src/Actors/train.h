@@ -28,7 +28,7 @@ public:
 
     void actualizeGraphicLocation() override;
     float getActualPathValue();
-    void addVehicle(Vehicle* newVehicle, QGraphicsItem *graphicsItem);
+    void addVehicleToTrain(Vehicle* newVehicle, QGraphicsItem *graphicsItem);
     void actualizeMaxSpeed();
     void setActualPathValue(float newValue);
     void setTrainPath(QVector<Rail*> newTrainPath);

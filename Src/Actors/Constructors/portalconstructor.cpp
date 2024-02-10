@@ -10,11 +10,11 @@ PortalConstructor::PortalConstructor(QObject* parent, QGraphicsItem* newGraphicI
 void PortalConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
 {
     Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
-    Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
     int testedNearestEndArea = -1;
-    int distance = 99999999;
+    int distance = 121;
     Rail* testedNearestRail = nullptr;
     QPoint correctedLocation = location + QPoint(-5,50); //graphics is slided
+    qDebug()  << correctedLocation;
 
     //try to find nearest area (end of actual rail)
     for (auto actor : actorsInCollision)
@@ -39,11 +39,11 @@ void PortalConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
     }
 
     //check nearest conected rails (if rail exist in the same point/area)
-    if (testedNearestEndArea != -1)
+    if (testedNearestEndArea != -1 && distance <= 120)
     {
         Rail* retestedRail = nullptr;
         QPoint retestedPoint;
-        int testedDistance = 99999999;
+        int testedDistance = 150;
         for (int i = 0; i < 2; i++)
         {
             int conectionValue = i;
@@ -76,7 +76,8 @@ void PortalConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
         (testedNearestEndArea == 0) ? snapLocation += testedNearestRail->getLocation() : snapLocation += testedNearestRail->getLocation() + testedNearestRail->getP3RelativeLocation().toPoint();
         snappedToRail = true;
         nearestRail = testedNearestRail;
-        setLocation(snapLocation, true);
+        //setLocation(snapLocation, true);
+        setGraphicLocation(snapLocation);
         actualizeGraphicLocation();
     }
     else snappedToRail = false;
@@ -89,6 +90,8 @@ void PortalConstructor::actualizeConstructor(QPoint newPoint)
         QPoint slideLocation = {5,-50};
         setLocation(newPoint + slideLocation, true);
     }
+    else setLocation(newPoint, false);
+
 }
 
 Rail* PortalConstructor::getNearestRail()

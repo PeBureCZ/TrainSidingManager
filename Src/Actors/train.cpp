@@ -34,7 +34,7 @@ void Train::setActualPathValue(float newValue)
     onPathValue = newValue;
 }
 
-void Train::addVehicle(Vehicle *newVehicle, QGraphicsItem* graphicsItem)
+void Train::addVehicleToTrain(Vehicle *newVehicle, QGraphicsItem* graphicsItem)
 {
     vehicles.push_back(newVehicle);
     vehicleGraphicsItems.push_back(graphicsItem);
