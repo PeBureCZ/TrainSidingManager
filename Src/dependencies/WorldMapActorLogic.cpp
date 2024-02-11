@@ -230,7 +230,7 @@ Actor *WorldMap::addTrain(Rail* spawnOnRail)
 
         qDebug() << "spawn train - temporary solution";
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
-        dynamic_cast<Train*>(newTrain)->setActualSpeed(1300); //centimeters/s
+        dynamic_cast<Train*>(newTrain)->setActualSpeed(130); //centimeters/s
 
         dynamic_cast<Train*>(newTrain)->startAutopilot();
 

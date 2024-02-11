@@ -13,8 +13,10 @@ protected:
     Rail* actualRail;
     QVector<Rail*> trainPath;
     float onPathValue;
-    int onPathLength; //centimeters!
-    bool directionToEnd;
+    int onPathLength;  //in decimeters!
+    int actualTrainLength; //in decimeters!
+    bool directionToRailEnd;
+    bool moveForward;
     QVector<Vehicle*> vehicles;
     QVector<QGraphicsItem*> vehicleGraphicsItems;
 

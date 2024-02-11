@@ -4,8 +4,8 @@
 
 Movable::Movable(QObject* parent, QGraphicsItem* newGraphicItem) : Actor(parent, newGraphicItem)
 {
-    maxSpeed =0; //centimeters per tick (1 km/h = 27.778 cm/s), tick = 1 second
-    actualSpeed = 0; //centimeters per tick (1 second)
+    maxSpeed =0; //decimeters per tick (1 km/h = 2.7778 cm/s), tick = 1 second
+    actualSpeed = 0; //decimeters per tick (1 second)
 }
 
 void Movable::setActualSpeed(int newSpeed)
