@@ -82,7 +82,7 @@ QString WorldMap::testFunction()
 {
     if (railList.size() > 0)
     {
-        addTrainActor(dynamic_cast<Rail*>(railList[0]));
+        addActor(TRAIN_ACTOR);
     }
     return "nothing";
 }

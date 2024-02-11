@@ -54,13 +54,15 @@ private:
     //selectors
     Actor* addRailSelector();
 
-    //trains
-    Actor* addTrainActor(Rail *spawnOnRail);
+    //specific-actors
+    Actor* addTrain(Rail *spawnOnRail);
+    Actor* addRail(QPoint point);
+    Actor* addPortal(QPoint point);
+    Actor* addSignal(QPoint point);
 
     //multi-type actor switch
     Actor* addStaticlActor(QPoint spawnPos, int indexOfActor);
     void *addVehicleActor(Train* ownerTrain, int indexOfVehicle);
-    Actor* addRailwaylActor(int indexOfActor);
 
 public:
     WorldMap(QObject *parent = nullptr

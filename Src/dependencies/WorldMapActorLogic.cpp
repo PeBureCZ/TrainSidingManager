@@ -2,7 +2,7 @@
 
 Actor *WorldMap::addActor(int indexOfActor)
 {
-    Actor* actor;
+    Actor* actor = nullptr;
     if (indexOfActor > CONSTRUCTORS_START && indexOfActor < CONSTRUCTORS_END)
     {
         switch (indexOfActor)
@@ -26,11 +26,36 @@ Actor *WorldMap::addActor(int indexOfActor)
     }
     else if(indexOfActor > RAILWAY_ACTORS_START && indexOfActor < RAILWAY_ACTORS_END)
     {
-        actor = addRailwaylActor(indexOfActor);
+        if (getActualConstructor() == nullptr) return nullptr;
+        QPoint mapLocation = getActualConstructor()->getLocation();
+        switch (indexOfActor)
+        {
+            case RAIL_ACTOR:
+            {
+                actor = addRail(mapLocation);
+                break;
+            }
+            case SIGNAL_ACTOR :
+            {
+                actor = addSignal(mapLocation);
+                    break;
+            }
+            case PORTAL_ACTOR:
+            {
+                actor = addPortal(mapLocation);
+                break;
+            }
+            default:{}
+        }
     }
     else if(indexOfActor > VEHICLE_ACTORS_START && indexOfActor < VEHICLE_ACTORS_END)
     {
-
+        if (indexOfActor == TRAIN_ACTOR)  actor = addTrain(dynamic_cast<Rail*>(railList[0]));
+        else
+        {
+            //add vehicles only
+            //need train selector / portal selector - not yet
+        }
     }
     else if(indexOfActor > SELECTORS_START && indexOfActor < SELECTORS_END)
     {
@@ -194,7 +219,7 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
     actualConstructor = nullptr;
 }
 
-Actor *WorldMap::addTrainActor(Rail* spawnOnRail)
+Actor *WorldMap::addTrain(Rail* spawnOnRail)
 {
     if (railList.size() > 0)
     {
@@ -204,91 +229,86 @@ Actor *WorldMap::addTrainActor(Rail* spawnOnRail)
         addVehicleActor(dynamic_cast<Train*>(newTrain), LOCO_CD730);
 
         qDebug() << "spawn train - temporary solution";
-        tickedActorsList.push_back(newTrain); //actor with tick update
+        tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
         dynamic_cast<Train*>(newTrain)->setActualSpeed(1300); //centimeters/s
 
         dynamic_cast<Train*>(newTrain)->startAutopilot();
+
+        //temporally
+        newTrain->setLocation(dynamic_cast<Rail*>(railList[0])->getLocation(),true);
+
         return newTrain;
     }
     return nullptr;
 }
 
-Actor *WorldMap::addRailwaylActor(int indexOfActor )
+Actor* WorldMap::addRail(QPoint point)
 {
-    if (getActualConstructor() == nullptr) return nullptr;
-    QPoint mapLocation = getActualConstructor()->getLocation();
-    Actor* connectedRail;
-    switch (indexOfActor)
+    Actor* connectedRail = dynamic_cast<RailConstructor*>(getActualConstructor())->getConnectedRail();
+    //ADD PATH FOR RAIL ACTOR = GRAPHIC ITEM
+    QPainterPath path;
+    path.cubicTo(0, 0, 0, 0, 0, 0); //deffault line -> will be changed immediately
+    QGraphicsPathItem* pathItem = new QGraphicsPathItem(path); //add graphics
+    pathItem->setPen(QPen(Qt::blue, 14));
+    pathItem->setPos(point.toPointF());
+    worldScene->addItem(pathItem);
+
+    //ADD RAIL ACTOR
+    Actor* railActor = new Rail(nullptr, pathItem); //add actor
+    Rail* railDynamic = dynamic_cast<Rail*>(railActor);
+    if (connectedRail != nullptr) railDynamic->setLined(false); // = rail is connected, start as béziere
+    railActor->setLocation(point, true);
+
+    //ADD GRAPHIC AREA OF RAIL ENDS
+    QPen pen;
+    pen.setWidth(3);
+    pen.setColor(Qt::red);
+    QPainterPath rect;
+    int size = railDynamic->getVisualAreaSize();
+    rect.addRect(0, 0, size, size);
+    QGraphicsItem* pathArea0 = new QGraphicsPathItem(rect);
+    QGraphicsItem* pathArea1 = new QGraphicsPathItem(rect);
+    dynamic_cast<QGraphicsPathItem*>(pathArea0)->setPen(pen);
+    dynamic_cast<QGraphicsPathItem*>(pathArea1)->setPen(pen);
+    railDynamic->createArea(0, pathArea0);
+    railDynamic->createArea(1, pathArea1);
+    railDynamic->setVisibilityOfArea(0,false, Qt::blue); //set to invisible
+    railDynamic->setVisibilityOfArea(1,false, Qt::blue); //set to invisible
+    worldScene->addItem(pathArea0);
+    worldScene->addItem(pathArea1);
+    return railActor;
+}
+
+Actor* WorldMap::addPortal(QPoint point)
+{
+    return nullptr;
+}
+
+Actor* WorldMap::addSignal(QPoint point)
+{
+    SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(getActualConstructor());
+    int nearestEndArea = actualSignalConstructor->getNearestEndArea();
+    Rail* connectedRail = actualSignalConstructor->getNearestRail();
+    if (connectedRail == nullptr || nearestEndArea == -1) return nullptr;
+
+    //ADD GRAPHIC FOR SIGNAL
+    SpriteColection newSprite;
+    QPixmap pixmap;
+    SignalConstructor* constructor = dynamic_cast<SignalConstructor*>(actualConstructor);
+
+    if (constructor->getNearestAreaGraphic() != nullptr) pixmap = newSprite.getSprite(RED_SIGNAL_SPRITE);
+    else pixmap = newSprite.getSprite(NO_SIGNAL_SPRITE);
+
+    QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct
+    worldScene->addItem(signalGraphic);
+
+    //ADD SIGNAL ACTOR
+    Actor* newSignal = new Signal(nullptr, signalGraphic);
+    newSignal->setLocation(point, true);
+
+    if (connectedRail != nullptr && (nearestEndArea == 0 || nearestEndArea == 1))
     {
-        case RAIL_ACTOR: //Rail
-        {
-            connectedRail = dynamic_cast<RailConstructor*>(getActualConstructor())->getConnectedRail();
-            //ADD PATH FOR RAIL ACTOR = GRAPHIC ITEM
-            QPainterPath path;
-            path.cubicTo(0, 0, 0, 0, 0, 0); //deffault line -> will be changed immediately
-            QGraphicsPathItem* pathItem = new QGraphicsPathItem(path); //add graphics
-            pathItem->setPen(QPen(Qt::blue, 14));
-            pathItem->setPos(mapLocation.toPointF());
-            worldScene->addItem(pathItem);
-
-            //ADD RAIL ACTOR
-            Actor* railActor = new Rail(nullptr, pathItem); //add actor
-            Rail* railDynamic = dynamic_cast<Rail*>(railActor);
-            if (connectedRail != nullptr) railDynamic->setLined(false); // = rail is connected, start as béziere
-            railActor->setLocation(mapLocation, true);
-
-            //ADD GRAPHIC AREA OF RAIL ENDS
-            QPen pen;
-            pen.setWidth(3);
-            pen.setColor(Qt::red);
-            QPainterPath rect;
-            int size = railDynamic->getVisualAreaSize();
-            rect.addRect(0, 0, size, size);
-            QGraphicsItem* pathArea0 = new QGraphicsPathItem(rect);
-            QGraphicsItem* pathArea1 = new QGraphicsPathItem(rect);
-            dynamic_cast<QGraphicsPathItem*>(pathArea0)->setPen(pen);
-            dynamic_cast<QGraphicsPathItem*>(pathArea1)->setPen(pen);
-            railDynamic->createArea(0, pathArea0);
-            railDynamic->createArea(1, pathArea1);
-            railDynamic->setVisibilityOfArea(0,false, Qt::blue); //set to invisible
-            railDynamic->setVisibilityOfArea(1,false, Qt::blue); //set to invisible
-            worldScene->addItem(pathArea0);
-            worldScene->addItem(pathArea1);
-
-            return railActor;
-        }
-        case SIGNAL_ACTOR : //Signal
-        {
-            SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(getActualConstructor());
-            int nearestEndArea = actualSignalConstructor->getNearestEndArea();
-            Rail* connectedRail = actualSignalConstructor->getNearestRail();
-            if (connectedRail == nullptr || nearestEndArea == -1) return nullptr;
-
-            //ADD GRAPHIC FOR SIGNAL
-            SpriteColection newSprite;
-            QPixmap pixmap;
-            SignalConstructor* constructor = dynamic_cast<SignalConstructor*>(actualConstructor);
-
-            if (constructor->getNearestAreaGraphic() != nullptr) pixmap = newSprite.getSprite(RED_SIGNAL_SPRITE);
-            else pixmap = newSprite.getSprite(NO_SIGNAL_SPRITE);
-
-            QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct
-            worldScene->addItem(signalGraphic);
-
-            //ADD SIGNAL ACTOR
-            Actor* newSignal = new Signal(nullptr, signalGraphic);
-            newSignal->setLocation(mapLocation, true);
-
-            if (connectedRail != nullptr && (nearestEndArea == 0 || nearestEndArea == 1))
-            {
-                dynamic_cast<Rail*>(connectedRail)->addSignal(nearestEndArea, dynamic_cast<Signal*>(newSignal));
-            }
-            return newSignal;
-        }
-        case PORTAL_ACTOR:
-        {
-
-        }
-        default:{}
+        dynamic_cast<Rail*>(connectedRail)->addSignal(nearestEndArea, dynamic_cast<Signal*>(newSignal));
     }
+    return newSignal;
 }

@@ -130,8 +130,6 @@ void Train::moveTrain()
 
 void Train::startAutopilot()
 {
-    //TrainNavigation navigation;
-    //trainPath = navigation.autopilotCheck(1000,5,actualRail,directionToEnd);
     trainPath = TrainNavigation::autopilotCheck(10000,10,actualRail,directionToEnd);
 }
 
