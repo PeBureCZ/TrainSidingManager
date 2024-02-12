@@ -5,7 +5,7 @@
 #include <QObject>
 #include "dependencies/worldmap.h"
 #include "dependencies/worldcollide.h"
-#include "mainWindow/customqgraphicsview.h"
+#include "mwComponents/customqgraphicsview.h"
 
 #include <QGraphicsItem>
 

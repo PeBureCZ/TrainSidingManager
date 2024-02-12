@@ -6,11 +6,13 @@
 #include "Actors_tests/train_test.h"
 #include "dependencies_tests/trainnavigation_test.h"
 
+#include "librarysubcore.h"
+
 int main(int argc, char *argv[])
 {
     int status = 0;
 
-    //this line fix QT ("auto run test" sometimes disable Tools/Tests menu -> QT bug)
+    //this line fix QT ("auto run test" sometimes disable Tools/Tests menu -> QT bug?)
     QTest::qExec(new WorldMap_test, argc, argv);
 
     auto runTest = [&status, argc, argv](QObject* obj)

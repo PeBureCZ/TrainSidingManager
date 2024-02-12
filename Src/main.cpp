@@ -1,4 +1,5 @@
-#include "mainWindow/interfacewindow.h"
+#include "mwComponents/interfacewindow.h"
+#include "mainWindow/mainwindow.h"
 #include <QApplication>
 #include <Qtimer>
 #include <QElapsedTimer>

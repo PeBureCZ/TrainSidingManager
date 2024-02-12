@@ -2,13 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "dependencies/worldmap.h"
 #include <QLabel>
 #include <QLayout>
+#include <QWidget>
+
+#include "dependencies/worldmap.h"
 #include "dependencies/managerconsole.h"
 #include "dependencies/Enums/MainWindowEnum.h"
 #include "Actors/Constructors/railselector.h"
-#include "buttonfunctions.h"
+#include "mwComponents/buttonfunctions.h"
 
 /*
 menuSelected:
@@ -26,6 +28,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 private:
     void resizeEvent(QResizeEvent *event) override;
     void setBasicMenuInterface();
@@ -35,7 +38,7 @@ private:
     void setPlayAddInterface(int menu);
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);   
     ~MainWindow();
     void wheelEvent(QWheelEvent *event);
     void initializeInterface();
@@ -49,7 +52,6 @@ public:
     QWidget *widgetWithLayout;
 
 private slots:
-
     virtual void on_PlayBut_clicked();
     virtual void on_TestButton1_clicked();
     virtual void on_SubBut_clicked();
@@ -82,11 +84,8 @@ private slots:
     virtual void on_AddMenuBut_clicked();
     virtual void on_EditMenuBut_clicked();
 
-
-
 protected:
     Ui::MainWindow *ui;
     WorldMap* world;
-
 };
 #endif // MAINWINDOW_H

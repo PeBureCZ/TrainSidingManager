@@ -2,11 +2,13 @@
 #define LIBRARYCORE_H
 
 #include "lib_global.h"
+#include <QObject>
 
-class LIB_EXPORT LibraryCore
+
+class LIB_EXPORT LibraryCore : public QObject
 {
 public:
-    LibraryCore();
+    LibraryCore(QObject* parent = nullptr);
     int testCustomLib(int a, int b);
 };
 

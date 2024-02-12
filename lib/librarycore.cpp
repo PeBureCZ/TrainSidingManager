@@ -1,6 +1,6 @@
 #include "librarycore.h"
 
-LibraryCore::LibraryCore()
+LibraryCore::LibraryCore(QObject* parent) : QObject(parent)
 {
 
 }
