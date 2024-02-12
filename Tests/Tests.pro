@@ -8,7 +8,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 INCLUDEPATH += ../Src
 
 
-
 SOURCES += \
     ../Src/Actors/Constructors/actorconstructor.cpp \
     ../Src/Actors/Constructors/portalconstructor.cpp \
@@ -55,7 +54,6 @@ SOURCES += \
     ../Src/Components/trigger.cpp \
     Actors_tests/actor_test.cpp \
 
-
 HEADERS += \
     ../Src/Actors/Constructors/actorconstructor.h \
     ../Src/Actors/Constructors/portalconstructor.h \
@@ -101,4 +99,18 @@ HEADERS += \
     Actors_tests/signal_test.h \
     Actors_tests/train_test.h \
     dependencies_tests/trainnavigation_test.h \
-    dependencies_tests/worldmap_test.h
+    dependencies_tests/worldmap_test.h \
+
+
+
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../build-TestSharedLibrary-Desktop_Qt_6_6_0_MinGW_64_bit-Debug/release/ -lTestSharedLibrary
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build-TestSharedLibrary-Desktop_Qt_6_6_0_MinGW_64_bit-Debug/debug/ -lTestSharedLibrary
+
+#INCLUDEPATH += $$PWD/../../build-TestSharedLibrary-Desktop_Qt_6_6_0_MinGW_64_bit-Debug/debug
+#DEPENDPATH += $$PWD/../../build-TestSharedLibrary-Desktop_Qt_6_6_0_MinGW_64_bit-Debug/debug
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release/ -llib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../lib/debug/ -llib
+
+INCLUDEPATH += $$PWD/../lib
+DEPENDPATH += $$PWD/../lib
