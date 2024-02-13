@@ -11,7 +11,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ../Src/mwComponents/customqgraphicsview.cpp \
+    ../ui/mwComponents/customqgraphicsview.cpp \
     librarycore.cpp \
     librarysubcore.cpp \
     Actors/Constructors/actorconstructor.cpp \
@@ -52,7 +52,7 @@ SOURCES += \
     dependencies/worldviewmap.cpp \
 
 HEADERS += \
-    ../Src/mwComponents/customqgraphicsview.h \
+    ../ui/mwComponents/customqgraphicsview.h \
     Actors/Constructors/actorconstructor.h \
     Actors/Constructors/portalconstructor.h \
     Actors/Constructors/railconstructor.h \
@@ -101,7 +101,7 @@ HEADERS += \
     librarycore.h \
     librarysubcore.h \
 
-INCLUDEPATH += ../Src
+INCLUDEPATH += ../ui
 
 
 # Default rules for deployment.

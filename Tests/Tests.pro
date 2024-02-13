@@ -3,7 +3,7 @@ CONFIG += qt warn_on depend_includepath testcase
 
 TEMPLATE = app
 
-INCLUDEPATH += ../Src
+INCLUDEPATH += ../ui
 
 SOURCES += \
     main.cpp \
