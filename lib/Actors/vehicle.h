@@ -14,7 +14,8 @@ protected:
     int secondAxleDistance; //relative
 public:
     Vehicle(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
-    QPoint axlePos();
+    const QPoint axlePos();
+    const int getLegth();
 signals:
 
 public slots:

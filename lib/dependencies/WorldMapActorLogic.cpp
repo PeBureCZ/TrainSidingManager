@@ -8,7 +8,6 @@ Actor *WorldMap::addActor(int indexOfActor)
         switch (indexOfActor)
         {
         case RAIL_CONSTRUCTOR:
-
             actor = addRailConstructor();
             break;
         case SIGNAL_CONSTRUCTOR:
@@ -50,7 +49,7 @@ Actor *WorldMap::addActor(int indexOfActor)
     }
     else if(indexOfActor > VEHICLE_ACTORS_START && indexOfActor < VEHICLE_ACTORS_END)
     {
-        if (indexOfActor == TRAIN_ACTOR)  actor = addTrain(dynamic_cast<Rail*>(railList[0]));
+        if (indexOfActor == TRAIN_ACTOR)  actor = addTrain();
         else
         {
             //add vehicles only
@@ -219,14 +218,16 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
     actualConstructor = nullptr;
 }
 
-Actor *WorldMap::addTrain(Rail* spawnOnRail)
+Actor *WorldMap::addTrain()
 {
     if (railList.size() > 0)
     {
         SpriteColection newSprite; //struct
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
-        Actor* newTrain = new Train(nullptr, trainItem, spawnOnRail);
+        Actor* newTrain = new Train(nullptr, trainItem, dynamic_cast<Rail*>(railList[0]));
+
         addVehicleActor(dynamic_cast<Train*>(newTrain), LOCO_CD730);
+        addVehicleActor(dynamic_cast<Train*>(newTrain), VAGON_EAS);
 
         qDebug() << "spawn train - temporary solution";
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)

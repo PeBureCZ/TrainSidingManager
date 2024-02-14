@@ -12,8 +12,6 @@ CONFIG += c++17
 
 SOURCES += \
     ../ui/mwComponents/customqgraphicsview.cpp \
-    librarycore.cpp \
-    librarysubcore.cpp \
     Actors/Constructors/actorconstructor.cpp \
     Actors/Constructors/portalconstructor.cpp \
     Actors/Constructors/railconstructor.cpp \
@@ -98,8 +96,6 @@ HEADERS += \
     dependencies/worldmap.h \
     dependencies/worldviewmap.h \
     lib_global.h \
-    librarycore.h \
-    librarysubcore.h \
 
 INCLUDEPATH += ../ui
 

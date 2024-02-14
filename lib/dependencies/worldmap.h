@@ -54,7 +54,7 @@ private:
     Actor* addRailSelector();
 
     //specific-actors
-    Actor* addTrain(Rail *spawnOnRail);
+    Actor* addTrain();
     Actor* addRail(QPoint point);
     Actor* addPortal(QPoint point);
     Actor* addSignal(QPoint point);

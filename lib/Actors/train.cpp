@@ -41,6 +41,7 @@ void Train::addVehicleToTrain(Vehicle *newVehicle, QGraphicsItem* graphicsItem)
     vehicles.push_back(newVehicle);
     vehicleGraphicsItems.push_back(graphicsItem);
     actualizeMaxSpeed();
+    actualizeTrainLenth();
 }
 
 void Train::actualizeMaxSpeed()
@@ -86,7 +87,7 @@ QPointF Train::getLocationOnPath(float percentOnPath)
 
 void Train::moveTrain()
 {
-    if (actualSpeed == 0) return; //no change, no move
+    if (actualSpeed == 0) return; //no change, no move 
     int newOnPathLength = onPathLength; //in decimeters
     bool directionOnEventBegin = directionToRailEnd;
     bool repeat = false;
@@ -145,6 +146,36 @@ void Train::setActualPathGraphic(Rail* actualRail)
     if (actualRail != nullptr) actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(dynamic_cast<Actor*>(actualRail)->getGraphicItem());
     else actualPathGraphic = nullptr;
 }
+
+void Train::teleportTrainToRail(Rail *rail)
+{
+    actualRail = rail;
+    setActualPathGraphic(actualRail);
+    int railLength = rail->getRailLength();
+
+    if (railLength < actualTrainLength - 10)
+    {
+        qDebug() << "rail is too short";
+        return;
+    }
+
+    directionToRailEnd ? onPathLength = 5 : onPathLength = 5 + actualTrainLength;
+    int savedSpeed = actualSpeed;
+    actualSpeed = 1;
+    moveTrain(); //move train by 1 set train in right position
+    actualSpeed = savedSpeed;
+}
+
+void Train::actualizeTrainLenth()
+{
+    actualTrainLength = 0;
+    for (auto vehicle : vehicles)
+    {
+        actualTrainLength += vehicle->getLegth();
+    }
+}
+
+
 
 void Train::tickEvent()
 {

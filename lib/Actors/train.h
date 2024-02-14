@@ -38,6 +38,9 @@ public:
     void moveTrain();
     void startAutopilot();
     void setActualPathGraphic(Rail *actualRail);
+    void teleportTrainToRail(Rail* rail);
+    void actualizeTrainLenth();
+
 
     virtual ~Train();
 

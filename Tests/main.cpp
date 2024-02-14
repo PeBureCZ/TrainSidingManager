@@ -6,8 +6,6 @@
 #include "Actors_tests/train_test.h"
 #include "dependencies_tests/trainnavigation_test.h"
 
-#include "librarysubcore.h"
-
 int main(int argc, char *argv[])
 {
     int status = 0;
