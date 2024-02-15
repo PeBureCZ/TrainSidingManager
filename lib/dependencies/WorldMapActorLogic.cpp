@@ -228,6 +228,7 @@ Actor *WorldMap::addTrain()
 
         addVehicleActor(dynamic_cast<Train*>(newTrain), LOCO_CD730);
         addVehicleActor(dynamic_cast<Train*>(newTrain), VAGON_EAS);
+        addVehicleActor(dynamic_cast<Train*>(newTrain), VAGON_EAS);
 
         qDebug() << "spawn train - temporary solution";
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)

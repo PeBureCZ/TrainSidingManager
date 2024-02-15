@@ -5,8 +5,8 @@ Eas::Eas(QObject* parent, QGraphicsItem* newGraphicItem)
 {
     mass = 23500; //kg
     firstAxleCenter = {15,25}; //dcm relative
-    secondAxleCenter = {15,90}; //dcm
-    width = 140; //dcm
-    length = 300; //dcm
+    secondAxleCenter = {15,115}; //dcm
+    width = 30; //dcm
+    length = 140; //dcm
     maxSpeed = 333;
 }

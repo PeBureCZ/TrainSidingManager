@@ -18,7 +18,11 @@ void Train::actualizeGraphicLocation()
 {
     //this function is called from worldmap (class) with function "updateWorld"
     //location (graphicLocation variable) is changed in QThreads and have to be visually changed in main thread
-    dynamic_cast<QGraphicsItem*>(vehicleGraphicsItems[0])->setPos(graphicLocation); //only index 0 vehicle for now
+
+    for (int i = 0; i < vehicles.size(); i++)
+    {
+        dynamic_cast<Vehicle*>(vehicles[i])->actualizeGraphicLocation();
+    }
 }
 
 Rail *Train::getActualRail()
@@ -97,15 +101,6 @@ void Train::moveTrain()
 
     (directionToRailEnd) ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
 
-    /*
-    if (directionToRailEnd && actualRail->getRailLength() - newOnPathLength < actualTrainLength || !directionToRailEnd && actualTrainLength > newOnPathLength)
-    {
-        actualSpeed = 0;
-        qDebug() << "train STOP - end of rail"; //need add to basic script!
-        return;
-    }
-    */
-
     while (repeat)
     {
         if (trainPath.size() > 0)
@@ -138,9 +133,30 @@ void Train::moveTrain()
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
 
-    QPoint onPathPoint = actualPathGraphic->path().pointAtPercent(newPathPercentValue).toPoint() + actualPathGraphic->pos().toPoint();
-    onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->firstAxlePos(); //change pos by axle pos (relative pos)
-    setGraphicLocation(onPathPoint); //graphic item position change by class WorldMap! (out of QTHREAD)
+    //TEMPORARY
+    QPoint onPathPoint;
+    Vehicle* vehicle = dynamic_cast<Vehicle*>(vehicles[0]);
+    onPathPoint = actualPathGraphic->path().pointAtPercent(newPathPercentValue).toPoint() + actualPathGraphic->pos().toPoint();
+    onPathPoint -= vehicle->firstAxlePos(); //change pos by axle pos (relative pos)
+    vehicle->setLocation(onPathPoint + QPoint(0,newOnPathLength),false);
+    vehicle->setGraphicLocation(onPathPoint);
+
+    /*
+    if ( vehicles.size() > 1)
+    {
+        directionToRailEnd ? newOnPathLength -= dynamic_cast<Vehicle*>(vehicles[0])->getLegth() : newOnPathLength += dynamic_cast<Vehicle*>(vehicles[0])->getLegth();
+        for (auto vehicle : vehicles)
+        {
+            directionToRailEnd ? newOnPathLength += vehicle->getLegth() : newOnPathLength -= vehicle->getLegth();
+            newPathPercentValue = actualPathGraphic->path().percentAtLength(newOnPathLength);
+            onPathPoint = actualPathGraphic->path().pointAtPercent(newPathPercentValue).toPoint() + actualPathGraphic->pos().toPoint();
+            onPathPoint -= vehicle->firstAxlePos(); //change pos by axle pos (relative pos)
+
+            vehicle->setLocation(onPathPoint + QPoint(0,newOnPathLength),false);
+            vehicle->setGraphicLocation(onPathPoint);
+        }
+    }
+    */
 }
 
 void Train::startAutopilot()
