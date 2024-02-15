@@ -87,7 +87,7 @@ QPointF Train::getLocationOnPath(float percentOnPath)
 
 void Train::moveTrain()
 {
-    if (actualSpeed == 0) return; //no change, no move 
+    if (actualSpeed == 0) return; //no change, no move
     int newOnPathLength = onPathLength; //in decimeters
     bool directionOnEventBegin = directionToRailEnd;
     bool repeat = false;
@@ -97,11 +97,20 @@ void Train::moveTrain()
 
     (directionToRailEnd) ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
 
+    /*
+    if (directionToRailEnd && actualRail->getRailLength() - newOnPathLength < actualTrainLength || !directionToRailEnd && actualTrainLength > newOnPathLength)
+    {
+        actualSpeed = 0;
+        qDebug() << "train STOP - end of rail"; //need add to basic script!
+        return;
+    }
+    */
+
     while (repeat)
     {
         if (trainPath.size() > 0)
         {
-            (directionOnEventBegin) ? newOnPathLength -= actualRail->getRailLength() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(trainPath[0])->getRailLength()*10;
+            (directionOnEventBegin) ? newOnPathLength -= actualRail->getRailLength() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(trainPath[0])->getRailLength();
             directionToRailEnd = TrainNavigation::checkNewDirection(directionToRailEnd, actualRail, trainPath[0]); //check direction for new path segment
             actualRail = trainPath[0];
             trainPath.remove(0);
@@ -121,19 +130,22 @@ void Train::moveTrain()
     if (directionOnEventBegin != directionToRailEnd) newOnPathLength = (newOnPathLength - (actualPathGraphic->path().length()))*-1;
 
     float newPathPercentValue = actualPathGraphic->path().percentAtLength(newOnPathLength);
-    if ((newPathPercentValue == 0 || newPathPercentValue == 1) && trainPath.size() == 0) setActualSpeed(0); //train stop at last rail
+    if (((newPathPercentValue == 0 && !directionToRailEnd) || (newPathPercentValue == 1 && directionToRailEnd)) && trainPath.size() == 0)
+    {
+        setActualSpeed(0); //train stop at last rail
+    }
 
-    QPoint onPathPoint = actualPathGraphic->path().pointAtPercent(newPathPercentValue).toPoint() + actualPathGraphic->pos().toPoint();
-
-    onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->axlePos(); //change pos by axle pos (relative pos)
-    setGraphicLocation(onPathPoint); //graphic item position change by class WorldMap! (out of QTHREAD)
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
+
+    QPoint onPathPoint = actualPathGraphic->path().pointAtPercent(newPathPercentValue).toPoint() + actualPathGraphic->pos().toPoint();
+    onPathPoint -= dynamic_cast<Vehicle*>(vehicles[0])->firstAxlePos(); //change pos by axle pos (relative pos)
+    setGraphicLocation(onPathPoint); //graphic item position change by class WorldMap! (out of QTHREAD)
 }
 
 void Train::startAutopilot()
 {
-    trainPath = TrainNavigation::autopilotCheck(10000,10,actualRail,directionToRailEnd);
+    trainPath = TrainNavigation::autopilotCheck(30000,10,actualRail,directionToRailEnd);
 }
 
 void Train::setTrainPath(QVector<Rail*> newTrainPath)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 11.0.2, 2024-02-13T13:59:07. -->
+<!-- Written by QtCreator 11.0.2, 2024-02-15T14:08:50. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -69,9 +69,8 @@
     <value type="bool" key="AutoTest.Framework.QtTest">true</value>
    </valuemap>
    <valuemap type="QVariantMap" key="AutoTest.CheckStates">
-    <value type="Qt::CheckState" key="1@:Qt Test">Unchecked</value>
-    <value type="Qt::CheckState" key="1@C:/QT_Projects/GitHub Projects/Tests/dependencies_tests/worldmap_test.cpp:getRelativeWorldPos_test">Unchecked</value>
-    <value type="Qt::CheckState" key="1@C:/QT_Projects/GitHub Projects/Tests/dependencies_tests/worldmap_test.h:WorldMap_test">Unchecked</value>
+    <value type="Qt::CheckState" key="1@C:/QT_Projects/GitHub Projects/tests/dependencies_tests/worldmap_test.cpp:getRelativeWorldPos_test">Unchecked</value>
+    <value type="Qt::CheckState" key="1@C:/QT_Projects/GitHub Projects/tests/dependencies_tests/worldmap_test.h:WorldMap_test">Unchecked</value>
    </valuemap>
    <value type="int" key="AutoTest.RunAfterBuild">0</value>
    <value type="bool" key="AutoTest.UseGlobal">true</value>
@@ -85,6 +84,9 @@
     <valuelist type="QVariantList" key="ClangTools.SelectedFiles"/>
     <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
     <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="CppEditor.QuickFix">
+    <value type="bool" key="UseGlobalSettings">true</value>
    </valuemap>
   </valuemap>
  </data>

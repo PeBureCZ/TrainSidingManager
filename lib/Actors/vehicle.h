@@ -11,14 +11,15 @@ protected:
     int width; //decimeter
     int length; //decimeter
     QPoint firstAxleCenter; //relative
-    int secondAxleDistance; //relative
+    QPoint secondAxleCenter; //relative
 public:
     Vehicle(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
-    const QPoint axlePos();
+    const QPoint firstAxlePos();
+    const QPoint secondAxlePos();
     const int getLegth();
 signals:
 
-public slots:
+
 };
 
 #endif //VEHICLE_H
