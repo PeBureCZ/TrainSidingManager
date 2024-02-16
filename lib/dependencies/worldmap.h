@@ -61,7 +61,7 @@ private:
 
     //multi-type actor switch
     Actor* addStaticlActor(QPoint spawnPos, int indexOfActor);
-    void *addVehicleActor(Train* ownerTrain, int indexOfVehicle);
+    void *addVehicleActors(Train* ownerTrain, QList<int> indexOfVehicles);
 
 public:
     WorldMap(QObject *parent = nullptr

@@ -16,13 +16,14 @@ void Train_test::addVehicle_zeroVehicle_test()
     delete testedTrain;
 }
 
-void Train_test::addVehicle_oneVehicle_test()
+void Train_test::addMultipleVehicles_oneVehicle_test()
 {
     Vehicle* testedVehicle1 = new Vehicle;
+    QList<Vehicle*> testedVehicles = {testedVehicle1};
     testedVehicle1->setMaxSpeed(8001);
 
     Train* testedTrain = new Train;
-    testedTrain->addVehicleToTrain(testedVehicle1, nullptr);
+    testedTrain->addMultipleVehicleToTrain(testedVehicles);
     QVERIFY(testedTrain->getMaxSpeed() == 8001);
     QVERIFY(testedTrain->getVehicles().size() == 1);
 
@@ -37,9 +38,10 @@ void Train_test::addVehicle_twoVehicle_test()
     Vehicle* testedVehicle2 = new Vehicle;
     testedVehicle2->setMaxSpeed(505);
 
+    QList<Vehicle*> testedVehicles = {testedVehicle1, testedVehicle2};
+
     Train* testedTrain = new Train;
-    testedTrain->addVehicleToTrain(testedVehicle1, nullptr);
-    testedTrain->addVehicleToTrain(testedVehicle2, nullptr);
+    testedTrain->addMultipleVehicleToTrain(testedVehicles);
     QVERIFY(testedTrain->getMaxSpeed() == 505);
     QVERIFY(testedTrain->getVehicles().size() == 2);
 

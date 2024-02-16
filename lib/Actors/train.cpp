@@ -40,10 +40,13 @@ void Train::setActualPathValue(float newValue)
     onPathValue = newValue;
 }
 
-void Train::addVehicleToTrain(Vehicle *newVehicle, QGraphicsItem* graphicsItem)
+void Train::addMultipleVehicleToTrain(QList<Vehicle *> newVehicles)
 {
-    vehicles.push_back(newVehicle);
-    vehicleGraphicsItems.push_back(graphicsItem);
+    for (auto vehicleActor : newVehicles)
+    {
+        vehicles.push_back(vehicleActor);
+        vehicleGraphicsItems.push_back(vehicleActor->getGraphicItem());
+    }
     actualizeMaxSpeed();
     actualizeTrainLenth();
 }

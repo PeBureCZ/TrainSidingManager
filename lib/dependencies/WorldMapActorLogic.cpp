@@ -138,34 +138,41 @@ Actor *WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
     return nullptr;
 }
 
-void *WorldMap::addVehicleActor(Train *ownerTrain, int indexOfVehicle)
+void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
 {
     //VEHICLES ARE NOT ADDED TO ACTOR LIST!!!
     //(delete train ---> delete all vehicles)
     SpriteColection newSprite; //struct
-    QGraphicsItem* vehicleGraphicsItem = nullptr;
-    Vehicle* newVehicle = nullptr;
-    switch (indexOfVehicle)
+    QList<Vehicle*> newVehicles = {};
+
+    for (auto vehicleIndex : indexOfVehicles)
     {
-    case LOCO_CD730:
-    {
-        vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(CD730_SPRITE)); //sprite from struct
-        newVehicle = new CD730(nullptr, vehicleGraphicsItem);
-        break;
+        switch (vehicleIndex)
+        {
+        case LOCO_CD730:
+        {
+            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(CD730_SPRITE));
+            newVehicles.push_back(new CD730(nullptr, vehicleGraphicsItem));
+            break;
+        }
+        case VAGON_EAS:
+        {
+            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(EAS_SPRITE));
+            newVehicles.push_back(new Eas(nullptr, vehicleGraphicsItem));
+            break;
+        }
+        //case x: ....
+        default: {}
+        }
     }
-    case VAGON_EAS:
+
+    if (newVehicles.size() != 0)
     {
-        vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(EAS_SPRITE)); //sprite from struct
-        newVehicle = new Eas(nullptr, vehicleGraphicsItem);
-        break;
-    }
-    //case x: ....
-    default: {}
-    }
-    if (vehicleGraphicsItem != nullptr && newVehicle != nullptr)
-    {
-        worldScene->addItem(vehicleGraphicsItem);
-        dynamic_cast<Train*>(ownerTrain)->addVehicleToTrain(newVehicle, vehicleGraphicsItem); //needed for destructor!
+        for (auto vehicle : newVehicles)
+        {
+            worldScene->addItem(vehicle->getGraphicItem());
+        }
+        dynamic_cast<Train*>(ownerTrain)->addMultipleVehicleToTrain(newVehicles);
     }
 }
 
@@ -226,9 +233,8 @@ Actor *WorldMap::addTrain()
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, dynamic_cast<Rail*>(railList[0]));
 
-        addVehicleActor(dynamic_cast<Train*>(newTrain), LOCO_CD730);
-        addVehicleActor(dynamic_cast<Train*>(newTrain), VAGON_EAS);
-        addVehicleActor(dynamic_cast<Train*>(newTrain), VAGON_EAS);
+        QList<int> vehicles = {LOCO_CD730, VAGON_EAS, VAGON_EAS};
+        addVehicleActors(dynamic_cast<Train*>(newTrain), vehicles);
 
         qDebug() << "spawn train - temporary solution";
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
@@ -236,7 +242,7 @@ Actor *WorldMap::addTrain()
 
         dynamic_cast<Train*>(newTrain)->startAutopilot();
 
-        //temporally
+        //temporary
         newTrain->setLocation(dynamic_cast<Rail*>(railList[0])->getLocation(),true);
 
         return newTrain;

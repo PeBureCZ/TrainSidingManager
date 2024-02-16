@@ -14,7 +14,7 @@ public:
 
 private slots:
     void addVehicle_zeroVehicle_test();
-    void addVehicle_oneVehicle_test();
+    void addMultipleVehicles_oneVehicle_test();
     void addVehicle_twoVehicle_test();
 
 signals:
