@@ -25,12 +25,12 @@ void Train::actualizeGraphicLocation()
     }
 }
 
-Rail *Train::getActualRail()
+Rail *Train::getActualRail() const
 {
     return actualRail;
 }
 
-float Train::getActualPathValue()
+float Train::getActualPathValue() const
 {
     return onPathValue;
 }
@@ -99,7 +99,9 @@ void Train::moveTrain()
     if (directionToRailEnd && newOnPathLength + actualSpeed > actualRail->getRailLength()) repeat = true;
     else if (!directionToRailEnd && newOnPathLength - actualSpeed < 0) repeat = true;
 
-    (directionToRailEnd) ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
+    recalculateSpeed(newOnPathLength);
+
+    directionToRailEnd ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
 
     while (repeat)
     {
@@ -203,11 +205,47 @@ void Train::actualizeTrainLenth()
     }
 }
 
+void Train::recalculateSpeed(int actualDistanceOnRail)
+{
+    int remainToRailEnd;
+    directionToRailEnd ? remainToRailEnd = actualRail->getRailLength() - actualDistanceOnRail : remainToRailEnd = actualDistanceOnRail;
+    if (moveForward) remainToRailEnd -= actualDistanceOnRail;
+    for (auto path : trainPath)
+    {
+        remainToRailEnd += path->getRailLength();
+    }
+    if (!moveForward) remainToRailEnd -= actualTrainLength;
+    if (remainToRailEnd < actualSpeed*12) //checked distance = 12 second - temporary solution
+    {
+        actualSpeed -= 10; //apply breaks - temporary
+        if (actualSpeed < 0) actualSpeed = 1;
+        if (remainToRailEnd <= 0) actualSpeed = 0;
+    }
+    else
+    {
+        actualSpeed += 4; //apply throtle power - temporary
+        if (actualSpeed > maxSpeed) actualSpeed = maxSpeed;
+    }
+}
 
+bool Train::getDirectionToRailEnd() const
+{
+    return directionToRailEnd;
+}
+
+const bool Train::getMoveDirection()
+{
+    return moveForward;
+}
 
 void Train::tickEvent()
 {
     moveTrain();
+}
+
+QVector<Rail *> Train::getTrainPath() const
+{
+    return trainPath;
 }
 
 Train::~Train()

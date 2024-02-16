@@ -17,6 +17,8 @@ public:
     int getMaxSpeed();
     void setMaxSpeed(int newMaxSpeed);
 
+    const int getActualSpeed();
+
 signals:
 
 public slots:

@@ -1,7 +1,6 @@
 #include "movable.h"
 
 
-
 Movable::Movable(QObject* parent, QGraphicsItem* newGraphicItem) : Actor(parent, newGraphicItem)
 {
     maxSpeed =0; //decimeters per tick (1 km/h = 2.7778 cm/s), tick = 1 second
@@ -22,6 +21,11 @@ int Movable::getMaxSpeed()
 void Movable::setMaxSpeed(int newMaxSpeed)
 {
     maxSpeed = newMaxSpeed;
+}
+
+const int Movable::getActualSpeed()
+{
+    return actualSpeed;
 }
 
 /*

@@ -26,26 +26,29 @@ public:
     Vehicle* getVehicleActor(int indexOfVehicle);
     QGraphicsItem* getVehicleGraphics(int indexOfVehicle);
     QPointF getLocationOnPath(float percentOnPath);
-    Rail* getActualRail();
+    QVector<Vehicle *> getVehicles() const;
+    QVector<Rail *> getTrainPath() const;
+    Rail* getActualRail() const;
+    bool getDirectionToRailEnd()const;
+    const bool getMoveDirection();
+    float getActualPathValue() const;
 
     void actualizeGraphicLocation() override;
-    float getActualPathValue();
+    void tickEvent() override;
+
     void addVehicleToTrain(Vehicle* newVehicle, QGraphicsItem *graphicsItem);
     void actualizeMaxSpeed();
     void setActualPathValue(float newValue);
-    void setTrainPath(QVector<Rail*> newTrainPath);
-    void tickEvent() override;
+    void setTrainPath(QVector<Rail*> newTrainPath); 
     void moveTrain();
     void startAutopilot();
     void setActualPathGraphic(Rail *actualRail);
     void teleportTrainToRail(Rail* rail);
     void actualizeTrainLenth();
-
+    void recalculateSpeed(int actualDistanceOnRail);
 
     virtual ~Train();
 
-
-    QVector<Vehicle *> getVehicles() const;
 
 
 
