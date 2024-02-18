@@ -92,7 +92,7 @@ QPointF Train::getLocationOnPath(float percentOnPath)
     return actualPathGraphic->path().pointAtPercent(percentOnPath);
 }
 
-void Train::moveTrain()
+void Train::actualizeOnPathLength()
 {
     if (actualSpeed == 0) return; //no change, no move
     int newOnPathLength = onPathLength; //in decimeters
@@ -102,7 +102,7 @@ void Train::moveTrain()
     if (directionToRailEnd && newOnPathLength + actualSpeed > actualRail->getRailLength()) repeat = true;
     else if (!directionToRailEnd && newOnPathLength - actualSpeed < 0) repeat = true;
 
-    recalculateSpeed(newOnPathLength);
+    //recalculateSpeed(newOnPathLength);
 
     directionToRailEnd ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
 
@@ -137,31 +137,104 @@ void Train::moveTrain()
 
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
+}
 
-    //TEMPORARY
-    QPoint onPathPoint;
-    Vehicle* vehicle = dynamic_cast<Vehicle*>(vehicles[0]);
-    onPathPoint = actualPathGraphic->path().pointAtPercent(newPathPercentValue).toPoint() + actualPathGraphic->pos().toPoint();
-    onPathPoint -= vehicle->firstAxlePos(); //change pos by axle pos (relative pos)
-    vehicle->setLocation(onPathPoint + QPoint(0,newOnPathLength),false);
-    vehicle->setGraphicLocation(onPathPoint);
-
-    /*
-    if ( vehicles.size() > 1)
+void Train::actualizeVehiclesOnPath()
+{
+    bool repeat = false;
+    if (directionToRailEnd && onPathLength + actualTrainLength > actualRail->getRailLength()) repeat = true;
+    else if (!directionToRailEnd && onPathLength - actualTrainLength < 0) repeat = true;
+    if (!repeat)
     {
-        directionToRailEnd ? newOnPathLength -= dynamic_cast<Vehicle*>(vehicles[0])->getLegth() : newOnPathLength += dynamic_cast<Vehicle*>(vehicles[0])->getLegth();
-        for (auto vehicle : vehicles)
+        int temporalDistance = onPathLength;
+        QPoint onPathPoint;
+        if (moveForward)
         {
-            directionToRailEnd ? newOnPathLength += vehicle->getLegth() : newOnPathLength -= vehicle->getLegth();
-            newPathPercentValue = actualPathGraphic->path().percentAtLength(newOnPathLength);
-            onPathPoint = actualPathGraphic->path().pointAtPercent(newPathPercentValue).toPoint() + actualPathGraphic->pos().toPoint();
-            onPathPoint -= vehicle->firstAxlePos(); //change pos by axle pos (relative pos)
+            for (int i = vehicles.size()-1; i >= 0; i--)
+            {
+                Vehicle* vehicle = dynamic_cast<Vehicle*>(vehicles[i]);
+                int firstAxleDistance, secondAxlePos;
 
-            vehicle->setLocation(onPathPoint + QPoint(0,newOnPathLength),false);
-            vehicle->setGraphicLocation(onPathPoint);
+                //directionToRailEnd ? firstAxleDistance =
+                //directionToRailEnd ? secondAxlePos = temporalDistance + vehicle->secondAxlePos().y() : secondAxlePos = temporalDistance - vehicle->secondAxlePos().y();
+
+                float percentOnRail = actualPathGraphic->path().percentAtLength(temporalDistance);
+                onPathPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
+                onPathPoint -= vehicle->firstAxlePos(); //change pos by axle pos (relative pos)
+
+                vehicle->setLocation(onPathPoint,false);
+                vehicle->setGraphicLocation(onPathPoint);
+
+                directionToRailEnd ? temporalDistance += vehicle->getLegth() : temporalDistance -= vehicle->getLegth();
+            }
+        }
+        else //move backward
+        {
+            for (int i = 0; i <= vehicles.size()-1; i++)
+            {
+
+            }
         }
     }
-    */
+    else //front of train vehicle is on next rail/s
+    {
+        QPoint onPathPoint;
+        int temporalDistance = onPathLength;
+
+        Rail* testedRail = actualRail;
+        QGraphicsPathItem* testedGraphicItem = actualPathGraphic;
+        int bonusPathIndex = 0;
+        bool actualVehicleDirection = directionToRailEnd;
+        temporalDistance = onPathLength;
+        if (moveForward)
+        {
+            for (int i = vehicles.size()-1; i >= 0; i--)
+            {
+                while (true)
+                {
+                    if ((actualVehicleDirection && temporalDistance > testedRail->getRailLength()) || (!actualVehicleDirection && temporalDistance < 0))
+                    {
+                        if (bonusPathIndex >= trainPath.size()) break;
+                        bool saveDirection = actualVehicleDirection;
+                        actualVehicleDirection = TrainNavigation::checkNewDirection(actualVehicleDirection, testedRail, trainPath[bonusPathIndex]);
+
+                        if (saveDirection && actualVehicleDirection) temporalDistance -= testedRail->getRailLength();
+                        else if (saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(trainPath[bonusPathIndex])->getRailLength() - (temporalDistance - testedRail->getRailLength());
+                        else if (!saveDirection && actualVehicleDirection) temporalDistance *= -1;
+                        else if (!saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(trainPath[bonusPathIndex])->getRailLength() + temporalDistance;
+
+                        testedRail = trainPath[bonusPathIndex];
+                        testedGraphicItem = dynamic_cast<QGraphicsPathItem*>(testedRail->getGraphicItem());
+                        bonusPathIndex++;
+                    }
+                    else
+                    {
+                        Vehicle* actualVehicle = dynamic_cast<Vehicle*>(vehicles[i]);
+                        float percentOnRail = testedGraphicItem->path().percentAtLength(temporalDistance);
+                        onPathPoint = testedGraphicItem->path().pointAtPercent(percentOnRail).toPoint() + testedGraphicItem->pos().toPoint();
+                        onPathPoint -=  actualVehicle->firstAxlePos(); //change pos by axle pos (relative pos)
+                        actualVehicle->setLocation(onPathPoint,false);
+                        actualVehicle->setGraphicLocation(onPathPoint); //actualize graphic in world tick
+                        actualVehicleDirection ? temporalDistance += actualVehicle->getLegth() : temporalDistance -= actualVehicle->getLegth();
+                        break;
+                    }
+                }
+            }
+        }
+        else //move backward
+        {
+            for (int i = 0; i <= vehicles.size()-1; i++)
+            {
+
+            }
+        }
+    }
+}
+
+void Train::moveTrain()
+{
+    actualizeOnPathLength();
+    actualizeVehiclesOnPath();
 }
 
 void Train::startAutopilot()
@@ -184,9 +257,8 @@ void Train::teleportTrainToRail(Rail *rail)
 {
     actualRail = rail;
     setActualPathGraphic(actualRail);
-    int railLength = rail->getRailLength();
 
-    if (railLength < actualTrainLength - 10)
+    if (rail->getRailLength() < actualTrainLength - 10)
     {
         qDebug() << "rail is too short";
         return;

@@ -46,6 +46,8 @@ public:
     void teleportTrainToRail(Rail* rail);
     void actualizeTrainLenth();
     void recalculateSpeed(int actualDistanceOnRail);
+    void actualizeOnPathLength();
+    void actualizeVehiclesOnPath();
 
     virtual ~Train();
 

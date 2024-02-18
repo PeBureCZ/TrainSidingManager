@@ -588,7 +588,7 @@ Trigger* Rail::getP3Trigger()
 
 int Rail::getRailLength()
 {
-    return dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().length();
+    return static_cast<int>(dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().length());
 }
 
 int Rail::getConnection(Rail *rail)
