@@ -4,6 +4,7 @@
 #include "movable.h"
 #include "vehicle.h"
 #include "dependencies/trainnavigation.h"
+#include "QtMath"
 
 class LIB_EXPORT Train : public Movable
 {
@@ -34,6 +35,7 @@ public:
     float getActualPathValue() const;
 
     void actualizeGraphicLocation() override;
+    void actualizeGraphicRotation() override;
     void tickEvent() override;
 
     void addMultipleVehicleToTrain(QList<Vehicle*> newVehicles);

@@ -62,6 +62,7 @@ void WorldMap::updateWorld()
     for (auto actor : tickedActorsList)
     {
         actor->actualizeGraphicLocation();
+        actor->actualizeGraphicRotation();
     }
     worldScene->update();
     worldView->update();

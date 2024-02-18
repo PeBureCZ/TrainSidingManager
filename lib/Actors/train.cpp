@@ -25,6 +25,17 @@ void Train::actualizeGraphicLocation()
     }
 }
 
+void Train::actualizeGraphicRotation()
+{
+    //this function is called from worldmap (class) with function "updateWorld"
+    //location (graphicLocation variable) is changed in QThreads and have to be visually changed in main thread
+
+    for (int i = 0; i < vehicles.size(); i++)
+    {
+        dynamic_cast<Vehicle*>(vehicles[i])->actualizeGraphicRotation();
+    }
+}
+
 Rail *Train::getActualRail() const
 {
     return actualRail;
@@ -153,14 +164,34 @@ void Train::actualizeVehiclesOnPath()
             for (int i = vehicles.size()-1; i >= 0; i--)
             {
                 Vehicle* vehicle = dynamic_cast<Vehicle*>(vehicles[i]);
-                int firstAxleDistance, secondAxlePos;
 
-                //directionToRailEnd ? firstAxleDistance =
-                //directionToRailEnd ? secondAxlePos = temporalDistance + vehicle->secondAxlePos().y() : secondAxlePos = temporalDistance - vehicle->secondAxlePos().y();
-
+                //front axle
                 float percentOnRail = actualPathGraphic->path().percentAtLength(temporalDistance);
                 onPathPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
-                onPathPoint -= vehicle->firstAxlePos(); //change pos by axle pos (relative pos)
+                //onPathPoint -= QPoint(vehicle->firstAxlePos().x(),0); //change pos by axle pos (relative pos)
+
+                /*
+                //second axle
+                int secondAcleDistance = temporalDistance;
+                directionToRailEnd ? secondAcleDistance += vehicle->getLegth() : secondAcleDistance -= vehicle->getLegth();
+                //if (directionToRailEnd) secondAcleDistance += vehicle->secondAxlePos().y() - vehicle->firstAxlePos().y();
+                //else secondAcleDistance -= vehicle->secondAxlePos().y() + vehicle->firstAxlePos().y();
+                percentOnRail = actualPathGraphic->path().percentAtLength(secondAcleDistance);
+                QPoint onPathSecondPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
+                //onPathSecondPoint -= QPoint(vehicle->secondAxlePos().x(),0);
+
+                //set vehicle rotation
+                //qreal angle = qAtan2(onPathSecondPoint.y() - onPathPoint.y(), onPathSecondPoint.x() - onPathPoint.x()) * 180.0 / M_PI;
+                qreal angle = qAtan2(onPathPoint.y() - onPathSecondPoint.y(), onPathPoint.x() - onPathSecondPoint.x()) * 180.0 / M_PI;
+                //angle -= 270.f;
+                // Úprava úhlu na rozsah 0 až 360 stupňů
+                //if (angle < 0) {
+                    //angle += 360;
+                //}
+                vehicle->setRotation(angle+90.f,false);
+                vehicle->setGraphicRotation(angle+90.f);
+                */
+
 
                 vehicle->setLocation(onPathPoint,false);
                 vehicle->setGraphicLocation(onPathPoint);
@@ -212,7 +243,7 @@ void Train::actualizeVehiclesOnPath()
                         Vehicle* actualVehicle = dynamic_cast<Vehicle*>(vehicles[i]);
                         float percentOnRail = testedGraphicItem->path().percentAtLength(temporalDistance);
                         onPathPoint = testedGraphicItem->path().pointAtPercent(percentOnRail).toPoint() + testedGraphicItem->pos().toPoint();
-                        onPathPoint -=  actualVehicle->firstAxlePos(); //change pos by axle pos (relative pos)
+                        //onPathPoint -=  actualVehicle->firstAxlePos(); //change pos by axle pos (relative pos)
                         actualVehicle->setLocation(onPathPoint,false);
                         actualVehicle->setGraphicLocation(onPathPoint); //actualize graphic in world tick
                         actualVehicleDirection ? temporalDistance += actualVehicle->getLegth() : temporalDistance -= actualVehicle->getLegth();

@@ -8,6 +8,7 @@ Actor::Actor(QObject *parent, QGraphicsItem* newGraphicItem)
     location = {0,0};
     graphicLocation = {0,0};
     rotation = 0.0f;
+    graphicRotation = 0.0f;
     collisionRecieveEnabled = false;
     collisionCallEnabled = false;
     calledCollisions = {};
@@ -27,6 +28,11 @@ void Actor::actualizeGraphicLocation()
     //this function is called from world with function "updateWorld"
     //location (graphicLocation variable) is changed in QThreads and have to be changed in main thread
     if (graphicItem != nullptr) graphicItem->setPos(graphicLocation);
+}
+
+void Actor::actualizeGraphicRotation()
+{
+    if (graphicItem != nullptr) graphicItem->setRotation(graphicRotation);
 }
 
 void Actor::calledCollisionEvent(const QList<Actor *> isInCollision)
@@ -71,9 +77,14 @@ QString Actor::getName()
     return name;
 }
 
-void Actor::setRotation(const float newRotation)
+void Actor::setRotation(const float newRotation, bool setGraphic)
 {
     rotation = newRotation;
+    if (setGraphic)
+    {
+        setGraphicRotation(newRotation);
+        actualizeGraphicRotation();
+    }
 }
 
 void Actor::setCallCollisionChannels(const QVector<int> newCollisions)
@@ -106,6 +117,11 @@ QPoint Actor::getLocation()
 QVector<Trigger*> Actor::getAllTriggers()
 {
     return triggers;
+}
+
+void Actor::setGraphicRotation(const float newRotation)
+{
+    graphicRotation = newRotation;
 }
 
 void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius)
