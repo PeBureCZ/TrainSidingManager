@@ -23,6 +23,7 @@ SOURCES += \
     Actors/Vagons/vagon.cpp \
     Actors/actor.cpp \
     Actors/cd730.cpp \
+    Actors/cd753.cpp \
     Actors/diesellocomotive.cpp \
     Actors/electriclocomotive.cpp \
     Actors/locomotive.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     Actors/Vagons/vagon.h \
     Actors/actor.h \
     Actors/cd730.h \
+    Actors/cd753.h \
     Actors/diesellocomotive.h \
     Actors/electriclocomotive.h \
     Actors/locomotive.h \

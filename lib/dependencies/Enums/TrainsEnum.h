@@ -3,8 +3,11 @@
 
 enum TrainsEnum
 {
+    //locomotives
     LOCO_CD730,
-    VAGON_EAS
+    LOCO_CD753,
+    //vagons
+    VAGON_EAS,
 };
 
 #endif // TRAINSENUM_H

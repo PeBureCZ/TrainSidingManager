@@ -18,6 +18,7 @@
 #include "Actors/actor.h"
 #include "Actors/train.h"
 #include "Actors/cd730.h"
+#include "Actors/cd753.h"
 #include "Actors/Vagons/eas.h"
 #include "Actors/signal.h"
 #include "Actors/Constructors/signalconstructor.h"

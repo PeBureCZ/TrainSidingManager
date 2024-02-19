@@ -10,17 +10,24 @@
 
 enum spriteEnums
 {
+    //HAVE TO ADD TO "SpriteColection" STRUCT TOO!!!
     EMPTY_SPRITE = 0,
+
     LOCO_SPRITE,
     CD730_SPRITE,
+    CD753_SPRITE,
+
+    EAS_SPRITE,
+
     RED_SIGNAL_SPRITE,
     GREEN_SIGNAL_SPRITE,
     YELLOW_SIGNAL_SPRITE,
     WHITE_SIGNAL_SPRITE,
-    RAIL_SPRITE,
     FULL_SIGNAL_SPRITE,
     NO_SIGNAL_SPRITE,
-    EAS_SPRITE,
+
+    RAIL_SPRITE,
+
     PORTAL_SPRITE,
 };
 
@@ -28,17 +35,24 @@ struct SpriteColection
 {
     const QVector<QString>relativePaths =
     {
+        //HAVE TO ADD TO "spriteEnums" TOO!!!
+
         "",
         "/images/loco.png",
         "/images/CD730.png",
+        "/images/CD753.png",
+
+        "/images/Eas.png",
+
         "/images/signal_red.png",
         "/images/signal_green.png",
         "/images/signal_yellow.png",
         "/images/signal_white.png",
-        "/images/rail.png",
         "/images/signal_full.png",
         "/images/signal_full_noPlace.png",
-        "/images/Eas.png",
+
+        "/images/rail.png",
+
         "/images/portal.png",
     };
 
