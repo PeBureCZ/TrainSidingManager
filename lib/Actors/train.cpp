@@ -170,7 +170,6 @@ void Train::actualizeVehiclesOnPath()
                 onPathPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
                 //onPathPoint -= QPoint(vehicle->firstAxlePos().x(),0); //change pos by axle pos (relative pos)
 
-                /*
                 //second axle
                 int secondAcleDistance = temporalDistance;
                 directionToRailEnd ? secondAcleDistance += vehicle->getLegth() : secondAcleDistance -= vehicle->getLegth();
@@ -180,21 +179,17 @@ void Train::actualizeVehiclesOnPath()
                 QPoint onPathSecondPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
                 //onPathSecondPoint -= QPoint(vehicle->secondAxlePos().x(),0);
 
-                //set vehicle rotation
-                //qreal angle = qAtan2(onPathSecondPoint.y() - onPathPoint.y(), onPathSecondPoint.x() - onPathPoint.x()) * 180.0 / M_PI;
                 qreal angle = qAtan2(onPathPoint.y() - onPathSecondPoint.y(), onPathPoint.x() - onPathSecondPoint.x()) * 180.0 / M_PI;
-                //angle -= 270.f;
-                // Úprava úhlu na rozsah 0 až 360 stupňů
-                //if (angle < 0) {
-                    //angle += 360;
-                //}
+
                 vehicle->setRotation(angle+90.f,false);
                 vehicle->setGraphicRotation(angle+90.f);
-                */
 
+                QPoint rotatedFirstAxlePoint = getRotatedPointArountPivot(onPathPoint+vehicle->firstAxlePos(),onPathPoint, angle+90);
+                //mirror point P_new = pivot + (pivot - P_old)
+                QPoint newLocation = onPathPoint + (onPathPoint - rotatedFirstAxlePoint);
 
-                vehicle->setLocation(onPathPoint,false);
-                vehicle->setGraphicLocation(onPathPoint);
+                vehicle->setLocation(newLocation,false);
+                vehicle->setGraphicLocation(newLocation);
 
                 directionToRailEnd ? temporalDistance += vehicle->getLegth() : temporalDistance -= vehicle->getLegth();
             }

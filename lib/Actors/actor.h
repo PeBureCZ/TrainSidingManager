@@ -38,6 +38,7 @@ public:
     QVector<int> callCollideChannels();
     QString getName();
     QPoint getLocation();
+    QPoint getRotatedPointArountPivot(const QPoint point, const QPoint pivot, const double angle);
     QVector<Trigger*> getAllTriggers();
 
     void setGraphicRotation(const float newRotation);

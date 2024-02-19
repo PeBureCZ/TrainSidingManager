@@ -114,6 +114,16 @@ QPoint Actor::getLocation()
     return location;
 }
 
+QPoint Actor::getRotatedPointArountPivot(const QPoint point, const QPoint pivot, const double angle)
+{
+    float radian = angle * M_PI / 180.0;
+
+    int newX = round((point.x() - pivot.x()) * cos(radian) - (point.y() - pivot.y()) * sin(radian) + pivot.x());
+    int newY = round((point.x() - pivot.x()) * sin(radian) + (point.y() - pivot.y()) * cos(radian) + pivot.y());
+    QPoint newPoint = QPoint(newX, newY);
+    return newPoint;
+}
+
 QVector<Trigger*> Actor::getAllTriggers()
 {
     return triggers;
