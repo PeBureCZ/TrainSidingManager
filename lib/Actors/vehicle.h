@@ -14,8 +14,7 @@ protected:
     QPoint secondAxleCenter; //relative
 public:
     Vehicle(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
-    const QPoint firstAxlePos();
-    const QPoint secondAxlePos();
+    const int getWidth();
     const int getLegth();
 signals:
 

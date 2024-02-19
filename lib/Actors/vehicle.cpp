@@ -10,14 +10,9 @@ Vehicle::Vehicle(QObject* parent, QGraphicsItem* newGraphicItem) :Movable(parent
     length = 0;  //relative in decimeters
 }
 
-const QPoint Vehicle::firstAxlePos()
+const int Vehicle::getWidth()
 {
-    return firstAxleCenter;
-}
-
-const QPoint Vehicle::secondAxlePos()
-{
-    return secondAxleCenter;
+    return width;
 }
 
 const int Vehicle::getLegth()

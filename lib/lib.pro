@@ -21,6 +21,7 @@ SOURCES += \
     Actors/Constructors/signalconstructor.cpp \
     Actors/Vagons/eas.cpp \
     Actors/Vagons/vagon.cpp \
+    Actors/Vagons/zaes.cpp \
     Actors/actor.cpp \
     Actors/cd730.cpp \
     Actors/cd753.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     Actors/Constructors/signalconstructor.h \
     Actors/Vagons/eas.h \
     Actors/Vagons/vagon.h \
+    Actors/Vagons/zaes.h \
     Actors/actor.h \
     Actors/cd730.h \
     Actors/cd753.h \

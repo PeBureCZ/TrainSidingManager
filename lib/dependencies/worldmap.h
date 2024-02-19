@@ -20,6 +20,7 @@
 #include "Actors/cd730.h"
 #include "Actors/cd753.h"
 #include "Actors/Vagons/eas.h"
+#include "Actors/Vagons/zaes.h"
 #include "Actors/signal.h"
 #include "Actors/Constructors/signalconstructor.h"
 #include "Actors/Constructors/railconstructor.h"

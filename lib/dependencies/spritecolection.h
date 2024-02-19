@@ -18,6 +18,7 @@ enum spriteEnums
     CD753_SPRITE,
 
     EAS_SPRITE,
+    ZAES_SPRITE,
 
     RED_SIGNAL_SPRITE,
     GREEN_SIGNAL_SPRITE,
@@ -43,6 +44,7 @@ struct SpriteColection
         "/images/CD753.png",
 
         "/images/Eas.png",
+        "/images/Zaes.png",
 
         "/images/signal_red.png",
         "/images/signal_green.png",

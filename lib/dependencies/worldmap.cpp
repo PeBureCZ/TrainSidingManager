@@ -20,7 +20,8 @@ WorldMap::WorldMap(QObject* parent, QGraphicsScene* scene, CustomQGraphicsView* 
         worldCollide =collide;
 
         worldView->setScene(worldScene);
-        worldView->setBackgroundBrush(QBrush(Qt::gray));
+        QColor myBackColor = QColor(67,85,59);
+        worldView->setBackgroundBrush(QBrush(myBackColor));
         worldView->setViewportUpdateMode(QGraphicsView::NoViewportUpdate); //stop update screen automatically
         setMap(25000, 20000); //set map x,y border size
     }

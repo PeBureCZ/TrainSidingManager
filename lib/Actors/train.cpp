@@ -105,7 +105,6 @@ QPointF Train::getLocationOnPath(float percentOnPath)
 
 void Train::actualizeOnPathLength()
 {
-    if (actualSpeed == 0) return; //no change, no move
     int newOnPathLength = onPathLength; //in decimeters
     bool directionOnEventBegin = directionToRailEnd;
     bool repeat = false;
@@ -113,7 +112,7 @@ void Train::actualizeOnPathLength()
     if (directionToRailEnd && newOnPathLength + actualSpeed > actualRail->getRailLength()) repeat = true;
     else if (!directionToRailEnd && newOnPathLength - actualSpeed < 0) repeat = true;
 
-    //recalculateSpeed(newOnPathLength);
+    recalculateSpeed(newOnPathLength);
 
     directionToRailEnd ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
 
@@ -141,10 +140,13 @@ void Train::actualizeOnPathLength()
     if (directionOnEventBegin != directionToRailEnd) newOnPathLength = (newOnPathLength - (actualPathGraphic->path().length()))*-1;
 
     float newPathPercentValue = actualPathGraphic->path().percentAtLength(newOnPathLength);
+
+    /*
     if (((newPathPercentValue == 0 && !directionToRailEnd) || (newPathPercentValue == 1 && directionToRailEnd)) && trainPath.size() == 0)
     {
         setActualSpeed(0); //train stop at last rail
     }
+    */
 
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
@@ -168,23 +170,19 @@ void Train::actualizeVehiclesOnPath()
                 //front axle
                 float percentOnRail = actualPathGraphic->path().percentAtLength(temporalDistance);
                 onPathPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
-                //onPathPoint -= QPoint(vehicle->firstAxlePos().x(),0); //change pos by axle pos (relative pos)
 
                 //second axle
-                int secondAcleDistance = temporalDistance;
-                directionToRailEnd ? secondAcleDistance += vehicle->getLegth() : secondAcleDistance -= vehicle->getLegth();
-                //if (directionToRailEnd) secondAcleDistance += vehicle->secondAxlePos().y() - vehicle->firstAxlePos().y();
-                //else secondAcleDistance -= vehicle->secondAxlePos().y() + vehicle->firstAxlePos().y();
-                percentOnRail = actualPathGraphic->path().percentAtLength(secondAcleDistance);
+                int secondAxleDistance = temporalDistance;
+                directionToRailEnd ? secondAxleDistance += vehicle->getLegth() : secondAxleDistance -= vehicle->getLegth();
+                percentOnRail = actualPathGraphic->path().percentAtLength(secondAxleDistance);
                 QPoint onPathSecondPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
-                //onPathSecondPoint -= QPoint(vehicle->secondAxlePos().x(),0);
 
                 qreal angle = qAtan2(onPathPoint.y() - onPathSecondPoint.y(), onPathPoint.x() - onPathSecondPoint.x()) * 180.0 / M_PI;
 
                 vehicle->setRotation(angle+90.f,false);
                 vehicle->setGraphicRotation(angle+90.f);
 
-                QPoint rotatedFirstAxlePoint = getRotatedPointArountPivot(onPathPoint+vehicle->firstAxlePos(),onPathPoint, angle+90);
+                QPoint rotatedFirstAxlePoint = getRotatedPointArountPivot(onPathPoint+QPoint(vehicle->getWidth()/2,0),onPathPoint, angle+90);
                 //mirror point P_new = pivot + (pivot - P_old)
                 QPoint newLocation = onPathPoint + (onPathPoint - rotatedFirstAxlePoint);
 
@@ -204,6 +202,13 @@ void Train::actualizeVehiclesOnPath()
     }
     else //front of train vehicle is on next rail/s
     {
+        if (trainPath.size() == 0)
+        {
+            qDebug() << "path is too short!";
+            setActualSpeed(0); //train stop at last rail
+             return;
+        }
+
         QPoint onPathPoint;
         int temporalDistance = onPathLength;
 
@@ -212,10 +217,17 @@ void Train::actualizeVehiclesOnPath()
         int bonusPathIndex = 0;
         bool actualVehicleDirection = directionToRailEnd;
         temporalDistance = onPathLength;
+
+        QList<QPoint>firstAxlePositionOnRail = {};
+        QList<QPoint>secondAxlePositionOnRail = {};
+        QList<Vehicle*> sortedVehicles = {};
+
         if (moveForward)
         {
             for (int i = vehicles.size()-1; i >= 0; i--)
             {
+                Vehicle* actualVehicle = dynamic_cast<Vehicle*>(vehicles[i]);
+                sortedVehicles.push_back(actualVehicle);
                 while (true)
                 {
                     if ((actualVehicleDirection && temporalDistance > testedRail->getRailLength()) || (!actualVehicleDirection && temporalDistance < 0))
@@ -235,14 +247,22 @@ void Train::actualizeVehiclesOnPath()
                     }
                     else
                     {
-                        Vehicle* actualVehicle = dynamic_cast<Vehicle*>(vehicles[i]);
                         float percentOnRail = testedGraphicItem->path().percentAtLength(temporalDistance);
                         onPathPoint = testedGraphicItem->path().pointAtPercent(percentOnRail).toPoint() + testedGraphicItem->pos().toPoint();
-                        //onPathPoint -=  actualVehicle->firstAxlePos(); //change pos by axle pos (relative pos)
-                        actualVehicle->setLocation(onPathPoint,false);
-                        actualVehicle->setGraphicLocation(onPathPoint); //actualize graphic in world tick
-                        actualVehicleDirection ? temporalDistance += actualVehicle->getLegth() : temporalDistance -= actualVehicle->getLegth();
-                        break;
+
+                        if (secondAxlePositionOnRail.size() != sortedVehicles.size())
+                        {
+                            //will be on axle position
+                            actualVehicleDirection ? temporalDistance += actualVehicle->getLegth() : temporalDistance -= actualVehicle->getLegth();
+                            secondAxlePositionOnRail.push_back(onPathPoint);
+                        }
+                        else
+                        {
+                            firstAxlePositionOnRail.push_back(onPathPoint);
+                            //will be on axle position
+                            //actualVehicleDirection ? temporalDistance += actualVehicle->getLegth() : temporalDistance -= actualVehicle->getLegth();
+                            break;
+                        }
                     }
                 }
             }
@@ -254,11 +274,30 @@ void Train::actualizeVehiclesOnPath()
 
             }
         }
+        int sortedIndex = 0;
+        if (!moveForward) sortedIndex = sortedVehicles.size()-1;
+        for (auto vehicle : sortedVehicles)
+        {
+            qreal angle = qAtan2(firstAxlePositionOnRail[sortedIndex].y() - secondAxlePositionOnRail[sortedIndex].y(), firstAxlePositionOnRail[sortedIndex].x() - secondAxlePositionOnRail[sortedIndex].x()) * 180.0 / M_PI;
+
+            vehicle->setRotation(angle+90.f,false);
+            vehicle->setGraphicRotation(angle+90.f);
+
+            QPoint rotatedFirstAxlePoint = getRotatedPointArountPivot(firstAxlePositionOnRail[sortedIndex]+QPoint(vehicle->getWidth()/2,0),firstAxlePositionOnRail[sortedIndex], angle+90);
+            //mirror point P_new = pivot + (pivot - P_old)
+            QPoint newLocation = firstAxlePositionOnRail[sortedIndex] + (firstAxlePositionOnRail[sortedIndex] - rotatedFirstAxlePoint);
+
+            vehicle->setLocation(newLocation,false);
+            vehicle->setGraphicLocation(newLocation); //actualize graphic in world tick
+
+            moveForward ? sortedIndex++ : sortedIndex--;
+        }
     }
 }
 
 void Train::moveTrain()
 {
+    if (actualSpeed == 0) return; //no change, no move
     actualizeOnPathLength();
     actualizeVehiclesOnPath();
 }
@@ -318,13 +357,13 @@ void Train::recalculateSpeed(int actualDistanceOnRail)
     if (!moveForward) remainToRailEnd -= actualTrainLength;
     if (remainToRailEnd < actualSpeed*12) //checked distance = 12 second - temporary solution
     {
-        actualSpeed -= 10; //apply breaks - temporary
+        actualSpeed -= 4; //apply breaks - temporary
         if (actualSpeed < 0) actualSpeed = 1;
         if (remainToRailEnd <= 0) actualSpeed = 0;
     }
     else
     {
-        actualSpeed += 4; //apply throtle power - temporary
+        actualSpeed += 2; //apply throtle power - temporary
         if (actualSpeed > maxSpeed) actualSpeed = maxSpeed;
     }
 }

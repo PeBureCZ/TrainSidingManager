@@ -167,6 +167,12 @@ void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
             newVehicles.push_back(new Eas(nullptr, vehicleGraphicsItem));
             break;
         }
+        case VAGON_ZAES:
+        {
+            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(ZAES_SPRITE));
+            newVehicles.push_back(new Zaes(nullptr, vehicleGraphicsItem));
+            break;
+        }
         //case x: ....
         default: {}
         }
@@ -239,7 +245,7 @@ Actor *WorldMap::addTrain()
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, dynamic_cast<Rail*>(railList[0]));
 
-        QList<int> vehicles = {LOCO_CD753, VAGON_EAS, VAGON_EAS};
+        QList<int> vehicles = {LOCO_CD753, VAGON_EAS, VAGON_EAS, VAGON_EAS, VAGON_EAS, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES};
         addVehicleActors(dynamic_cast<Train*>(newTrain), vehicles);
 
         qDebug() << "spawn train - temporary solution";
