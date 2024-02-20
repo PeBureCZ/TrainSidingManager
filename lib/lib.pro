@@ -93,6 +93,7 @@ HEADERS += \
     dependencies/interfacewindow.h \
     dependencies/managerconsole.h \
     dependencies/managerconsolelogic.h \
+    dependencies/settings.h \
     dependencies/trainnavigation.h \
     dependencies/railnavigation.h \
     dependencies/spritecolection.h \

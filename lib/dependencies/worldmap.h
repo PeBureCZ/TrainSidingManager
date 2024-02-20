@@ -2,10 +2,6 @@
 #define WORLDMAP_H
 
 #include "worldviewmap.h"
-#include <QPainterPath>
-#include <QPen>
-#include <QThread>
-#include "mwComponents/customqgraphicsview.h"
 
 //BASIC OBJECTS
 #include <QGraphicsView>
@@ -13,6 +9,11 @@
 #include "spritecolection.h"
 #include "worldcollide.h"
 #include "railnavigation.h"
+#include "settings.h"
+#include <QPainterPath>
+#include <QPen>
+#include <QThread>
+#include "mwComponents/customqgraphicsview.h"
 
 //MOVABLE OBJECTS
 #include "Actors/actor.h"
@@ -29,6 +30,7 @@
 
 //STATIC OBJECTS
 #include "Actors/rail.h"
+#include "Actors/portal.h"
 
 //ENUMS
 #include "Enums/TrainsEnum.h"

@@ -241,7 +241,7 @@ Actor *WorldMap::addTrain()
 {
     if (railList.size() > 0)
     {
-        SpriteColection newSprite; //struct
+        SpriteColection newSprite;
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, dynamic_cast<Rail*>(railList[0]));
 
@@ -301,7 +301,25 @@ Actor* WorldMap::addRail(QPoint point)
 
 Actor* WorldMap::addPortal(QPoint point)
 {
-    return nullptr;
+    PortalConstructor* actualPortalConstructor = dynamic_cast<PortalConstructor*>(getActualConstructor());
+    Rail* connectedRail = actualPortalConstructor->getNearestRail();
+    if (connectedRail == nullptr) return nullptr;
+
+    //ADD GRAPHIC
+    SpriteColection newSprite;
+    QGraphicsItem* portalGraphic = new QGraphicsPixmapItem(newSprite.getSprite(PORTAL_SPRITE));
+    worldScene->addItem(portalGraphic);
+
+    //ADD PORTAL ACTOR
+    Actor* portalActor = new Portal(nullptr, portalGraphic); //add actor
+    QPoint correctedLocation = actualPortalConstructor->getGraphicItem()->pos().toPoint();
+    //location may not be the same as the location of graphic item! (if snapped to rail)
+    portalActor->setLocation(correctedLocation - QPoint(24,24),false);
+    portalActor->setGraphicLocation(correctedLocation);
+    portalActor->actualizeGraphicLocation();
+    dynamic_cast<Portal*>(portalActor)->setConnectedRail(connectedRail);
+
+    return portalActor;
 }
 
 Actor* WorldMap::addSignal(QPoint point)

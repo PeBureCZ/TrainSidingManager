@@ -200,13 +200,13 @@ void Train::actualizeVehiclesOnPath()
             }
         }
     }
-    else //front of train vehicle is on next rail/s
+    else //front (or back) of train vehicle is on next rail/s
     {
         if (trainPath.size() == 0)
         {
             qDebug() << "path is too short!";
             setActualSpeed(0); //train stop at last rail
-             return;
+            return;
         }
 
         QPoint onPathPoint;
@@ -297,14 +297,19 @@ void Train::actualizeVehiclesOnPath()
 
 void Train::moveTrain()
 {
-    if (actualSpeed == 0) return; //no change, no move
+    //no change, no move
+    if (actualSpeed == 0) return;
+
+    //calculate the actual position of the train. The actual position corresponds to the last vehicle in direction of movement
     actualizeOnPathLength();
+
+    //calculate the graphic and actor positions for each individual vehicle
     actualizeVehiclesOnPath();
 }
 
 void Train::startAutopilot()
 {
-    trainPath = TrainNavigation::autopilotCheck(30000,10,actualRail,directionToRailEnd);
+    trainPath = TrainNavigation::autopilotCheck(30000,30,actualRail,directionToRailEnd);
 }
 
 void Train::setTrainPath(QVector<Rail*> newTrainPath)

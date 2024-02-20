@@ -1,12 +1,11 @@
 #ifndef RAIL_H
 #define RAIL_H
 
-#define VISUAL_AREA_SIZE 40
-
 #include "railwayobject.h"
 #include <QGraphicsItem>
 #include "Components/trigger.h"
 #include "Actors/signal.h"
+#include "dependencies/settings.h"
 #include <QColor>
 
 #include <QPen>
@@ -15,6 +14,7 @@ class LIB_EXPORT Rail : public RailwayObject
 {
 Q_OBJECT
 protected:
+    const int VISUAL_AREA_SIZE = 40;
     QPoint P0; //start point - ABSOLUTE
     QPoint P1; //first curve control point - RELATIVE TO P0
     QPoint P2; //second curve control point - RELATIVE TO P0
@@ -30,6 +30,7 @@ protected:
     QGraphicsItem* endArea;
     bool occupied;
     bool visuallyOccupied;
+
 public:
     Rail(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
     QPointF getP0WorldLocation();

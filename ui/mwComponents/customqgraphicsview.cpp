@@ -89,8 +89,8 @@ int CustomQGraphicsView::getZoomLevel()
 void CustomQGraphicsView::setWorldMap(int xSize, int ySize) //need to refract later!
 {
     //check max map size -> accept or reduce size to maximum
-    (xSize > MAX_MAP_X_SIZE) ? mapSizeX = MAX_MAP_X_SIZE : mapSizeX = xSize;
-    (ySize > MAX_MAP_Y_SIZE) ? mapSizeY = MAX_MAP_Y_SIZE : mapSizeY = ySize;
+    (xSize > MAX_MAP_SIZE_X) ? mapSizeX = MAX_MAP_SIZE_X : mapSizeX = xSize;
+    (ySize > MAX_MAP_SIZE_Y) ? mapSizeY = MAX_MAP_SIZE_Y : mapSizeY = ySize;
 
     //set world border and world size
     //set border, border set to coordinate (-) and (+) -> coord. {0,0} in map center

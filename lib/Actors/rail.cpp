@@ -454,20 +454,21 @@ void Rail::setOccupied(const bool newOccupied, bool setVisualToOccupied)
 
 void Rail::setVisualOccupied(const bool newsVisualState)
 {
+    using namespace customQColors;
     visuallyOccupied = newsVisualState;
     if (newsVisualState)
     {
         //change visual to new = true
         QGraphicsPathItem* graphicPath = dynamic_cast<QGraphicsPathItem*>(graphicItem);
         QPen newPen = graphicPath->pen();
-        newPen.setColor(QColor(0,255,255,255));
+        newPen.setColor(SELECTED_RAIL_COLOR);
         graphicPath->setPen(newPen);
     }
     else
     {
         QGraphicsPathItem* graphicPath = dynamic_cast<QGraphicsPathItem*>(graphicItem);
         QPen newPen = graphicPath->pen();
-        newPen.setColor(Qt::blue);
+        newPen.setColor(UNSELECTED_RAIL_COLOR);
         graphicPath->setPen(newPen);
     }
 }
