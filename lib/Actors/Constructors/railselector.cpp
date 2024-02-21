@@ -82,7 +82,7 @@ void RailSelector::callSelectEvent(QPoint point)
             {
                 connectedRail->smoothConnectionC1(false);
             }
-            connectedRail->setObjectBoxCollider();
+            connectedRail->setRailObjectBoxCollider();
         }
     }
 }

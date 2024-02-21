@@ -47,7 +47,7 @@ public:
     void setGraphicLocation(QPoint newLocation);
     void setLocation(QPoint newLocation, bool setGraphic); //overloaded function
     void setLocation(QPointF newLocation, bool setGraphic); //overloaded function
-    void addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius);
+    void createTriggerInActor(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius);
 
     float getRotation();
     int getDistance(QPoint pointA, QPoint pointB);
@@ -59,7 +59,7 @@ public:
     virtual void actualizeGraphicLocation();
     virtual void actualizeGraphicRotation();
     virtual void calledCollisionEvent(const QList<Actor*> isInCollision); //overrided
-    virtual void setObjectBoxCollider(); //overrided
+    virtual void setRailObjectBoxCollider(); //overrided
     virtual void tickEvent();
     virtual void actorLeaveFromCollision(Actor* actor);
     virtual void actorEnterInCollision(Actor* actor);

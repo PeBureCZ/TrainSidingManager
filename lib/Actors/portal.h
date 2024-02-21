@@ -14,6 +14,8 @@ protected:
 public:
     explicit Portal(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr);
     void setConnectedRail(Rail* newConnectedRail);
+    Rail* getConnectedRail();
+    int getConectedArea();
 
     //~Portal();
 };

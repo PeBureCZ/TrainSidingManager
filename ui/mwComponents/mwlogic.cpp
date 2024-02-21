@@ -35,7 +35,7 @@ void mwlogic::actualizeMap()
 
 void mwlogic::actualizeDeltaTime(qint64 deltaTime)
 {
-    if (menuSelected == PLAY_MODE_FREE) elapsedTime += deltaTime;
+    if (menuSelected >= PLAY_MODE_START) elapsedTime += deltaTime;
 }
 
 void mwlogic::playButSwitch(bool editMode)
@@ -138,10 +138,10 @@ void mwlogic::constructRail(QPoint point)
         //comnplete lined rail
         actualRailConstructor->actualizeConstructor(point);
         Rail* createdRail = actualRailConstructor->getOwnedRail();
-        world->getWorldCollide()->addTriggerToActor(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, QPoint(0,0), 0.0f, 120); //for P0 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, BOX_COLLIDER, {STATIC_CHANNEL},  QPoint(0,0), 0.0f, 1);//create object BoxCollider
-        actualRailConstructor->getOwnedRail()->setObjectBoxCollider();
+        world->getWorldCollide()->addCollideTriger(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, QPoint(0,0), 0.0f, 120); //for P0 point
+        world->getWorldCollide()->addCollideTriger(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
+        world->getWorldCollide()->addCollideTriger(createdRail, BOX_COLLIDER, {STATIC_CHANNEL},  QPoint(0,0), 0.0f, 1);//create object BoxCollider
+        actualRailConstructor->getOwnedRail()->setRailObjectBoxCollider();
         actualRailConstructor->actualizeConstructor(point); //duplicied due to P3 point actualize
         actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
         actualRailConstructor->underConstruction(false);
@@ -171,14 +171,14 @@ void mwlogic::constructRail(QPoint point)
         Rail* createdRail = actualRailConstructor->getOwnedRail();
         QPoint newPoint = nearestRail->getLocation();
         if (nearestPoint == 1) newPoint += nearestRail->getP3RelativeLocation().toPoint();
-        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {RAIL_CHANNEL}, {0,0}, 0.0f, 120); //for P0 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, 0, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
-        world->getWorldCollide()->addTriggerToActor(createdRail, 1, {STATIC_CHANNEL}, {0,0}, 0.0f, 1);//create object BoxCollider
+        world->getWorldCollide()->addCollideTriger(createdRail, 0, {RAIL_CHANNEL}, {0,0}, 0.0f, 120); //for P0 point
+        world->getWorldCollide()->addCollideTriger(createdRail, 0, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
+        world->getWorldCollide()->addCollideTriger(createdRail, 1, {STATIC_CHANNEL}, {0,0}, 0.0f, 1);//create object BoxCollider
         actualRailConstructor->actualizeConstructor(newPoint);
         actualRailConstructor->getOwnedRail()->connectRails(nearestRail, false);
         actualRailConstructor->smoothEndPoint();
         actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
-        actualRailConstructor->getOwnedRail()->setObjectBoxCollider();
+        actualRailConstructor->getOwnedRail()->setRailObjectBoxCollider();
         actualRailConstructor->underConstruction(false);
         break;
     }
@@ -191,6 +191,28 @@ void mwlogic::constructSignal()
     if (world->addActor(SIGNAL_ACTOR) == nullptr)
     {
         managerConsole->printToConsole("Signal is not connected to any rail point!", RED_BOLD_COLOR, LONG_DURATION);
+    }
+}
+
+void mwlogic::constructTrain(QPoint point)
+{
+    QList<Actor*> actors = world->getActorsCollideInLocation({STATIC_CHANNEL}, point);
+    if (actors.size() != 0)
+    {
+        for (auto actor : actors)
+        {
+            if (dynamic_cast<Portal*>(actor))
+            {
+                Rail* portalOwnedRail = dynamic_cast<Portal*>(actor)->getConnectedRail();
+                Train* createdTrain = dynamic_cast<Train*>(world->addActor(TRAIN_ACTOR));
+                if (!createdTrain->teleportTrainToRail(portalOwnedRail))
+                {
+                    //false = train is too short -> delete
+                    world->deleteActor(createdTrain);
+
+                }
+            }
+        }
     }
 }
 

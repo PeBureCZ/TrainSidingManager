@@ -230,7 +230,9 @@ void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = tru
 {
     if (actualConstructor != nullptr && dynamic_cast<ActorConstructor*>(actualConstructor))
     {
-        Actor* actorConstructed = dynamic_cast<ActorConstructor*>(actualConstructor)->getActorConstructing();
+        ActorConstructor* actorConstructor = dynamic_cast<ActorConstructor*>(actualConstructor);
+        Actor* actorConstructed = actorConstructor->getActorConstructing();
+        actorConstructor->setActorConstructing(nullptr);
         if (deleteCreation && actorConstructed != nullptr) deleteActor(actorConstructed);
         deleteActor(actualConstructor);
     }
@@ -245,18 +247,17 @@ Actor *WorldMap::addTrain()
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, dynamic_cast<Rail*>(railList[0]));
 
-        QList<int> vehicles = {LOCO_CD753, VAGON_EAS, VAGON_EAS, VAGON_EAS, VAGON_EAS, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES, VAGON_ZAES};
+        QList<int> vehicles = {LOCO_CD753, VAGON_EAS, VAGON_ZAES};
         addVehicleActors(dynamic_cast<Train*>(newTrain), vehicles);
 
         qDebug() << "spawn train - temporary solution";
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
         dynamic_cast<Train*>(newTrain)->setActualSpeed(100); //centimeters/s
 
-        dynamic_cast<Train*>(newTrain)->startAutopilot();
-
         //temporary
         newTrain->setLocation(dynamic_cast<Rail*>(railList[0])->getLocation(),true);
 
+        dynamic_cast<Train*>(newTrain)->startAutopilot();
         return newTrain;
     }
     return nullptr;
@@ -317,6 +318,7 @@ Actor* WorldMap::addPortal(QPoint point)
     portalActor->setLocation(correctedLocation - QPoint(24,24),false);
     portalActor->setGraphicLocation(correctedLocation);
     portalActor->actualizeGraphicLocation();
+    getWorldCollide()->addCollideTriger(portalActor, BOX_COLLIDER, {STATIC_CHANNEL}, QPoint(0,0), 0.0f, 120);
     dynamic_cast<Portal*>(portalActor)->setConnectedRail(connectedRail);
 
     return portalActor;

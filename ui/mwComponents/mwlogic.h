@@ -38,6 +38,7 @@ public:
     void constructRail(QPoint point);
     void constructSignal();
     void constructPortal();
+    void constructTrain(QPoint point);
 
 };
 

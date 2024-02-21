@@ -323,22 +323,24 @@ void Train::setActualPathGraphic(Rail* actualRail)
     else actualPathGraphic = nullptr;
 }
 
-void Train::teleportTrainToRail(Rail *rail)
+bool Train::teleportTrainToRail(Rail *rail)
 {
-    actualRail = rail;
-    setActualPathGraphic(actualRail);
-
     if (rail->getRailLength() < actualTrainLength - 10)
     {
-        qDebug() << "rail is too short";
-        return;
+        qDebug() << "can´t teleport, rail is too short";
+        return false;
     }
+
+    actualRail = rail;
+    setActualPathGraphic(actualRail);
 
     directionToRailEnd ? onPathLength = 5 : onPathLength = 5 + actualTrainLength;
     int savedSpeed = actualSpeed;
     actualSpeed = 1;
     moveTrain(); //move train by 1 set train in right position
     actualSpeed = savedSpeed;
+    startAutopilot();
+    return true;
 }
 
 void Train::actualizeTrainLenth()

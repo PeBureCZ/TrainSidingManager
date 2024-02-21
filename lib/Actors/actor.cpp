@@ -134,9 +134,10 @@ void Actor::setGraphicRotation(const float newRotation)
     graphicRotation = newRotation;
 }
 
-void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius)
+void Actor::createTriggerInActor(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius)
 {
-    //for recieve collision ONLY!!!
+    //DO NOT USE THIS FUNCTION WITHOUT SAVING COLLIDE CHANNELS TO WORLD COLLIDE LISTS!
+    //USE WorldCollide class!
     collisionRecieveEnabled = true;
     Trigger* component = {};
     switch (indexOfType)
@@ -151,6 +152,9 @@ void Actor::addTriggerComponent(int indexOfType, QVector<int> channels, QPoint r
         case BOX_COLLIDER:
         {
             Trigger* newComponent = new BoxCollider();
+            QPoint leftUpCorner = relativeLocation + QPoint(relativeLocation.x() - radius/2, relativeLocation.y() - radius/2);
+            QPoint rightDownCorner = relativeLocation + QPoint(relativeLocation.x() + radius/2, relativeLocation.y() + radius/2);
+            dynamic_cast<BoxCollider*>(newComponent)->setBoxCollider(leftUpCorner, rightDownCorner, relativeRotation);
             component = newComponent;
             break;
         }
@@ -182,7 +186,7 @@ QVector<int> Actor::recieveCollideChannels()
         {
             if (allChannelsUsed.indexOf(channel) == -1)
             {
-            allChannelsUsed.push_back(channel);
+                allChannelsUsed.push_back(channel);
             }
         }
     }
@@ -204,7 +208,7 @@ bool Actor::canCallCollision()
     return collisionCallEnabled;
 }
 
-void Actor::setObjectBoxCollider()
+void Actor::setRailObjectBoxCollider()
 {
     //overrided
 }

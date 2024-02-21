@@ -18,6 +18,7 @@ void PortalConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
     //try to find nearest area (end of actual rail)
     for (auto actor : actorsInCollision)
     {
+        if (!dynamic_cast<Rail*>(actor)) continue;
         Rail* rail = dynamic_cast<Rail*>(actor);
         QPoint testedPoint1 = rail->getP0WorldLocation().toPoint();
         QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();

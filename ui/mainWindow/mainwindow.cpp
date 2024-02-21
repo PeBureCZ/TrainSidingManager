@@ -182,7 +182,6 @@ void MainWindow::setPlaySelectInterface(int menu)
 {
     switch (menu)
     {
-        //not yet
         default: setBasicMenuInterface();
     }
 }
@@ -192,7 +191,7 @@ void MainWindow::setPlayAddInterface(int menu)
     switch (menu)
     {
     case PLAY_MODE_FREE:
-        freeButton(ui->MultiFuncBut1);
+        setButtonText("Train", ui->MultiFuncBut1);
         freeButton(ui->MultiFuncBut2);
         freeButton(ui->MultiFuncBut3);
         freeButton(ui->MultiFuncBut24);

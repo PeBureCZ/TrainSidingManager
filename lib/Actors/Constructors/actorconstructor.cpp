@@ -15,3 +15,8 @@ Actor *ActorConstructor::getActorConstructing()
 {
     return actorConstructing;
 }
+
+Actor *ActorConstructor::setActorConstructing(Actor * newActor)
+{
+    actorConstructing = newActor;
+}

@@ -489,10 +489,10 @@ void Rail::moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3
     getP3Trigger()->setRelativeLocation(newP3);
     getP0Trigger()->setRelativeLocation(newP0);
 
-    setObjectBoxCollider();
+    setRailObjectBoxCollider();
 }
 
-void Rail::setObjectBoxCollider()
+void Rail::setRailObjectBoxCollider()
 {
     BoxCollider* boxCollider = {};
     for (auto trigger : getAllTriggers())

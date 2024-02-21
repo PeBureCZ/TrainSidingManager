@@ -63,6 +63,15 @@ void WorldMap::updateWorld()
     {
         actor->actualizeGraphicLocation();
         actor->actualizeGraphicRotation();
+        /*
+        //NOT USED NOW - NOT USEFULL FOR ANYTHING NOW
+        if (actor->canCallCollision())
+        {
+            QVector<int> collideChannels = actor->callCollideChannels();
+            QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
+            actor->calledCollisionEvent(actors);
+        }
+        */
     }
     worldScene->update();
     worldView->update();
@@ -81,10 +90,6 @@ QGraphicsScene *WorldMap::getWorldScene()
 
 QString WorldMap::testFunction()
 {
-    if (railList.size() > 0)
-    {
-        addActor(TRAIN_ACTOR);
-    }
     return "nothing";
 }
 

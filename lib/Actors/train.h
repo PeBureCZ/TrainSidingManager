@@ -45,7 +45,7 @@ public:
     void moveTrain();
     void startAutopilot();
     void setActualPathGraphic(Rail *actualRail);
-    void teleportTrainToRail(Rail* rail);
+    bool teleportTrainToRail(Rail* rail);
     void actualizeTrainLenth();
     void recalculateSpeed(int actualDistanceOnRail);
     void actualizeOnPathLength();

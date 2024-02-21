@@ -12,6 +12,7 @@ public:
     ActorConstructor(QObject* parent = nullptr, QGraphicsItem *newGraphicItem = nullptr, Actor* actorToConstructing = nullptr);
     virtual void actualizeConstructor(QPoint newPoint);
     Actor *getActorConstructing();
+    Actor *setActorConstructing(Actor *newActor);
 signals:
 
 public slots:

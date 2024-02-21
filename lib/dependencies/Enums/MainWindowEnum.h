@@ -24,6 +24,7 @@ enum OptionMode
     //PLAY+ADD
     PLAY_MODE_START = 300,
     PLAY_MODE_FREE,
+    PLAY_ADD_TRAIN,
     ADD_PLAY_END = 399,
 
     //PLAY+SELECT

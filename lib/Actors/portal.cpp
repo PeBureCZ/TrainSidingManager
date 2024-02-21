@@ -20,4 +20,16 @@ void Portal::setConnectedRail(Rail *newConnectedRail)
     else connectedToArea = 1;
 }
 
+Rail *Portal::getConnectedRail()
+{
+    return connectedRail;
+}
+
+int Portal::getConectedArea()
+{
+    return connectedToArea;
+}
+
+
+
 //Portal::~Portal(){}
