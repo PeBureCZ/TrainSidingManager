@@ -13,17 +13,19 @@ class InterfaceWindow : public mwlogic
 public:
     InterfaceWindow(mwlogic *parent = nullptr);
 protected slots:
-    //void on_TestButton1_clicked();
     void on_PlayBut_clicked() override;
     void on_SubBut_clicked() override;
     void on_AddBut_clicked() override;
+    void playButSwitch(bool editMode) override;
+    void selectMenuSwitch(bool selectMode) override;
+
+    //MOUSE EVENTs
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void leftMouseRelease();
     void rightMouseRelease();
     void wheelEvent(QWheelEvent *event);
-    void playButSwitch(bool editMode) override;
-    void selectMenuSwitch(bool selectMode) override;
+
 
     //menu function buttons clicked
     void on_AddMenuBut_clicked() override;
@@ -54,7 +56,6 @@ protected slots:
     void on_MultiFuncBut22_clicked() override;
     void on_MultiFuncBut23_clicked() override;
     void on_MultiFuncBut24_clicked() override;
-
 };
 
 #endif // INTERFACEWINDOW_H

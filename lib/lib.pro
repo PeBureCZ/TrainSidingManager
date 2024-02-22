@@ -19,6 +19,7 @@ SOURCES += \
     Actors/Constructors/railselector.cpp \
     Actors/Constructors/selectconstructor.cpp \
     Actors/Constructors/signalconstructor.cpp \
+    Actors/Constructors/trainselector.cpp \
     Actors/Vagons/eas.cpp \
     Actors/Vagons/vagon.cpp \
     Actors/Vagons/zaes.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     Actors/Constructors/railselector.h \
     Actors/Constructors/selectconstructor.h \
     Actors/Constructors/signalconstructor.h \
+    Actors/Constructors/trainselector.h \
     Actors/Vagons/eas.h \
     Actors/Vagons/vagon.h \
     Actors/Vagons/zaes.h \

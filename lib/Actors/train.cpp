@@ -305,6 +305,8 @@ void Train::moveTrain()
 
     //calculate the graphic and actor positions for each individual vehicle
     actualizeVehiclesOnPath();
+    if (moveForward) setLocation(dynamic_cast<Actor*>(vehicles[0])->getLocation(), false);
+    else setLocation(dynamic_cast<Actor*>(vehicles.last())->getLocation(), false);
 }
 
 void Train::startAutopilot()

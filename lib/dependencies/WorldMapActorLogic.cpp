@@ -253,6 +253,7 @@ Actor *WorldMap::addTrain()
         qDebug() << "spawn train - temporary solution";
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
         dynamic_cast<Train*>(newTrain)->setActualSpeed(100); //centimeters/s
+        getWorldCollide()->addCollideTriger(newTrain,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(0,0),0.f, 400);
 
         //temporary
         newTrain->setLocation(dynamic_cast<Rail*>(railList[0])->getLocation(),true);

@@ -75,7 +75,7 @@ void MainWindow::playButSwitch(bool editMode)
 {
     if (editMode) ui->PlayBut->setText("PlayMode");
     else ui->PlayBut->setText("EditMode");
-    selectMenuSwitch(false);
+    selectMenuSwitch(false); //switch mode -> always set "ADD MENU"
 }
 
 void MainWindow::selectMenuSwitch(bool selectMode)
@@ -137,9 +137,9 @@ void MainWindow::InterfaceSet(int menuSelected)
 {
     if (menuSelected >= OPTION_MODE_START && menuSelected <= OPTION_MODE_END) setBasicMenuInterface();
     else if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END) setEditAddInterface(menuSelected);
-    else if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END) setEditSelectInterface(menuSelected);
-    else if (menuSelected >= PLAY_MODE_START && menuSelected <= ADD_PLAY_END) setPlayAddInterface(menuSelected);
-    else if (menuSelected >= SELECT_PLAY_START && menuSelected <= PLAY_MODE_END) setPlaySelectInterface(menuSelected);
+    else if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END) setEditSelectInterface(menuSelected);
+    else if (menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_ADD_END) setPlayAddInterface(menuSelected);
+    else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END) setPlaySelectInterface(menuSelected);
 }
 
 void MainWindow::setBasicMenuInterface()
@@ -154,7 +154,7 @@ void MainWindow::setEditSelectInterface(int menu)
 {
     switch (menu)
     {
-    case SELECT_EDIT_START:
+    case EDIT_SELECT_START:
         setButtonText("Rails", ui->MultiFuncBut1);
         freeButton(ui->MultiFuncBut2);
         freeButton(ui->MultiFuncBut3);
@@ -182,6 +182,14 @@ void MainWindow::setPlaySelectInterface(int menu)
 {
     switch (menu)
     {
+        case PLAY_SELECT_START:
+        {
+            setButtonText("Train_p", ui->MultiFuncBut1);
+            freeButton(ui->MultiFuncBut2);
+            freeButton(ui->MultiFuncBut3);
+            freeButton(ui->MultiFuncBut24);
+            break;
+        }
         default: setBasicMenuInterface();
     }
 }

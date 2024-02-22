@@ -4,12 +4,6 @@ InterfaceWindow::InterfaceWindow(mwlogic *parent)
     : mwlogic{parent}
 {}
 
-/*
-void InterfaceWindow::on_TestButton1_clicked() //temporary
-{
-    menuSelected = NOT_USED_NOW;
-}*/
-
 void InterfaceWindow::on_PlayBut_clicked()
 {
     playButSwitch(menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_MODE_END);
@@ -19,7 +13,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
+        if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END)
         {
             //editor + EDIT/SELECT
             ActorConstructor* constructor = world->getActualConstructor();
@@ -40,7 +34,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             switch (menuSelected)
             {
                 //case 0: same as default
-                case RAIL_ADD_MODE: //add Rail (RailConstructor)
+                case RAIL_CONSTRUCT_MODE: //add Rail (RailConstructor)
                 {
                     int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
                     int yBarValue = world->getWorldView()->verticalScrollBar()->value();
@@ -48,19 +42,19 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                     constructRail(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
                     break;
                 }
-                case PORTAL_ADD_MODE:
+                case PORTAL_CONSTRUCT_MODE:
                 {
                     world->addActor(PORTAL_ACTOR);
                     break;
                 }
-                case SIGNAL_ADD_MODE:
+                case SIGNAL_CONSTRUCT_MODE:
                     constructSignal();
                     break;
                 default: {}break;//incl. 0
                     //nothing yet...;
             }
         }
-        else if (menuSelected >= PLAY_MODE_START && menuSelected <= ADD_PLAY_END)
+        else if (menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_ADD_END)
         {
             //playmode + ADD
             switch (menuSelected)
@@ -77,15 +71,26 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             }
 
         }
-        else if (menuSelected >= SELECT_PLAY_START && menuSelected <= PLAY_MODE_END)
+        else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END)
         {
             //playmode + EDIT/SELECT
-
+            switch (menuSelected)
+            {
+            case PLAY_SELECT_TRAIN:
+            {
+                    int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
+                    int yBarValue = world->getWorldView()->verticalScrollBar()->value();
+                    int zoomLevel = world->getWorldView()->getZoomLevel();
+                    selectTrain(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
+                    break;
+            }
+            default: {}
+            }
         }
     }
     else if (event->button() == Qt::RightButton)
     {
-        if (menuSelected >= menuSelected && menuSelected <= PORTAL_ADD_MODE)
+        if (menuSelected >= menuSelected && menuSelected <= PORTAL_CONSTRUCT_MODE)
         {
             world->deleteConstructor(true);
             menuSelected = EDIT_MODE_FREE;
@@ -97,14 +102,14 @@ void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
+        if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END)
         {
             leftMouseRelease();
         }
     }
     else if (event->button() == Qt::RightButton)
     {
-        if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
+        if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END)
         {
             rightMouseRelease();
         }
@@ -173,7 +178,7 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
         if (selectMode)
         {
             managerConsole->printToConsole("switch to select option in edit mode", YELLOW_BOLD_COLOR, 140);
-            menuSelected = SELECT_EDIT_START;
+            menuSelected = EDIT_SELECT_START;
         }
         else
         {
@@ -186,7 +191,7 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
         if (selectMode)
         {
             managerConsole->printToConsole("switch to select option in play mode", YELLOW_BOLD_COLOR, 140);
-            menuSelected = SELECT_PLAY_START;
+            menuSelected = PLAY_SELECT_START;
         }
         else
         {
@@ -211,17 +216,21 @@ void InterfaceWindow::on_MultiFuncBut1_clicked()
 {
     if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
     {
-        menuSelected = RAIL_ADD_MODE; //if editMode -> constructiong Rail
+        menuSelected = RAIL_CONSTRUCT_MODE; //if editMode -> constructiong Rail
         addConstructor(RAIL_CONSTRUCTOR);
     }
-    else if (menuSelected >= SELECT_EDIT_START && menuSelected <= EDIT_MODE_END)
+    else if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END)
     {
-        menuSelected = RAIL_SELECTOR_MODE;
+        menuSelected = EDIT_SELECT_RAIL;
         addConstructor(RAIL_SELECTOR);
     }
-    else if (menuSelected >= PLAY_MODE_START && menuSelected <= ADD_PLAY_END)
+    else if (menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_ADD_END)
     {
         menuSelected = PLAY_ADD_TRAIN;
+    }
+    else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END)
+    {
+        menuSelected = PLAY_SELECT_TRAIN;
     }
 }
 
@@ -229,7 +238,7 @@ void InterfaceWindow::on_MultiFuncBut2_clicked()
 {
     if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
     {
-        menuSelected = SIGNAL_ADD_MODE; //if editMode -> constructiong signals
+        menuSelected = SIGNAL_CONSTRUCT_MODE; //if editMode -> constructiong signals
         addConstructor(SIGNAL_CONSTRUCTOR); //delete constructor included
     }
 }
@@ -238,7 +247,7 @@ void InterfaceWindow::on_MultiFuncBut3_clicked()
 {
     if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
     {
-        menuSelected = PORTAL_ADD_MODE; //if editMode -> constructiong signals
+        menuSelected = PORTAL_CONSTRUCT_MODE; //if editMode -> constructiong signals
         addConstructor(PORTAL_CONSTRUCTOR); //delete constructor included
     }
 }

@@ -216,4 +216,28 @@ void mwlogic::constructTrain(QPoint point)
     }
 }
 
+void mwlogic::selectTrain(QPoint point)
+{
+    QList<Actor*> actors = world->getActorsCollideInLocation({TRAIN_CHANNEL}, point);
+    int nearestTrainDistance = 99999999;
+    Train* nearestTrain = nullptr;
+    for (auto actor : actors)
+    {
+        if (dynamic_cast<Train*>(actor))
+        {
+            int testedDistance = world->getWorldDistance(actor->getLocation(), point);
+            if (nearestTrainDistance > testedDistance)
+            {
+                nearestTrainDistance = testedDistance;
+                nearestTrain = dynamic_cast<Train*>(actor);
+            }
+        }
+    }
+    if (nearestTrain != nullptr)
+    {
+        //create train selector!
+    }
+
+}
+
 mwlogic::~mwlogic() {}
