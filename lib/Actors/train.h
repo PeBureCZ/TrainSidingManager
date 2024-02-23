@@ -20,6 +20,9 @@ protected:
     bool moveForward;
     QVector<Vehicle*> vehicles;
     QVector<QGraphicsItem*> vehicleGraphicsItems;
+    int remainToPathEnd;
+    int breakLevel;
+    int throttleLevel;
 
 
 public:

@@ -23,10 +23,15 @@
 #include "Actors/Vagons/eas.h"
 #include "Actors/Vagons/zaes.h"
 #include "Actors/signal.h"
+
+//CONSTRUCTORS
 #include "Actors/Constructors/signalconstructor.h"
 #include "Actors/Constructors/railconstructor.h"
-#include "Actors/Constructors/railselector.h"
 #include "Actors/Constructors/portalconstructor.h"
+
+//SELECTORS
+#include "Actors/Constructors/trainselector.h"
+#include "Actors/Constructors/railselector.h"
 
 //STATIC OBJECTS
 #include "Actors/rail.h"
@@ -56,6 +61,7 @@ private:
 
     //selectors
     Actor* addRailSelector();
+    Actor* addTrainSelector();
 
     //specific-actors
     Actor* addTrain();
@@ -87,7 +93,7 @@ public:
     void setActorLocation(QPoint newLocation, Actor* actor);
     void deleteActor(Actor* actor);
     void setConstructor(Actor*actor);
-    void deleteConstructor(bool deleteCreation);
+    void deleteConstructor();
 
     //FCE - RETURN
     QString testFunction();
@@ -111,6 +117,8 @@ public:
     void actualizeEditor();
     void actualizePlayMode();
     void updateWorld();
+    void actualizeConstructorPerTick();
+
 
     //DESTRUCTORs
     ~WorldMap();

@@ -53,10 +53,8 @@ void WorldCollide::removeActorFromCollideLists(Actor *removedActor)
             }
             case TRAIN_CHANNEL:
             {
-                qDebug() << "remove from collide list, size: " << trainChannel.size();
                 int removedIndex = trainChannel.indexOf(removedActor);
                 if (removedIndex != -1) trainChannel.remove(removedIndex);
-                qDebug() << "remove from collide list, size after: " << trainChannel.size();
                 break;
             }
             case RAIL_CHANNEL:

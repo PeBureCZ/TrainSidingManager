@@ -12,6 +12,9 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     moveForward = true;
     trainPath = {};
     setActualPathGraphic(actualRail);
+    remainToPathEnd = 0;
+    breakLevel = 6;
+    throttleLevel = 2;
 }
 
 void Train::actualizeGraphicLocation()
@@ -103,6 +106,22 @@ QPointF Train::getLocationOnPath(float percentOnPath)
     return actualPathGraphic->path().pointAtPercent(percentOnPath);
 }
 
+void Train::moveTrain()
+{
+    //no change, no move
+    if (actualSpeed == 0) return;
+
+    //calculate the actual position of the train. The actual position corresponds to the last vehicle in direction of movement
+    actualizeOnPathLength();
+
+    //calculate the graphic and actor positions for each individual vehicle
+    actualizeVehiclesOnPath();
+
+    //Aactualize Train(Actor) location (not Vehicle locations)
+    if (moveForward) setLocation(dynamic_cast<Actor*>(vehicles[0])->getLocation(), false);
+    else setLocation(dynamic_cast<Actor*>(vehicles.last())->getLocation(), false);
+}
+
 void Train::actualizeOnPathLength()
 {
     int newOnPathLength = onPathLength; //in decimeters
@@ -132,6 +151,7 @@ void Train::actualizeOnPathLength()
         else
         {
             setActualSpeed(0);
+            qDebug() << "1: speed set to 0 in train";
             (directionToRailEnd) ? newOnPathLength = actualPathGraphic->path().length() : newOnPathLength = 0;
             break;
         }
@@ -140,13 +160,6 @@ void Train::actualizeOnPathLength()
     if (directionOnEventBegin != directionToRailEnd) newOnPathLength = (newOnPathLength - (actualPathGraphic->path().length()))*-1;
 
     float newPathPercentValue = actualPathGraphic->path().percentAtLength(newOnPathLength);
-
-    /*
-    if (((newPathPercentValue == 0 && !directionToRailEnd) || (newPathPercentValue == 1 && directionToRailEnd)) && trainPath.size() == 0)
-    {
-        setActualSpeed(0); //train stop at last rail
-    }
-    */
 
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
@@ -201,14 +214,7 @@ void Train::actualizeVehiclesOnPath()
         }
     }
     else //front (or back) of train vehicle is on next rail/s
-    {
-        if (trainPath.size() == 0)
-        {
-            qDebug() << "path is too short!";
-            setActualSpeed(0); //train stop at last rail
-            return;
-        }
-
+    {   
         QPoint onPathPoint;
         int temporalDistance = onPathLength;
 
@@ -295,20 +301,6 @@ void Train::actualizeVehiclesOnPath()
     }
 }
 
-void Train::moveTrain()
-{
-    //no change, no move
-    if (actualSpeed == 0) return;
-
-    //calculate the actual position of the train. The actual position corresponds to the last vehicle in direction of movement
-    actualizeOnPathLength();
-
-    //calculate the graphic and actor positions for each individual vehicle
-    actualizeVehiclesOnPath();
-    if (moveForward) setLocation(dynamic_cast<Actor*>(vehicles[0])->getLocation(), false);
-    else setLocation(dynamic_cast<Actor*>(vehicles.last())->getLocation(), false);
-}
-
 void Train::startAutopilot()
 {
     trainPath = TrainNavigation::autopilotCheck(30000,30,actualRail,directionToRailEnd);
@@ -327,21 +319,19 @@ void Train::setActualPathGraphic(Rail* actualRail)
 
 bool Train::teleportTrainToRail(Rail *rail)
 {
-    if (rail->getRailLength() < actualTrainLength - 10)
+    actualRail = rail;
+    setActualPathGraphic(actualRail);
+    startAutopilot();
+    if (rail->getRailLength() + TrainNavigation::getTrainPathLength(trainPath) < actualTrainLength - 10)
     {
         qDebug() << "can´t teleport, rail is too short";
         return false;
     }
-
-    actualRail = rail;
-    setActualPathGraphic(actualRail);
-
     directionToRailEnd ? onPathLength = 5 : onPathLength = 5 + actualTrainLength;
     int savedSpeed = actualSpeed;
     actualSpeed = 1;
     moveTrain(); //move train by 1 set train in right position
-    actualSpeed = savedSpeed;
-    startAutopilot();
+    actualSpeed = savedSpeed; 
     return true;
 }
 
@@ -356,24 +346,28 @@ void Train::actualizeTrainLenth()
 
 void Train::recalculateSpeed(int actualDistanceOnRail)
 {
-    int remainToRailEnd;
-    directionToRailEnd ? remainToRailEnd = actualRail->getRailLength() - actualDistanceOnRail : remainToRailEnd = actualDistanceOnRail;
-    if (moveForward) remainToRailEnd -= actualDistanceOnRail;
-    for (auto path : trainPath)
+    directionToRailEnd ? remainToPathEnd = actualRail->getRailLength() - actualDistanceOnRail : remainToPathEnd = actualDistanceOnRail;
+    remainToPathEnd += TrainNavigation::getTrainPathLength(trainPath);
+    if (moveForward) remainToPathEnd -= actualTrainLength;
+
+    if (remainToPathEnd < actualSpeed)
     {
-        remainToRailEnd += path->getRailLength();
+        if (actualSpeed > breakLevel)
+        {
+            qDebug() << "TRAIN DERAILED OR MOVE VIA RED SIGNAL at speed: " << actualSpeed; //NOT COMPLETED YET
+            setActualSpeed(0); //train stop at last rail
+            return;
+        }
     }
-    if (!moveForward) remainToRailEnd -= actualTrainLength;
-    if (remainToRailEnd < actualSpeed*12) //checked distance = 12 second - temporary solution
+
+    if (remainToPathEnd < breakLevel*(throttleLevel+actualSpeed)*3) //checked distance = 12 second - temporary solution
     {
-        actualSpeed -= 4; //apply breaks - temporary
-        if (actualSpeed < 0) actualSpeed = 1;
-        if (remainToRailEnd <= 0) actualSpeed = 0;
+        if (remainToPathEnd > 50 && actualSpeed > breakLevel)  setActualSpeed(actualSpeed - breakLevel);
+        else if (remainToPathEnd <= 50) setActualSpeed(0);
     }
     else
     {
-        actualSpeed += 2; //apply throtle power - temporary
-        if (actualSpeed > maxSpeed) actualSpeed = maxSpeed;
+        setActualSpeed(actualSpeed + throttleLevel);
     }
 }
 

@@ -25,6 +25,7 @@ enum ActorType
     //SELECTORS
     SELECTORS_START = 400,
     RAIL_SELECTOR,
+    TRAIN_SELECTOR,
     SELECTORS_END = 499,
 };
 

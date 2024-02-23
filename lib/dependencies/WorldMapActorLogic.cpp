@@ -15,7 +15,7 @@ Actor *WorldMap::addActor(int indexOfActor)
             break;
         case PORTAL_CONSTRUCTOR:
             actor = addPortalConstructor();
-            break;
+            break;         
         default: {}
         }
     }
@@ -62,6 +62,9 @@ Actor *WorldMap::addActor(int indexOfActor)
         {
         case RAIL_SELECTOR:
             actor = addRailSelector();
+            break;
+        case TRAIN_SELECTOR:
+            actor = addTrainSelector();
             break;
         default: {}
         }
@@ -111,12 +114,22 @@ Actor *WorldMap::addPortalConstructor()
 
 Actor *WorldMap::addRailSelector()
 {
-    //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR = NULL
+    //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR - nothing now
     //ADD SELECTOR (CONSTRUCTOR)
     Actor* railSelector = new RailSelector(nullptr, nullptr, nullptr); //without acttor to construct
     railSelector->setCallCollisionChannels({0,2});
     setConstructor(railSelector);
     return railSelector;
+}
+
+Actor *WorldMap::addTrainSelector()
+{
+    qDebug() << "trainSelector created";
+    //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR - nothing now
+    //ADD SELECTOR (CONSTRUCTOR)
+    Actor* trainSelector = new TrainSelector(nullptr, nullptr, nullptr); //without acttor to construct
+    setConstructor(trainSelector);
+    return trainSelector;
 }
 
 Actor *WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
@@ -226,14 +239,14 @@ void WorldMap::setConstructor(Actor * actor)
     tickedActorsList.push_back(actor);
 }
 
-void WorldMap:: deleteConstructor(bool deleteCreation) //if deleteCreation = true, delete actor in ActorConstructor too
+void WorldMap:: deleteConstructor()
 {
     if (actualConstructor != nullptr && dynamic_cast<ActorConstructor*>(actualConstructor))
     {
         ActorConstructor* actorConstructor = dynamic_cast<ActorConstructor*>(actualConstructor);
         Actor* actorConstructed = actorConstructor->getActorConstructing();
         actorConstructor->setActorConstructing(nullptr);
-        if (deleteCreation && actorConstructed != nullptr) deleteActor(actorConstructed);
+        if (actorConstructed != nullptr) deleteActor(actorConstructed);
         deleteActor(actualConstructor);
     }
     actualConstructor = nullptr;
@@ -255,10 +268,7 @@ Actor *WorldMap::addTrain()
         dynamic_cast<Train*>(newTrain)->setActualSpeed(100); //centimeters/s
         getWorldCollide()->addCollideTriger(newTrain,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(0,0),0.f, 400);
 
-        //temporary
-        newTrain->setLocation(dynamic_cast<Rail*>(railList[0])->getLocation(),true);
-
-        dynamic_cast<Train*>(newTrain)->startAutopilot();
+        //dynamic_cast<Train*>(newTrain)->startAutopilot();
         return newTrain;
     }
     return nullptr;

@@ -39,7 +39,7 @@ public:
     void constructSignal();
     void constructPortal();
     void constructTrain(QPoint point);
-    void selectTrain(QPoint point);
+    void trainOrSignalSelect();
 
 };
 

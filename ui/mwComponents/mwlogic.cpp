@@ -23,6 +23,7 @@ void mwlogic::actualizeMap()
             elapsedTime -= 1000;
             playModeActualized = false;
         }
+        else world->actualizeConstructorPerTick();
     }
     else
     {
@@ -52,7 +53,7 @@ void mwlogic::selectMenuSwitch(bool selectMode)
 
 void mwlogic::addConstructor(int constructorType)
 {
-    world->deleteConstructor(true);
+    world->deleteConstructor();
     ConsoleTextsStruct console;
     switch (constructorType)
     {
@@ -76,6 +77,15 @@ void mwlogic::addConstructor(int constructorType)
         managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
         managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
         break;
+    case TRAIN_SELECTOR:
+        world->addActor(TRAIN_SELECTOR);
+        //managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
+        //managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
+        break;
+
+
+
+
     default: {}
     }
 }
@@ -216,11 +226,18 @@ void mwlogic::constructTrain(QPoint point)
     }
 }
 
-void mwlogic::selectTrain(QPoint point)
+void mwlogic::trainOrSignalSelect()
 {
-    QList<Actor*> actors = world->getActorsCollideInLocation({TRAIN_CHANNEL}, point);
+    Actor* actualConstructor = world->getActualConstructor();
+    if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
+
+    TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
+    QPoint point = actualConstructor->getLocation();
+    QList<Actor*> actors = world->getActorsCollideInLocation({TRAIN_CHANNEL, RAIL_CHANNEL}, point);
     int nearestTrainDistance = 99999999;
+    int nearestSignalDistance = 99999999;
     Train* nearestTrain = nullptr;
+    Signal* nearestSignal = nullptr;
     for (auto actor : actors)
     {
         if (dynamic_cast<Train*>(actor))
@@ -232,10 +249,37 @@ void mwlogic::selectTrain(QPoint point)
                 nearestTrain = dynamic_cast<Train*>(actor);
             }
         }
+        else if (dynamic_cast<Rail*>(actor))
+        {
+            Rail* nearRail = dynamic_cast<Rail*>(actor);
+
+
+            int toP0Distance = world->getWorldDistance(nearRail->getLocation(),point);
+            int toP3Distance = world->getWorldDistance(nearRail->getLocation()+nearRail->getP3RelativeLocation().toPoint(),point);
+
+            int areaSelected;
+            (toP0Distance < toP3Distance) ? areaSelected = 0 : areaSelected = 1;
+
+            int distanceToSignal;
+            (areaSelected == 0) ? distanceToSignal = toP0Distance : distanceToSignal = toP3Distance;
+
+
+            Signal* nearSignal;
+            (areaSelected == 0) ? nearSignal = nearRail->getSignal(0) : nearSignal = nearRail->getSignal(1);
+
+            if (nearSignal != nullptr && distanceToSignal < nearestSignalDistance)
+            {
+                nearestSignal = nearSignal;
+            }
+        }
     }
     if (nearestTrain != nullptr)
     {
-        //create train selector!
+        qDebug() << "train is near";
+    }
+    else if (nearestSignal != nullptr)
+    {
+        qDebug() << "signal is near";
     }
 
 }

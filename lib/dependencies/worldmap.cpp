@@ -34,16 +34,7 @@ WorldMap::WorldMap(QObject* parent, QGraphicsScene* scene, CustomQGraphicsView* 
 
 void WorldMap::actualizeEditor()
 {
-    if (actualConstructor != nullptr)
-    {
-        actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
-        if (actualConstructor->canCallCollision())
-        {
-            QVector<int> collideChannels = actualConstructor->callCollideChannels();
-            QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
-            actualConstructor->calledCollisionEvent(actors);
-        }
-    }
+    actualizeConstructorPerTick();
 }
 
 void WorldMap::actualizePlayMode()
@@ -77,6 +68,19 @@ void WorldMap::updateWorld()
     worldView->update();
 }
 
+void WorldMap::actualizeConstructorPerTick()
+{
+    if (actualConstructor != nullptr)
+    {
+        actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
+        if (actualConstructor->canCallCollision())
+        {
+            QVector<int> collideChannels = actualConstructor->callCollideChannels();
+            QVector<Actor*> actors = getActorsCollideInLocation(collideChannels, worldView->getRelativeFromCursor());
+            actualConstructor->calledCollisionEvent(actors);
+        }
+    }
+}
 
 CustomQGraphicsView *WorldMap::getWorldView() //return view of scene (QGraphicsView)
 {
@@ -271,7 +275,7 @@ int WorldMap::getWorldDistance(QPoint pointOne, QPoint pointTwo)
 WorldMap::~WorldMap()
 {
     //constructor have to delete first! (contains a ptr* to a deleted Actor = just "constructed actor")
-    if (getActualConstructor() != nullptr) deleteConstructor(true);
+    if (getActualConstructor() != nullptr) deleteConstructor();
 
     deleteAllActors();
     delete worldScene;

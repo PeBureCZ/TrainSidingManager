@@ -6,12 +6,13 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
     Rail* testedRail;
     QList<Rail*> trainPath = {};
     Signal* signal = nullptr;
+
     (direction) ? signal = actualRail->getSignal(1) : signal = actualRail->getSignal(0);
 
     //autopilot end on red signal state
     if (signal != nullptr)
     {
-        if (signal->getState() == 0) return trainPath;
+        if (signal->getState() == SIGNAL_STOP) return trainPath;
     }
 
     (direction) ? testedRail = actualRail->getConnectedRail(2) : testedRail = actualRail->getConnectedRail(0);
@@ -21,11 +22,20 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
     bool condition2 = distanceChecked < minDistanceCheck || trainPath.size() < minimalPathSegments;
     bool condition3 = distanceChecked < 50000;
 
-    //
     while (condition1 && condition2 && condition3)
     {
+
         distanceChecked += testedRail->getRailLength();
         trainPath.push_back(testedRail);
+
+        int endAreaNumber = -1;
+        (direction) ? endAreaNumber = 1 : endAreaNumber = 0;
+
+        signal = testedRail->getSignal(endAreaNumber);
+        if (signal != nullptr && signal->getState() == SIGNAL_STOP)
+        {
+            return trainPath; //if signal on end point = 0 -> path end on this signal
+        }
 
         int connectionNumber = 0;
         if (direction) connectionNumber +=2;
@@ -36,22 +46,6 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
         }
         testedRail = newConnectedRail;
 
-        int endAreaNumber = -1;
-        (direction) ? endAreaNumber = 1 : endAreaNumber = 0;
-
-        if (testedRail != nullptr)
-        {
-            signal = testedRail->getSignal(endAreaNumber);
-            if (signal != nullptr)
-            {
-                if (signal->getState() == 0)
-                {
-                    trainPath.push_back(testedRail);
-                    return trainPath; //if signal on end point = 0 -> path end on this signal
-                }
-            }
-        }
-        else signal = nullptr;
 
         //new set of conditions
         condition1 = testedRail != nullptr;
@@ -59,6 +53,16 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
         condition3 = distanceChecked < 50000;
     }
     return trainPath;
+}
+
+int TrainNavigation::getTrainPathLength(QList<Rail *> path)
+{
+    int length = 0;
+    for (auto rail : path)
+    {
+        length += rail->getRailLength();
+    }
+    return length;
 }
 
 bool TrainNavigation::checkNewDirection(bool actualDirection, Rail *actualRail, Rail* newRail)

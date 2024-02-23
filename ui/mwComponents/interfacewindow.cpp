@@ -78,10 +78,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             {
             case PLAY_SELECT_TRAIN:
             {
-                    int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
-                    int yBarValue = world->getWorldView()->verticalScrollBar()->value();
-                    int zoomLevel = world->getWorldView()->getZoomLevel();
-                    selectTrain(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
+                    trainOrSignalSelect();
                     break;
             }
             default: {}
@@ -90,11 +87,9 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
     }
     else if (event->button() == Qt::RightButton)
     {
-        if (menuSelected >= menuSelected && menuSelected <= PORTAL_CONSTRUCT_MODE)
-        {
-            world->deleteConstructor(true);
-            menuSelected = EDIT_MODE_FREE;
-        }
+        world->deleteConstructor();
+        if (menuSelected < PLAY_MODE_START) menuSelected = EDIT_MODE_FREE;
+        else menuSelected = PLAY_MODE_START;
     }
 }
 
@@ -165,6 +160,7 @@ void InterfaceWindow::wheelEvent(QWheelEvent *event)
 
 void InterfaceWindow::playButSwitch(bool editMode)
 {
+    world->deleteConstructor();
     if (editMode) menuSelected = EDIT_MODE_FREE;
     else menuSelected = PLAY_MODE_FREE;
     mwlogic::playButSwitch(editMode);
@@ -172,6 +168,7 @@ void InterfaceWindow::playButSwitch(bool editMode)
 
 void InterfaceWindow::selectMenuSwitch(bool selectMode)
 {
+    world->deleteConstructor();
     ConsoleTextsStruct console;
     if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_MODE_END)
     {
@@ -231,6 +228,7 @@ void InterfaceWindow::on_MultiFuncBut1_clicked()
     else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END)
     {
         menuSelected = PLAY_SELECT_TRAIN;
+        addConstructor(TRAIN_SELECTOR);
     }
 }
 
@@ -362,7 +360,7 @@ void InterfaceWindow::on_MultiFuncBut24_clicked()
         {
             //delete last created actor
             Actor* deletedActor = world->actorList[world->actorList.size()-1];
-            if (world->getActualConstructor() != nullptr) world->deleteConstructor(true);
+            if (world->getActualConstructor() != nullptr) world->deleteConstructor();
             else world->deleteActor(deletedActor);
             managerConsole->printToConsole("Last item deleted", RED_COLOR, MIDDLE_DURATION);
         }
