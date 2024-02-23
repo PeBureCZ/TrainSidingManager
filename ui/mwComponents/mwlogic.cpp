@@ -273,15 +273,23 @@ void mwlogic::trainOrSignalSelect()
             }
         }
     }
-    if (nearestTrain != nullptr)
-    {
-        qDebug() << "train is near";
-    }
-    else if (nearestSignal != nullptr)
+
+    Train* selectedTrain = trainSelector->getSelectedTrain();
+    if (nearestSignal != nullptr && selectedTrain != nullptr)
     {
         qDebug() << "signal is near";
+        trainSelector->setSelectedSignal(nearestSignal);
     }
-
+    else if (nearestTrain != nullptr)
+    {
+        qDebug() << "train selected";
+        trainSelector->setSelectedTrain(nearestTrain);
+    }
+    else
+    {
+        qDebug() << "nothing";
+        trainSelector->setSelectedSignal(nullptr);
+    }
 }
 
 mwlogic::~mwlogic() {}

@@ -5,9 +5,8 @@
 #include <QObject>
 #include "Actors/train.h"
 #include "Actors/rail.h"
-#include "Actors/signal.h"
 
-class TrainSelector : public SelectConstructor
+class LIB_EXPORT TrainSelector : public SelectConstructor
 {
     Q_OBJECT
 protected:
@@ -17,10 +16,11 @@ public:
     explicit TrainSelector(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     void actualizeConstructor(QPoint newPoint) override;
 
-    Signal *getSelectedSignal() const;
+    Signal *getSelectedSignal();
     void setSelectedSignal(Signal *newSelectedSignal);
-    Train *getSelectedTrain() const;
+    Train *getSelectedTrain();
     void setSelectedTrain(Train *newSelectedTrain);
+    void testFce();
 };
 
 #endif // TRAINSELECTOR_H

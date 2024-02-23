@@ -4,10 +4,11 @@
 TrainSelector::TrainSelector(QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing)
     : SelectConstructor(parent, newGraphicItem, actorToConstructing)
 {
-
+    selectedTrain = nullptr;
+    selectedSignal = nullptr;
 }
 
-Signal *TrainSelector::getSelectedSignal() const
+Signal* TrainSelector::getSelectedSignal()
 {
     return selectedSignal;
 }
@@ -17,7 +18,7 @@ void TrainSelector::setSelectedSignal(Signal *newSelectedSignal)
     selectedSignal = newSelectedSignal;
 }
 
-Train *TrainSelector::getSelectedTrain() const
+Train* TrainSelector::getSelectedTrain()
 {
     return selectedTrain;
 }
@@ -25,6 +26,11 @@ Train *TrainSelector::getSelectedTrain() const
 void TrainSelector::setSelectedTrain(Train *newSelectedTrain)
 {
     selectedTrain = newSelectedTrain;
+}
+
+void TrainSelector::testFce()
+{
+
 }
 
 void TrainSelector::actualizeConstructor(QPoint newPoint)

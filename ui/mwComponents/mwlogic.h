@@ -7,9 +7,7 @@
 #include <QWheelEvent>
 #include <QGraphicsView>
 #include <QHBoxLayout>
-#include "Actors/rail.h"
 
-#include "dependencies/WorldMapActorLogic.h"
 
 //ENUM
 #include "dependencies/Enums/BlockChannels.h"
