@@ -10,7 +10,8 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     directionToRailEnd = true;
     actualTrainLength = 0; //decimeters
     moveForward = true;
-    trainPath = {};
+    remainingPath = {};
+    takenPath = {};
     setActualPathGraphic(actualRail);
     remainToPathEnd = 0;
     breakLevel = 6;
@@ -137,12 +138,15 @@ void Train::actualizeOnPathLength()
 
     while (repeat)
     {
-        if (trainPath.size() > 0)
+        if (remainingPath.size() > 0)
         {
-            (directionOnEventBegin) ? newOnPathLength -= actualRail->getRailLength() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(trainPath[0])->getRailLength();
-            directionToRailEnd = TrainNavigation::checkNewDirection(directionToRailEnd, actualRail, trainPath[0]); //check direction for new path segment
-            actualRail = trainPath[0];
-            trainPath.remove(0);
+            (directionOnEventBegin) ? newOnPathLength -= actualRail->getRailLength() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(remainingPath[0])->getRailLength();
+            directionToRailEnd = TrainNavigation::checkNewDirection(directionToRailEnd, actualRail, remainingPath[0]); //check direction for new path segment
+
+            //The already taken path is added to the takenPath, and a new actualRail is set from the remainingPath
+            takenPath.push_back(actualRail);
+            actualRail = remainingPath[0];
+            remainingPath.remove(0);
             actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(actualRail->getGraphicItem());
 
             if (directionOnEventBegin && newOnPathLength < actualRail->getRailLength()) break;
@@ -238,16 +242,16 @@ void Train::actualizeVehiclesOnPath()
                 {
                     if ((actualVehicleDirection && temporalDistance > testedRail->getRailLength()) || (!actualVehicleDirection && temporalDistance < 0))
                     {
-                        if (bonusPathIndex >= trainPath.size()) break;
+                        if (bonusPathIndex >= remainingPath.size()) break;
                         bool saveDirection = actualVehicleDirection;
-                        actualVehicleDirection = TrainNavigation::checkNewDirection(actualVehicleDirection, testedRail, trainPath[bonusPathIndex]);
+                        actualVehicleDirection = TrainNavigation::checkNewDirection(actualVehicleDirection, testedRail, remainingPath[bonusPathIndex]);
 
                         if (saveDirection && actualVehicleDirection) temporalDistance -= testedRail->getRailLength();
-                        else if (saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(trainPath[bonusPathIndex])->getRailLength() - (temporalDistance - testedRail->getRailLength());
+                        else if (saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(remainingPath[bonusPathIndex])->getRailLength() - (temporalDistance - testedRail->getRailLength());
                         else if (!saveDirection && actualVehicleDirection) temporalDistance *= -1;
-                        else if (!saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(trainPath[bonusPathIndex])->getRailLength() + temporalDistance;
+                        else if (!saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(remainingPath[bonusPathIndex])->getRailLength() + temporalDistance;
 
-                        testedRail = trainPath[bonusPathIndex];
+                        testedRail = remainingPath[bonusPathIndex];
                         testedGraphicItem = dynamic_cast<QGraphicsPathItem*>(testedRail->getGraphicItem());
                         bonusPathIndex++;
                     }
@@ -303,12 +307,17 @@ void Train::actualizeVehiclesOnPath()
 
 void Train::startAutopilot()
 {
-    trainPath = TrainNavigation::autopilotCheck(30000,30,actualRail,directionToRailEnd);
+    remainingPath = TrainNavigation::autopilotCheck(30000,30,actualRail,directionToRailEnd);
+    for (auto rail : remainingPath)
+    {
+        rail->setOccupied(true, true);
+    }
+    actualRail->setOccupied(true, true);
 }
 
 void Train::setTrainPath(QVector<Rail*> newTrainPath)
 {
-    trainPath = newTrainPath;
+    remainingPath = newTrainPath;
 }
 
 void Train::setActualPathGraphic(Rail* actualRail)
@@ -322,7 +331,7 @@ bool Train::teleportTrainToRail(Rail *rail)
     actualRail = rail;
     setActualPathGraphic(actualRail);
     startAutopilot();
-    if (rail->getRailLength() + TrainNavigation::getTrainPathLength(trainPath) < actualTrainLength - 10)
+    if (rail->getRailLength() + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
     {
         qDebug() << "can´t teleport, rail is too short";
         return false;
@@ -347,7 +356,7 @@ void Train::actualizeTrainLenth()
 void Train::recalculateSpeed(int actualDistanceOnRail)
 {
     directionToRailEnd ? remainToPathEnd = actualRail->getRailLength() - actualDistanceOnRail : remainToPathEnd = actualDistanceOnRail;
-    remainToPathEnd += TrainNavigation::getTrainPathLength(trainPath);
+    remainToPathEnd += TrainNavigation::getTrainPathLength(remainingPath);
     if (moveForward) remainToPathEnd -= actualTrainLength;
 
     if (remainToPathEnd < actualSpeed)
@@ -359,11 +368,13 @@ void Train::recalculateSpeed(int actualDistanceOnRail)
             return;
         }
     }
-
-    if (remainToPathEnd < breakLevel*(throttleLevel+actualSpeed)*3) //checked distance = 12 second - temporary solution
+    if (remainToPathEnd - actualSpeed - 80 < (0 - (actualSpeed*actualSpeed)) / (2 * breakLevel*-1)) //checked distance = 12 second - temporary solution
     {
         if (remainToPathEnd > 50 && actualSpeed > breakLevel)  setActualSpeed(actualSpeed - breakLevel);
-        else if (remainToPathEnd <= 50) setActualSpeed(0);
+        else if (remainToPathEnd <= 50)
+        {
+            setActualSpeed(0);
+        }
     }
     else
     {
@@ -388,7 +399,7 @@ void Train::tickEvent()
 
 QVector<Rail *> Train::getTrainPath() const
 {
-    return trainPath;
+    return remainingPath;
 }
 
 Train::~Train()

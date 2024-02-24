@@ -12,7 +12,8 @@ Q_OBJECT
 protected:
     QGraphicsPathItem* actualPathGraphic;
     Rail* actualRail;
-    QVector<Rail*> trainPath;
+    QVector<Rail*> remainingPath;
+    QVector<Rail*> takenPath;
     float onPathValue;
     int onPathLength;  //in decimeters!
     int actualTrainLength; //in decimeters!
