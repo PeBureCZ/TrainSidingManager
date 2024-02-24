@@ -45,7 +45,8 @@ public:
     void addMultipleVehicleToTrain(QList<Vehicle*> newVehicles);
     void actualizeMaxSpeed();
     void setActualPathValue(float newValue);
-    void setTrainPath(QVector<Rail*> newTrainPath); 
+    void setTrainPath(QVector<Rail*> newTrainPath);
+    void addNextPartOfPath(QVector<Rail*> addedPartOfPath);
     void moveTrain();
     void startAutopilot();
     void setActualPathGraphic(Rail *actualRail);

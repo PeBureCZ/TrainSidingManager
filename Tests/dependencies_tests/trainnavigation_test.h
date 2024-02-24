@@ -8,7 +8,6 @@ class TrainNavigation_test : public QObject
 {
     Q_OBJECT
 private slots:
-    void checkNewDirection_test();
 public:
     explicit TrainNavigation_test(QObject *parent = nullptr);
 

@@ -140,11 +140,20 @@ void Train::actualizeOnPathLength()
     {
         if (remainingPath.size() > 0)
         {
+            //get a new position of train
             (directionOnEventBegin) ? newOnPathLength -= actualRail->getRailLength() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(remainingPath[0])->getRailLength();
-            directionToRailEnd = TrainNavigation::checkNewDirection(directionToRailEnd, actualRail, remainingPath[0]); //check direction for new path segment
+
+            takenPath.push_back(actualRail);
+            if ((directionToRailEnd && actualRail->getSignal(1) != nullptr) || (!directionToRailEnd && actualRail->getSignal(0) != nullptr))
+            {
+                for (auto rail : takenPath) rail->setOccupied(false, true);
+                takenPath.clear();
+            }
+
+            directionToRailEnd = TrainNavigation::checkDirectionOnNextRail(directionToRailEnd, actualRail, remainingPath[0]); //check direction for new path segment
 
             //The already taken path is added to the takenPath, and a new actualRail is set from the remainingPath
-            takenPath.push_back(actualRail);
+
             actualRail = remainingPath[0];
             remainingPath.remove(0);
             actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(actualRail->getGraphicItem());
@@ -244,7 +253,7 @@ void Train::actualizeVehiclesOnPath()
                     {
                         if (bonusPathIndex >= remainingPath.size()) break;
                         bool saveDirection = actualVehicleDirection;
-                        actualVehicleDirection = TrainNavigation::checkNewDirection(actualVehicleDirection, testedRail, remainingPath[bonusPathIndex]);
+                        actualVehicleDirection = TrainNavigation::checkDirectionOnNextRail(actualVehicleDirection, testedRail, remainingPath[bonusPathIndex]);
 
                         if (saveDirection && actualVehicleDirection) temporalDistance -= testedRail->getRailLength();
                         else if (saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(remainingPath[bonusPathIndex])->getRailLength() - (temporalDistance - testedRail->getRailLength());
@@ -320,6 +329,15 @@ void Train::setTrainPath(QVector<Rail*> newTrainPath)
     remainingPath = newTrainPath;
 }
 
+void Train::addNextPartOfPath(QVector<Rail *> addedPartOfPath)
+{
+    remainingPath += addedPartOfPath;
+    for (auto rail : addedPartOfPath)
+    {
+        rail->setOccupied(true, true);
+    }
+}
+
 void Train::setActualPathGraphic(Rail* actualRail)
 {
     if (actualRail != nullptr) actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(dynamic_cast<Actor*>(actualRail)->getGraphicItem());
@@ -371,15 +389,9 @@ void Train::recalculateSpeed(int actualDistanceOnRail)
     if (remainToPathEnd - actualSpeed - 80 < (0 - (actualSpeed*actualSpeed)) / (2 * breakLevel*-1)) //checked distance = 12 second - temporary solution
     {
         if (remainToPathEnd > 50 && actualSpeed > breakLevel)  setActualSpeed(actualSpeed - breakLevel);
-        else if (remainToPathEnd <= 50)
-        {
-            setActualSpeed(0);
-        }
+        else if (remainToPathEnd <= 50) setActualSpeed(0);
     }
-    else
-    {
-        setActualSpeed(actualSpeed + throttleLevel);
-    }
+    else setActualSpeed(actualSpeed + throttleLevel);
 }
 
 bool Train::getDirectionToRailEnd() const

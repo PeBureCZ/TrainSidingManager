@@ -34,6 +34,7 @@ private:
 public:
     Actor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr);
     QGraphicsItem* getGraphicItem();
+    QPoint getGraphicLocation();
     QVector<int> recieveCollideChannels();
     QVector<int> callCollideChannels();
     QString getName();

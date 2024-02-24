@@ -340,6 +340,7 @@ Actor* WorldMap::addSignal(QPoint point)
     SignalConstructor* actualSignalConstructor = dynamic_cast<SignalConstructor*>(getActualConstructor());
     int nearestEndArea = actualSignalConstructor->getNearestEndArea();
     Rail* connectedRail = actualSignalConstructor->getNearestRail();
+
     if (connectedRail == nullptr || nearestEndArea == -1) return nullptr;
 
     //ADD GRAPHIC FOR SIGNAL
@@ -357,9 +358,11 @@ Actor* WorldMap::addSignal(QPoint point)
     Actor* newSignal = new Signal(nullptr, signalGraphic);
     newSignal->setLocation(point, true);
 
+
     if (connectedRail != nullptr && (nearestEndArea == 0 || nearestEndArea == 1))
     {
-        dynamic_cast<Rail*>(connectedRail)->addSignal(nearestEndArea, dynamic_cast<Signal*>(newSignal));
+        connectedRail->addSignal(nearestEndArea, dynamic_cast<Signal*>(newSignal));
+        dynamic_cast<Signal*>(newSignal)->addRailActor(dynamic_cast<Actor*>(connectedRail));
     }
     return newSignal;
 }

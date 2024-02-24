@@ -560,10 +560,15 @@ void Rail::addSignal(int numberOfEndPoint, Signal* signalActor)
     else if (numberOfEndPoint == 1) signalP3 = signalActor;
 }
 
-void Rail::releaseSignal(int numberOfEndPoint)
+void Rail::actorLeaveFromCollision(Actor *actor)
 {
-    if (numberOfEndPoint == 0) signalP0 = nullptr;
-    else if (numberOfEndPoint == 1) signalP3 = nullptr;
+    //RELEASE SIGNAL (used if the signal was deleted before the rail. A Signal can´t include Rail!)
+    if (dynamic_cast<Signal*>(actor))
+    {
+        Signal* removedSignal = dynamic_cast<Signal*>(actor);
+        if (signalP0 == removedSignal) signalP0 = nullptr;
+        else if (signalP3 == removedSignal) signalP3 = nullptr;
+    }
 }
 
 Signal *Rail::getSignal(int numberOfEndPoint)

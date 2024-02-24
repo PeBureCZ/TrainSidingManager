@@ -65,21 +65,41 @@ int TrainNavigation::getTrainPathLength(QList<Rail *> path)
     return length;
 }
 
-bool TrainNavigation::checkNewDirection(bool actualDirection, Rail *actualRail, Rail* newRail)
+bool TrainNavigation::checkDirectionOnLatestRail(QList<Rail *> path, Rail *actualRail, bool actualDirection)
 {
-    QPoint railEndPosition;
-    if (actualDirection) // direction = from P0 to P3
+    int connection;
+    bool direction = 0;
+    if (path.size() == 0)
     {
-        railEndPosition = actualRail->getLocation() + actualRail->getP3RelativeLocation().toPoint(); //P3
-        if (railEndPosition != newRail->getLocation()) return false; //if true: end P3 -> start P3, false = change direction
+        qDebug() << "1";
+        return actualDirection;
     }
-    else // direction = from P3 to P0
+    else if (path.size() == 1)
     {
-      railEndPosition = actualRail->getLocation(); //P0
-      if (railEndPosition != newRail->getLocation()) return false; //if true: end P0 -> start P3, false = same direction as before
+        qDebug() << "2";
+        connection = dynamic_cast<Rail*>(path[0])->getConnection(actualRail);
     }
-    return true; //set direction to "from P0 to P3" = "directionToEnd" in Train(Actor)
+    else
+    {
+        qDebug() << "3";
+        Rail* lastRail = path.last();
+        Rail* penultimateRail = path[path.size()-2];
+        connection = lastRail->getConnection(penultimateRail);
+    }
+    (connection <= 1) ? direction = 1 : direction = 0;
+    return direction;
+
 }
+
+bool TrainNavigation::checkDirectionOnNextRail(bool actualDirection, Rail *actualRail, Rail* nextRail)
+{
+    bool direction;
+    int conection = nextRail->getConnection(actualRail); //get conection of rail 0-3 (A,B,C,D)
+    (conection <= 1) ? direction = true : direction = false; //Transfer connection to direction
+    return direction; //transfered to direction
+}
+
+
 
 
 

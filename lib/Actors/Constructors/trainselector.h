@@ -20,7 +20,7 @@ public:
     void setSelectedSignal(Signal *newSelectedSignal);
     Train *getSelectedTrain();
     void setSelectedTrain(Train *newSelectedTrain);
-    void testFce();
+    void findPathToSignal();
 };
 
 #endif // TRAINSELECTOR_H

@@ -10,6 +10,7 @@ Signal::Signal(QObject *parent, QGraphicsItem *newGraphicItem)
     {
         allowedSignalState.push_back(i);
     }
+    railActor = nullptr;
 }
 
 void Signal::setState(int newSignState)
@@ -27,6 +28,22 @@ QList<int> Signal::getAllowedSignalState() const
     return allowedSignalState;
 }
 
+void Signal::addRailActor(Actor *newRailActor)
+{
+    railActor = newRailActor;
+}
+
+Actor *Signal::getRailActor()
+{
+    return railActor;
+}
+
 Signal::~Signal()
-{}
+{
+    qDebug() << "signal destructor activated";
+    if (railActor != nullptr)
+    {
+        railActor->actorLeaveFromCollision(dynamic_cast<Actor*>(this));
+    }
+}
 

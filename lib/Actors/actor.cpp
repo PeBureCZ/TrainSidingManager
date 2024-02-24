@@ -67,6 +67,11 @@ QGraphicsItem *Actor::getGraphicItem()
     return graphicItem;
 }
 
+QPoint Actor::getGraphicLocation()
+{
+    return graphicLocation;
+}
+
 void Actor::setName(QString newName)
 {
     name = newName;
