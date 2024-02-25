@@ -144,6 +144,8 @@ void Train::actualizeOnPathLength()
             (directionOnEventBegin) ? newOnPathLength -= actualRail->getRailLength() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(remainingPath[0])->getRailLength();
 
             takenPath.push_back(actualRail);
+
+            //signal: "sekční + odjezdové" - not yet
             if ((directionToRailEnd && actualRail->getSignal(1) != nullptr) || (!directionToRailEnd && actualRail->getSignal(0) != nullptr))
             {
                 for (auto rail : takenPath) rail->setOccupied(false, true);
@@ -155,6 +157,14 @@ void Train::actualizeOnPathLength()
             //The already taken path is added to the takenPath, and a new actualRail is set from the remainingPath
 
             actualRail = remainingPath[0];
+
+            //signal: "vjezdové - temporary
+            if ((directionToRailEnd && actualRail->getSignal(0) != nullptr) || (!directionToRailEnd && actualRail->getSignal(1) != nullptr))
+            {
+                for (auto rail : takenPath) rail->setOccupied(false, true);
+                takenPath.clear();
+            }
+
             remainingPath.remove(0);
             actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(actualRail->getGraphicItem());
 
@@ -420,4 +430,7 @@ Train::~Train()
     {
         delete vehicle;
     }
+    for (auto rail : takenPath) rail->setOccupied(false, true);
+    for (auto rail : remainingPath) rail->setOccupied(false, true);
+    actualRail->setOccupied(false, true);
 }

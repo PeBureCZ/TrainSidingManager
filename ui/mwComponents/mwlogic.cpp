@@ -3,7 +3,7 @@
 mwlogic::mwlogic(MainWindow *parent)
     : MainWindow{parent}
 {
-    menuSelected = EDIT_MODE_FREE;
+    menuSelected = EDIT_MODE_START;
     playModeActualized = false;
     elapsedTime = 0;
 }
@@ -275,19 +275,19 @@ void mwlogic::trainOrSignalSelect()
     }
 
     Train* selectedTrain = trainSelector->getSelectedTrain();
-    if (nearestSignal != nullptr && selectedTrain != nullptr)
+    if (nearestSignal != nullptr && trainSelector->getSelectedTrain() != nullptr)
     {
         qDebug() << "signal is near -> create new path";
         trainSelector->setSelectedSignal(nearestSignal);
         trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
         trainSelector->setSelectedSignal(nullptr);
     }
-    else if (nearestTrain != nullptr)
+    else if (nearestSignal == nullptr && nearestTrain != nullptr)
     {
         qDebug() << "train selected";
         trainSelector->setSelectedTrain(nearestTrain);
     }
-    else
+    else if (nearestSignal == nullptr)
     {
         qDebug() << "nothing / signal deselect";
         trainSelector->setSelectedSignal(nullptr);

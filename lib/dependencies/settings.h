@@ -20,4 +20,21 @@ namespace customQColors
     inline const QColor UNSELECTED_RAIL_COLOR = QColor(Qt::blue);
 }
 
+
+
+enum graphicItemLayer
+{
+    //QGraphicsItem *myItem = new QGraphicsItem;
+    //myItem->setZValue(1);
+
+    BOTTOM_LAYER = 0,
+    UNSELECTED_RAIL_LAYER,
+    SELECTED_RAIL_LAYER,
+    RED_AREA_LAYER,
+    GREEN_AREA_LAYER,
+    VEHICLE_LAYER,
+    SIGNAL_LAYER,
+    TOP_LAYER,
+};
+
 #endif // SETTINGS_H

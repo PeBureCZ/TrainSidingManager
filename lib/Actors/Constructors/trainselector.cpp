@@ -51,7 +51,7 @@ void TrainSelector::findPathToSignal()
         QList<Rail*> findedRails = {};
         //QList<Rail*> findedDirections = {};
 
-        int repeat = 300;
+        int repeat = 300; //number of rails to check in order to find the path
         bool finded = false;
         while (repeat > 0 && needTestRails.size() > 0)
         {
@@ -72,29 +72,45 @@ void TrainSelector::findPathToSignal()
 
             for (int i = firstIndex; i < lastIndex; i++)
             {
+                //scan connected rail of testedRail
                 if (testedRail->getConnectedRail(i) != nullptr) //true = on connection is rail
                 {
                     Rail* newRailFinded = testedRail->getConnectedRail(i);
                     if (newRailFinded->getOccupied()) continue;
+
                     int conectionToPreviousRail = newRailFinded->getConnection(testedRail);
+                    if (conectionToPreviousRail <=1) conectionToPreviousRail = 0;
+                    else conectionToPreviousRail  = 1;
+
                     bool newDirection;
-                    (conectionToPreviousRail <= 1) ? newDirection = true : newDirection = false;
+                    (conectionToPreviousRail == 0) ? newDirection = true : newDirection = false;
 
                     if (newRailFinded == railToFind)
                     {
                         //check if the track is in opposite direction
                         int railEndOfSignal;
                         (newRailFinded->getSignal(0) == selectedSignal) ? railEndOfSignal = 0 : railEndOfSignal = 1;
-                        qDebug() << "signal is on end: " << railEndOfSignal;
-                        qDebug() << "new direction: " << newDirection;
                         if (railEndOfSignal != newDirection)
                         {
                             qDebug() << "reversed direction!";
                             continue;
                         }
                     }
-                    testedRailDirection.push_back(newDirection);
 
+                    int connectionToRailToFind = newRailFinded->getConnection(railToFind);
+                    if (connectionToRailToFind != -1)
+                    {
+                        //newRailFinded is connected to railToFind! but is direction right?
+                        if (connectionToRailToFind <=1) connectionToRailToFind = 0;
+                        else connectionToRailToFind = 1;
+
+                        if (conectionToPreviousRail == connectionToRailToFind)
+                        {
+                            qDebug() << "wrong direction rail!";
+                            continue;
+                        }
+                    }
+                    testedRailDirection.push_back(newDirection);
                     findedRails.push_back(newRailFinded); //add to temporal list
                     needTestRails.push_back(newRailFinded);
                 }
@@ -103,41 +119,49 @@ void TrainSelector::findPathToSignal()
             needTestRails.removeAt(0);
             testedRailDirection.removeAt(0);
         }
-        qDebug() << "repeat remaining: " << repeat;
+        if (repeat < 50) qDebug() << "repeat remaining: " << repeat << " / 300";
 
         if (finded)
         {
-            while(true)
+            while(true) // remove other found rails at the end of the list if they are not the Rails looking for
             {
                 Rail* lastRailInList = findedRails.last();
-                if (railToFind == lastRailInList)
+                if (railToFind == lastRailInList) break;
+                else findedRails.removeLast();
+            }
+            qDebug() << "findedRails size before reduction is " << findedRails.size();
+            for (int i = findedRails.size() - 1; i > 0; i--)
+            {
+                Rail* railFromList = findedRails[i];
+
+                if (railFromList->getConnection(findedRails[i-1]) != -1); //part of path finded! Skip code...
+                else if (railFromList != railToFind )
                 {
-                    break;
+                    //not first and not last rails
+                    int connectionToPrevious = railFromList->getConnection(findedRails[i-1]);
+                    int connectionToNext = railFromList->getConnection(findedRails[i+1]);
+
+                    //transfer to railEnds number
+                    if (connectionToPrevious != -1 && connectionToPrevious <= 1) connectionToPrevious = 0;
+                    if (connectionToNext != -1 && connectionToNext <= 1) connectionToPrevious = 0;
+                    if (connectionToPrevious != -1 && connectionToPrevious >= 2) connectionToPrevious = 1;
+                    if (connectionToNext != -1 && connectionToNext >= 2) connectionToPrevious = 1;
+
+                    if (connectionToNext != -1 && connectionToPrevious == connectionToNext) findedRails.removeAt(i-1);
+                    else findedRails.removeAt(i-1);
                 }
                 else
                 {
-                    findedRails.removeLast();
-                }
-            }
-            qDebug() << "findedRails size before reduction is " << findedRails.size();
-            for (int i = findedRails.size() - 1; i > -1; i--)
-            {
-                //qDebug() << "try rail " << i;
-                Rail* railFromList = findedRails[i];
-                if (i > 0 && railFromList->getConnection(findedRails[i-1]) != -1)
-                {
-                    //qDebug() << "find reverse!";
-                }
-                else if (i > 0)
-                {
-                    //qDebug() << "discard " << i-1;
                     findedRails.removeAt(i-1);
                 }
-                //else qDebug() << "end";
             }
-            qDebug() << "findedRails size after reduction is " << findedRails.size();
-            selectedTrain->addNextPartOfPath(findedRails);
 
+            //check first rail in list
+            if (findedRails.size() > 1 && dynamic_cast<Rail*>(findedRails[0])->getConnection(dynamic_cast<Rail*>(findedRails[1])) == -1)
+            {
+                findedRails.removeAt(0);
+            }
+            selectedTrain->addNextPartOfPath(findedRails);
             selectedTrain->setActualSpeed(selectedTrain->getActualSpeed()+1);
         }
         else qDebug() << "the path was not found!";

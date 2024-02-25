@@ -8,7 +8,6 @@ enum OptionMode
 
     //EDIT+ADD
     EDIT_MODE_START = 100,
-    EDIT_MODE_FREE,
     //constructors start
     RAIL_CONSTRUCT_MODE,
     SIGNAL_CONSTRUCT_MODE,
@@ -23,7 +22,6 @@ enum OptionMode
 
     //PLAY+ADD
     PLAY_MODE_START = 300,
-    PLAY_MODE_FREE,
     PLAY_ADD_TRAIN,
     PLAY_ADD_END = 399,
 

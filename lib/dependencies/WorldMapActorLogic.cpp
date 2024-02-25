@@ -196,6 +196,7 @@ void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
         for (auto vehicle : newVehicles)
         {
             worldScene->addItem(vehicle->getGraphicItem());
+            vehicle->getGraphicItem()->setZValue(VEHICLE_LAYER);
         }
         dynamic_cast<Train*>(ownerTrain)->addMultipleVehicleToTrain(newVehicles);
     }
@@ -266,7 +267,7 @@ Actor *WorldMap::addTrain()
         qDebug() << "spawn train - temporary solution";
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
         dynamic_cast<Train*>(newTrain)->setActualSpeed(100); //centimeters/s
-        getWorldCollide()->addCollideTriger(newTrain,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(0,0),0.f, 400);
+        getWorldCollide()->addCollideTriger(newTrain,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(0,0),0.f, 1000);
 
         //dynamic_cast<Train*>(newTrain)->startAutopilot();
         return newTrain;
@@ -353,6 +354,7 @@ Actor* WorldMap::addSignal(QPoint point)
 
     QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct
     worldScene->addItem(signalGraphic);
+    signalGraphic->setZValue(SIGNAL_LAYER);
 
     //ADD SIGNAL ACTOR
     Actor* newSignal = new Signal(nullptr, signalGraphic);

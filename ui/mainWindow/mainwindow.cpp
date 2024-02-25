@@ -21,7 +21,7 @@ MainWindow::~MainWindow()
 void MainWindow::initializeInterface()
 {
     //ui
-    setEditAddInterface(EDIT_MODE_FREE);
+    setEditAddInterface(EDIT_MODE_START);
     //Map
     ui->MapViewLayout->addWidget(world->getWorldView(),1);
     //unused button
@@ -168,7 +168,7 @@ void MainWindow::setEditAddInterface(int menu)
 {
     switch (menu)
     {
-    case EDIT_MODE_FREE:
+    case EDIT_MODE_START:
         setButtonText("Rails", ui->MultiFuncBut1);
         setButtonText("Signals", ui->MultiFuncBut2);
         setButtonText("Portals", ui->MultiFuncBut3);
@@ -198,7 +198,7 @@ void MainWindow::setPlayAddInterface(int menu)
 {
     switch (menu)
     {
-    case PLAY_MODE_FREE:
+    case PLAY_MODE_START:
         setButtonText("Train", ui->MultiFuncBut1);
         freeButton(ui->MultiFuncBut2);
         freeButton(ui->MultiFuncBut3);

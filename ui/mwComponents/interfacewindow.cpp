@@ -88,8 +88,10 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
     else if (event->button() == Qt::RightButton)
     {
         world->deleteConstructor();
-        if (menuSelected < PLAY_MODE_START) menuSelected = EDIT_MODE_FREE;
-        else menuSelected = PLAY_MODE_START;
+        if (menuSelected <= EDIT_ADD_END) menuSelected = EDIT_MODE_START; //edit + add
+        else if (menuSelected <= EDIT_MODE_END) menuSelected = EDIT_SELECT_START;// edit + select
+        else if (menuSelected <= PLAY_ADD_END) menuSelected = PLAY_MODE_START;  // play + add
+        else menuSelected = PLAY_SELECT_START; // play + select
     }
 }
 
@@ -160,9 +162,16 @@ void InterfaceWindow::wheelEvent(QWheelEvent *event)
 
 void InterfaceWindow::playButSwitch(bool editMode)
 {
-    world->deleteConstructor();
-    if (editMode) menuSelected = EDIT_MODE_FREE;
-    else menuSelected = PLAY_MODE_FREE;
+    world->deleteConstructor(); //have to be deleted before another actors!
+    if (editMode)
+    {
+        menuSelected = EDIT_MODE_START;
+        for (auto actorTicked : world->tickedActorsList)
+        {
+            world->deleteActor(actorTicked);
+        }
+    }
+    else menuSelected = PLAY_MODE_START;
     mwlogic::playButSwitch(editMode);
 }
 
@@ -180,7 +189,7 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
         else
         {
             managerConsole->printToConsole("Switch to add option in edit mode", YELLOW_BOLD_COLOR, 140);
-            menuSelected = EDIT_MODE_FREE;
+            menuSelected = EDIT_MODE_START;
         }
     }
     else if(menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_MODE_END)
@@ -193,7 +202,7 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
         else
         {
             managerConsole->printToConsole("switch to add option in play mode", YELLOW_BOLD_COLOR, 140);
-            menuSelected = PLAY_MODE_FREE;
+            menuSelected = PLAY_MODE_START;
         }
     }
     mwlogic::selectMenuSwitch(selectMode);
@@ -352,10 +361,10 @@ void InterfaceWindow::on_MultiFuncBut23_clicked()
 
 void InterfaceWindow::on_MultiFuncBut24_clicked()
 {
-    if (menuSelected != PLAY_MODE_FREE)
+    if (menuSelected != PLAY_MODE_START)
     {
         //delete button
-        menuSelected = EDIT_MODE_FREE;
+        menuSelected = EDIT_MODE_START;
         if (world->actorList.size() > 0)
         {
             //delete last created actor

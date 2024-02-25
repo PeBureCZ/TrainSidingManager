@@ -446,10 +446,10 @@ bool Rail::getOccupied()
     return occupied;
 }
 
-void Rail::setOccupied(const bool newOccupied, bool setVisualToOccupied)
+void Rail::setOccupied(const bool isOccupied, bool setGraphic)
 {
-    occupied = newOccupied;
-    if (setVisualToOccupied) setVisualOccupied(newOccupied);
+    occupied = isOccupied;
+    if (setGraphic) setVisualOccupied(isOccupied);
 }
 
 void Rail::setVisualOccupied(const bool newsVisualState)
@@ -463,6 +463,7 @@ void Rail::setVisualOccupied(const bool newsVisualState)
         QPen newPen = graphicPath->pen();
         newPen.setColor(SELECTED_RAIL_COLOR);
         graphicPath->setPen(newPen);
+        graphicPath->setZValue(SELECTED_RAIL_LAYER);
     }
     else
     {
@@ -470,6 +471,7 @@ void Rail::setVisualOccupied(const bool newsVisualState)
         QPen newPen = graphicPath->pen();
         newPen.setColor(UNSELECTED_RAIL_COLOR);
         graphicPath->setPen(newPen);
+        graphicPath->setZValue(UNSELECTED_RAIL_LAYER);
     }
 }
 

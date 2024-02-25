@@ -25,6 +25,7 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
     //try to find nearest area (end of actual rail)
     for (auto actor : actorsInCollision)
     {
+        if (!dynamic_cast<Rail*>(actor)) continue;
         Rail* rail = dynamic_cast<Rail*>(actor);
         QPoint testedPoint1 = rail->getP0WorldLocation().toPoint();
         QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();
@@ -100,14 +101,14 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
             QPen newPen(Qt::red);
             newPen.setWidth(3);
             dynamic_cast<QGraphicsPathItem*>(nearestAreaGraphicItem)->setPen(newPen);
-            nearestAreaGraphicItem->setZValue(0);
+            nearestAreaGraphicItem->setZValue(RED_AREA_LAYER);
         }   
         if (areaItem != nullptr && nearestAreaGraphicItem != areaItem)
         {
             QPen newPen(Qt::green);
             newPen.setWidth(3);
             nearestRail->setVisibilityOfArea(testedNearestEndArea, true, Qt::green);
-            areaItem->setZValue(3);
+            areaItem->setZValue(GREEN_AREA_LAYER);
         }
         nearestAreaGraphicItem = areaItem;
     }
@@ -116,7 +117,7 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
         QPen newPen(Qt::red);
         newPen.setWidth(3);
         dynamic_cast<QGraphicsPathItem*>(nearestAreaGraphicItem)->setPen(newPen);
-        nearestAreaGraphicItem->setZValue(0);
+        nearestAreaGraphicItem->setZValue(RED_AREA_LAYER);
         nearestAreaGraphicItem = nullptr;
     }
     nearestEndArea = testedNearestEndArea;
@@ -125,6 +126,7 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
 void SignalConstructor::actorLeaveFromCollision(Actor *actor)
 {
     Actor::actorLeaveFromCollision(actor); //remove actor from list
+    if (!dynamic_cast<Rail*>(actor)) return;
     Rail* rail = dynamic_cast<Rail*>(actor);
     rail->setOccupied(false,true);
     rail->setVisibilityOfArea(0, false, nullptr);

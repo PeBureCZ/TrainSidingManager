@@ -149,10 +149,13 @@ void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
 void RailConstructor::actorLeaveFromCollision(Actor *actor)
 {
     Actor::actorLeaveFromCollision(actor);
-    Rail* rail = dynamic_cast<Rail*>(actor);
-    rail->setOccupied(false,true);
-    rail->setVisibilityOfArea(0, false, nullptr);
-    rail->setVisibilityOfArea(1, false, nullptr);
+    if (dynamic_cast<Rail*>(actor))
+    {
+        Rail* rail = dynamic_cast<Rail*>(actor);
+        rail->setOccupied(false,true);
+        rail->setVisibilityOfArea(0, false, nullptr);
+        rail->setVisibilityOfArea(1, false, nullptr);
+    }
 }
 
 void RailConstructor::actorEnterInCollision(Actor *actor)
