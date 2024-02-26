@@ -49,7 +49,7 @@ public:
     QVBoxLayout *consoleLayout;
     ManagerConsole* managerConsole;
     QHBoxLayout *mapZoomLayout;
-    QWidget *widgetWithLayout;
+    QWidget *ZoomWidget;
 
 private slots:
     virtual void on_PlayBut_clicked();

@@ -40,15 +40,15 @@ void MainWindow::initializeInterface()
     //console
     managerConsole = new ManagerConsole(this); //add custom manager console
 
-    //zoom option in map
+    //ZOOM IN MAP (BUTTONS)
     mapZoomLayout = new QHBoxLayout();
-    widgetWithLayout = new QWidget();
+    ZoomWidget = new QWidget();
 
+    ZoomWidget->setParent(ui->centralwidget);
+    ZoomWidget->setLayout(mapZoomLayout);
     mapZoomLayout->addWidget(ui->ZoomAddBut);
     mapZoomLayout->addWidget(ui->ZoomSubBut);
-
-    widgetWithLayout->setLayout(mapZoomLayout);
-    widgetWithLayout->setGeometry(QRect(160,20,100,50));
+    ZoomWidget->setGeometry(QRect(155,-8,70,70)); //pos x, pos y, size x, size y
 
     //BASIC STATS
     ui->BasicStats->setVisible(true);
@@ -60,7 +60,7 @@ void MainWindow::initializeInterface()
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QSize sizeView = world->getWorldView()->size();
-    managerConsole->setConsolePos({160,0},sizeView.width(),sizeView.height());
+    managerConsole->setConsolePos({160,sizeView.height()-300},sizeView.width(),300); //300 = console height
     managerConsole->printToConsole("bugged console (you have to resize window), affects response to mouse events", RED_BOLD_COLOR, MIDDLE_DURATION);
 }
 
@@ -207,5 +207,5 @@ MainWindow::~MainWindow()
     delete ui;
     delete world;
     delete mapZoomLayout;
-    delete widgetWithLayout;
+    delete ZoomWidget;
 }
