@@ -102,12 +102,9 @@ void mwlogic::constructRail(QPoint point)
 
     if (actualRailConstructor != nullptr && nearestRail != nullptr)
     {
-        //constructing béziere rail or near ends of exist rail or combinated
-
         //check if connect nearest Rail
-        Rail* testedRail = dynamic_cast<Rail*>(actualRailConstructor->getNearestRail());
-        QPoint testedPoint1 = testedRail->getP0WorldLocation().toPoint();
-        QPoint testedPoint2 = (testedRail->getP0WorldLocation() + testedRail->getP3RelativeLocation()).toPoint();
+        QPoint testedPoint1 = nearestRail->getP0WorldLocation().toPoint();
+        QPoint testedPoint2 = (nearestRail->getP0WorldLocation() + nearestRail->getP3RelativeLocation()).toPoint();
         int testedDistance1 = world->getWorldDistance(point, testedPoint1);
         int testedDistance2 = world->getWorldDistance(point, testedPoint2);
         if (maxRadius > testedDistance1 && testedDistance1 <= testedDistance2)
@@ -133,12 +130,13 @@ void mwlogic::constructRail(QPoint point)
     }
 
     //choose creating style from previous condition (e.g. connected, lined, etc.)
+    int zoomLevel = world->getWorldView()->getZoomLevel();
     switch (createRailByStyle)
     {
     case 0:
     {
         //create new lined rail and start constructing
-        actualRailConstructor->actualizeConstructor(point);
+        actualRailConstructor->actualizeConstructor(point, zoomLevel);
         actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addActor(RAIL_ACTOR)));
         actualRailConstructor->underConstruction(true);
         break;
@@ -146,13 +144,13 @@ void mwlogic::constructRail(QPoint point)
     case 1:
     {
         //comnplete lined rail
-        actualRailConstructor->actualizeConstructor(point);
+        actualRailConstructor->actualizeConstructor(point, zoomLevel);
         Rail* createdRail = actualRailConstructor->getOwnedRail();
         world->getWorldCollide()->addCollideTriger(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, QPoint(0,0), 0.0f, 120); //for P0 point
         world->getWorldCollide()->addCollideTriger(createdRail, SPHERE_COLLIDER, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
         world->getWorldCollide()->addCollideTriger(createdRail, BOX_COLLIDER, {STATIC_CHANNEL},  QPoint(0,0), 0.0f, 1);//create object BoxCollider
         actualRailConstructor->getOwnedRail()->setRailObjectBoxCollider();
-        actualRailConstructor->actualizeConstructor(point); //duplicied due to P3 point actualize
+        actualRailConstructor->actualizeConstructor(point, zoomLevel); //duplicied due to P3 point actualize
         actualRailConstructor->getOwnedRail()->actualizeAreasPosition();
         actualRailConstructor->underConstruction(false);
         break;
@@ -163,9 +161,14 @@ void mwlogic::constructRail(QPoint point)
         //re-calculate nearest trigger from nearest actor
         QPoint newPoint = nearestRail->getLocation();
         if (nearestPoint == 1) newPoint += nearestRail->getP3RelativeLocation().toPoint();
-
         actualRailConstructor->setConnectedRail(nearestRail);
-        actualRailConstructor->actualizeConstructor(newPoint);
+        actualRailConstructor->actualizeConstructor(newPoint, zoomLevel);
+
+        if (nearestRail->getConnectedRail(nearestPoint*2) != nullptr && nearestRail->getConnectedRail(nearestPoint*2+1) != nullptr) //connection 0/1 or 2/3
+        {
+            managerConsole->printToConsole("The rail has a junction already", RED_BOLD_COLOR, MIDDLE_DURATION);
+            break;
+        }
 
         //ADD RAIL ACTOR
         actualRailConstructor->setOwnedRail(dynamic_cast<Rail*>(world->addActor(RAIL_ACTOR)));
@@ -179,12 +182,17 @@ void mwlogic::constructRail(QPoint point)
     {
         //complete béziere rail and connect to second (before created) rail
         Rail* createdRail = actualRailConstructor->getOwnedRail();
+        if (createdRail == nearestRail || nearestRail->getConnection(createdRail) != -1) //try to connect self self-connect conected rail
+        {
+            managerConsole->printToConsole("You cannot create and connect rail here", RED_BOLD_COLOR, MIDDLE_DURATION);
+            break;
+        }
         QPoint newPoint = nearestRail->getLocation();
         if (nearestPoint == 1) newPoint += nearestRail->getP3RelativeLocation().toPoint();
         world->getWorldCollide()->addCollideTriger(createdRail, 0, {RAIL_CHANNEL}, {0,0}, 0.0f, 120); //for P0 point
         world->getWorldCollide()->addCollideTriger(createdRail, 0, {RAIL_CHANNEL}, createdRail->getP3RelativeLocation().toPoint(), 0.0f, 120);//for P3 point
         world->getWorldCollide()->addCollideTriger(createdRail, 1, {STATIC_CHANNEL}, {0,0}, 0.0f, 1);//create object BoxCollider
-        actualRailConstructor->actualizeConstructor(newPoint);
+        actualRailConstructor->actualizeConstructor(newPoint, world->getWorldView()->getZoomLevel());
         actualRailConstructor->getOwnedRail()->connectRails(nearestRail, false);
         actualRailConstructor->smoothEndPoint();
         actualRailConstructor->getOwnedRail()->actualizeAreasPosition();

@@ -31,8 +31,8 @@ void SelectConstructor::setUnderEdit(bool newUnderEdit)
 void SelectConstructor::callSelectEvent(QPoint point)
 {}
 
-void SelectConstructor::actualizeConstructor(QPoint newPoint)
+void SelectConstructor::actualizeConstructor(QPoint newPoint, int zoomLevel)
 {
-    setLocation(newPoint,false);
+    ActorConstructor::actualizeConstructor(newPoint, zoomLevel);
     if (underEditMode) callSelectEvent(newPoint);
 }

@@ -14,7 +14,7 @@ protected:
     Train* selectedTrain = nullptr;
 public:
     explicit TrainSelector(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
-    void actualizeConstructor(QPoint newPoint) override;
+    void actualizeConstructor(QPoint newPoint, int zoomLevel) override;
 
     Signal *getSelectedSignal();
     void setSelectedSignal(Signal *newSelectedSignal);

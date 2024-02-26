@@ -72,7 +72,7 @@ void WorldMap::actualizeConstructorPerTick()
 {
     if (actualConstructor != nullptr)
     {
-        actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor());
+        actualConstructor->actualizeConstructor(worldView->getRelativeFromCursor(), getWorldView()->getZoomLevel()); //worldView->getZoomLevel
         if (actualConstructor->canCallCollision())
         {
             QVector<int> collideChannels = actualConstructor->callCollideChannels();

@@ -37,8 +37,9 @@ void RailConstructor::smoothEndPoint()
     if (ownedRail != nullptr) ownedRail->smoothConnectionC1(true);
 }
 
-void RailConstructor::actualizeConstructor(QPoint newPoint)
+void RailConstructor::actualizeConstructor(QPoint newPoint, int zoomLevel)
 {
+    zoomLevelSaved = zoomLevel;
     if (ownedRail != nullptr)
     {
         actualizeRail();
@@ -49,10 +50,7 @@ void RailConstructor::actualizeConstructor(QPoint newPoint)
             dynamic_cast<Component*>(ownedRail->getAllTriggers()[1])->setRelativeLocation(newPoint - ownedRail->getLocation()); //p3 trigger
         }
     }
-    else
-    {
-        setLocation(newPoint,true);
-    }
+    else setLocation(newPoint,true);
 }
 
 void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)

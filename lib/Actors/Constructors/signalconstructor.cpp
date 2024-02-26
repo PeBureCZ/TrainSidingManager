@@ -8,8 +8,9 @@ SignalConstructor::SignalConstructor(QObject* parent, QGraphicsItem* newGraphicI
     nearestRail = nullptr;
 }
 
-void SignalConstructor::actualizeConstructor(QPoint newPoint)
+void SignalConstructor::actualizeConstructor(QPoint newPoint, int zoomLevel)
 {
+    zoomLevelSaved = zoomLevel;
     QPoint slideLocation = {5,-50};
     setLocation(newPoint + slideLocation, true);
 }

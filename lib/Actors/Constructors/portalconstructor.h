@@ -19,7 +19,7 @@ public:
     Actor *actorToConstructing = nullptr);
 
     void calledCollisionEvent(const QList<Actor*> isInCollision) override;
-    void actualizeConstructor(QPoint newPoint) override;
+    void actualizeConstructor(QPoint newPoint, int zoomLevel) override;
 
     ~PortalConstructor();
     Rail* getNearestRail();

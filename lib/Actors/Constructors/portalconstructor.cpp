@@ -95,14 +95,15 @@ void PortalConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
     }
 }
 
-void PortalConstructor::actualizeConstructor(QPoint newPoint)
+void PortalConstructor::actualizeConstructor(QPoint newPoint, int zoomLevel)
 {
     if (!snappedToRail)
     {
         QPoint slideLocation = {5,-50};
         setLocation(newPoint + slideLocation, true);
+        zoomLevelSaved = zoomLevel;
     }
-    else setLocation(newPoint, false);
+    else ActorConstructor::actualizeConstructor(newPoint, zoomLevel);
 
 }
 

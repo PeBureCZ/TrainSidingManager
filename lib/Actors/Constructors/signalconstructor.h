@@ -16,7 +16,7 @@ protected:
     const int MAX_SIGNAL_DISTANCE = 120;
 public:
     explicit SignalConstructor(QObject *parent = nullptr, QGraphicsItem *newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
-    void actualizeConstructor(QPoint newPoint) override;
+    void actualizeConstructor(QPoint newPoint, int zoomLevel) override;
     void calledCollisionEvent(const QList<Actor *> isInCollision) override; //overrided
     Rail* getNearestRail();
     QGraphicsItem* getNearestAreaGraphic();

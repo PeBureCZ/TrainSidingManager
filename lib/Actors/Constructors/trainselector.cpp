@@ -168,8 +168,8 @@ void TrainSelector::findPathToSignal()
     }
 }
 
-void TrainSelector::actualizeConstructor(QPoint newPoint)
+void TrainSelector::actualizeConstructor(QPoint newPoint, int zoomLevel)
 {
-    setLocation(newPoint,false);
+    ActorConstructor::actualizeConstructor(newPoint, zoomLevel);
 }
 

@@ -17,7 +17,7 @@ public:
     virtual void setUnderSelect(bool newUnderSelect);
     void setUnderEdit(bool newUnderEdit);
     virtual void callSelectEvent(QPoint point);
-    void actualizeConstructor(QPoint newPoint) override;
+    void actualizeConstructor(QPoint newPoint, int zoomLevel) override;
 };
 
 #endif // SELECTCONSTRUCTOR_H

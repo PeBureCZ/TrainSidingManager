@@ -4,11 +4,14 @@ ActorConstructor::ActorConstructor(QObject* parent, QGraphicsItem* newGraphicIte
     : Actor(parent, newGraphicItem)
     , actorConstructing (actorToConstructing)
 {
+    zoomLevelSaved = 0;
 }
 
-void ActorConstructor::actualizeConstructor(QPoint newPoint)
+void ActorConstructor::actualizeConstructor(QPoint newPoint, int zoomLevel)
 {
     //overrided in subclass
+    zoomLevelSaved = zoomLevel;
+    setLocation(newPoint,false);
 }
 
 Actor *ActorConstructor::getActorConstructing()
