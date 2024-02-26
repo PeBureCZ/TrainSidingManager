@@ -54,8 +54,8 @@ public:
 private slots:
     virtual void on_PlayBut_clicked();
     virtual void on_TestButton1_clicked();
-    virtual void on_SubBut_clicked();
-    virtual void on_AddBut_clicked();
+    virtual void on_ZoomSubBut_clicked();
+    virtual void on_ZoomAddBut_clicked();
 
     virtual void on_MultiFuncBut1_clicked();
     virtual void on_MultiFuncBut2_clicked();

@@ -14,8 +14,8 @@ public:
     InterfaceWindow(mwlogic *parent = nullptr);
 protected slots:
     void on_PlayBut_clicked() override;
-    void on_SubBut_clicked() override;
-    void on_AddBut_clicked() override;
+    void on_ZoomSubBut_clicked() override;
+    void on_ZoomAddBut_clicked() override;
     void playButSwitch(bool editMode) override;
     void selectMenuSwitch(bool selectMode) override;
 

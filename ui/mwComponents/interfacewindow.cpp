@@ -208,12 +208,12 @@ void InterfaceWindow::selectMenuSwitch(bool selectMode)
     mwlogic::selectMenuSwitch(selectMode);
 }
 
-void InterfaceWindow::on_SubBut_clicked()
+void InterfaceWindow::on_ZoomSubBut_clicked()
 {
     world->getWorldView()->zoomOut();
 }
 
-void InterfaceWindow::on_AddBut_clicked()
+void InterfaceWindow::on_ZoomAddBut_clicked()
 {
     world->getWorldView()->zoomIn(false); //false = sideways by mouse
 }

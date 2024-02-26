@@ -10,14 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     initializeInterface();
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-    delete world;
-    delete mapZoomLayout;
-    delete widgetWithLayout;
-}
-
 void MainWindow::initializeInterface()
 {
     //ui
@@ -47,11 +39,14 @@ void MainWindow::initializeInterface()
     ui->MultiFuncBut23->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     //console
     managerConsole = new ManagerConsole(this); //add custom manager console
+
     //zoom option in map
     mapZoomLayout = new QHBoxLayout();
     widgetWithLayout = new QWidget();
-    mapZoomLayout->addWidget(ui->SubBut);
-    mapZoomLayout->addWidget(ui->AddBut);
+
+    mapZoomLayout->addWidget(ui->ZoomAddBut);
+    mapZoomLayout->addWidget(ui->ZoomSubBut);
+
     widgetWithLayout->setLayout(mapZoomLayout);
     widgetWithLayout->setGeometry(QRect(160,20,100,50));
 
@@ -60,8 +55,6 @@ void MainWindow::initializeInterface()
 
     //SPECIAL STATS
     ui->SpecialStats->setVisible(true);
-    //ui->SpecialLabel1->setVisible(false);
-    //ui->SpecialTextEdit1->setVisible(false);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -101,10 +94,11 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::on_PlayBut_clicked() {}//overrided
 void MainWindow::on_TestButton1_clicked()
 {
-    world->testFunction();
+    qDebug() << ui->MultiFuncBut1->size();
+    //world->testFunction();
 }
-void MainWindow::on_SubBut_clicked() {}//overrided
-void MainWindow::on_AddBut_clicked() {}//overrided
+void MainWindow::on_ZoomSubBut_clicked() {}//overrided
+void MainWindow::on_ZoomAddBut_clicked() {}//overrided
 void MainWindow::on_AddMenuBut_clicked(){}//overrided
 void MainWindow::on_EditMenuBut_clicked(){}//overrided
 
@@ -206,4 +200,12 @@ void MainWindow::setPlayAddInterface(int menu)
         break;
     default: setBasicMenuInterface();
     }
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+    delete world;
+    delete mapZoomLayout;
+    delete widgetWithLayout;
 }
