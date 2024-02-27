@@ -33,18 +33,12 @@ void TrainSelector::findPathToSignal()
     if (selectedTrain != nullptr && selectedSignal != nullptr)
     {
         Rail* lastRail;
-        if (selectedTrain->getTrainPath().size() > 0)
-        {
-            lastRail = selectedTrain->getTrainPath().last();
-        }
-        else
-        {
-            lastRail = selectedTrain->getActualRail();
-        }
+
+        if (selectedTrain->getTrainPath().size() > 0) lastRail = selectedTrain->getTrainPath().last();
+        else lastRail = selectedTrain->getActualRail();
+
         bool direction = TrainNavigation::checkDirectionOnLatestRail(selectedTrain->getTrainPath(), selectedTrain->getActualRail(), selectedTrain->getDirectionToRailEnd());
-
         Rail* railToFind = dynamic_cast<Rail*>(selectedSignal->getRailActor());
-
         QList<Rail*> needTestRails = {lastRail};
         QList<bool> testedRailDirection = {direction};
 
@@ -92,7 +86,9 @@ void TrainSelector::findPathToSignal()
                         (newRailFinded->getSignal(0) == selectedSignal) ? railEndOfSignal = 0 : railEndOfSignal = 1;
                         if (railEndOfSignal != newDirection)
                         {
-                            qDebug() << "reversed direction!";
+                            //It is necessary to remove the wrong rail because it may be prioritized over the rail with the correct direction during reverse pathfinding
+                            int indexOfWrongRail = findedRails.indexOf(testedRail);
+                            if (indexOfWrongRail != -1) findedRails.removeAt(indexOfWrongRail);
                             continue;
                         }
                     }
@@ -104,11 +100,7 @@ void TrainSelector::findPathToSignal()
                         if (connectionToRailToFind <=1) connectionToRailToFind = 0;
                         else connectionToRailToFind = 1;
 
-                        if (conectionToPreviousRail == connectionToRailToFind)
-                        {
-                            qDebug() << "wrong direction rail!";
-                            continue;
-                        }
+                        if (conectionToPreviousRail == connectionToRailToFind) continue; //finded rail is in wrong direction
                     }
                     testedRailDirection.push_back(newDirection);
                     findedRails.push_back(newRailFinded); //add to temporal list
@@ -119,17 +111,16 @@ void TrainSelector::findPathToSignal()
             needTestRails.removeAt(0);
             testedRailDirection.removeAt(0);
         }
-        if (repeat < 50) qDebug() << "repeat remaining: " << repeat << " / 300";
 
         if (finded)
         {
+            //REVERSED PATHFINDING
             while(true) // remove other found rails at the end of the list if they are not the Rails looking for
             {
                 Rail* lastRailInList = findedRails.last();
                 if (railToFind == lastRailInList) break;
                 else findedRails.removeLast();
             }
-            qDebug() << "findedRails size before reduction is " << findedRails.size();
             for (int i = findedRails.size() - 1; i > 0; i--)
             {
                 Rail* railFromList = findedRails[i];
@@ -150,10 +141,7 @@ void TrainSelector::findPathToSignal()
                     if (connectionToNext != -1 && connectionToPrevious == connectionToNext) findedRails.removeAt(i-1);
                     else findedRails.removeAt(i-1);
                 }
-                else
-                {
-                    findedRails.removeAt(i-1);
-                }
+                else findedRails.removeAt(i-1);
             }
 
             //check first rail in list
