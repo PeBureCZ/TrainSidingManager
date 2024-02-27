@@ -63,11 +63,15 @@ void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
     if (ownedPath != nullptr) correctedLocation += ownedRail->getP3RelativeLocation().toPoint();
 
     //try to find nearest area (end of actual rail)
+    Actor* ownedRailActor = dynamic_cast<Actor*>(ownedRail);
     for (auto actor : actorsInCollision)
     {
-        if (dynamic_cast<Rail*>(actor) && actor != ownedRail)
+        if (dynamic_cast<Rail*>(actor) && actor != ownedRailActor)
         {
             Rail* rail = dynamic_cast<Rail*>(actor);
+
+            if (ownedRail != nullptr && ownedRail->getConnection(rail) != -1) continue; //cannot connect self-connected rail
+
             QPoint testedPoint1 = rail->getP0WorldLocation().toPoint();
             QPoint testedPoint2 = (rail->getP0WorldLocation() + rail->getP3RelativeLocation()).toPoint();
             int testedDistance1 = getDistance(correctedLocation, testedPoint1);
@@ -100,6 +104,7 @@ void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
             if(testedNearestRail->getConnectedRail(conectionValue) != nullptr)
             {
                 retestedRail = testedNearestRail->getConnectedRail(conectionValue);
+                if (retestedRail == ownedRail) continue;
                 retestedPoint = dynamic_cast<QGraphicsPathItem*>(retestedRail->getGraphicItem())->path().pointAtPercent(0.01f).toPoint() + retestedRail->getLocation();
                 testedDistance = getDistance(correctedLocation, retestedPoint);
                 if (distance > testedDistance)

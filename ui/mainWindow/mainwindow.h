@@ -52,6 +52,7 @@ public:
     QWidget *ZoomWidget;
 
 private slots:
+
     virtual void on_PlayBut_clicked();
     virtual void on_TestButton1_clicked();
     virtual void on_ZoomSubBut_clicked();
@@ -81,6 +82,7 @@ private slots:
     virtual void on_MultiFuncBut22_clicked();
     virtual void on_MultiFuncBut23_clicked();
     virtual void on_MultiFuncBut24_clicked();
+
     virtual void on_AddMenuBut_clicked();
     virtual void on_EditMenuBut_clicked();
 

@@ -24,7 +24,6 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 if (selector->getUnderSelect() == true)
                 {
                     selector->setUnderEdit(true);
-                    managerConsole->printToConsole("under edit = true", GREEN_COLOR, VERY_LONG_DURATION);
                 }
             }
         }
@@ -97,6 +96,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
 
 void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+    qDebug() << "need rework here - interfaceWindow (mouse release event)";
     if (event->button() == Qt::LeftButton)
     {
         if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END)
@@ -128,14 +128,11 @@ void InterfaceWindow::leftMouseRelease()
                 world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP1VisualPoint());
                 world->getWorldScene()->addItem(dynamic_cast<RailSelector*>(selector)->getP2VisualPoint());
             }
-            managerConsole->printToConsole("under select = true", GREEN_COLOR, VERY_LONG_DURATION);
         }
         else if (selector->getUnderEdit() == true)
         {
             selector->setUnderEdit(false);
-            managerConsole->printToConsole("under edit = false", GREEN_COLOR, VERY_LONG_DURATION);
         }
-        else managerConsole->printToConsole("nothing", GREEN_COLOR, VERY_LONG_DURATION);
     }
 }
 
@@ -150,13 +147,13 @@ void InterfaceWindow::rightMouseRelease()
         {
             selector->setUnderSelect(false);
             selector->setUnderEdit(false);
-            managerConsole->printToConsole("under select and edit = false", GREEN_COLOR, VERY_LONG_DURATION);
         }
     }
 }
 
 void InterfaceWindow::wheelEvent(QWheelEvent *event)
 {
+    qDebug() << "wheele event";
     MainWindow::wheelEvent(event);
 }
 

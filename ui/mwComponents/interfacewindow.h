@@ -26,7 +26,6 @@ protected slots:
     void rightMouseRelease();
     void wheelEvent(QWheelEvent *event);
 
-
     //menu function buttons clicked
     void on_AddMenuBut_clicked() override;
     void on_EditMenuBut_clicked() override;

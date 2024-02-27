@@ -105,14 +105,9 @@ void mwlogic::constructRail(QPoint point)
         QPoint testedPoint2 = (nearestRail->getP0WorldLocation() + nearestRail->getP3RelativeLocation()).toPoint();
         int testedDistance1 = world->getWorldDistance(point, testedPoint1);
         int testedDistance2 = world->getWorldDistance(point, testedPoint2);
-        if (testedDistance1 && testedDistance1 <= testedDistance2)
-        {
-            nearestPoint = 0; //P0 is finded
-        }
-        else if (testedDistance2 && testedDistance2 < testedDistance1)
-        {
-            nearestPoint = 1; //P3 is finded
-        }
+
+        if (testedDistance1 && testedDistance1 <= testedDistance2) nearestPoint = 0; //P0
+        else if (testedDistance2 && testedDistance2 < testedDistance1) nearestPoint = 1; //P3
     }
 
     //check if rail is under construction or must be created

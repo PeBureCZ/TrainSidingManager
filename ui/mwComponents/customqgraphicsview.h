@@ -26,6 +26,7 @@ public:
     int getMapSizeY();
     QPoint getRelativeFromCursor();
     void wheelEvent(QWheelEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event);
 };
 
 #endif // CUSTOMQGRAPHICSVIEW_H

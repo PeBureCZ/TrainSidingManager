@@ -40,7 +40,13 @@ void MainWindow::initializeInterface()
     //console
     managerConsole = new ManagerConsole(this); //add custom manager console
 
+
     //ZOOM IN MAP (BUTTONS)
+
+    //Cannot be used - a KNOWN BUG
+    //Reason: ZOOM buttons are placed under a console (label) covering the entire area.
+    //This is an alternative solution because the RMB event does not work on the map. WHY?!!
+    //However, RMB does work on the label = console.
     mapZoomLayout = new QHBoxLayout();
     ZoomWidget = new QWidget();
 
@@ -60,7 +66,7 @@ void MainWindow::initializeInterface()
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QSize sizeView = world->getWorldView()->size();
-    managerConsole->setConsolePos({160,sizeView.height()-300},sizeView.width(),300); //300 = console height
+    managerConsole->setConsolePos({160,sizeView.height() - 250},sizeView.width(),250);
     managerConsole->printToConsole("bugged console (you have to resize window), affects response to mouse events", RED_BOLD_COLOR, MIDDLE_DURATION);
 }
 
