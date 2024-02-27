@@ -96,8 +96,6 @@ void mwlogic::constructRail(QPoint point)
     Rail* nearestRail = actualRailConstructor->getNearestRail();
     int createRailByStyle = -1;
     int zoom = world->getWorldView()->getZoomLevel();
-    int maxRadius = 5;
-    if (zoom > 0) maxRadius += zoom * 25; //increase "snap radius" derived from zoom
     int nearestPoint = -1;
 
     if (actualRailConstructor != nullptr && nearestRail != nullptr)
@@ -107,11 +105,11 @@ void mwlogic::constructRail(QPoint point)
         QPoint testedPoint2 = (nearestRail->getP0WorldLocation() + nearestRail->getP3RelativeLocation()).toPoint();
         int testedDistance1 = world->getWorldDistance(point, testedPoint1);
         int testedDistance2 = world->getWorldDistance(point, testedPoint2);
-        if (maxRadius > testedDistance1 && testedDistance1 <= testedDistance2)
+        if (testedDistance1 && testedDistance1 <= testedDistance2)
         {
             nearestPoint = 0; //P0 is finded
         }
-        else if (maxRadius > testedDistance2 && testedDistance2 < testedDistance1)
+        else if (testedDistance2 && testedDistance2 < testedDistance1)
         {
             nearestPoint = 1; //P3 is finded
         }

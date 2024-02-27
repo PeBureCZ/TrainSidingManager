@@ -57,7 +57,7 @@ void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
 {
     Actor::calledCollisionEvent(isInCollision); //re-fill actors in collide list and run functions "actorEnterInCollision and actorLeaveFromCollision"
     int nearestPoint = -1;
-    int distance = 99999999;
+    int distance = 9999999;
     Rail* testedNearestRail = nullptr;
     QPoint correctedLocation = location;
     if (ownedPath != nullptr) correctedLocation += ownedRail->getP3RelativeLocation().toPoint();
@@ -119,7 +119,9 @@ void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
     }
 
     //set visual change (occupied rail)
-    if (testedNearestRail != nullptr)
+    int minDistanceWithZoom = 5;
+    if (zoomLevelSaved > 0) minDistanceWithZoom += zoomLevelSaved * 25;
+    if (testedNearestRail != nullptr && distance <= minDistanceWithZoom)
     {
         if (nearestRail != nullptr)
         {
