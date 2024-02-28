@@ -10,17 +10,29 @@ class LIB_EXPORT TrainSelector : public SelectConstructor
 {
     Q_OBJECT
 protected:
-    Signal* selectedSignal = nullptr;
-    Train* selectedTrain = nullptr;
+    Train* selectedTrain;
+    Signal* nearestSignal;
+    Train* nearestTrain;
+    Rail* nearestRail;
+
 public:
     explicit TrainSelector(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     void actualizeConstructor(QPoint newPoint, int zoomLevel) override;
 
-    Signal *getSelectedSignal();
-    void setSelectedSignal(Signal *newSelectedSignal);
     Train *getSelectedTrain();
-    void setSelectedTrain(Train *newSelectedTrain);
+    void setSelectedTrain();
+    Signal* getNearestSignal();
+    Train* getNearestTrain();
     void findPathToSignal();
+    void findNearestTrain();
+    void findNearestSignal();
+    void unselectSignal();
+
+    void calledCollisionEvent(const QList<Actor *> isInCollision) override;
+    void actorLeaveFromCollision(Actor* actor) override;
+    void actorEnterInCollision(Actor* actor) override;
+
+    ~TrainSelector();
 };
 
 #endif // TRAINSELECTOR_H

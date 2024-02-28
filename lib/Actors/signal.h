@@ -16,7 +16,7 @@ protected:
     Actor* railActor; //can´t hold Rail*
 public:
     explicit Signal(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
-    void setState(int newSignState);
+    void setState(int newSignState, int newSprite);
     int getState();
     QList<int> getAllowedSignalState() const;
     void addRailActor(Actor* newRailActor);

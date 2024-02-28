@@ -10,6 +10,7 @@
 #include "../Components/boxcollider.h"
 #include <QObject>
 #include "lib_global.h"
+#include "dependencies/spritecolection.h"
 
 //ENUMS
 #include "dependencies/Enums/ComponentsEnum.h"
@@ -49,6 +50,7 @@ public:
     void setLocation(QPoint newLocation, bool setGraphic); //overloaded function
     void setLocation(QPointF newLocation, bool setGraphic); //overloaded function
     void createTriggerInActor(int indexOfType, QVector<int> channels, QPoint relativeLocation, float relativeRotation, int radius);
+    void changeSprite(int spriteFromEnum);
 
     float getRotation();
     int getDistance(QPoint pointA, QPoint pointB);

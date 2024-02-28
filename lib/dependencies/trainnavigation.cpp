@@ -71,17 +71,11 @@ bool TrainNavigation::checkDirectionOnLatestRail(QList<Rail *> path, Rail *actua
     bool direction = 0;
     if (path.size() == 0)
     {
-        qDebug() << "1";
         return actualDirection;
     }
-    else if (path.size() == 1)
-    {
-        qDebug() << "2";
-        connection = dynamic_cast<Rail*>(path[0])->getConnection(actualRail);
-    }
+    else if (path.size() == 1) connection = dynamic_cast<Rail*>(path[0])->getConnection(actualRail);
     else
     {
-        qDebug() << "3";
         Rail* lastRail = path.last();
         Rail* penultimateRail = path[path.size()-2];
         connection = lastRail->getConnection(penultimateRail);

@@ -152,7 +152,6 @@ void InterfaceWindow::rightMouseRelease()
 
 void InterfaceWindow::wheelEvent(QWheelEvent *event)
 {
-    qDebug() << "wheele event";
     MainWindow::wheelEvent(event);
 }
 

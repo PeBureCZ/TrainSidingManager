@@ -174,6 +174,16 @@ void Actor::createTriggerInActor(int indexOfType, QVector<int> channels, QPoint 
     }
 }
 
+void Actor::changeSprite(int spriteFromEnum)
+{
+    if (dynamic_cast<QGraphicsPixmapItem*>(graphicItem))
+    {
+        SpriteColection newSprite;
+        QPixmap pixmap = newSprite.getSprite(spriteFromEnum);
+        dynamic_cast<QGraphicsPixmapItem*>(graphicItem)->setPixmap(pixmap);
+    }
+}
+
 int Actor::getDistance(QPoint pointA, QPoint pointB)
 {
     QLineF line(pointA, pointB);

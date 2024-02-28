@@ -233,67 +233,24 @@ void mwlogic::trainOrSignalSelect()
     if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
 
     TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
+
+
+
     QPoint point = actualConstructor->getLocation();
     QList<Actor*> actors = world->getActorsCollideInLocation({TRAIN_CHANNEL, RAIL_CHANNEL, STATIC_CHANNEL}, point);
     int nearestTrainDistance = 99999999;
     int nearestSignalDistance = 99999999;
-    Train* nearestTrain = nullptr;
-    Signal* nearestSignal = nullptr;
-    for (auto actor : actors)
-    {
-        if (dynamic_cast<Train*>(actor))
-        {
-            int testedDistance = world->getWorldDistance(actor->getLocation(), point);
-            if (nearestTrainDistance > testedDistance)
-            {
-                nearestTrainDistance = testedDistance;
-                nearestTrain = dynamic_cast<Train*>(actor);
-            }
-        }
-        else if (dynamic_cast<Rail*>(actor))
-        {
-            //try to find nearest signal (from picture location!)
-            Rail* nearRail = dynamic_cast<Rail*>(actor);
-            if (nearRail->getOccupied()) continue;
-
-            int testedDistance = 99999999;
-
-            int testedRailEnd = 0;
-            while(testedRailEnd < 2)
-            {
-                if (nearRail->getSignal(testedRailEnd) != nullptr)
-                {
-                    testedDistance = world->getWorldDistance(point, nearRail->getSignal(testedRailEnd)->getLocation());
-                    if (testedDistance < nearestSignalDistance)
-                    {
-                        nearestSignalDistance = testedDistance;
-                        nearestSignal = nearRail->getSignal(testedRailEnd);
-                    }
-                }
-                testedRailEnd++;
-            }
-        }
-    }
 
     Train* selectedTrain = trainSelector->getSelectedTrain();
-    if (nearestSignal != nullptr && trainSelector->getSelectedTrain() != nullptr)
-    {
-        qDebug() << "signal is near -> create new path";
-        trainSelector->setSelectedSignal(nearestSignal);
-        trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
-        trainSelector->setSelectedSignal(nullptr);
-    }
-    else if (nearestSignal == nullptr && nearestTrain != nullptr)
-    {
-        qDebug() << "train selected";
-        trainSelector->setSelectedTrain(nearestTrain);
-    }
-    else if (nearestSignal == nullptr)
-    {
-        qDebug() << "nothing / signal deselect";
-        trainSelector->setSelectedSignal(nullptr);
-    }
+    Train* nearestTrain = trainSelector->getNearestTrain();
+    Signal* nearestSignal = trainSelector->getNearestSignal();
 
+    if (selectedTrain == nullptr && nearestTrain != nullptr) trainSelector->setSelectedTrain();
+    else if (nearestSignal != nullptr && selectedTrain != nullptr)
+    {
+        trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
+        trainSelector->unselectSignal();
+    }
 }
 
 mwlogic::~mwlogic() {}

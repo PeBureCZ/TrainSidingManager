@@ -55,6 +55,7 @@ public:
     void recalculateSpeed(int actualDistanceOnRail);
     void actualizeOnPathLength();
     void actualizeVehiclesOnPath();
+    void selectTrain(bool selected);
 
     virtual ~Train();
 

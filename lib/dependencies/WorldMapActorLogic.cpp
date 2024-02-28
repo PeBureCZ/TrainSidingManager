@@ -124,10 +124,10 @@ Actor *WorldMap::addRailSelector()
 
 Actor *WorldMap::addTrainSelector()
 {
-    qDebug() << "trainSelector created";
     //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR - nothing now
     //ADD SELECTOR (CONSTRUCTOR)
     Actor* trainSelector = new TrainSelector(nullptr, nullptr, nullptr); //without acttor to construct
+    trainSelector->setCallCollisionChannels({TRAIN_CHANNEL, STATIC_CHANNEL});
     setConstructor(trainSelector);
     return trainSelector;
 }
@@ -164,25 +164,25 @@ void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
         {
         case LOCO_CD730:
         {
-            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(CD730_SPRITE));
+            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(CD730_ACTIVE_SPRITE));
             newVehicles.push_back(new CD730(nullptr, vehicleGraphicsItem));
             break;
         }
         case LOCO_CD753:
         {
-            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(CD753_SPRITE));
+            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(CD753_ACTIVE_SPRITE));
             newVehicles.push_back(new CD753(nullptr, vehicleGraphicsItem));
             break;
         }
         case VAGON_EAS:
         {
-            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(EAS_SPRITE));
+            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(EAS_ACTIVE_SPRITE));
             newVehicles.push_back(new Eas(nullptr, vehicleGraphicsItem));
             break;
         }
         case VAGON_ZAES:
         {
-            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(ZAES_SPRITE));
+            QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(ZAES_ACTIVE_SPRITE));
             newVehicles.push_back(new Zaes(nullptr, vehicleGraphicsItem));
             break;
         }

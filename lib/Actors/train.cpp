@@ -322,6 +322,14 @@ void Train::actualizeVehiclesOnPath()
     }
 }
 
+void Train::selectTrain(bool selected)
+{
+    for (auto vehicle : vehicles)
+    {
+        vehicle->selectVehicle(selected);
+    }
+}
+
 void Train::startAutopilot()
 {
     remainingPath = TrainNavigation::autopilotCheck(30000,30,actualRail,directionToRailEnd);
