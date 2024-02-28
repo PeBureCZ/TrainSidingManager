@@ -17,10 +17,10 @@ void mwlogic::actualizeMap()
             world->actualizePlayMode();
             playModeActualized = true;
         }
-        if (elapsedTime > 1000) //actualize play mode only one time per 1 second
+        if (elapsedTime > 200) //actualize play mode only one time per 1 second
         {
             world->updateWorld();
-            elapsedTime -= 1000;
+            elapsedTime -= 200;
             playModeActualized = false;
         }
         else world->actualizeConstructorPerTick();

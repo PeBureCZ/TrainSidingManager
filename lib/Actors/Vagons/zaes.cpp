@@ -8,5 +8,5 @@ Zaes::Zaes(QObject* parent, QGraphicsItem* newGraphicItem)
     secondAxleCenter = {15,108}; //dcm
     width = 30; //dcm
     length = 133; //dcm
-    maxSpeed = 333;
+    maxSpeed = 83; //dcm / 0,2s
 }

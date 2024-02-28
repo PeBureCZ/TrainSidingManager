@@ -155,10 +155,9 @@ void Train::actualizeOnPathLength()
             directionToRailEnd = TrainNavigation::checkDirectionOnNextRail(directionToRailEnd, actualRail, remainingPath[0]); //check direction for new path segment
 
             //The already taken path is added to the takenPath, and a new actualRail is set from the remainingPath
-
             actualRail = remainingPath[0];
 
-            //signal: "vjezdové - temporary
+            //signal: "vjezdové" - temporary
             if ((directionToRailEnd && actualRail->getSignal(0) != nullptr) || (!directionToRailEnd && actualRail->getSignal(1) != nullptr))
             {
                 for (auto rail : takenPath) rail->setOccupied(false, true);
@@ -212,7 +211,6 @@ void Train::actualizeVehiclesOnPath()
                 directionToRailEnd ? secondAxleDistance += vehicle->getLegth() : secondAxleDistance -= vehicle->getLegth();
                 percentOnRail = actualPathGraphic->path().percentAtLength(secondAxleDistance);
                 QPoint onPathSecondPoint = actualPathGraphic->path().pointAtPercent(percentOnRail).toPoint() + actualPathGraphic->pos().toPoint();
-
                 qreal angle = qAtan2(onPathPoint.y() - onPathSecondPoint.y(), onPathPoint.x() - onPathSecondPoint.x()) * 180.0 / M_PI;
 
                 vehicle->setRotation(angle+90.f,false);
