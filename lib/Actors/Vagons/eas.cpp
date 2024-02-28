@@ -8,5 +8,5 @@ Eas::Eas(QObject* parent, QGraphicsItem* newGraphicItem)
     secondAxleCenter = {15,115}; //dcm
     width = 30; //dcm
     length = 140; //dcm
-    maxSpeed = 333;
+    maxSpeed = 83.7f; //dcm / 200ms
 }

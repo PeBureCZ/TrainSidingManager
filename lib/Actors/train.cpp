@@ -14,8 +14,8 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     takenPath = {};
     setActualPathGraphic(actualRail);
     remainToPathEnd = 0;
-    breakLevel = 6;
-    throttleLevel = 2;
+    breakLevel = 0.2f;
+    throttleLevel = 0.07f;
 }
 
 void Train::actualizeGraphicLocation()
@@ -71,7 +71,7 @@ void Train::actualizeMaxSpeed()
     //It will recalculate the maximum speed based on the train's weight...
 
     if (vehicles.size() == 0) maxSpeed = 0;
-    int newMaxSpeed = 999999;
+    int newMaxSpeed = 99999.9f;
     for (auto vehicle : vehicles)
     {
         if (newMaxSpeed > vehicle->getMaxSpeed()) newMaxSpeed = vehicle->getMaxSpeed();
@@ -110,7 +110,7 @@ QPointF Train::getLocationOnPath(float percentOnPath)
 void Train::moveTrain()
 {
     //no change, no move
-    if (actualSpeed == 0) return;
+    if (actualSpeed <= 0.0f) return;
 
     //calculate the actual position of the train. The actual position corresponds to the last vehicle in direction of movement
     actualizeOnPathLength();
@@ -172,7 +172,7 @@ void Train::actualizeOnPathLength()
         }
         else
         {
-            setActualSpeed(0);
+            setActualSpeed(0.0f);
             qDebug() << "1: speed set to 0 in train";
             (directionToRailEnd) ? newOnPathLength = actualPathGraphic->path().length() : newOnPathLength = 0;
             break;

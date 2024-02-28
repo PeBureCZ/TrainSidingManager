@@ -22,8 +22,8 @@ protected:
     QVector<Vehicle*> vehicles;
     QVector<QGraphicsItem*> vehicleGraphicsItems;
     int remainToPathEnd;
-    int breakLevel;
-    int throttleLevel;
+    float breakLevel;
+    float throttleLevel;
 
 
 public:

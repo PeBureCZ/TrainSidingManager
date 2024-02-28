@@ -7,17 +7,17 @@ class LIB_EXPORT Movable : public Actor
 {
 Q_OBJECT
 protected:
-    int maxSpeed;
-    int actualSpeed;
+    float maxSpeed;
+    float actualSpeed;
 
 
 public:
     Movable(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
-    void setActualSpeed(int newSpeed);
-    int getMaxSpeed();
-    void setMaxSpeed(int newMaxSpeed);
+    void setActualSpeed(float newSpeed);
+    float getMaxSpeed();
+    void setMaxSpeed(float newMaxSpeed);
 
-    const int getActualSpeed();
+    const float getActualSpeed();
 
 signals:
 
