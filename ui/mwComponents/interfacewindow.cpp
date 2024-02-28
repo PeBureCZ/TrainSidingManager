@@ -96,7 +96,6 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
 
 void InterfaceWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug() << "need rework here - interfaceWindow (mouse release event)";
     if (event->button() == Qt::LeftButton)
     {
         if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END)

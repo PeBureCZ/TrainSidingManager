@@ -17,6 +17,7 @@ protected:
     QList<QString> consoleText;
 public:
     explicit ManagerConsoleLogic(QObject *parent = nullptr);
+    QLabel* getQLabelObject();
     void addToConsole(QString text, int timeToHidden);
     void setConsolePos(QPoint point, int sizeX, int sizeY);
     void reduceTimeSpan(int reduction);

@@ -37,24 +37,22 @@ void MainWindow::initializeInterface()
     ui->MultiFuncBut21->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut22->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut23->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+
     //console
     managerConsole = new ManagerConsole(this); //add custom manager console
 
-
     //ZOOM IN MAP (BUTTONS)
-
     //Cannot be used - a KNOWN BUG
     //Reason: ZOOM buttons are placed under a console (label) covering the entire area.
     //This is an alternative solution because the RMB event does not work on the map. WHY?!!
     //However, RMB does work on the label = console.
     mapZoomLayout = new QHBoxLayout();
-    ZoomWidget = new QWidget();
+    ZoomWidget = new QWidget(this);
 
-    ZoomWidget->setParent(ui->centralwidget);
     ZoomWidget->setLayout(mapZoomLayout);
     mapZoomLayout->addWidget(ui->ZoomAddBut);
     mapZoomLayout->addWidget(ui->ZoomSubBut);
-    ZoomWidget->setGeometry(QRect(155,-8,70,70)); //pos x, pos y, size x, size y
+    ZoomWidget->setGeometry(QRect(155,5,70,70)); //pos x, pos y, size x, size y
 
     //BASIC STATS
     ui->BasicStats->setVisible(true);
@@ -66,7 +64,7 @@ void MainWindow::initializeInterface()
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QSize sizeView = world->getWorldView()->size();
-    managerConsole->setConsolePos({160,sizeView.height() - 250},sizeView.width(),250);
+    managerConsole->setConsolePos({160, 0},sizeView.width()-160,sizeView.height());
     managerConsole->printToConsole("bugged console (you have to resize window), affects response to mouse events", RED_BOLD_COLOR, MIDDLE_DURATION);
 }
 

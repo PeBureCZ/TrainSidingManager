@@ -10,6 +10,11 @@ ManagerConsoleLogic::ManagerConsoleLogic(QObject *parent)
     consoleText = {};
 }
 
+QLabel *ManagerConsoleLogic::getQLabelObject()
+{
+    return consoleTextObject;
+}
+
 void ManagerConsoleLogic::addToConsole(QString text, int timeToHidden)
 {
     //visual size = max 14 rows

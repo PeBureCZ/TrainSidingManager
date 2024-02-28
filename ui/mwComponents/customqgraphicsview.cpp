@@ -24,11 +24,6 @@ void CustomQGraphicsView::wheelEvent(QWheelEvent *event)
     }
 }
 
-void CustomQGraphicsView::mouseReleaseEvent(QMouseEvent *event)
-{
-    qDebug() << "need rework here - customQGraphicsView (mouse release event)";
-}
-
 void CustomQGraphicsView::zoomIn(bool sideways)
 {    
     if (zoomLevel > MIN_ZOOM_LEVEL)
