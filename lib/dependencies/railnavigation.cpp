@@ -7,10 +7,10 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
     {
         Rail* lastRail;
 
-        if (train->getTrainPath().size() > 0) lastRail = train->getTrainPath().last();
+        if (train->getRemainingPath().size() > 0) lastRail = train->getRemainingPath().last();
         else lastRail = train->getActualRail();
 
-        bool direction = TrainNavigation::checkDirectionOnLatestRail(train->getTrainPath(), train->getActualRail(), train->getDirectionToRailEnd());
+        bool direction = TrainNavigation::checkDirectionOnLatestRail(train->getRemainingPath(), train->getActualRail(), train->getDirectionToRailEnd());
         Rail* railToFind = dynamic_cast<Rail*>(nearestSignal->getRailActor());
         QList<Rail*> needTestRails = {lastRail};
         QList<bool> testedRailDirection = {direction};

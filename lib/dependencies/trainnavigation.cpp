@@ -25,7 +25,7 @@ QList<Rail *> TrainNavigation::autopilotCheck(const int minDistanceCheck, const 
     while (condition1 && condition2 && condition3)
     {
 
-        distanceChecked += testedRail->getRailLength();
+        distanceChecked += testedRail->getLengthOfRail();
         trainPath.push_back(testedRail);
 
         int endAreaNumber = -1;
@@ -60,12 +60,12 @@ int TrainNavigation::getTrainPathLength(QList<Rail *> path)
     int length = 0;
     for (auto rail : path)
     {
-        length += rail->getRailLength();
+        length += rail->getLengthOfRail();
     }
     return length;
 }
 
-bool TrainNavigation::checkDirectionOnLatestRail(QList<Rail *> path, Rail *actualRail, bool actualDirection)
+bool TrainNavigation::checkDirectionOnLatestRail(const QList<Rail *> path, const Rail *actualRail, bool actualDirection)
 {
     int connection;
     bool direction = 0;
@@ -85,7 +85,59 @@ bool TrainNavigation::checkDirectionOnLatestRail(QList<Rail *> path, Rail *actua
 
 }
 
-bool TrainNavigation::checkDirectionOnNextRail(bool actualDirection, Rail *actualRail, Rail* nextRail)
+void TrainNavigation::checkObjectsOnPath(const Rail* actualRail, const QList<Rail*> actualPath, bool direction, int distanceToEnd)
+{
+    //check a signals on the actualRail
+    QList<Signal*> signalsOnPath = {};
+    QList<int> signalOnDistant = {};
+    int railEnd = 0;
+    int distanceMeasure = 0;
+    if (direction) railEnd++;
+    distanceMeasure += actualRail->getLengthOfRail();
+    if (actualRail->getSignal(railEnd) != nullptr) signalsOnPath.push_back(actualRail->getSignal(railEnd));
+    if (signalsOnPath.size() != 0) signalOnDistant.push_back(distanceMeasure);
+
+    //check a signals on remaining train path
+    if (actualPath.size() == 0) return;
+    //actualize train direction from actualRail to firstPath
+    direction = TrainNavigation::checkDirectionOnNextRail(direction, actualRail, actualPath[0]);
+    int railIndex = 0;
+    for (auto rail : actualPath)
+    {
+        distanceMeasure += rail->getLengthOfRail();
+        railEnd = 0;
+        if (direction) railEnd++;
+        if (rail->getSignal(railEnd) != nullptr)
+        {
+            signalOnDistant.push_back(distanceMeasure);
+            signalsOnPath.push_back(rail->getSignal(railEnd));
+        }
+        if (railIndex < actualPath.size()-1) direction = TrainNavigation::checkDirectionOnNextRail(direction, rail, actualPath[railIndex+1]);
+        railIndex++;
+    }
+
+    qDebug() << "signals on path: " << signalsOnPath.size();
+
+    int signalsCount = signalsOnPath.size();
+    if (signalsCount > 0) signalsOnPath.last()->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+    if (signalsCount > 1)
+    {
+        if (distanceToEnd < distanceMeasure - signalOnDistant[signalsCount-2]) dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_CAUTION, CAUTION_SIGNAL_SPRITE);
+        else dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+    }
+
+    if (signalsCount > 2)
+    {
+        for (int i = 0; i < signalsCount-2; i++)
+        {
+            qDebug() << "DTE: " << distanceToEnd << "    SIGoD: " << signalOnDistant[i] << "    mes: " << distanceMeasure;
+            if (distanceToEnd < distanceMeasure - signalOnDistant[i]) dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_PROCEED, PROCEED_SIGNAL_SPRITE);
+            else dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+        }
+    }
+}
+
+bool TrainNavigation::checkDirectionOnNextRail(bool actualDirection, const Rail *actualRail, const Rail *nextRail)
 {
     bool direction;
     int conection = nextRail->getConnection(actualRail); //get conection of rail 0-3 (A,B,C,D)

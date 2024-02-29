@@ -573,7 +573,7 @@ void Rail::actorLeaveFromCollision(Actor *actor)
     }
 }
 
-Signal *Rail::getSignal(int numberOfEndPoint)
+Signal *Rail::getSignal(int numberOfEndPoint) const
 {
     if (numberOfEndPoint == 0) return signalP0;
     else if (numberOfEndPoint == 1) return signalP3;
@@ -594,12 +594,12 @@ Trigger* Rail::getP3Trigger()
     return nullptr;
 }
 
-int Rail::getRailLength()
+int Rail::getLengthOfRail() const
 {
     return static_cast<int>(dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().length());
 }
 
-int Rail::getConnection(Rail *rail)
+int Rail::getConnection(const Rail *rail) const
 {
     if (conectionA0 == rail) return 0; //connection 0
     if (conectionB0 == rail) return 1; //connection 1

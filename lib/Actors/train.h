@@ -33,11 +33,15 @@ public:
     QGraphicsItem* getVehicleGraphics(int indexOfVehicle);
     QPointF getLocationOnPath(float percentOnPath);
     QVector<Vehicle *> getVehicles() const;
-    QVector<Rail *> getTrainPath() const;
+    QVector<Rail *> getRemainingPath() const;
+    QVector<Rail *> getTakenPath() const;
     Rail* getActualRail() const;
     bool getDirectionToRailEnd()const;
     const bool getMoveDirection();
     float getActualPathValue() const;
+    bool teleportTrainToRail(Rail* rail);
+    int getTrainLength();
+    int getRemainToPathEnd();
 
     void actualizeGraphicLocation() override;
     void actualizeGraphicRotation() override;
@@ -52,7 +56,6 @@ public:
     void moveTrain();
     void startAutopilot();
     void setActualPathGraphic(Rail *actualRail);
-    bool teleportTrainToRail(Rail* rail);
     void actualizeTrainLenth();
     void recalculateSpeed(int actualDistanceOnRail);
     void actualizeOnPathLength();

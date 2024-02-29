@@ -41,13 +41,13 @@ public:
     QGraphicsItem *getAreaGraphic(const int area);
     Trigger* getP0Trigger();
     Trigger *getP3Trigger();
-    Signal* getSignal(int numberOfEndPoint);
+    Signal* getSignal(int numberOfEndPoint) const;
 
     bool getLined();
     bool getOccupied();
 
-    int getRailLength();
-    int getConnection(Rail* rail);
+    int getLengthOfRail() const;
+    int getConnection(const Rail *rail) const;
     int getVisualAreaSize();
 
     void setConnectedRail(Rail *connectedRail, const int connection);

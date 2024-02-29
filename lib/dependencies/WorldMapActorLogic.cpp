@@ -90,7 +90,7 @@ Actor* WorldMap::addSignalConstructor()
 {
     //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
     SpriteColection newSprite;
-    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.getSprite(RED_SIGNAL_SPRITE));
+    QGraphicsItem* signalConstructorGraphic = new QGraphicsPixmapItem(newSprite.getSprite(STOP_SIGNAL_SPRITE));
     worldScene->addItem(signalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* signalConstructor = new SignalConstructor(nullptr, signalConstructorGraphic, nullptr); //without acttor to construct
@@ -349,7 +349,7 @@ Actor* WorldMap::addSignal(QPoint point)
     QPixmap pixmap;
     SignalConstructor* constructor = dynamic_cast<SignalConstructor*>(actualConstructor);
 
-    if (constructor->getNearestAreaGraphic() != nullptr) pixmap = newSprite.getSprite(RED_SIGNAL_SPRITE);
+    if (constructor->getNearestAreaGraphic() != nullptr) pixmap = newSprite.getSprite(STOP_SIGNAL_SPRITE);
     else pixmap = newSprite.getSprite(NO_SIGNAL_SPRITE);
 
     QGraphicsItem* signalGraphic = new QGraphicsPixmapItem(pixmap); //sprite from struct

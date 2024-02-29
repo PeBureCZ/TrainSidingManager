@@ -40,6 +40,10 @@ Train *TrainSelector::getNearestTrain()
 void TrainSelector::findPathToSignal()
 {
     RailNavigation::makePath(selectedTrain, getNearestSignal());
+    if (nearestTrain != nullptr)
+    {
+        TrainNavigation::checkObjectsOnPath(nearestTrain->getActualRail(),nearestTrain->getRemainingPath(),nearestTrain->getDirectionToRailEnd(), nearestTrain->getRemainToPathEnd());
+    }
 }
 
 void TrainSelector::findNearestTrain()
@@ -118,7 +122,7 @@ void TrainSelector::findNearestSignal()
     else if (retestedNearestSignal != nullptr && nearestSignal != nullptr && retestedNearestSignal != nearestSignal)
     {
         qDebug() << "need set signalstate correctly";
-        nearestSignal->setState(nearestSignal->getState(), RED_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+        nearestSignal->setState(nearestSignal->getState(), STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
         nearestRail->setVisualOccupied(false);
 
         nearestSignal = retestedNearestSignal;
@@ -129,7 +133,7 @@ void TrainSelector::findNearestSignal()
     else if (nearestSignal != nullptr && retestedNearestSignal == nullptr)
     {
         qDebug() << "need set signalstate correctly";
-        nearestSignal->setState(nearestSignal->getState(),RED_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+        nearestSignal->setState(nearestSignal->getState(),STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
         nearestSignal = nullptr;
         nearestRail->setVisualOccupied(false);
     }
@@ -140,7 +144,7 @@ void TrainSelector::unselectSignal()
     //called when train path is set
     nearestRail = nullptr;
     qDebug() << "need set signalstate correctly";
-    nearestSignal->setState(nearestSignal->getState(), RED_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+    nearestSignal->setState(nearestSignal->getState(), STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
     nearestSignal = nullptr;
 }
 
@@ -162,6 +166,6 @@ void TrainSelector::actorEnterInCollision(Actor *actor)
 TrainSelector::~TrainSelector()
 {
     if(nearestTrain != nullptr) nearestTrain->selectTrain(false);
-    if(nearestSignal != nullptr) nearestSignal->setState(nearestSignal->getState(),RED_SIGNAL_SPRITE);
+    if(nearestSignal != nullptr) nearestSignal->setState(nearestSignal->getState(),STOP_SIGNAL_SPRITE);
     if (nearestRail != nullptr) nearestRail->setVisualOccupied(false);
 }

@@ -130,7 +130,7 @@ void Train::actualizeOnPathLength()
     bool directionOnEventBegin = directionToRailEnd;
     bool repeat = false;
 
-    if (directionToRailEnd && newOnPathLength + actualSpeed > actualRail->getRailLength()) repeat = true;
+    if (directionToRailEnd && newOnPathLength + actualSpeed > actualRail->getLengthOfRail()) repeat = true;
     else if (!directionToRailEnd && newOnPathLength - actualSpeed < 0) repeat = true;
 
     recalculateSpeed(newOnPathLength);
@@ -142,7 +142,7 @@ void Train::actualizeOnPathLength()
         if (remainingPath.size() > 0)
         {
             //get a new position of train
-            (directionOnEventBegin) ? newOnPathLength -= actualRail->getRailLength() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(remainingPath[0])->getRailLength();
+            (directionOnEventBegin) ? newOnPathLength -= actualRail->getLengthOfRail() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(remainingPath[0])->getLengthOfRail();
 
             takenPath.push_back(actualRail);
 
@@ -166,7 +166,7 @@ void Train::actualizeOnPathLength()
             remainingPath.remove(0);
             actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(actualRail->getGraphicItem());
 
-            if (directionOnEventBegin && newOnPathLength < actualRail->getRailLength()) break;
+            if (directionOnEventBegin && newOnPathLength < actualRail->getLengthOfRail()) break;
             if (!directionOnEventBegin && newOnPathLength > 0) break;
         }
         else
@@ -189,7 +189,7 @@ void Train::actualizeOnPathLength()
 void Train::actualizeVehiclesOnPath()
 {
     bool repeat = false;
-    if (directionToRailEnd && onPathLength + actualTrainLength > actualRail->getRailLength()) repeat = true;
+    if (directionToRailEnd && onPathLength + actualTrainLength > actualRail->getLengthOfRail()) repeat = true;
     else if (!directionToRailEnd && onPathLength - actualTrainLength < 0) repeat = true;
     if (!repeat)
     {
@@ -256,16 +256,16 @@ void Train::actualizeVehiclesOnPath()
                 sortedVehicles.push_back(actualVehicle);
                 while (true)
                 {
-                    if ((actualVehicleDirection && temporalDistance > testedRail->getRailLength()) || (!actualVehicleDirection && temporalDistance < 0))
+                    if ((actualVehicleDirection && temporalDistance > testedRail->getLengthOfRail()) || (!actualVehicleDirection && temporalDistance < 0))
                     {
                         if (bonusPathIndex >= remainingPath.size()) break;
                         bool saveDirection = actualVehicleDirection;
                         actualVehicleDirection = TrainNavigation::checkDirectionOnNextRail(actualVehicleDirection, testedRail, remainingPath[bonusPathIndex]);
 
-                        if (saveDirection && actualVehicleDirection) temporalDistance -= testedRail->getRailLength();
-                        else if (saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(remainingPath[bonusPathIndex])->getRailLength() - (temporalDistance - testedRail->getRailLength());
+                        if (saveDirection && actualVehicleDirection) temporalDistance -= testedRail->getLengthOfRail();
+                        else if (saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(remainingPath[bonusPathIndex])->getLengthOfRail() - (temporalDistance - testedRail->getLengthOfRail());
                         else if (!saveDirection && actualVehicleDirection) temporalDistance *= -1;
-                        else if (!saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(remainingPath[bonusPathIndex])->getRailLength() + temporalDistance;
+                        else if (!saveDirection && !actualVehicleDirection) temporalDistance = dynamic_cast<Rail*>(remainingPath[bonusPathIndex])->getLengthOfRail() + temporalDistance;
 
                         testedRail = remainingPath[bonusPathIndex];
                         testedGraphicItem = dynamic_cast<QGraphicsPathItem*>(testedRail->getGraphicItem());
@@ -364,7 +364,7 @@ bool Train::teleportTrainToRail(Rail *rail)
     actualRail = rail;
     setActualPathGraphic(actualRail);
     startAutopilot();
-    if (rail->getRailLength() + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
+    if (rail->getLengthOfRail() + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
     {
         qDebug() << "can´t teleport, rail is too short";
         return false;
@@ -373,8 +373,18 @@ bool Train::teleportTrainToRail(Rail *rail)
     int savedSpeed = actualSpeed;
     actualSpeed = 1;
     moveTrain(); //move train by 1 set train in right position
-    actualSpeed = savedSpeed; 
+    actualSpeed = savedSpeed;
     return true;
+}
+
+int Train::getTrainLength()
+{
+    return actualTrainLength;
+}
+
+int Train::getRemainToPathEnd()
+{
+    return remainToPathEnd;
 }
 
 void Train::actualizeTrainLenth()
@@ -388,7 +398,7 @@ void Train::actualizeTrainLenth()
 
 void Train::recalculateSpeed(int actualDistanceOnRail)
 {
-    directionToRailEnd ? remainToPathEnd = actualRail->getRailLength() - actualDistanceOnRail : remainToPathEnd = actualDistanceOnRail;
+    directionToRailEnd ? remainToPathEnd = actualRail->getLengthOfRail() - actualDistanceOnRail : remainToPathEnd = actualDistanceOnRail;
     remainToPathEnd += TrainNavigation::getTrainPathLength(remainingPath);
     if (moveForward) remainToPathEnd -= actualTrainLength;
 
@@ -428,15 +438,28 @@ void Train::tickEvent()
 {
     if (releasePath == true)
     {
-        for (auto rail : takenPath) rail->setOccupied(false, true);
+        for (auto rail : takenPath)
+        {
+            rail->setOccupied(false, true);
+            if (rail->getSignal(0) != nullptr) rail->getSignal(0)->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+            if (rail->getSignal(1) != nullptr) rail->getSignal(1)->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+        }
         takenPath.clear();
         releasePath = false;
+
+        //also actualize signals on RemainingPath
+        TrainNavigation::checkObjectsOnPath(actualRail, remainingPath, directionToRailEnd, remainToPathEnd);
     }
 }
 
-QVector<Rail *> Train::getTrainPath() const
+QVector<Rail *> Train::getRemainingPath() const
 {
     return remainingPath;
+}
+
+QVector<Rail *> Train::getTakenPath() const
+{
+    return takenPath;
 }
 
 Train::~Train()
