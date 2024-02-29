@@ -82,10 +82,9 @@ bool TrainNavigation::checkDirectionOnLatestRail(const QList<Rail *> path, const
     }
     (connection <= 1) ? direction = 1 : direction = 0;
     return direction;
-
 }
 
-void TrainNavigation::checkObjectsOnPath(const Rail* actualRail, const QList<Rail*> actualPath, bool direction, int distanceToEnd)
+void TrainNavigation::checkSignalsOnPath(const Rail* actualRail, const QList<Rail*> actualPath, bool direction, int distanceToEnd)
 {
     //check a signals on the actualRail
     QList<Signal*> signalsOnPath = {};
@@ -116,13 +115,11 @@ void TrainNavigation::checkObjectsOnPath(const Rail* actualRail, const QList<Rai
         railIndex++;
     }
 
-    qDebug() << "signals on path: " << signalsOnPath.size();
-
     int signalsCount = signalsOnPath.size();
     if (signalsCount > 0) signalsOnPath.last()->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
     if (signalsCount > 1)
     {
-        if (distanceToEnd < distanceMeasure - signalOnDistant[signalsCount-2]) dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_CAUTION, CAUTION_SIGNAL_SPRITE);
+        if (distanceToEnd >= (distanceMeasure - signalOnDistant[signalsCount-2])) dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_CAUTION, CAUTION_SIGNAL_SPRITE);
         else dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
     }
 
@@ -130,8 +127,7 @@ void TrainNavigation::checkObjectsOnPath(const Rail* actualRail, const QList<Rai
     {
         for (int i = 0; i < signalsCount-2; i++)
         {
-            qDebug() << "DTE: " << distanceToEnd << "    SIGoD: " << signalOnDistant[i] << "    mes: " << distanceMeasure;
-            if (distanceToEnd < distanceMeasure - signalOnDistant[i]) dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_PROCEED, PROCEED_SIGNAL_SPRITE);
+            if (distanceToEnd >= (distanceMeasure - signalOnDistant[i])) dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_PROCEED, PROCEED_SIGNAL_SPRITE);
             else dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
         }
     }

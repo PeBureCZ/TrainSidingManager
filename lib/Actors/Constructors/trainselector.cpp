@@ -40,10 +40,7 @@ Train *TrainSelector::getNearestTrain()
 void TrainSelector::findPathToSignal()
 {
     RailNavigation::makePath(selectedTrain, getNearestSignal());
-    if (nearestTrain != nullptr)
-    {
-        TrainNavigation::checkObjectsOnPath(nearestTrain->getActualRail(),nearestTrain->getRemainingPath(),nearestTrain->getDirectionToRailEnd(), nearestTrain->getRemainToPathEnd());
-    }
+    if (nearestTrain != nullptr) unselectSignal();
 }
 
 void TrainSelector::findNearestTrain()
@@ -121,7 +118,6 @@ void TrainSelector::findNearestSignal()
     }
     else if (retestedNearestSignal != nullptr && nearestSignal != nullptr && retestedNearestSignal != nearestSignal)
     {
-        qDebug() << "need set signalstate correctly";
         nearestSignal->setState(nearestSignal->getState(), STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
         nearestRail->setVisualOccupied(false);
 
@@ -132,7 +128,6 @@ void TrainSelector::findNearestSignal()
     }
     else if (nearestSignal != nullptr && retestedNearestSignal == nullptr)
     {
-        qDebug() << "need set signalstate correctly";
         nearestSignal->setState(nearestSignal->getState(),STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
         nearestSignal = nullptr;
         nearestRail->setVisualOccupied(false);

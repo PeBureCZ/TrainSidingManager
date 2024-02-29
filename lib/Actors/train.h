@@ -25,7 +25,8 @@ protected:
     int remainToPathEnd;
     float breakLevel;
     float throttleLevel;
-
+    Rail* lastRailChecked;
+    Rail* occupiedByFirstVehicle;
 
 public:
     Train(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Rail* spawnedRail = nullptr);

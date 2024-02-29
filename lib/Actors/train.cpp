@@ -17,6 +17,8 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     remainToPathEnd = 0;
     breakLevel = 0.2f;
     throttleLevel = 0.07f;
+    lastRailChecked = nullptr;
+    occupiedByFirstVehicle = nullptr;
 }
 
 void Train::actualizeGraphicLocation()
@@ -172,7 +174,6 @@ void Train::actualizeOnPathLength()
         else
         {
             setActualSpeed(0.0f);
-            qDebug() << "1: speed set to 0 in train";
             (directionToRailEnd) ? newOnPathLength = actualPathGraphic->path().length() : newOnPathLength = 0;
             break;
         }
@@ -232,6 +233,7 @@ void Train::actualizeVehiclesOnPath()
 
             }
         }
+        occupiedByFirstVehicle = actualRail;
     }
     else //front (or back) of train vehicle is on next rail/s
     {   
@@ -300,6 +302,9 @@ void Train::actualizeVehiclesOnPath()
 
             }
         }
+
+        occupiedByFirstVehicle = testedRail;
+
         int sortedIndex = 0;
         if (!moveForward) sortedIndex = sortedVehicles.size()-1;
         for (auto vehicle : sortedVehicles)
@@ -351,6 +356,8 @@ void Train::addNextPartOfPath(QVector<Rail *> addedPartOfPath)
     {
         rail->setOccupied(true, true);
     }
+    lastRailChecked = nullptr; //will actualize signals
+    remainToPathEnd = -1;
 }
 
 void Train::setActualPathGraphic(Rail* actualRail)
@@ -445,10 +452,13 @@ void Train::tickEvent()
             if (rail->getSignal(1) != nullptr) rail->getSignal(1)->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
         }
         takenPath.clear();
-        releasePath = false;
-
-        //also actualize signals on RemainingPath
-        TrainNavigation::checkObjectsOnPath(actualRail, remainingPath, directionToRailEnd, remainToPathEnd);
+        releasePath = false; 
+    }
+    if (lastRailChecked != occupiedByFirstVehicle && remainToPathEnd != -1)
+    {
+        //train go throw new rail - need actualize signals
+        TrainNavigation::checkSignalsOnPath(actualRail, remainingPath,directionToRailEnd,remainToPathEnd-actualSpeed);
+        lastRailChecked = occupiedByFirstVehicle;
     }
 }
 

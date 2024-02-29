@@ -96,11 +96,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 }
 
 void MainWindow::on_PlayBut_clicked() {}//overrided
-void MainWindow::on_TestButton1_clicked()
-{
-    qDebug() << ui->MultiFuncBut1->size();
-    //world->testFunction();
-}
+void MainWindow::on_TestButton1_clicked(){}
 void MainWindow::on_ZoomSubBut_clicked() {}//overrided
 void MainWindow::on_ZoomAddBut_clicked() {}//overrided
 void MainWindow::on_AddMenuBut_clicked(){}//overrided

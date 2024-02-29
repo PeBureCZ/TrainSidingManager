@@ -122,7 +122,20 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
             {
                 findedRails.removeAt(0);
             }
-            train->addNextPartOfPath(findedRails);
+
+            //Check if the Rail is used in path multiple times
+            QList<Rail*> outputPath = {};
+            for (auto rail : findedRails)
+            {
+                if (outputPath.indexOf(rail) == -1) outputPath.push_back(rail);
+                else
+                {
+                   qDebug() << "Rail is used in path multiple times";
+                   return;
+                }
+            }
+
+            train->addNextPartOfPath(outputPath);
             train->setActualSpeed(train->getActualSpeed()+1);
         }
         else qDebug() << "the path was not found!";

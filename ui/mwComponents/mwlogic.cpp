@@ -249,7 +249,6 @@ void mwlogic::trainOrSignalSelect()
     else if (nearestSignal != nullptr && selectedTrain != nullptr)
     {
         trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
-        trainSelector->unselectSignal();
     }
 }
 

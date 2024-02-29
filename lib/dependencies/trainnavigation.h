@@ -10,7 +10,7 @@ public:
     static QList<Rail*> autopilotCheck(int minDistanceCheck, const int minimalPathSegments, Rail *actualRail, bool direction);
     static int getTrainPathLength(QList<Rail*> path);
     static bool checkDirectionOnLatestRail(const QList<Rail*> path, const Rail* actualRail, bool actualDirection);
-    static void checkObjectsOnPath(const Rail *actualRail, const QList<Rail *> actualPath, bool direction, int distanceToEnd);
+    static void checkSignalsOnPath(const Rail *actualRail, const QList<Rail *> actualPath, bool direction, int distanceToEnd);
 };
 
 #endif // TRAINNAVIGATION_H
