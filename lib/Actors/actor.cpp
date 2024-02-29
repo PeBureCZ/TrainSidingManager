@@ -233,6 +233,11 @@ void Actor::tickEvent()
     //overrided
 }
 
+void Actor::threadedTickEvent()
+{
+    //overrided
+}
+
 
 Actor::~Actor()
 {

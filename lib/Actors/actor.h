@@ -64,6 +64,7 @@ public:
     virtual void calledCollisionEvent(const QList<Actor*> isInCollision); //overrided
     virtual void setRailObjectBoxCollider(); //overrided
     virtual void tickEvent();
+    virtual void threadedTickEvent();
     virtual void actorLeaveFromCollision(Actor* actor);
     virtual void actorEnterInCollision(Actor* actor);
     virtual ~Actor();

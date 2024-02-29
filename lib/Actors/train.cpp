@@ -12,6 +12,7 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     moveForward = true;
     remainingPath = {};
     takenPath = {};
+    releasePath = false;
     setActualPathGraphic(actualRail);
     remainToPathEnd = 0;
     breakLevel = 0.2f;
@@ -148,8 +149,7 @@ void Train::actualizeOnPathLength()
             //signal: "sekční + odjezdové" - not yet
             if ((directionToRailEnd && actualRail->getSignal(1) != nullptr) || (!directionToRailEnd && actualRail->getSignal(0) != nullptr))
             {
-                for (auto rail : takenPath) rail->setOccupied(false, true);
-                takenPath.clear();
+                 releasePath = true; //will release path after tick in tickEvent();
             }
 
             directionToRailEnd = TrainNavigation::checkDirectionOnNextRail(directionToRailEnd, actualRail, remainingPath[0]); //check direction for new path segment
@@ -160,8 +160,7 @@ void Train::actualizeOnPathLength()
             //signal: "vjezdové" - temporary
             if ((directionToRailEnd && actualRail->getSignal(0) != nullptr) || (!directionToRailEnd && actualRail->getSignal(1) != nullptr))
             {
-                for (auto rail : takenPath) rail->setOccupied(false, true);
-                takenPath.clear();
+                releasePath = true; //will release path after tick in tickEvent();
             }
 
             remainingPath.remove(0);
@@ -420,9 +419,19 @@ const bool Train::getMoveDirection()
     return moveForward;
 }
 
-void Train::tickEvent()
+void Train::threadedTickEvent()
 {
     moveTrain();
+}
+
+void Train::tickEvent()
+{
+    if (releasePath == true)
+    {
+        for (auto rail : takenPath) rail->setOccupied(false, true);
+        takenPath.clear();
+        releasePath = false;
+    }
 }
 
 QVector<Rail *> Train::getTrainPath() const

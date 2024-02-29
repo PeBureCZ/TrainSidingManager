@@ -3,7 +3,7 @@
 
 void actualizeActor(Actor* actor) //global function - threated
 {
-    actor->tickEvent();
+    actor->threadedTickEvent();
 }
 
 WorldMap::WorldMap(QObject* parent, QGraphicsScene* scene, CustomQGraphicsView* view, WorldCollide* collide)
@@ -54,6 +54,7 @@ void WorldMap::updateWorld()
     {
         actor->actualizeGraphicLocation();
         actor->actualizeGraphicRotation();
+        actor->tickEvent();
         /*
         //NOT USED NOW - NOT USEFULL FOR ANYTHING NOW
         if (actor->canCallCollision())

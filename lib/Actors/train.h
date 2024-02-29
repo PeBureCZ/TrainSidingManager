@@ -14,6 +14,7 @@ protected:
     Rail* actualRail;
     QVector<Rail*> remainingPath;
     QVector<Rail*> takenPath;
+    bool releasePath;
     float onPathValue;
     int onPathLength;  //in decimeters!
     int actualTrainLength; //in decimeters!
@@ -40,6 +41,7 @@ public:
 
     void actualizeGraphicLocation() override;
     void actualizeGraphicRotation() override;
+    void threadedTickEvent() override;
     void tickEvent() override;
 
     void addMultipleVehicleToTrain(QList<Vehicle*> newVehicles);
