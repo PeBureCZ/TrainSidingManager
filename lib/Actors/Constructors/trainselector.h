@@ -2,6 +2,7 @@
 #define TRAINSELECTOR_H
 
 #include "selectconstructor.h"
+#include "dependencies/railnavigation.h"
 #include <QObject>
 #include "Actors/train.h"
 #include "Actors/rail.h"

@@ -6,12 +6,8 @@
 
 class LIB_EXPORT RailNavigation
 {
-private:
-    Rail* actualRail;
-    Train* train;
 public:
-    RailNavigation(Train* trainObject, Rail* destinationRail);
-    QVector<Rail*> makePath();
+    static void makePath(Train* train, Signal *nearestSignal);
 };
 
 #endif // RAILNAVIGATION_H

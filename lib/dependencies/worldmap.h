@@ -105,7 +105,6 @@ public:
     Actor* getActorFromTriggersInCollide(Actor* testedActor, QPoint position, int channel);
     ActorConstructor *getActualConstructor();
     QVector<Actor *> getActorsCollideInLocation(QVector<int> useBlockChannels, QPoint point);
-    QVector<Rail*> findPath(Train* train, Rail* destinationRail);
     WorldCollide* getWorldCollide();
     Trigger *getNearestTriggerInRange(Actor *actor, QPoint position, int radius);
     int getWorldWidth();

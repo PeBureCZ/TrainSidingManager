@@ -259,13 +259,6 @@ void WorldMap::deleteAllActors()
     }
 }
 
-QVector<Rail*> WorldMap::findPath(Train *train, Rail* destinationRail)
-{
-    QVector<Rail*> rails = {};
-    RailNavigation navigation(train, destinationRail);
-    return rails;
-}
-
 int WorldMap::getWorldDistance(QPoint pointOne, QPoint pointTwo)
 {
     QLineF line(pointOne, pointTwo);
