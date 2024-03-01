@@ -40,7 +40,7 @@ public:
     bool getDirectionToRailEnd()const;
     const bool getMoveDirection();
     float getActualPathValue() const;
-    bool teleportTrainToRail(Rail* rail);
+    bool teleportTrainToRail(Rail* rail, bool direction);
     int getTrainLength();
     int getRemainToPathEnd();
 

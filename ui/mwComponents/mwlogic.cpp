@@ -214,13 +214,16 @@ void mwlogic::constructTrain(QPoint point)
         {
             if (dynamic_cast<Portal*>(actor))
             {
-                Rail* portalOwnedRail = dynamic_cast<Portal*>(actor)->getConnectedRail();
+                Portal *portal = dynamic_cast<Portal*>(actor);
+                int portalRailEnd = portal->getConectedArea();
+                Rail* portalOwnedRail = portal->getConnectedRail();
                 Train* createdTrain = dynamic_cast<Train*>(world->addActor(TRAIN_ACTOR));
-                if (!createdTrain->teleportTrainToRail(portalOwnedRail))
+                bool trainDirection;
+                (portalRailEnd == 0)? trainDirection = true : trainDirection = false;
+                if (portalRailEnd == -1 || !createdTrain->teleportTrainToRail(portalOwnedRail, trainDirection))
                 {
-                    //false = train is too short -> delete
+                    //false =rail is too short -> delete
                     world->deleteActor(createdTrain);
-
                 }
             }
         }

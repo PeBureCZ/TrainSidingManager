@@ -366,7 +366,7 @@ void Train::setActualPathGraphic(Rail* actualRail)
     else actualPathGraphic = nullptr;
 }
 
-bool Train::teleportTrainToRail(Rail *rail)
+bool Train::teleportTrainToRail(Rail *rail, bool direction)
 {
     actualRail = rail;
     setActualPathGraphic(actualRail);
@@ -376,7 +376,8 @@ bool Train::teleportTrainToRail(Rail *rail)
         qDebug() << "can´t teleport, rail is too short";
         return false;
     }
-    directionToRailEnd ? onPathLength = 5 : onPathLength = 5 + actualTrainLength;
+    directionToRailEnd = direction;
+    directionToRailEnd ? onPathLength = 5 : onPathLength = actualRail->getLengthOfRail() - 5; // - 5;
     int savedSpeed = actualSpeed;
     actualSpeed = 1;
     moveTrain(); //move train by 1 set train in right position
