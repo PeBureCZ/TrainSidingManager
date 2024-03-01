@@ -201,7 +201,7 @@ void mwlogic::constructSignal()
 {
     if (world->addActor(SIGNAL_ACTOR) == nullptr)
     {
-        managerConsole->printToConsole("Signal is not connected to any rail point!", RED_BOLD_COLOR, LONG_DURATION);
+        managerConsole->printToConsole("Signal is not connected to any rail point, or rail end is occupied by another signal!", RED_BOLD_COLOR, LONG_DURATION);
     }
 }
 

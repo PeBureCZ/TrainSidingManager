@@ -114,21 +114,25 @@ void TrainSelector::findNearestSignal()
         nearestSignal = retestedNearestSignal;
         nearestRail = dynamic_cast<Rail*>(retestedNearestSignal->getRailActor());
         nearestRail->setVisualOccupied(true);
-        nearestSignal->setState(nearestSignal->getState(), FULL_SIGNAL_SPRITE);
+        nearestSignal->setState(nearestSignal->getState(), SELECTED_SIGNAL_SPRITE);
+        nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(-17,-12),true);
     }
     else if (retestedNearestSignal != nullptr && nearestSignal != nullptr && retestedNearestSignal != nearestSignal)
     {
         nearestSignal->setState(nearestSignal->getState(), STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+        nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(17,12),true);
         nearestRail->setVisualOccupied(false);
 
         nearestSignal = retestedNearestSignal;
         nearestRail = dynamic_cast<Rail*>(retestedNearestSignal->getRailActor());
-        nearestSignal->setState(nearestSignal->getState(), FULL_SIGNAL_SPRITE);
+        nearestSignal->setState(nearestSignal->getState(), SELECTED_SIGNAL_SPRITE);
+        nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(-17,-12),true);
         nearestRail->setVisualOccupied(true);
     }
     else if (nearestSignal != nullptr && retestedNearestSignal == nullptr)
     {
         nearestSignal->setState(nearestSignal->getState(),STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+        nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(17,12),true);
         nearestSignal = nullptr;
         nearestRail->setVisualOccupied(false);
     }
@@ -138,8 +142,8 @@ void TrainSelector::unselectSignal()
 {
     //called when train path is set
     nearestRail = nullptr;
-    qDebug() << "need set signalstate correctly";
     nearestSignal->setState(nearestSignal->getState(), STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+    nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(17,12),true);
     nearestSignal = nullptr;
 }
 

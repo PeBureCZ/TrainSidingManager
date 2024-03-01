@@ -25,6 +25,15 @@ enum SignalState
     SIGNAL_CUSTOM8 //last allowed signal in constructor
 };
 
+enum SignalType
+{
+    ENTRANCE_SIGNAL = 0,
+    DEPARTURE_SIGNAL,
+    BUFFER_SIGNAL,
+    SHUNTING_SIGNAL,
+    AUTOBLOCK,
+};
+
 
 
 

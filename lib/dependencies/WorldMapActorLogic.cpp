@@ -342,7 +342,8 @@ Actor* WorldMap::addSignal(QPoint point)
     int nearestEndArea = actualSignalConstructor->getNearestEndArea();
     Rail* connectedRail = actualSignalConstructor->getNearestRail();
 
-    if (connectedRail == nullptr || nearestEndArea == -1) return nullptr;
+    if (connectedRail == nullptr || nearestEndArea == -1) return nullptr; //no rail or railpoint is nearby
+    if (connectedRail->getSignal(nearestEndArea) != nullptr) return nullptr; //rail is occupied by another signal
 
     //ADD GRAPHIC FOR SIGNAL
     SpriteColection newSprite;

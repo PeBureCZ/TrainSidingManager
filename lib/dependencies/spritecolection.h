@@ -40,6 +40,7 @@ enum spriteEnums
     WHITE_SIGNAL_SPRITE,
     FULL_SIGNAL_SPRITE,
     NO_SIGNAL_SPRITE,
+    SELECTED_SIGNAL_SPRITE,
 };
 
 struct SpriteColection
@@ -77,6 +78,7 @@ struct SpriteColection
         "/images/signal_white.png",
         "/images/signal_full.png",
         "/images/signal_full_noPlace.png",
+        "/images/selected_signal.png",
     };
 
     QString relativeDirectory;

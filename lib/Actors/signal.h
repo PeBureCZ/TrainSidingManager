@@ -14,13 +14,18 @@ protected:
     QList<int> allowedSignalState;
     int signalState;
     Actor* railActor; //can´t hold Rail*
+    int signalType;
 public:
     explicit Signal(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
-    void setState(int newSignState, int newSprite);
+
     int getState();
     QList<int> getAllowedSignalState() const;
-    void addRailActor(Actor* newRailActor);
     Actor* getRailActor();
+
+    void setDefaultState();
+    void addRailActor(Actor* newRailActor);
+    void setState(int newSignState, int newSprite);
+
     ~Signal();
 
 };
