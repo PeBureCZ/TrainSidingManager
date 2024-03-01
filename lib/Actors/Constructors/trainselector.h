@@ -6,6 +6,7 @@
 #include <QObject>
 #include "Actors/train.h"
 #include "Actors/rail.h"
+#include "dependencies/Enums/CustomColors.h"
 
 class LIB_EXPORT TrainSelector : public SelectConstructor
 {

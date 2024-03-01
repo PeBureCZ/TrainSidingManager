@@ -4,6 +4,7 @@
 #include "actorconstructor.h"
 #include <QTransform>
 #include "Actors/rail.h"
+#include "dependencies/Enums/CustomColors.h"
 
 class LIB_EXPORT RailConstructor : public ActorConstructor
 {

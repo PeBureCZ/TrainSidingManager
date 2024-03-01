@@ -82,15 +82,16 @@ void PortalConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
     else snappedToRail = false;
 
     //set visual change (occupied rail)
+    using namespace customQColors;
     if (testedNearestRail != nullptr)
     {
-        if (nearestRail != nullptr && testedNearestRail != nearestRail) nearestRail->setOccupied(false,true);
+        if (nearestRail != nullptr && testedNearestRail != nearestRail) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail = testedNearestRail;
-        nearestRail->setOccupied(true,true);
+        nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
     }
     else if (nearestRail != nullptr)
     {
-        nearestRail->setOccupied(false,true);
+        nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail = nullptr;
     }
 }
@@ -120,5 +121,6 @@ PortalConstructor::~PortalConstructor()
         rail->setVisibilityOfArea(0, false, nullptr);
         rail->setVisibilityOfArea(1, false, nullptr);
     }
-    if (nearestRail != nullptr) nearestRail->setOccupied(false,true);
+    using namespace customQColors;
+    if (nearestRail != nullptr) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
 }

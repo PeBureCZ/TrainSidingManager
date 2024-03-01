@@ -334,9 +334,14 @@ void Train::selectTrain(bool selected)
     }
 }
 
-void Train::startAutopilot()
+void Train::setdirectionToRailEnd(bool newDirection)
 {
-    remainingPath = TrainNavigation::autopilotCheck(30000,30,actualRail,directionToRailEnd);
+    directionToRailEnd = newDirection;
+}
+
+void Train::makePathFromPortal()
+{
+    remainingPath = TrainNavigation::autopilotCheck(30000,100,actualRail,directionToRailEnd);
     for (auto rail : remainingPath)
     {
         rail->setOccupied(true, true);
@@ -374,19 +379,19 @@ bool Train::teleportTrainToRail(Rail *rail, bool direction)
         return false;
     }
     actualRail = rail;
+    directionToRailEnd = direction;
+    directionToRailEnd ? onPathLength = 5 : onPathLength = actualRail->getLengthOfRail() - 5;
     setActualPathGraphic(actualRail);
-    startAutopilot();
+    int savedSpeed = actualSpeed;
+    setActualSpeed(1);
+    moveTrain(); //move train by 1 set train in right position
+    setActualSpeed(savedSpeed);
+    makePathFromPortal();
     if (rail->getLengthOfRail() + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
     {
         qDebug() << "can´t teleport, rail is too short";
         return false;
     }
-    directionToRailEnd = direction;
-    directionToRailEnd ? onPathLength = 5 : onPathLength = actualRail->getLengthOfRail() - 5; // - 5;
-    int savedSpeed = actualSpeed;
-    actualSpeed = 1;
-    moveTrain(); //move train by 1 set train in right position
-    actualSpeed = savedSpeed;
     return true;
 }
 

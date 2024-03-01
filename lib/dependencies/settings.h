@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QColor>
+#include "dependencies/Enums/CustomColors.h"
 
 #define BACKGROUND_COLOR 65,80,65
 
@@ -13,14 +13,6 @@ enum settingsEnum
     MAX_ZOOM_LEVEL = 18,
     START_ZOOM = 4,
 };
-
-namespace customQColors
-{
-    inline const QColor SELECTED_RAIL_COLOR = QColor(0, 255, 255, 255);
-    inline const QColor UNSELECTED_RAIL_COLOR = QColor(Qt::blue);
-}
-
-
 
 enum graphicItemLayer
 {

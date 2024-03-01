@@ -448,31 +448,19 @@ bool Rail::getOccupied()
 
 void Rail::setOccupied(const bool isOccupied, bool setGraphic)
 {
+    using namespace customQColors;
     occupied = isOccupied;
-    if (setGraphic) setVisualOccupied(isOccupied);
+    isOccupied ? setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER) : setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
 }
 
-void Rail::setVisualOccupied(const bool newsVisualState)
+void Rail::setRailColor(QColor color, int layerEnum)
 {
     using namespace customQColors;
-    visuallyOccupied = newsVisualState;
-    if (newsVisualState)
-    {
-        //change visual to new = true
-        QGraphicsPathItem* graphicPath = dynamic_cast<QGraphicsPathItem*>(graphicItem);
-        QPen newPen = graphicPath->pen();
-        newPen.setColor(SELECTED_RAIL_COLOR);
-        graphicPath->setPen(newPen);
-        graphicPath->setZValue(SELECTED_RAIL_LAYER);
-    }
-    else
-    {
-        QGraphicsPathItem* graphicPath = dynamic_cast<QGraphicsPathItem*>(graphicItem);
-        QPen newPen = graphicPath->pen();
-        newPen.setColor(UNSELECTED_RAIL_COLOR);
-        graphicPath->setPen(newPen);
-        graphicPath->setZValue(UNSELECTED_RAIL_LAYER);
-    }
+    QGraphicsPathItem* graphicPath = dynamic_cast<QGraphicsPathItem*>(graphicItem);
+    QPen newPen = graphicPath->pen();
+    newPen.setColor(color);
+    graphicPath->setPen(newPen);
+    graphicPath->setZValue(layerEnum);
 }
 
 void Rail::moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3)

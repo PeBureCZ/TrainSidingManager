@@ -10,7 +10,6 @@ Portal::Portal(QObject *parent, QGraphicsItem *newGraphicItem)
 void Portal::setConnectedRail(Rail *newConnectedRail)
 {
     connectedRail = newConnectedRail;
-
     int distance = getDistance(getLocation(), connectedRail->getLocation() + connectedRail->getP3RelativeLocation().toPoint());
     if (distance >  getDistance(connectedRail->getLocation(), getLocation()))
     {

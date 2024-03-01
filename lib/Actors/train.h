@@ -55,17 +55,16 @@ public:
     void setTrainPath(QVector<Rail*> newTrainPath);
     void addNextPartOfPath(QVector<Rail*> addedPartOfPath);
     void moveTrain();
-    void startAutopilot();
+    void makePathFromPortal();
     void setActualPathGraphic(Rail *actualRail);
     void actualizeTrainLenth();
     void recalculateSpeed(int actualDistanceOnRail);
     void actualizeOnPathLength();
     void actualizeVehiclesOnPath();
     void selectTrain(bool selected);
+    void setdirectionToRailEnd(bool newDirection);
 
     virtual ~Train();
-
-
 
 
 signals:

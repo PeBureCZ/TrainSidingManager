@@ -217,6 +217,7 @@ void mwlogic::constructTrain(QPoint point)
                 Portal *portal = dynamic_cast<Portal*>(actor);
                 int portalRailEnd = portal->getConectedArea();
                 Rail* portalOwnedRail = portal->getConnectedRail();
+
                 Train* createdTrain = dynamic_cast<Train*>(world->addActor(TRAIN_ACTOR));
                 bool trainDirection;
                 (portalRailEnd == 0)? trainDirection = true : trainDirection = false;

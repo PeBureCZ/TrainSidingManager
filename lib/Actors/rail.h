@@ -65,7 +65,7 @@ public:
     void smoothConnectionA0(bool changeP1Distance);
     void smoothConnectionC1(bool changeP2Distance);
     void setOccupied(const bool isOccupied, bool setGraphic);
-    void setVisualOccupied(const bool newsVisualState);
+    void setRailColor(QColor color, int layerEnum);
     void moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);
     void setRailObjectBoxCollider() override;
     void addSignal(int numberOfEndPoint, Signal *signalActor);

@@ -260,16 +260,14 @@ Actor *WorldMap::addTrain()
         SpriteColection newSprite;
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, nullptr);
-
+        tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
         QList<int> vehicles = {LOCO_CD753, VAGON_EAS};
         addVehicleActors(dynamic_cast<Train*>(newTrain), vehicles);
 
         qDebug() << "spawn train - temporary solution";
-        tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
         dynamic_cast<Train*>(newTrain)->setActualSpeed(1); //centimeters/s
-        getWorldCollide()->addCollideTriger(newTrain,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(0,0),0.f, 1000);
 
-        //dynamic_cast<Train*>(newTrain)->startAutopilot();
+        getWorldCollide()->addCollideTriger(newTrain,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(0,0),0.f, 1000);
         return newTrain;
     }
     return nullptr;

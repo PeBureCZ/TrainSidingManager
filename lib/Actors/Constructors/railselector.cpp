@@ -156,27 +156,28 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
     (distance <= 20) ? nearestPoint = testedNearestPoint : nearestPoint = -1;
 
     //set visual change (occupied rail)
+    using namespace customQColors;
     if (testedNearestRail != nullptr && !underSelectMode)
     {
         if (nearestRail != nullptr)
         {
             if (testedNearestRail != nearestRail)
             {
-                nearestRail->setOccupied(false,true);
+                nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
                 nearestRail = testedNearestRail;
-                nearestRail->setOccupied(true,true);
+                nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
             }
             //else = no change
         }
         else
         {
             nearestRail = testedNearestRail;
-            nearestRail->setOccupied(true,true);
+            nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
         }
     }
     else if (!underSelectMode)
     {
-        if (nearestRail != nullptr) nearestRail->setOccupied(false,true);
+        if (nearestRail != nullptr) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail = nullptr;
     }
 }
@@ -186,7 +187,8 @@ void RailSelector::actorLeaveFromCollision(Actor *actor)
     if (underSelectMode) return;
     Actor::actorLeaveFromCollision(actor);
     Rail* rail = dynamic_cast<Rail*>(actor);
-    rail->setOccupied(false,true);
+    using namespace customQColors;
+    rail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
     rail->setVisibilityOfArea(0, false, nullptr);
     rail->setVisibilityOfArea(1, false, nullptr);
 }
@@ -214,7 +216,8 @@ void RailSelector::setUnderSelect(bool newUnderSelect)
             {
                 actorsInCollision.removeOne(kickedActor);
                 Rail* rail = dynamic_cast<Rail*>(kickedActor);
-                rail->setOccupied(false,true);
+                using namespace customQColors;
+                rail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
                 rail->setVisibilityOfArea(0, false, nullptr);
                 rail->setVisibilityOfArea(1, false, nullptr);
             }
@@ -272,7 +275,8 @@ RailSelector::~RailSelector()
 {
     if (nearestRail != nullptr)
     {
-        nearestRail->setOccupied(false,true);
+        using namespace customQColors;
+        nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail->setVisibilityOfArea(0, false, nullptr);
         nearestRail->setVisibilityOfArea(1, false, nullptr);
     }

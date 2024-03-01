@@ -81,15 +81,16 @@ void SignalConstructor::calledCollisionEvent(const QList<Actor*> isInCollision)
     }
 
     //set visual change (occupied rail)
+    using namespace customQColors;
     if (testedNearestRail != nullptr)
     {
-        if (nearestRail != nullptr && testedNearestRail != nearestRail) nearestRail->setOccupied(false,true);
+        if (nearestRail != nullptr && testedNearestRail != nearestRail) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail = testedNearestRail;
-        nearestRail->setOccupied(true,true);
+        nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
     }
     else if (nearestRail != nullptr)
     {
-        nearestRail->setOccupied(false,true);
+        nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail = nullptr;
     }
 
@@ -129,7 +130,8 @@ void SignalConstructor::actorLeaveFromCollision(Actor *actor)
     Actor::actorLeaveFromCollision(actor); //remove actor from list
     if (!dynamic_cast<Rail*>(actor)) return;
     Rail* rail = dynamic_cast<Rail*>(actor);
-    rail->setOccupied(false,true);
+    using namespace customQColors;
+    rail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
     rail->setVisibilityOfArea(0, false, nullptr);
     rail->setVisibilityOfArea(1, false, nullptr);
 }
@@ -168,7 +170,8 @@ SignalConstructor::~SignalConstructor()
         rail->setVisibilityOfArea(0, false, nullptr);
         rail->setVisibilityOfArea(1, false, nullptr);
     }
-    if (nearestRail != nullptr) nearestRail->setOccupied(false,true);
+    using namespace customQColors;
+    if (nearestRail != nullptr) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
 }
 
 
