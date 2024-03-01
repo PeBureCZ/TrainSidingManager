@@ -368,6 +368,11 @@ void Train::setActualPathGraphic(Rail* actualRail)
 
 bool Train::teleportTrainToRail(Rail *rail, bool direction)
 {
+    if (rail->getOccupied() == true)
+    {
+        qDebug() << "can´t teleport, rail is occupied";
+        return false;
+    }
     actualRail = rail;
     setActualPathGraphic(actualRail);
     startAutopilot();
@@ -481,5 +486,5 @@ Train::~Train()
     }
     for (auto rail : takenPath) rail->setOccupied(false, true);
     for (auto rail : remainingPath) rail->setOccupied(false, true);
-    actualRail->setOccupied(false, true);
+    if (actualRail != nullptr) actualRail->setOccupied(false, true);
 }

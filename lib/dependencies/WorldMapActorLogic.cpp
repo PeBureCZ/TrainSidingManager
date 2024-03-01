@@ -259,7 +259,7 @@ Actor *WorldMap::addTrain()
     {
         SpriteColection newSprite;
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
-        Actor* newTrain = new Train(nullptr, trainItem, dynamic_cast<Rail*>(railList[0]));
+        Actor* newTrain = new Train(nullptr, trainItem, nullptr);
 
         QList<int> vehicles = {LOCO_CD753, VAGON_EAS};
         addVehicleActors(dynamic_cast<Train*>(newTrain), vehicles);
