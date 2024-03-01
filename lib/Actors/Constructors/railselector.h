@@ -24,6 +24,7 @@ public:
     void callSelectEvent(QPoint point) override;
     void setUnderSelect(bool newUnderSelect) override;
     void deleteMiddleVisualPoints();
+    Actor* getSelectedActor() override;
 
 };
 

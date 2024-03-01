@@ -261,6 +261,13 @@ void RailSelector::deleteMiddleVisualPoints()
     if (visualP2 != nullptr) delete visualP2;
 }
 
+Actor* RailSelector::getSelectedActor()
+{
+    Actor* selectedActor = nullptr;
+    if (underSelectMode) selectedActor = nearestRail;
+    return selectedActor;
+}
+
 RailSelector::~RailSelector()
 {
     if (nearestRail != nullptr)

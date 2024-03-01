@@ -152,7 +152,7 @@ void MainWindow::setEditSelectInterface(int menu)
         setButtonText("Rails", ui->MultiFuncBut1);
         freeButton(ui->MultiFuncBut2);
         freeButton(ui->MultiFuncBut3);
-        freeButton(ui->MultiFuncBut24);
+        setButtonText("Delete", ui->MultiFuncBut24);
         break;
     default: setBasicMenuInterface();
     }

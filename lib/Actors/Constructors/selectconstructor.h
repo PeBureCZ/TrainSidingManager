@@ -14,10 +14,12 @@ public:
     explicit SelectConstructor(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     bool getUnderSelect();
     bool getUnderEdit();
-    virtual void setUnderSelect(bool newUnderSelect);
     void setUnderEdit(bool newUnderEdit);
-    virtual void callSelectEvent(QPoint point);
     void actualizeConstructor(QPoint newPoint, int zoomLevel) override;
+    virtual void setUnderSelect(bool newUnderSelect);
+
+    virtual void callSelectEvent(QPoint point);
+    virtual Actor* getSelectedActor();
 };
 
 #endif // SELECTCONSTRUCTOR_H

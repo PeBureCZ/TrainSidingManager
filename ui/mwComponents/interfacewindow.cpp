@@ -356,7 +356,7 @@ void InterfaceWindow::on_MultiFuncBut23_clicked()
 
 void InterfaceWindow::on_MultiFuncBut24_clicked()
 {
-    if (menuSelected != PLAY_MODE_START)
+    if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END)
     {
         //delete button
         menuSelected = EDIT_MODE_START;
@@ -367,6 +367,27 @@ void InterfaceWindow::on_MultiFuncBut24_clicked()
             if (world->getActualConstructor() != nullptr) world->deleteConstructor();
             else world->deleteActor(deletedActor);
             managerConsole->printToConsole("Last item deleted", RED_COLOR, MIDDLE_DURATION);
+        }
+        else managerConsole->printToConsole("No item to delete", DEFAULT_COLOR, VERY_LONG_DURATION);
+    }
+    else if (menuSelected != PLAY_MODE_START)
+    {
+        //edit mode + select
+        //delete button
+        menuSelected = EDIT_SELECT_START;
+        if (world->actorList.size() > 0)
+        {
+            if (world->getActualConstructor() != nullptr && dynamic_cast<SelectConstructor*>(world->getActualConstructor()))
+            {
+                Actor* deletedActor = dynamic_cast<SelectConstructor*>(world->getActualConstructor())->getSelectedActor();
+                if (deletedActor != nullptr)
+                {
+                    //the selector has to have the "getSelectedActor()" function
+                    world->deleteConstructor();
+                    world->deleteActor(deletedActor);
+                    managerConsole->printToConsole("Last item deleted", RED_COLOR, MIDDLE_DURATION);
+                }
+            }
         }
         else managerConsole->printToConsole("No item to delete", DEFAULT_COLOR, VERY_LONG_DURATION);
     }
