@@ -95,8 +95,19 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     QWidget::wheelEvent(event);
 }
 
+void MainWindow::on_TestButton1_clicked()
+{
+    for (auto actor : world->tickedActorsList)
+    {
+        if (dynamic_cast<Train*>(actor))
+        {
+            qDebug() << "direction changed";
+            dynamic_cast<Train*>(actor)->changeMoveDirection();
+        }
+    }
+}
+
 void MainWindow::on_PlayBut_clicked() {}//overrided
-void MainWindow::on_TestButton1_clicked(){}
 void MainWindow::on_ZoomSubBut_clicked() {}//overrided
 void MainWindow::on_ZoomAddBut_clicked() {}//overrided
 void MainWindow::on_AddMenuBut_clicked(){}//overrided

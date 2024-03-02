@@ -339,6 +339,95 @@ void Train::setdirectionToRailEnd(bool newDirection)
     directionToRailEnd = newDirection;
 }
 
+void Train::setMoveDirection(bool forwardDirection)
+{
+    //moveForward
+    qDebug() << "start reverse!";
+
+    //recalculateSpeed(newOnPathLength);
+
+    //remainingPath.clear();
+    //takenPath.clear();
+
+    /*
+    bool toActualRail = true;
+    for (auto rail : fullOccupiedRailPath)
+    {
+        if (toActualRail)
+        {
+            if (rail == actualRail)
+            {
+                toActualRail = false;
+                continue;
+            }
+            remainingPath.push_back(rail);
+        }
+        else takenPath.push_back(rail);
+    }
+    */
+    int newOnPathLength = onPathLength; //in decimeters
+    bool directionOnEventBegin = directionToRailEnd;
+    bool repeat = false;
+
+    if (directionToRailEnd && newOnPathLength + actualTrainLength > actualRail->getLengthOfRail()) repeat = true;
+    else if (!directionToRailEnd && newOnPathLength - actualTrainLength < 0) repeat = true;
+
+    directionToRailEnd ? newOnPathLength = onPathLength + actualTrainLength : newOnPathLength = onPathLength - actualTrainLength;
+
+    while (repeat)
+    {
+        if (remainingPath.size() > 0)
+        {
+            //get a new position of train
+            (directionOnEventBegin) ? newOnPathLength -= actualRail->getLengthOfRail() : newOnPathLength = newOnPathLength + dynamic_cast<Rail*>(remainingPath[0])->getLengthOfRail();
+
+            takenPath.push_back(actualRail);
+
+            directionToRailEnd = TrainNavigation::checkDirectionOnNextRail(directionToRailEnd, actualRail, remainingPath[0]); //check direction for new path segment
+
+            //The already taken path is added to the takenPath, and a new actualRail is set from the remainingPath
+            actualRail = remainingPath[0];
+
+            remainingPath.remove(0);
+            actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(actualRail->getGraphicItem());
+
+            if (directionOnEventBegin && newOnPathLength < actualRail->getLengthOfRail()) break;
+            if (!directionOnEventBegin && newOnPathLength > 0) break;
+        }
+        else qDebug() << "error in setMoveDiretion";
+    }
+
+    if (directionOnEventBegin != directionToRailEnd) newOnPathLength = (newOnPathLength - (actualPathGraphic->path().length()))*-1;
+
+    float newPathPercentValue = actualPathGraphic->path().percentAtLength(newOnPathLength);
+
+    onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
+    onPathLength = newOnPathLength;
+
+
+    //change taken path & remainingPath
+    QList<Rail*> savedTakenPath = takenPath;
+    takenPath = remainingPath;
+    remainingPath = savedTakenPath;
+
+    //change actual rail and occupiedByFirstVehicle rail
+    //Rail* savedActualRail = actualRail;
+    //actualRail = occupiedByFirstVehicle;
+    //occupiedByFirstVehicle = savedActualRail;
+
+    QList<Vehicle*> reversedVehicles = {};
+    for (int i = vehicles.size() - 1; i >= 0; i--)
+    {
+        reversedVehicles.push_back(vehicles[i]);
+        qDebug() << "reversed vehicle: " << i;
+    }
+    vehicles = reversedVehicles;
+    directionToRailEnd = !directionToRailEnd;
+
+    actualizeVehiclesOnPath();
+    setActualSpeed(1);
+}
+
 void Train::makePathFromPortal()
 {
     remainingPath = TrainNavigation::autopilotCheck(30000,100,actualRail,directionToRailEnd);
@@ -383,7 +472,7 @@ bool Train::teleportTrainToRail(Rail *rail, bool direction)
     directionToRailEnd ? onPathLength = 5 : onPathLength = actualRail->getLengthOfRail() - 5;
     setActualPathGraphic(actualRail);
     int savedSpeed = actualSpeed;
-    setActualSpeed(1);
+    setActualSpeed(15);
     moveTrain(); //move train by 1 set train in right position
     setActualSpeed(savedSpeed);
     makePathFromPortal();

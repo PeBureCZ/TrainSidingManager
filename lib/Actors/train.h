@@ -63,6 +63,7 @@ public:
     void actualizeVehiclesOnPath();
     void selectTrain(bool selected);
     void setdirectionToRailEnd(bool newDirection);
+    void changeMoveDirection();
 
     virtual ~Train();
 
