@@ -32,10 +32,9 @@ class MainWindow : public QMainWindow
 private:
     void resizeEvent(QResizeEvent *event) override;
     void setBasicMenuInterface();
-    void setEditSelectInterface(int menu);
-    void setEditAddInterface(int menu);
-    void setPlaySelectInterface(int menu);
-    void setPlayAddInterface(int menu);
+    void setEditSelectInterface();
+    void setEditAddInterface();
+    void setPlayAddInterface();
 
 public:
     MainWindow(QWidget *parent = nullptr);   
@@ -45,6 +44,9 @@ public:
     virtual void playButSwitch(bool editMode);
     virtual void selectMenuSwitch(bool selectMode);
     void InterfaceSet(int menuSelected);
+
+    void setTrainMenu();
+    void setPlaySelectInterface();
 
     QVBoxLayout *consoleLayout;
     ManagerConsole* managerConsole;

@@ -231,14 +231,12 @@ void mwlogic::constructTrain(QPoint point)
     }
 }
 
-void mwlogic::trainOrSignalSelect()
+void mwlogic::trainSelect()
 {
     Actor* actualConstructor = world->getActualConstructor();
     if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
 
     TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
-
-
 
     QPoint point = actualConstructor->getLocation();
     QList<Actor*> actors = world->getActorsCollideInLocation({TRAIN_CHANNEL, RAIL_CHANNEL, STATIC_CHANNEL}, point);
@@ -247,13 +245,82 @@ void mwlogic::trainOrSignalSelect()
 
     Train* selectedTrain = trainSelector->getSelectedTrain();
     Train* nearestTrain = trainSelector->getNearestTrain();
-    Signal* nearestSignal = trainSelector->getNearestSignal();
 
-    if (selectedTrain == nullptr && nearestTrain != nullptr) trainSelector->setSelectedTrain();
-    else if (nearestSignal != nullptr && selectedTrain != nullptr)
+    if (selectedTrain == nullptr && nearestTrain != nullptr)
     {
-        trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
+       trainSelector->setSelectedTrain();
+       menuSelected = TRAIN_MODE_SELECT_PATH;
+       setTrainMenu();
     }
+}
+
+void mwlogic::clickInTrainMenu()
+{
+    switch (menuSelected)
+    {
+       case TRAIN_MODE_SELECT_PATH:
+        {
+           Actor* actualConstructor = world->getActualConstructor();
+           if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
+
+           TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
+           Train* selectedTrain = trainSelector->getSelectedTrain();
+
+           Signal* nearestSignal = trainSelector->getNearestSignal();
+           if (nearestSignal != nullptr && selectedTrain != nullptr)
+           {
+                trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
+           }
+           break;
+        }
+        case TRAIN_MODE_MOVE_TO:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_MOVIE_VIA:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_CHANGE_DIRECTION:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_CHANGE_MODE:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_UNCOUPLE:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_LOAD:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_UNLOAD:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_LEAVE_TRAIN:
+        {
+
+            break;
+        }
+        case TRAIN_MODE_EXIT:
+        {
+
+            break;
+        }
+        default: {}
+        }
+
 }
 
 mwlogic::~mwlogic() {}

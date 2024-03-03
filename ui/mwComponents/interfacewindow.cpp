@@ -72,15 +72,19 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
         }
         else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END)
         {
+            if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT) //TRAIN_MODE
+            {
+                clickInTrainMenu();
+            }
             //playmode + EDIT/SELECT
             switch (menuSelected)
             {
-            case PLAY_SELECT_TRAIN:
-            {
-                    trainOrSignalSelect();
-                    break;
-            }
-            default: {}
+                case PLAY_SELECT_TRAIN:
+                {
+                        trainSelect();
+                        break;
+                }
+                default: {}
             }
         }
     }
@@ -90,7 +94,11 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
         if (menuSelected <= EDIT_ADD_END) menuSelected = EDIT_MODE_START; //edit + add
         else if (menuSelected <= EDIT_MODE_END) menuSelected = EDIT_SELECT_START;// edit + select
         else if (menuSelected <= PLAY_ADD_END) menuSelected = PLAY_MODE_START;  // play + add
-        else menuSelected = PLAY_SELECT_START; // play + select
+        else
+        {
+            menuSelected = PLAY_SELECT_START; // play + select
+            setPlaySelectInterface();
+        }
     }
 }
 
@@ -215,7 +223,7 @@ void InterfaceWindow::on_ZoomAddBut_clicked()
 
 void InterfaceWindow::on_MultiFuncBut1_clicked()
 {
-    if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
+    if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END)
     {
         menuSelected = RAIL_CONSTRUCT_MODE; //if editMode -> constructiong Rail
         addConstructor(RAIL_CONSTRUCTOR);
@@ -231,14 +239,21 @@ void InterfaceWindow::on_MultiFuncBut1_clicked()
     }
     else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END)
     {
-        menuSelected = PLAY_SELECT_TRAIN;
-        addConstructor(TRAIN_SELECTOR);
+        if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+        {
+            menuSelected = TRAIN_MODE_SELECT_PATH;
+        }
+        else if (menuSelected == PLAY_SELECT_START)
+        {
+            menuSelected = PLAY_SELECT_TRAIN;
+            addConstructor(TRAIN_SELECTOR);
+        }
     }
 }
 
 void InterfaceWindow::on_MultiFuncBut2_clicked()
 {
-    if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
+    if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END)
     {
         menuSelected = SIGNAL_CONSTRUCT_MODE; //if editMode -> constructiong signals
         addConstructor(SIGNAL_CONSTRUCTOR); //delete constructor included
@@ -247,7 +262,7 @@ void InterfaceWindow::on_MultiFuncBut2_clicked()
 
 void InterfaceWindow::on_MultiFuncBut3_clicked()
 {
-    if (menuSelected == OPTION_MODE_START || (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END))
+    if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END)
     {
         menuSelected = PORTAL_CONSTRUCT_MODE; //if editMode -> constructiong signals
         addConstructor(PORTAL_CONSTRUCTOR); //delete constructor included

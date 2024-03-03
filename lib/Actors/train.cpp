@@ -339,32 +339,8 @@ void Train::setdirectionToRailEnd(bool newDirection)
     directionToRailEnd = newDirection;
 }
 
-void Train::setMoveDirection(bool forwardDirection)
+void Train::changeMoveDirection()
 {
-    //moveForward
-    qDebug() << "start reverse!";
-
-    //recalculateSpeed(newOnPathLength);
-
-    //remainingPath.clear();
-    //takenPath.clear();
-
-    /*
-    bool toActualRail = true;
-    for (auto rail : fullOccupiedRailPath)
-    {
-        if (toActualRail)
-        {
-            if (rail == actualRail)
-            {
-                toActualRail = false;
-                continue;
-            }
-            remainingPath.push_back(rail);
-        }
-        else takenPath.push_back(rail);
-    }
-    */
     int newOnPathLength = onPathLength; //in decimeters
     bool directionOnEventBegin = directionToRailEnd;
     bool repeat = false;

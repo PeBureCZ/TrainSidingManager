@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::initializeInterface()
 {
     //ui
-    setEditAddInterface(EDIT_MODE_START);
+    setEditAddInterface();
     //Map
     ui->MapViewLayout->addWidget(world->getWorldView(),1);
     //unused button
@@ -141,10 +141,10 @@ void MainWindow::on_MultiFuncBut24_clicked() {}//overrided
 void MainWindow::InterfaceSet(int menuSelected)
 {
     if (menuSelected >= OPTION_MODE_START && menuSelected <= OPTION_MODE_END) setBasicMenuInterface();
-    else if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END) setEditAddInterface(menuSelected);
-    else if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END) setEditSelectInterface(menuSelected);
-    else if (menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_ADD_END) setPlayAddInterface(menuSelected);
-    else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END) setPlaySelectInterface(menuSelected);
+    else if (menuSelected >= EDIT_MODE_START && menuSelected <= EDIT_ADD_END) setEditAddInterface();
+    else if (menuSelected >= EDIT_SELECT_START && menuSelected <= EDIT_MODE_END) setEditSelectInterface();
+    else if (menuSelected >= PLAY_MODE_START && menuSelected <= PLAY_ADD_END) setPlayAddInterface();
+    else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END) setPlaySelectInterface();
 }
 
 void MainWindow::setBasicMenuInterface()
@@ -152,65 +152,94 @@ void MainWindow::setBasicMenuInterface()
     freeButton(ui->MultiFuncBut1);
     freeButton(ui->MultiFuncBut2);
     freeButton(ui->MultiFuncBut3);
+    freeButton(ui->MultiFuncBut4);
+    freeButton(ui->MultiFuncBut5);
+    freeButton(ui->MultiFuncBut6);
+    freeButton(ui->MultiFuncBut7);
+    freeButton(ui->MultiFuncBut8);
+    freeButton(ui->MultiFuncBut9);
+    freeButton(ui->MultiFuncBut10);
+
     freeButton(ui->MultiFuncBut24);
 }
 
-void MainWindow::setEditSelectInterface(int menu)
+void MainWindow::setEditSelectInterface()
 {
-    switch (menu)
-    {
-    case EDIT_SELECT_START:
-        setButtonText("Rails", ui->MultiFuncBut1);
-        freeButton(ui->MultiFuncBut2);
-        freeButton(ui->MultiFuncBut3);
-        setButtonText("Delete", ui->MultiFuncBut24);
-        break;
-    default: setBasicMenuInterface();
-    }
+    setButtonText("Rails", ui->MultiFuncBut1);
+    freeButton(ui->MultiFuncBut2);
+    freeButton(ui->MultiFuncBut3);
+    freeButton(ui->MultiFuncBut4);
+    freeButton(ui->MultiFuncBut5);
+    freeButton(ui->MultiFuncBut6);
+    freeButton(ui->MultiFuncBut7);
+    freeButton(ui->MultiFuncBut8);
+    freeButton(ui->MultiFuncBut9);
+    freeButton(ui->MultiFuncBut10);
+
+    setButtonText("Delete", ui->MultiFuncBut24);
 }
 
-void MainWindow::setEditAddInterface(int menu)
+void MainWindow::setEditAddInterface()
 {
-    switch (menu)
-    {
-    case EDIT_MODE_START:
-        setButtonText("Rails", ui->MultiFuncBut1);
-        setButtonText("Signals", ui->MultiFuncBut2);
-        setButtonText("Portals", ui->MultiFuncBut3);
-        setButtonText("Delete", ui->MultiFuncBut24);
-        break;
-    default: setBasicMenuInterface();
-    }
+    setButtonText("Rails", ui->MultiFuncBut1);
+    setButtonText("Signals", ui->MultiFuncBut2);
+    setButtonText("Portals", ui->MultiFuncBut3);
+    freeButton(ui->MultiFuncBut4);
+    freeButton(ui->MultiFuncBut5);
+    freeButton(ui->MultiFuncBut6);
+    freeButton(ui->MultiFuncBut7);
+    freeButton(ui->MultiFuncBut8);
+    freeButton(ui->MultiFuncBut9);
+    freeButton(ui->MultiFuncBut10);
+
+    setButtonText("Delete", ui->MultiFuncBut24);
 }
 
-void MainWindow::setPlaySelectInterface(int menu)
+void MainWindow:: setPlaySelectInterface()
 {
-    switch (menu)
-    {
-        case PLAY_SELECT_START:
-        {
-            setButtonText("Train_p", ui->MultiFuncBut1);
-            freeButton(ui->MultiFuncBut2);
-            freeButton(ui->MultiFuncBut3);
-            freeButton(ui->MultiFuncBut24);
-            break;
-        }
-        default: setBasicMenuInterface();
-    }
+    setButtonText("Train_p", ui->MultiFuncBut1);
+    freeButton(ui->MultiFuncBut2);
+    freeButton(ui->MultiFuncBut3);
+    freeButton(ui->MultiFuncBut4);
+    freeButton(ui->MultiFuncBut5);
+    freeButton(ui->MultiFuncBut6);
+    freeButton(ui->MultiFuncBut7);
+    freeButton(ui->MultiFuncBut8);
+    freeButton(ui->MultiFuncBut9);
+    freeButton(ui->MultiFuncBut10);
+
+    freeButton(ui->MultiFuncBut24);
 }
 
-void MainWindow::setPlayAddInterface(int menu)
+void MainWindow::setTrainMenu()
 {
-    switch (menu)
-    {
-    case PLAY_MODE_START:
-        setButtonText("Train", ui->MultiFuncBut1);
-        freeButton(ui->MultiFuncBut2);
-        freeButton(ui->MultiFuncBut3);
-        freeButton(ui->MultiFuncBut24);
-        break;
-    default: setBasicMenuInterface();
-    }
+    setButtonText("path", ui->MultiFuncBut1);
+    setButtonText("move to", ui->MultiFuncBut2);
+    setButtonText("move via", ui->MultiFuncBut3);
+    setButtonText("direction", ui->MultiFuncBut4);
+    setButtonText("switch mode", ui->MultiFuncBut5);
+    setButtonText("uncouple", ui->MultiFuncBut6);
+    setButtonText("load", ui->MultiFuncBut7);
+    setButtonText("unload", ui->MultiFuncBut8);
+    setButtonText("leave", ui->MultiFuncBut9);
+    freeButton(ui->MultiFuncBut10);
+    setButtonText("exit", ui->MultiFuncBut24);
+}
+
+void MainWindow::setPlayAddInterface()
+{
+    setButtonText("Train", ui->MultiFuncBut1);
+    freeButton(ui->MultiFuncBut2);
+    freeButton(ui->MultiFuncBut3);
+    freeButton(ui->MultiFuncBut4);
+    freeButton(ui->MultiFuncBut5);
+    freeButton(ui->MultiFuncBut6);
+    freeButton(ui->MultiFuncBut7);
+    freeButton(ui->MultiFuncBut8);
+    freeButton(ui->MultiFuncBut9);
+    freeButton(ui->MultiFuncBut10);
+
+    freeButton(ui->MultiFuncBut24);
 }
 
 MainWindow::~MainWindow()
