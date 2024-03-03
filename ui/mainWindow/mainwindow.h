@@ -11,6 +11,9 @@
 #include "dependencies/Enums/MainWindowEnum.h"
 #include "Actors/Constructors/railselector.h"
 #include "mwComponents/buttonfunctions.h"
+#include "dependencies/spritecolection.h"
+#include "mwComponents/icons.h"
+#include <QApplication>
 
 /*
 menuSelected:

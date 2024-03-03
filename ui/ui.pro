@@ -28,6 +28,7 @@ SOURCES += \
 HEADERS += \
     mainWindow/mainwindow.h \
     mwComponents/buttonfunctions.h \
+    mwComponents/icons.h \
     mwComponents/interfacewindow.h \
     mwComponents/customqgraphicsview.h \
     mwComponents/mwlogic.h

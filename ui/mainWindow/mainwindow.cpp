@@ -16,7 +16,39 @@ void MainWindow::initializeInterface()
     setEditAddInterface();
     //Map
     ui->MapViewLayout->addWidget(world->getWorldView(),1);
+
+    //button icon size
+    ui->MultiFuncBut1->setIconSize(ui->MultiFuncBut1->size());
+    ui->MultiFuncBut2->setIconSize(ui->MultiFuncBut2->size());
+    ui->MultiFuncBut3->setIconSize(ui->MultiFuncBut3->size());
+    ui->MultiFuncBut4->setIconSize(ui->MultiFuncBut4->size());
+    ui->MultiFuncBut5->setIconSize(ui->MultiFuncBut5->size());
+    ui->MultiFuncBut6->setIconSize(ui->MultiFuncBut6->size());
+    ui->MultiFuncBut7->setIconSize(ui->MultiFuncBut7->size());
+    ui->MultiFuncBut8->setIconSize(ui->MultiFuncBut8->size());
+    ui->MultiFuncBut9->setIconSize(ui->MultiFuncBut9->size());
+    ui->MultiFuncBut10->setIconSize(ui->MultiFuncBut10->size());
+    ui->MultiFuncBut11->setIconSize(ui->MultiFuncBut11->size());
+    ui->MultiFuncBut12->setIconSize(ui->MultiFuncBut12->size());
+    ui->MultiFuncBut13->setIconSize(ui->MultiFuncBut13->size());
+    ui->MultiFuncBut14->setIconSize(ui->MultiFuncBut14->size());
+    ui->MultiFuncBut15->setIconSize(ui->MultiFuncBut15->size());
+    ui->MultiFuncBut16->setIconSize(ui->MultiFuncBut16->size());
+    ui->MultiFuncBut17->setIconSize(ui->MultiFuncBut17->size());
+    ui->MultiFuncBut18->setIconSize(ui->MultiFuncBut18->size());
+    ui->MultiFuncBut19->setIconSize(ui->MultiFuncBut19->size());
+    ui->MultiFuncBut20->setIconSize(ui->MultiFuncBut20->size());
+    ui->MultiFuncBut21->setIconSize(ui->MultiFuncBut21->size());
+    ui->MultiFuncBut22->setIconSize(ui->MultiFuncBut22->size());
+    ui->MultiFuncBut23->setIconSize(ui->MultiFuncBut23->size());
+    ui->MultiFuncBut24->setIconSize(ui->MultiFuncBut24->size());
+
+
     //unused button
+    QString path = QApplication::applicationDirPath() + "/images/button_empty.png";
+    QIcon BUT_EMPTY_SPRITE(path);
+    ui->MultiFuncBut1->setIcon(BUT_EMPTY_SPRITE);
+
     ui->MultiFuncBut4->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut5->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut6->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
@@ -181,7 +213,7 @@ void MainWindow::setEditSelectInterface()
 
 void MainWindow::setEditAddInterface()
 {
-    setButtonText("Rails", ui->MultiFuncBut1);
+    //setButtonText("Rails", ui->MultiFuncBut1);
     setButtonText("Signals", ui->MultiFuncBut2);
     setButtonText("Portals", ui->MultiFuncBut3);
     freeButton(ui->MultiFuncBut4);
