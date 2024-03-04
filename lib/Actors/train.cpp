@@ -19,6 +19,7 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     throttleLevel = 0.07f;
     lastRailChecked = nullptr;
     occupiedByFirstVehicle = nullptr;
+    isIdle = false;
 }
 
 void Train::actualizeGraphicLocation()
@@ -328,10 +329,8 @@ void Train::actualizeVehiclesOnPath()
 
 void Train::selectTrain(bool selected)
 {
-    for (auto vehicle : vehicles)
-    {
-        vehicle->selectVehicle(selected);
-    }
+    if (isIdle) for (auto vehicle : vehicles) vehicle->idleVehicle(!selected);
+    else for (auto vehicle : vehicles) vehicle->selectVehicle(selected);
 }
 
 void Train::setdirectionToRailEnd(bool newDirection)
@@ -402,6 +401,23 @@ void Train::changeMoveDirection()
 
     actualizeVehiclesOnPath();
     setActualSpeed(1);
+}
+
+void Train::uncouple(int uncoupledVehicleIndex)
+{
+    if (uncoupledVehicleIndex <= vehicles.size()-1)
+    {
+
+    }
+}
+
+void Train::idle(bool idleState)
+{
+    for (auto vehicle : vehicles)
+    {
+        vehicle->idleVehicle(idleState);
+    }
+    isIdle = true;
 }
 
 void Train::makePathFromPortal()
@@ -490,14 +506,14 @@ void Train::recalculateSpeed(int actualDistanceOnRail)
         if (actualSpeed > breakLevel)
         {
             qDebug() << "TRAIN DERAILED OR MOVE VIA RED SIGNAL at speed: " << actualSpeed; //NOT COMPLETED YET
-            setActualSpeed(0); //train stop at last rail
+            setActualSpeed(0.0f); //train stop at last rail
             return;
         }
     }
     if (remainToPathEnd - actualSpeed - 80 < (0 - (actualSpeed*actualSpeed)) / (2 * breakLevel*-1)) //checked distance = 12 second - temporary solution
     {
         if (remainToPathEnd > 50 && actualSpeed > breakLevel)  setActualSpeed(actualSpeed - breakLevel);
-        else if (remainToPathEnd <= 50) setActualSpeed(0);
+        else if (remainToPathEnd <= 50) setActualSpeed(0.0f);
     }
     else setActualSpeed(actualSpeed + throttleLevel);
 }

@@ -21,6 +21,9 @@ enum spriteEnums
     //LOCOMOTIVES - SELECTED
     CD753_SELECTED_SPRITE,
 
+    //LOCOMOTIVES - IDLE
+    CD753_IDLE_SPRITE,
+
     //VAGONS - ACTIVE
     EAS_ACTIVE_SPRITE,
     ZAES_ACTIVE_SPRITE,
@@ -28,6 +31,10 @@ enum spriteEnums
     //VAGONS - SELECTED
     EAS_SELECTED_SPRITE,
     ZAES_SELECTED_SPRITE,
+
+    //VAGONS - IDLE
+    EAS_IDLE_SPRITE,
+    ZAES_IDLE_SPRITE,
 
     //ADDITIONAL
     RAIL_SPRITE,  
@@ -59,6 +66,9 @@ struct SpriteColection
         //LOCOMOTIVES - SELECTED
             "/images/CD753_selected.png",
 
+        //LOCOMOTIVES - IDLE
+            "/images/CD753_idle.png",
+
         //VAGONS - ACTIVE
             "/images/Eas.png",
             "/images/Zaes.png",
@@ -66,6 +76,10 @@ struct SpriteColection
         //VAGONS - SELECTED
             "/images/Eas_selected.png",
             "/images/Zaes_selected.png",
+
+        //VAGONS - IDLE
+            "/images/Eas_idle.png",
+            "/images/Zaes_idle.png",
 
         //ADDITIONAL
             "/images/rail.png",

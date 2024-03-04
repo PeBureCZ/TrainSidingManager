@@ -27,6 +27,7 @@ protected:
     float throttleLevel;
     Rail* lastRailChecked;
     Rail* occupiedByFirstVehicle;
+    bool isIdle;
 
 public:
     Train(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Rail* spawnedRail = nullptr);
@@ -64,6 +65,8 @@ public:
     void selectTrain(bool selected);
     void setdirectionToRailEnd(bool newDirection);
     void changeMoveDirection();
+    void uncouple(int uncoupledVehicleIndex);
+    void idle (bool idleState);
 
     virtual ~Train();
 

@@ -10,5 +10,5 @@ CD753::CD753(QObject* parent, QGraphicsItem* newGraphicItem) : DieselLocomotive(
     length = 168; //relative in decimeters
     selectedSpriteEnum = CD753_SELECTED_SPRITE;
     unselectedSpriteEnum = CD753_ACTIVE_SPRITE;
-    unactiveSpriteEnum = CD753_ACTIVE_SPRITE;
+    unactiveSpriteEnum = CD753_IDLE_SPRITE;
 }

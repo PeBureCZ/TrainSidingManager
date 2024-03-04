@@ -11,7 +11,7 @@ void Movable::setActualSpeed(float newSpeed)
 {
     if (newSpeed <= maxSpeed) actualSpeed = newSpeed;
     else actualSpeed = maxSpeed;
-    if (actualSpeed < 0.0f) actualSpeed = 0.0f;
+    if (actualSpeed < 1.0f) actualSpeed = 0.0f;
 }
 
 float Movable::getMaxSpeed()

@@ -11,5 +11,5 @@ Eas::Eas(QObject* parent, QGraphicsItem* newGraphicItem)
     maxSpeed = 83.7f; //dcm / 200ms
     selectedSpriteEnum = EAS_SELECTED_SPRITE;
     unselectedSpriteEnum = EAS_ACTIVE_SPRITE;
-    unactiveSpriteEnum = EAS_ACTIVE_SPRITE;
+    unactiveSpriteEnum = EAS_IDLE_SPRITE;
 }

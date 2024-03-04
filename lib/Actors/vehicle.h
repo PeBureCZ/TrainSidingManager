@@ -21,6 +21,7 @@ public:
     const int getWidth();
     const int getLegth();
     void selectVehicle(bool selected);
+    void idleVehicle(bool idle);
 signals:
 
 

@@ -234,6 +234,15 @@ void WorldMap::deleteActor(Actor *actor)
     }
 }
 
+void WorldMap::kickTickedActor(Actor *actor)
+{
+    int indexOfActor = tickedActorsList.indexOf(actor);
+    if (indexOfActor != -1)
+    {
+        tickedActorsList.removeAt(indexOfActor);
+    }
+}
+
 void WorldMap::setConstructor(Actor * actor)
 {
     actualConstructor = dynamic_cast<ActorConstructor*>(actor);

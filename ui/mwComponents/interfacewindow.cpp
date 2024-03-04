@@ -271,17 +271,34 @@ void InterfaceWindow::on_MultiFuncBut3_clicked()
 
 void InterfaceWindow::on_MultiFuncBut4_clicked()
 {
-
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        int savedMenuValue = menuSelected;
+        menuSelected = TRAIN_MODE_CHANGE_DIRECTION;
+        clickInTrainMenu();
+        menuSelected = savedMenuValue;
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut5_clicked()
 {
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        int savedMenuValue = menuSelected;
+        menuSelected = TRAIN_MODE_LEAVE_TRAIN;
+        clickInTrainMenu(); //if leave train -> menuSelected changed in function
+        if (menuSelected == TRAIN_MODE_LEAVE_TRAIN) menuSelected = savedMenuValue;
 
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut6_clicked()
 {
-
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        menuSelected = TRAIN_MODE_UNCOUPLE;
+        clickInTrainMenu();
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut7_clicked()

@@ -38,6 +38,7 @@ enum iconEnums
     VIA_ICON,
     EXIT_ICON,
     BIN_ICON,
+    MOTOR_ICON,
 };
 
 QT_BEGIN_NAMESPACE
@@ -50,10 +51,6 @@ class MainWindow : public QMainWindow
 
 private:
     void resizeEvent(QResizeEvent *event) override;
-    void setBasicMenuInterface();
-    void setEditSelectInterface();
-    void setEditAddInterface();
-    void setPlayAddInterface();
     QVector<QString> relativeIconPaths;
 
 public:
@@ -63,8 +60,13 @@ public:
     void initializeInterface();
     virtual void playButSwitch(bool editMode);
     virtual void selectMenuSwitch(bool selectMode);
-    void InterfaceSet(int menuSelected);
 
+    //MENU TYPES
+    void InterfaceSet(int menuSelected);
+    void setBasicMenuInterface();
+    void setEditSelectInterface();
+    void setEditAddInterface();
+    void setPlayAddInterface();
     void setTrainMenu();
     void setPlaySelectInterface();
 

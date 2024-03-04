@@ -30,6 +30,7 @@ void MainWindow::initializeInterface()
             relativePath + "/images/button_via.png",
             relativePath + "/images/button_exit.png",
             relativePath + "/images/button_bin.png",
+            relativePath + "/images/button_motor.png",
         };
     setEditAddInterface();
     //Map
@@ -311,7 +312,7 @@ void MainWindow::setTrainMenu()
     ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[MOVE_ICON]));
     ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[VIA_ICON]));
     ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
-    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
+    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[MOTOR_ICON]));
     ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[UNCOUPLE_ICON]));
     ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[LOAD_ICON]));
     ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[UNLOAD_ICON]));

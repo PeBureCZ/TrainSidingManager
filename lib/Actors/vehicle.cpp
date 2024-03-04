@@ -28,5 +28,12 @@ void Vehicle::selectVehicle(bool selected)
     selected ? changeSprite(selectedSpriteEnum) : changeSprite(unselectedSpriteEnum);
 }
 
+void Vehicle::idleVehicle(bool idle)
+{
+    idle ? changeSprite(unactiveSpriteEnum) : changeSprite(unselectedSpriteEnum);
+}
+
+
+
 
 

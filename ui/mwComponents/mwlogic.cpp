@@ -256,16 +256,14 @@ void mwlogic::trainSelect()
 
 void mwlogic::clickInTrainMenu()
 {
+    Actor* actualConstructor = world->getActualConstructor();
+    if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
+    TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
+    Train* selectedTrain = trainSelector->getSelectedTrain();
     switch (menuSelected)
     {
        case TRAIN_MODE_SELECT_PATH:
-        {
-           Actor* actualConstructor = world->getActualConstructor();
-           if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
-
-           TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
-           Train* selectedTrain = trainSelector->getSelectedTrain();
-
+        {       
            Signal* nearestSignal = trainSelector->getNearestSignal();
            if (nearestSignal != nullptr && selectedTrain != nullptr)
            {
@@ -285,7 +283,13 @@ void mwlogic::clickInTrainMenu()
         }
         case TRAIN_MODE_CHANGE_DIRECTION:
         {
-
+            if (selectedTrain->getActualSpeed() == 0)
+            {
+                managerConsole->printToConsole("Train direction changed", DEFAULT_COLOR, MIDDLE_DURATION);
+                selectedTrain->changeMoveDirection();
+                selectedTrain->setActualSpeed(1);
+            }
+            else managerConsole->printToConsole("Can´t change the direction of the train, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;
         }
         case TRAIN_MODE_CHANGE_MODE:
@@ -295,7 +299,12 @@ void mwlogic::clickInTrainMenu()
         }
         case TRAIN_MODE_UNCOUPLE:
         {
-
+            if (selectedTrain->getActualSpeed() == 0)
+            {
+                managerConsole->printToConsole("Temporarry solution - uncouple", DEFAULT_COLOR, MIDDLE_DURATION);
+                selectedTrain->uncouple(1);
+            }
+            else managerConsole->printToConsole("Can´t uncouple now, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;
         }
         case TRAIN_MODE_LOAD:
@@ -310,7 +319,15 @@ void mwlogic::clickInTrainMenu()
         }
         case TRAIN_MODE_LEAVE_TRAIN:
         {
-
+            if (selectedTrain->getActualSpeed() == 0.0f)
+            {
+                selectedTrain->idle(true);
+                world->kickTickedActor(dynamic_cast<Actor*>(selectedTrain));
+                menuSelected = PLAY_SELECT_TRAIN;
+                setPlaySelectInterface();
+                world->deleteConstructor();
+            }
+            else managerConsole->printToConsole("The train can´t idle now, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;
         }
         case TRAIN_MODE_EXIT:

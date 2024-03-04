@@ -92,6 +92,7 @@ public:
     void deleteAllActors(); //QGraphicsItem* item, QString name
     void setActorLocation(QPoint newLocation, Actor* actor);
     void deleteActor(Actor* actor);
+    void kickTickedActor(Actor* actor);
     void setConstructor(Actor*actor);
     void deleteConstructor();
 

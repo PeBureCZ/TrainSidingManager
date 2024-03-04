@@ -11,5 +11,5 @@ Zaes::Zaes(QObject* parent, QGraphicsItem* newGraphicItem)
     maxSpeed = 83.7f; //dcm / 0,2s
     selectedSpriteEnum = ZAES_SELECTED_SPRITE;
     unselectedSpriteEnum = ZAES_ACTIVE_SPRITE;
-    unactiveSpriteEnum = ZAES_ACTIVE_SPRITE;
+    unactiveSpriteEnum = ZAES_IDLE_SPRITE;
 }
