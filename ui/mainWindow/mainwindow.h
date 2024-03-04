@@ -10,9 +10,7 @@
 #include "dependencies/managerconsole.h"
 #include "dependencies/Enums/MainWindowEnum.h"
 #include "Actors/Constructors/railselector.h"
-#include "mwComponents/buttonfunctions.h"
 #include "dependencies/spritecolection.h"
-#include "mwComponents/icons.h"
 #include <QApplication>
 
 /*
@@ -23,6 +21,24 @@ menuSelected:
 300-399 = play add mode
 400-499 = play select/edit mode
 */
+
+enum iconEnums
+{
+    EMPTY_ICON,
+    CHANGEDIR_ICON,
+    LOAD_ICON,
+    MOVE_ICON,
+    PATH_ICON,
+    PORTAL_ICON,
+    RAIL_ICON,
+    SIGNAL_ICON,
+    TRAIN_ICON,
+    UNCOUPLE_ICON,
+    UNLOAD_ICON,
+    VIA_ICON,
+    EXIT_ICON,
+    BIN_ICON,
+};
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,6 +54,7 @@ private:
     void setEditSelectInterface();
     void setEditAddInterface();
     void setPlayAddInterface();
+    QVector<QString> relativeIconPaths;
 
 public:
     MainWindow(QWidget *parent = nullptr);   

@@ -2,11 +2,11 @@
 #define SPRITECOLECTION_H
 
 #include <QString>
-#include <QApplication>
 #include <QVector>
 #include <QPixmap>
 #include <array>
 #include <QGraphicsPixmapItem>
+#include <QApplication>
 
 enum spriteEnums
 {
@@ -45,7 +45,7 @@ enum spriteEnums
 
 struct SpriteColection
 {
-    const QVector<QString>relativePaths =
+    const QVector<QString>relativePixmapPaths =
     {
         //HAVE TO ADD TO "spriteEnums" TOO!!!
         //EMPTY = 0
@@ -82,7 +82,6 @@ struct SpriteColection
     };
 
     QString relativeDirectory;
-    QVector<QString> filePath;
     SpriteColection();
     QPixmap getSprite(int indexOfSprite);
 

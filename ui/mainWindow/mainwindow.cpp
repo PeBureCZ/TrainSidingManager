@@ -13,6 +13,24 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::initializeInterface()
 {
     //ui
+    QString relativePath = QApplication::applicationDirPath();
+    relativeIconPaths =
+        {
+            relativePath + "/images/button_empty.png",
+            relativePath + "/images/button_changedir.png",
+            relativePath + "/images/button_load.png",
+            relativePath + "/images/button_move.png",
+            relativePath + "/images/button_path.png",
+            relativePath + "/images/button_portal.png",
+            relativePath + "/images/button_rail.png",
+            relativePath + "/images/button_signals.png",
+            relativePath + "/images/button_train.png",
+            relativePath + "/images/button_uncouple.png",
+            relativePath + "/images/button_unload.png",
+            relativePath + "/images/button_via.png",
+            relativePath + "/images/button_exit.png",
+            relativePath + "/images/button_bin.png",
+        };
     setEditAddInterface();
     //Map
     ui->MapViewLayout->addWidget(world->getWorldView(),1);
@@ -43,12 +61,7 @@ void MainWindow::initializeInterface()
     ui->MultiFuncBut23->setIconSize(ui->MultiFuncBut23->size());
     ui->MultiFuncBut24->setIconSize(ui->MultiFuncBut24->size());
 
-
-    //unused button
-    QString path = QApplication::applicationDirPath() + "/images/button_empty.png";
-    QIcon BUT_EMPTY_SPRITE(path);
-    ui->MultiFuncBut1->setIcon(BUT_EMPTY_SPRITE);
-
+    /*
     ui->MultiFuncBut4->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut5->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut6->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
@@ -69,6 +82,7 @@ void MainWindow::initializeInterface()
     ui->MultiFuncBut21->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut22->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
     ui->MultiFuncBut23->setStyleSheet("background-color: rgba(20, 20, 20, 8);"); //unused button
+    */
 
     //console
     managerConsole = new ManagerConsole(this); //add custom manager console
@@ -181,97 +195,170 @@ void MainWindow::InterfaceSet(int menuSelected)
 
 void MainWindow::setBasicMenuInterface()
 {
-    freeButton(ui->MultiFuncBut1);
-    freeButton(ui->MultiFuncBut2);
-    freeButton(ui->MultiFuncBut3);
-    freeButton(ui->MultiFuncBut4);
-    freeButton(ui->MultiFuncBut5);
-    freeButton(ui->MultiFuncBut6);
-    freeButton(ui->MultiFuncBut7);
-    freeButton(ui->MultiFuncBut8);
-    freeButton(ui->MultiFuncBut9);
-    freeButton(ui->MultiFuncBut10);
-
-    freeButton(ui->MultiFuncBut24);
+    ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut15->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut16->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut17->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut18->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut19->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut20->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut21->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut22->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut23->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut24->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
 }
 
 void MainWindow::setEditSelectInterface()
 {
-    setButtonText("Rails", ui->MultiFuncBut1);
-    freeButton(ui->MultiFuncBut2);
-    freeButton(ui->MultiFuncBut3);
-    freeButton(ui->MultiFuncBut4);
-    freeButton(ui->MultiFuncBut5);
-    freeButton(ui->MultiFuncBut6);
-    freeButton(ui->MultiFuncBut7);
-    freeButton(ui->MultiFuncBut8);
-    freeButton(ui->MultiFuncBut9);
-    freeButton(ui->MultiFuncBut10);
-
-    setButtonText("Delete", ui->MultiFuncBut24);
+    ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[RAIL_ICON]));
+    ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut15->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut16->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut17->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut18->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut19->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut20->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut21->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut22->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut23->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut24->setIcon(QIcon(relativeIconPaths[BIN_ICON]));
 }
 
 void MainWindow::setEditAddInterface()
 {
-    //setButtonText("Rails", ui->MultiFuncBut1);
-    setButtonText("Signals", ui->MultiFuncBut2);
-    setButtonText("Portals", ui->MultiFuncBut3);
-    freeButton(ui->MultiFuncBut4);
-    freeButton(ui->MultiFuncBut5);
-    freeButton(ui->MultiFuncBut6);
-    freeButton(ui->MultiFuncBut7);
-    freeButton(ui->MultiFuncBut8);
-    freeButton(ui->MultiFuncBut9);
-    freeButton(ui->MultiFuncBut10);
-
-    setButtonText("Delete", ui->MultiFuncBut24);
+    ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[RAIL_ICON]));
+    ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[SIGNAL_ICON]));
+    ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[PORTAL_ICON]));
+    ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut15->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut16->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut17->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut18->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut19->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut20->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut21->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut22->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut23->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut24->setIcon(QIcon(relativeIconPaths[BIN_ICON]));
 }
 
 void MainWindow:: setPlaySelectInterface()
 {
-    setButtonText("Train_p", ui->MultiFuncBut1);
-    freeButton(ui->MultiFuncBut2);
-    freeButton(ui->MultiFuncBut3);
-    freeButton(ui->MultiFuncBut4);
-    freeButton(ui->MultiFuncBut5);
-    freeButton(ui->MultiFuncBut6);
-    freeButton(ui->MultiFuncBut7);
-    freeButton(ui->MultiFuncBut8);
-    freeButton(ui->MultiFuncBut9);
-    freeButton(ui->MultiFuncBut10);
-
-    freeButton(ui->MultiFuncBut24);
+    ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[TRAIN_ICON]));
+    ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut15->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut16->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut17->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut18->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut19->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut20->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut21->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut22->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut23->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut24->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
 }
 
 void MainWindow::setTrainMenu()
-{
-    setButtonText("path", ui->MultiFuncBut1);
-    setButtonText("move to", ui->MultiFuncBut2);
-    setButtonText("move via", ui->MultiFuncBut3);
-    setButtonText("direction", ui->MultiFuncBut4);
-    setButtonText("switch mode", ui->MultiFuncBut5);
-    setButtonText("uncouple", ui->MultiFuncBut6);
-    setButtonText("load", ui->MultiFuncBut7);
-    setButtonText("unload", ui->MultiFuncBut8);
-    setButtonText("leave", ui->MultiFuncBut9);
-    freeButton(ui->MultiFuncBut10);
-    setButtonText("exit", ui->MultiFuncBut24);
+{  
+    ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[PATH_ICON]));
+    ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[MOVE_ICON]));
+    ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[VIA_ICON]));
+    ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
+    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
+    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[UNCOUPLE_ICON]));
+    ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[LOAD_ICON]));
+    ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[UNLOAD_ICON]));
+    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut15->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut16->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut17->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut18->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut19->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut20->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut21->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut22->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut23->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut24->setIcon(QIcon(relativeIconPaths[EXIT_ICON]));
 }
 
 void MainWindow::setPlayAddInterface()
 {
-    setButtonText("Train", ui->MultiFuncBut1);
-    freeButton(ui->MultiFuncBut2);
-    freeButton(ui->MultiFuncBut3);
-    freeButton(ui->MultiFuncBut4);
-    freeButton(ui->MultiFuncBut5);
-    freeButton(ui->MultiFuncBut6);
-    freeButton(ui->MultiFuncBut7);
-    freeButton(ui->MultiFuncBut8);
-    freeButton(ui->MultiFuncBut9);
-    freeButton(ui->MultiFuncBut10);
-
-    freeButton(ui->MultiFuncBut24);
+    ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[TRAIN_ICON]));
+    ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut15->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut16->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut17->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut18->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut19->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut20->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut21->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut22->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut23->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut24->setIcon(QIcon(relativeIconPaths[BIN_ICON]));
 }
 
 MainWindow::~MainWindow()

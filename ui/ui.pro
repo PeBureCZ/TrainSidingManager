@@ -6,20 +6,9 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-
-DISTFILES += \
-    README.md \
-    images/CD730.png \
-    images/loco.png \
-    images/signal_green.png \
-    images/signal_red.png \
-    images/signal_white.png \
-    images/signal_yellow.png
-
 SOURCES += \
     main.cpp \
     mainWindow/mainwindow.cpp \
-    mwComponents/buttonfunctions.cpp \
     mwComponents/interfacewindow.cpp \
     mwComponents/customqgraphicsview.cpp \
     mwComponents/mwlogic.cpp
@@ -27,8 +16,6 @@ SOURCES += \
 
 HEADERS += \
     mainWindow/mainwindow.h \
-    mwComponents/buttonfunctions.h \
-    mwComponents/icons.h \
     mwComponents/interfacewindow.h \
     mwComponents/customqgraphicsview.h \
     mwComponents/mwlogic.h
