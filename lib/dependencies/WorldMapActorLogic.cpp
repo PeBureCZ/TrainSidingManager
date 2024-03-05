@@ -104,6 +104,7 @@ Actor *WorldMap::addPortalConstructor()
     //ADD GRAPHIC FOR SIGNAL_CONSTRUCTOR
     SpriteColection newSprite;
     QGraphicsItem* portalConstructorGraphic = new QGraphicsPixmapItem(newSprite.getSprite(PORTAL_SPRITE));
+    portalConstructorGraphic->setZValue(ABOVE_RAIL);
     worldScene->addItem(portalConstructorGraphic);
     //ADD CONSTRUCTOR ACTOR
     Actor* portalConstructor = new PortalConstructor(nullptr, portalConstructorGraphic, nullptr);
@@ -329,6 +330,7 @@ Actor* WorldMap::addPortal(QPoint point)
     SpriteColection newSprite;
     QGraphicsItem* portalGraphic = new QGraphicsPixmapItem(newSprite.getSprite(PORTAL_SPRITE));
     worldScene->addItem(portalGraphic);
+    portalGraphic->setZValue(ABOVE_RAIL);
 
     //ADD PORTAL ACTOR
     Actor* portalActor = new Portal(nullptr, portalGraphic); //add actor

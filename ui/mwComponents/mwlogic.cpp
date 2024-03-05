@@ -61,7 +61,7 @@ void mwlogic::addConstructor(int constructorType)
 
         world->addActor(RAIL_CONSTRUCTOR);
         managerConsole->printToConsole(console.messageText[RAIL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
-        managerConsole->printToConsole(console.messageText[RAIL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
+        managerConsole->printToConsole(console.messageText[RAIL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
         break;
     case SIGNAL_CONSTRUCTOR:
         world->addActor(SIGNAL_CONSTRUCTOR);
@@ -260,6 +260,10 @@ void mwlogic::clickInTrainMenu()
     if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
     TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
     Train* selectedTrain = trainSelector->getSelectedTrain();
+    if (menuSelected != TRAIN_MODE_LEAVE_TRAIN || !selectedTrain->getIdle())
+    {
+       managerConsole->printToConsole("The train is idle now. If you want to continue your journey, please start the train using the 'motor button", DEFAULT_COLOR, MIDDLE_DURATION);
+    }
     switch (menuSelected)
     {
        case TRAIN_MODE_SELECT_PATH:
@@ -271,14 +275,27 @@ void mwlogic::clickInTrainMenu()
            }
            break;
         }
-        case TRAIN_MODE_MOVE_TO:
+        case TRAIN_MODE_MOVE:
         {
-
+            selectedTrain->setAutopilot(false);
+            selectedTrain->recalculateRemainToPathEnd();
+            selectedTrain->setTravelDistance(selectedTrain->getRemainToPathEnd());
+            if (selectedTrain->getActualSpeed() == 0.0f) selectedTrain->setActualSpeed(1.0f);
             break;
         }
-        case TRAIN_MODE_MOVIE_VIA:
+        case TRAIN_MODE_MOVE_VIA:
         {
-
+            selectedTrain->setAutopilot(false);
+            break;
+        }
+        case TRAIN_MODE_MOVE_TO:
+        {
+            selectedTrain->setAutopilot(false);
+            break;
+        }
+        case TRAIN_MODE_AUTOPILOT:
+        {
+            selectedTrain->setAutopilot(true);
             break;
         }
         case TRAIN_MODE_CHANGE_DIRECTION:
@@ -287,7 +304,7 @@ void mwlogic::clickInTrainMenu()
             {
                 managerConsole->printToConsole("Train direction changed", DEFAULT_COLOR, MIDDLE_DURATION);
                 selectedTrain->changeMoveDirection();
-                selectedTrain->setActualSpeed(1);
+                TrainNavigation::checkSignalsOnPath(selectedTrain->getActualRail(), selectedTrain->getRemainingPath(),selectedTrain->getDirectionToRailEnd(),selectedTrain->getRemainToPathEnd()- selectedTrain->getActualSpeed());
             }
             else managerConsole->printToConsole("Can´t change the direction of the train, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;
@@ -321,11 +338,15 @@ void mwlogic::clickInTrainMenu()
         {
             if (selectedTrain->getActualSpeed() == 0.0f)
             {
-                selectedTrain->idle(true);
-                world->kickTickedActor(dynamic_cast<Actor*>(selectedTrain));
-                menuSelected = PLAY_SELECT_TRAIN;
-                setPlaySelectInterface();
-                world->deleteConstructor();
+                if (!selectedTrain->getIdle())
+                {
+                    selectedTrain->idle(true);
+                    world->kickTickedActor(dynamic_cast<Actor*>(selectedTrain));
+                    menuSelected = PLAY_SELECT_TRAIN;
+                    setPlaySelectInterface();
+                    world->deleteConstructor();
+                }
+                else selectedTrain->idle(false);
             }
             else managerConsole->printToConsole("The train can´t idle now, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;

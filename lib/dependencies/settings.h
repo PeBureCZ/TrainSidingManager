@@ -20,8 +20,10 @@ enum graphicItemLayer
     //myItem->setZValue(1);
 
     BOTTOM_LAYER = 0,
+    UNDER_RAIL,
     UNSELECTED_RAIL_LAYER,
     SELECTED_RAIL_LAYER,
+    ABOVE_RAIL,
     RED_AREA_LAYER,
     GREEN_AREA_LAYER,
     VEHICLE_LAYER,

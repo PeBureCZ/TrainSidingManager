@@ -76,15 +76,18 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
             {
                 clickInTrainMenu();
             }
-            //playmode + EDIT/SELECT
-            switch (menuSelected)
+            else
             {
+                //playmode + EDIT/SELECT
+                switch (menuSelected)
+                {
                 case PLAY_SELECT_TRAIN:
                 {
-                        trainSelect();
-                        break;
+                    trainSelect();
+                    break;
                 }
                 default: {}
+                }
             }
         }
     }
@@ -258,6 +261,11 @@ void InterfaceWindow::on_MultiFuncBut2_clicked()
         menuSelected = SIGNAL_CONSTRUCT_MODE; //if editMode -> constructiong signals
         addConstructor(SIGNAL_CONSTRUCTOR); //delete constructor included
     }
+    else if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        menuSelected = TRAIN_MODE_MOVE;
+        clickInTrainMenu();
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut3_clicked()
@@ -273,23 +281,14 @@ void InterfaceWindow::on_MultiFuncBut4_clicked()
 {
     if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
-        int savedMenuValue = menuSelected;
-        menuSelected = TRAIN_MODE_CHANGE_DIRECTION;
+        menuSelected = AUTOPILOT_ICON;
         clickInTrainMenu();
-        menuSelected = savedMenuValue;
     }
 }
 
 void InterfaceWindow::on_MultiFuncBut5_clicked()
 {
-    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
-    {
-        int savedMenuValue = menuSelected;
-        menuSelected = TRAIN_MODE_LEAVE_TRAIN;
-        clickInTrainMenu(); //if leave train -> menuSelected changed in function
-        if (menuSelected == TRAIN_MODE_LEAVE_TRAIN) menuSelected = savedMenuValue;
 
-    }
 }
 
 void InterfaceWindow::on_MultiFuncBut6_clicked()
@@ -313,12 +312,25 @@ void InterfaceWindow::on_MultiFuncBut8_clicked()
 
 void InterfaceWindow::on_MultiFuncBut9_clicked()
 {
-
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        int savedMenuValue = menuSelected;
+        menuSelected = TRAIN_MODE_CHANGE_DIRECTION;
+        clickInTrainMenu();
+        menuSelected = savedMenuValue;
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut10_clicked()
 {
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        int savedMenuValue = menuSelected;
+        menuSelected = TRAIN_MODE_LEAVE_TRAIN;
+        clickInTrainMenu(); //if leave train -> menuSelected changed in function
+        if (menuSelected == TRAIN_MODE_LEAVE_TRAIN) menuSelected = savedMenuValue;
 
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut11_clicked()

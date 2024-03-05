@@ -20,6 +20,8 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     lastRailChecked = nullptr;
     occupiedByFirstVehicle = nullptr;
     isIdle = false;
+    autopilot = false;
+    travelDistance = 0;
 }
 
 void Train::actualizeGraphicLocation()
@@ -129,14 +131,16 @@ void Train::moveTrain()
 
 void Train::actualizeOnPathLength()
 {
+    recalculateSpeed();
+    travelDistance -= static_cast<int>(actualSpeed);
+    recalculateRemainToPathEnd();
+
     int newOnPathLength = onPathLength; //in decimeters
     bool directionOnEventBegin = directionToRailEnd;
     bool repeat = false;
 
     if (directionToRailEnd && newOnPathLength + actualSpeed > actualRail->getLengthOfRail()) repeat = true;
     else if (!directionToRailEnd && newOnPathLength - actualSpeed < 0) repeat = true;
-
-    recalculateSpeed(newOnPathLength);
 
     directionToRailEnd ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
 
@@ -379,11 +383,12 @@ void Train::changeMoveDirection()
     onPathValue = newPathPercentValue; //actualize new train value on path (rail track)
     onPathLength = newOnPathLength;
 
-
     //change taken path & remainingPath
     QList<Rail*> savedTakenPath = takenPath;
     takenPath = remainingPath;
     remainingPath = savedTakenPath;
+
+
 
     //change actual rail and occupiedByFirstVehicle rail
     //Rail* savedActualRail = actualRail;
@@ -394,13 +399,12 @@ void Train::changeMoveDirection()
     for (int i = vehicles.size() - 1; i >= 0; i--)
     {
         reversedVehicles.push_back(vehicles[i]);
-        qDebug() << "reversed vehicle: " << i;
     }
     vehicles = reversedVehicles;
     directionToRailEnd = !directionToRailEnd;
 
     actualizeVehiclesOnPath();
-    setActualSpeed(1);
+    recalculateRemainToPathEnd();
 }
 
 void Train::uncouple(int uncoupledVehicleIndex)
@@ -418,6 +422,16 @@ void Train::idle(bool idleState)
         vehicle->idleVehicle(idleState);
     }
     isIdle = true;
+}
+
+void Train::setAutopilot(bool newAutopilot)
+{
+    autopilot = newAutopilot;
+}
+
+void Train::setTravelDistance(int newDistance)
+{
+    travelDistance = newDistance;
 }
 
 void Train::makePathFromPortal()
@@ -446,6 +460,13 @@ void Train::addNextPartOfPath(QVector<Rail *> addedPartOfPath)
     remainToPathEnd = -1;
 }
 
+void Train::recalculateRemainToPathEnd()
+{
+    directionToRailEnd ? remainToPathEnd = actualRail->getLengthOfRail() - onPathLength : remainToPathEnd = onPathLength;
+    remainToPathEnd += TrainNavigation::getTrainPathLength(remainingPath);
+    remainToPathEnd -= actualTrainLength;
+}
+
 void Train::setActualPathGraphic(Rail* actualRail)
 {
     if (actualRail != nullptr) actualPathGraphic = dynamic_cast<QGraphicsPathItem*>(dynamic_cast<Actor*>(actualRail)->getGraphicItem());
@@ -464,7 +485,7 @@ bool Train::teleportTrainToRail(Rail *rail, bool direction)
     directionToRailEnd ? onPathLength = 5 : onPathLength = actualRail->getLengthOfRail() - 5;
     setActualPathGraphic(actualRail);
     int savedSpeed = actualSpeed;
-    setActualSpeed(15);
+    setActualSpeed(1.0);
     moveTrain(); //move train by 1 set train in right position
     setActualSpeed(savedSpeed);
     makePathFromPortal();
@@ -474,6 +495,11 @@ bool Train::teleportTrainToRail(Rail *rail, bool direction)
         return false;
     }
     return true;
+}
+
+const bool Train::getIdle()
+{
+    return isIdle;
 }
 
 int Train::getTrainLength()
@@ -486,6 +512,11 @@ int Train::getRemainToPathEnd()
     return remainToPathEnd;
 }
 
+int Train::getOnPathLength()
+{
+    return onPathLength;
+}
+
 void Train::actualizeTrainLenth()
 {
     actualTrainLength = 0;
@@ -495,13 +526,9 @@ void Train::actualizeTrainLenth()
     }
 }
 
-void Train::recalculateSpeed(int actualDistanceOnRail)
+void Train::recalculateSpeed()
 {
-    directionToRailEnd ? remainToPathEnd = actualRail->getLengthOfRail() - actualDistanceOnRail : remainToPathEnd = actualDistanceOnRail;
-    remainToPathEnd += TrainNavigation::getTrainPathLength(remainingPath);
-    if (moveForward) remainToPathEnd -= actualTrainLength;
-
-    if (remainToPathEnd < actualSpeed)
+    if (travelDistance < actualSpeed)
     {
         if (actualSpeed > breakLevel)
         {
@@ -510,10 +537,10 @@ void Train::recalculateSpeed(int actualDistanceOnRail)
             return;
         }
     }
-    if (remainToPathEnd - actualSpeed - 80 < (0 - (actualSpeed*actualSpeed)) / (2 * breakLevel*-1)) //checked distance = 12 second - temporary solution
+    if (travelDistance - actualSpeed - 80 < (0 - (actualSpeed*actualSpeed)) / (2 * breakLevel*-1)) //checked distance = 12 second - temporary solution
     {
-        if (remainToPathEnd > 50 && actualSpeed > breakLevel)  setActualSpeed(actualSpeed - breakLevel);
-        else if (remainToPathEnd <= 50) setActualSpeed(0.0f);
+        if (travelDistance > 50 && actualSpeed > breakLevel)  setActualSpeed(actualSpeed - breakLevel);
+        else if (travelDistance <= 50) setActualSpeed(0.0f);
     }
     else setActualSpeed(actualSpeed + throttleLevel);
 }
@@ -526,6 +553,11 @@ bool Train::getDirectionToRailEnd() const
 const bool Train::getMoveDirection()
 {
     return moveForward;
+}
+
+const bool Train::getAutopilot()
+{
+    return autopilot;
 }
 
 void Train::threadedTickEvent()

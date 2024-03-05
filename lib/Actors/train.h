@@ -28,6 +28,8 @@ protected:
     Rail* lastRailChecked;
     Rail* occupiedByFirstVehicle;
     bool isIdle;
+    bool autopilot;
+    int travelDistance;
 
 public:
     Train(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Rail* spawnedRail = nullptr);
@@ -38,12 +40,18 @@ public:
     QVector<Rail *> getRemainingPath() const;
     QVector<Rail *> getTakenPath() const;
     Rail* getActualRail() const;
+
     bool getDirectionToRailEnd()const;
-    const bool getMoveDirection();
-    float getActualPathValue() const;
     bool teleportTrainToRail(Rail* rail, bool direction);
+    const bool getIdle();
+    const bool getMoveDirection();
+    const bool getAutopilot();
+
+    float getActualPathValue() const;
+
     int getTrainLength();
     int getRemainToPathEnd();
+    int getOnPathLength();
 
     void actualizeGraphicLocation() override;
     void actualizeGraphicRotation() override;
@@ -55,11 +63,12 @@ public:
     void setActualPathValue(float newValue);
     void setTrainPath(QVector<Rail*> newTrainPath);
     void addNextPartOfPath(QVector<Rail*> addedPartOfPath);
+    void recalculateRemainToPathEnd();
     void moveTrain();
     void makePathFromPortal();
     void setActualPathGraphic(Rail *actualRail);
     void actualizeTrainLenth();
-    void recalculateSpeed(int actualDistanceOnRail);
+    void recalculateSpeed();
     void actualizeOnPathLength();
     void actualizeVehiclesOnPath();
     void selectTrain(bool selected);
@@ -67,6 +76,8 @@ public:
     void changeMoveDirection();
     void uncouple(int uncoupledVehicleIndex);
     void idle (bool idleState);
+    void setAutopilot(bool newAutopilot);
+    void setTravelDistance(int newDistance);
 
     virtual ~Train();
 

@@ -133,10 +133,10 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
                    qDebug() << "Rail is used in path multiple times";
                    return;
                 }
-            }
-
+            }  
             train->addNextPartOfPath(outputPath);
-            train->setActualSpeed(train->getActualSpeed()+1);
+            train->recalculateRemainToPathEnd();
+            TrainNavigation::checkSignalsOnPath(train->getActualRail(), train->getRemainingPath(),train->getDirectionToRailEnd(),train->getRemainToPathEnd()- train->getActualSpeed());
         }
         else qDebug() << "the path was not found!";
     }
