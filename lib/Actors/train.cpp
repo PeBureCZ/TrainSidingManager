@@ -139,10 +139,10 @@ void Train::actualizeOnPathLength()
     bool directionOnEventBegin = directionToRailEnd;
     bool repeat = false;
 
-    if (directionToRailEnd && newOnPathLength + actualSpeed > actualRail->getLengthOfRail()) repeat = true;
+    if (directionToRailEnd && newOnPathLength + static_cast<int>(actualSpeed) > actualRail->getLengthOfRail()) repeat = true;
     else if (!directionToRailEnd && newOnPathLength - actualSpeed < 0) repeat = true;
 
-    directionToRailEnd ? newOnPathLength = onPathLength + actualSpeed : newOnPathLength = onPathLength - actualSpeed;
+    directionToRailEnd ? newOnPathLength = onPathLength + static_cast<int>(actualSpeed) : newOnPathLength = onPathLength - static_cast<int>(actualSpeed);
 
     while (repeat)
     {

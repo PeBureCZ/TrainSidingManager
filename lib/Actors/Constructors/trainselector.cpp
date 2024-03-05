@@ -41,6 +41,12 @@ void TrainSelector::findPathToSignal()
 {
     RailNavigation::makePath(selectedTrain, getNearestSignal());
     if (nearestTrain != nullptr) unselectSignal();
+    if (selectedTrain->getAutopilot())
+    {
+        selectedTrain->recalculateRemainToPathEnd();
+        selectedTrain->setTravelDistance(selectedTrain->getRemainToPathEnd());
+        if (selectedTrain->getRemainToPathEnd() > 50 && selectedTrain->getActualSpeed() == 0.0f) selectedTrain->setActualSpeed(1.0f);
+    }
 }
 
 void TrainSelector::findNearestTrain()

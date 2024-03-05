@@ -82,10 +82,6 @@ void mwlogic::addConstructor(int constructorType)
         //managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT1], DEFAULT_COLOR, LONG_DURATION);
         //managerConsole->printToConsole(console.messageText[PORTAL_CONSOLE_TEXT2], DEFAULT_COLOR, LONG_DURATION);
         break;
-
-
-
-
     default: {}
     }
 }
@@ -296,6 +292,9 @@ void mwlogic::clickInTrainMenu()
         case TRAIN_MODE_AUTOPILOT:
         {
             selectedTrain->setAutopilot(true);
+            selectedTrain->recalculateRemainToPathEnd();
+            selectedTrain->setTravelDistance(selectedTrain->getRemainToPathEnd());
+            if (selectedTrain->getRemainToPathEnd() > 50 && selectedTrain->getActualSpeed() == 0.0f) selectedTrain->setActualSpeed(1.0f);
             break;
         }
         case TRAIN_MODE_CHANGE_DIRECTION:

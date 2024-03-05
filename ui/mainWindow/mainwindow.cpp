@@ -150,8 +150,13 @@ void MainWindow::on_TestButton1_clicked()
     {
         if (dynamic_cast<Train*>(actor))
         {
-            qDebug() << "direction changed";
-            dynamic_cast<Train*>(actor)->changeMoveDirection();
+            Train* train = dynamic_cast<Train*>(actor);
+            int index = 0;
+            for (auto vehicle : train->getVehicles())
+            {
+                if (dynamic_cast<CD753*>(vehicle)) qDebug() << index << " = 753";
+                index++;
+            }
         }
     }
 }

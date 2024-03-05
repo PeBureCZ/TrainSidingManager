@@ -281,7 +281,7 @@ void InterfaceWindow::on_MultiFuncBut4_clicked()
 {
     if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
-        menuSelected = AUTOPILOT_ICON;
+        menuSelected = TRAIN_MODE_AUTOPILOT;
         clickInTrainMenu();
     }
 }

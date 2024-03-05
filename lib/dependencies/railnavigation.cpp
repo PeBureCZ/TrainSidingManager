@@ -137,6 +137,7 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
             train->addNextPartOfPath(outputPath);
             train->recalculateRemainToPathEnd();
             TrainNavigation::checkSignalsOnPath(train->getActualRail(), train->getRemainingPath(),train->getDirectionToRailEnd(),train->getRemainToPathEnd()- train->getActualSpeed());
+            if (train->getAutopilot()) train->setTravelDistance(train->getRemainToPathEnd());
         }
         else qDebug() << "the path was not found!";
     }
