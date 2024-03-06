@@ -30,7 +30,7 @@ void Vehicle::selectVehicle(bool selected)
 
 void Vehicle::idleVehicle(bool idle)
 {
-    idle ? changeSprite(unactiveSpriteEnum) : changeSprite(unselectedSpriteEnum);
+    idle ? changeSprite(unactiveSpriteEnum) : changeSprite(selectedSpriteEnum);
 }
 
 

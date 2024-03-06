@@ -50,6 +50,7 @@ void WorldMap::actualizePlayMode()
 
 void WorldMap::updateWorld()
 {
+    qDebug() << "actor ticked size: " << tickedActorsList.size();
     for (auto actor : tickedActorsList)
     {
         actor->actualizeGraphicLocation();

@@ -333,7 +333,7 @@ void Train::actualizeVehiclesOnPath()
 
 void Train::selectTrain(bool selected)
 {
-    if (isIdle) for (auto vehicle : vehicles) vehicle->idleVehicle(!selected);
+    if (isIdle && !selected) for (auto vehicle : vehicles) vehicle->idleVehicle(!selected);
     else for (auto vehicle : vehicles) vehicle->selectVehicle(selected);
 }
 
@@ -421,7 +421,7 @@ void Train::idle(bool idleState)
     {
         vehicle->idleVehicle(idleState);
     }
-    isIdle = true;
+    isIdle = idleState;
 }
 
 void Train::setAutopilot(bool newAutopilot)

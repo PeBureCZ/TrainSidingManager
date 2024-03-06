@@ -256,9 +256,10 @@ void mwlogic::clickInTrainMenu()
     if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
     TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
     Train* selectedTrain = trainSelector->getSelectedTrain();
-    if (menuSelected != TRAIN_MODE_LEAVE_TRAIN || !selectedTrain->getIdle())
-    {
+    if (selectedTrain->getIdle() && menuSelected != TRAIN_MODE_LEAVE_TRAIN)
+    {      
        managerConsole->printToConsole("The train is idle now. If you want to continue your journey, please start the train using the 'motor button", DEFAULT_COLOR, MIDDLE_DURATION);
+       return;
     }
     switch (menuSelected)
     {
@@ -310,7 +311,6 @@ void mwlogic::clickInTrainMenu()
         }
         case TRAIN_MODE_CHANGE_MODE:
         {
-
             break;
         }
         case TRAIN_MODE_UNCOUPLE:
@@ -325,12 +325,10 @@ void mwlogic::clickInTrainMenu()
         }
         case TRAIN_MODE_LOAD:
         {
-
             break;
         }
         case TRAIN_MODE_UNLOAD:
         {
-
             break;
         }
         case TRAIN_MODE_LEAVE_TRAIN:
@@ -345,7 +343,14 @@ void mwlogic::clickInTrainMenu()
                     setPlaySelectInterface();
                     world->deleteConstructor();
                 }
-                else selectedTrain->idle(false);
+                else
+                {
+                    selectedTrain->idle(false);
+                    world->tickedActorsList.push_back(selectedTrain);
+                }
+
+
+
             }
             else managerConsole->printToConsole("The train can´t idle now, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;
