@@ -81,12 +81,12 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 //playmode + EDIT/SELECT
                 switch (menuSelected)
                 {
-                case PLAY_SELECT_TRAIN:
-                {
-                    trainSelect();
-                    break;
-                }
-                default: {}
+                    case PLAY_SELECT_TRAIN:
+                    {
+                        trainSelect();
+                        break;
+                    }
+                    default: {}
                 }
             }
         }
@@ -263,7 +263,7 @@ void InterfaceWindow::on_MultiFuncBut2_clicked()
     }
     else if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
-        menuSelected = TRAIN_MODE_MOVE;
+        menuSelected = TRAIN_MODE_CHANGE_MODE; //shunt / normal mode
         clickInTrainMenu();
     }
 }
@@ -295,22 +295,37 @@ void InterfaceWindow::on_MultiFuncBut6_clicked()
 {
     if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
-        menuSelected = TRAIN_MODE_UNCOUPLE;
+        menuSelected = TRAIN_MODE_MOVE;
         clickInTrainMenu();
     }
 }
 
 void InterfaceWindow::on_MultiFuncBut7_clicked()
 {
-
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        //load train
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut8_clicked()
 {
-
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        //unload train
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut9_clicked()
+{
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        menuSelected = TRAIN_MODE_UNCOUPLE;
+        clickInTrainMenu();
+    }
+}
+
+void InterfaceWindow::on_MultiFuncBut10_clicked()
 {
     if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
@@ -321,7 +336,7 @@ void InterfaceWindow::on_MultiFuncBut9_clicked()
     }
 }
 
-void InterfaceWindow::on_MultiFuncBut10_clicked()
+void InterfaceWindow::on_MultiFuncBut11_clicked()
 {
     if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
@@ -329,13 +344,7 @@ void InterfaceWindow::on_MultiFuncBut10_clicked()
         menuSelected = TRAIN_MODE_LEAVE_TRAIN;
         clickInTrainMenu(); //if leave train -> menuSelected changed in function
         if (menuSelected == TRAIN_MODE_LEAVE_TRAIN) menuSelected = savedMenuValue;
-
     }
-}
-
-void InterfaceWindow::on_MultiFuncBut11_clicked()
-{
-
 }
 
 void InterfaceWindow::on_MultiFuncBut12_clicked()
@@ -413,6 +422,11 @@ void InterfaceWindow::on_MultiFuncBut24_clicked()
             managerConsole->printToConsole("Last item deleted", RED_COLOR, MIDDLE_DURATION);
         }
         else managerConsole->printToConsole("No item to delete", DEFAULT_COLOR, VERY_LONG_DURATION);
+    }
+    else if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT) //TRAIN_MODE
+    {
+        menuSelected = TRAIN_MODE_EXIT;
+        clickInTrainMenu();
     }
     else if (menuSelected != PLAY_MODE_START)
     {

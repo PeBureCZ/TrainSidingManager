@@ -246,7 +246,7 @@ void mwlogic::trainSelect()
     {
        trainSelector->setSelectedTrain();
        menuSelected = TRAIN_MODE_SELECT_PATH;
-       setTrainMenu();
+       setTrainMenu(trainSelector->getSelectedTrain());
     }
 }
 
@@ -256,7 +256,7 @@ void mwlogic::clickInTrainMenu()
     if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
     TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
     Train* selectedTrain = trainSelector->getSelectedTrain();
-    if (selectedTrain->getIdle() && menuSelected != TRAIN_MODE_LEAVE_TRAIN)
+    if (selectedTrain->getIdle() && (menuSelected != TRAIN_MODE_LEAVE_TRAIN && menuSelected !=TRAIN_MODE_EXIT))
     {      
        managerConsole->printToConsole("The train is idle now. If you want to continue your journey, please start the train using the 'motor button", DEFAULT_COLOR, MIDDLE_DURATION);
        return;
@@ -311,6 +311,18 @@ void mwlogic::clickInTrainMenu()
         }
         case TRAIN_MODE_CHANGE_MODE:
         {
+            if (selectedTrain->getShunt())
+            {
+                selectedTrain->setShunt(false);
+                setTrainMenu(selectedTrain);
+                managerConsole->printToConsole("The train is in normal mode now", DEFAULT_COLOR, MIDDLE_DURATION);
+            }
+            else
+            {
+                selectedTrain->setShunt(true);
+                setTrainMenu(selectedTrain);
+                managerConsole->printToConsole("the train is in shunt mode now", DEFAULT_COLOR, MIDDLE_DURATION);
+            }
             break;
         }
         case TRAIN_MODE_UNCOUPLE:
@@ -339,25 +351,24 @@ void mwlogic::clickInTrainMenu()
                 {
                     selectedTrain->idle(true);
                     world->kickTickedActor(dynamic_cast<Actor*>(selectedTrain));
-                    menuSelected = PLAY_SELECT_TRAIN;
-                    setPlaySelectInterface();
-                    world->deleteConstructor();
+                    setTrainMenu(selectedTrain);
                 }
                 else
                 {
                     selectedTrain->idle(false);
+                    setTrainMenu(selectedTrain);
                     world->tickedActorsList.push_back(selectedTrain);
                 }
-
-
-
             }
             else managerConsole->printToConsole("The train can´t idle now, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;
         }
         case TRAIN_MODE_EXIT:
         {
-
+            qDebug() << "exit";
+            selectedTrain->selectTrain(false);
+            menuSelected = PLAY_SELECT_START;
+            setPlaySelectInterface();
             break;
         }
         default: {}

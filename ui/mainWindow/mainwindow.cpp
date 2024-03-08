@@ -32,7 +32,10 @@ void MainWindow::initializeInterface()
             relativePath + "/images/button_unload.png",
             relativePath + "/images/button_exit.png",
             relativePath + "/images/button_bin.png",
-            relativePath + "/images/button_motor.png",
+            relativePath + "/images/button_motorTrue.png",
+            relativePath + "/images/button_motorFalse.png",
+            relativePath + "/images/button_shuntTrue.png",
+            relativePath + "/images/button_shuntFalse.png",
         };
     setEditAddInterface();
     //Map
@@ -287,6 +290,7 @@ void MainWindow::setEditAddInterface()
 
 void MainWindow:: setPlaySelectInterface()
 {
+
     ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[TRAIN_ICON]));
     ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
     ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
@@ -313,19 +317,25 @@ void MainWindow:: setPlaySelectInterface()
     ui->MultiFuncBut24->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
 }
 
-void MainWindow::setTrainMenu()
+void MainWindow::setTrainMenu(Train *train)
 {  
     ui->MultiFuncBut1->setIcon(QIcon(relativeIconPaths[PATH_ICON]));
-    ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[MOVE_ICON]));
+
+    if (train->getShunt()) ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[SHUNT_TRUE_ICON]));
+    else ui->MultiFuncBut2->setIcon(QIcon(relativeIconPaths[SHUNT_FALSE_ICON]));
+
     ui->MultiFuncBut3->setIcon(QIcon(relativeIconPaths[VIA_ICON]));
     ui->MultiFuncBut4->setIcon(QIcon(relativeIconPaths[AUTOPILOT_ICON]));
     ui->MultiFuncBut5->setIcon(QIcon(relativeIconPaths[MOVE_TO_ICON]));
-    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[UNCOUPLE_ICON]));
+    ui->MultiFuncBut6->setIcon(QIcon(relativeIconPaths[MOVE_ICON]));
     ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[LOAD_ICON]));
     ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[UNLOAD_ICON]));
-    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
-    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[MOTOR_ICON]));
-    ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[UNCOUPLE_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
+
+    if (train->getIdle()) ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[MOTOR_FALSE_ICON]));
+    else ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[MOTOR_TRUE_ICON]));
+
     ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
     ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
     ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));

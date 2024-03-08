@@ -30,6 +30,8 @@ protected:
     QGraphicsItem* endArea;
     bool occupied;
     bool visuallyOccupied;
+    bool shuntAllowed;
+    int occupiedBy;
 
 public:
     Rail(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);

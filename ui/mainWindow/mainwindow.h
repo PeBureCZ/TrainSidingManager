@@ -40,7 +40,10 @@ enum iconEnums
     UNLOAD_ICON,
     EXIT_ICON,
     BIN_ICON,
-    MOTOR_ICON,
+    MOTOR_TRUE_ICON,
+    MOTOR_FALSE_ICON,
+    SHUNT_TRUE_ICON,
+    SHUNT_FALSE_ICON,
 };
 
 QT_BEGIN_NAMESPACE
@@ -69,7 +72,7 @@ public:
     void setEditSelectInterface();
     void setEditAddInterface();
     void setPlayAddInterface();
-    void setTrainMenu();
+    void setTrainMenu(Train* train);
     void setPlaySelectInterface();
 
     QVBoxLayout *consoleLayout;

@@ -21,7 +21,9 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     occupiedByFirstVehicle = nullptr;
     isIdle = false;
     autopilot = false;
+    shunt = false;
     travelDistance = 0;
+    int trainState = 0;
 }
 
 void Train::actualizeGraphicLocation()
@@ -429,6 +431,11 @@ void Train::setAutopilot(bool newAutopilot)
     autopilot = newAutopilot;
 }
 
+void Train::setShunt(bool newShunt)
+{
+    shunt = newShunt;
+}
+
 void Train::setTravelDistance(int newDistance)
 {
     travelDistance = newDistance;
@@ -495,6 +502,11 @@ bool Train::teleportTrainToRail(Rail *rail, bool direction)
         return false;
     }
     return true;
+}
+
+bool Train::getShunt()
+{
+    return shunt;
 }
 
 const bool Train::getIdle()

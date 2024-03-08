@@ -14,9 +14,11 @@ Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(paren
     startArea = nullptr;
     endArea = nullptr;
     occupied = false;
+    occupiedBy = 0;
     visuallyOccupied = false;
     signalP0 = nullptr;
     signalP3 = nullptr;
+    shuntAllowed = true;
 }
 
 QPointF Rail::getP0WorldLocation()

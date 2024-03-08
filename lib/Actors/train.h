@@ -30,6 +30,7 @@ protected:
     bool isIdle;
     bool autopilot;
     int travelDistance;
+    bool shunt;
 
 public:
     Train(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Rail* spawnedRail = nullptr);
@@ -43,6 +44,7 @@ public:
 
     bool getDirectionToRailEnd()const;
     bool teleportTrainToRail(Rail* rail, bool direction);
+    bool getShunt();
     const bool getIdle();
     const bool getMoveDirection();
     const bool getAutopilot();
@@ -77,6 +79,7 @@ public:
     void uncouple(int uncoupledVehicleIndex);
     void idle (bool idleState);
     void setAutopilot(bool newAutopilot);
+    void setShunt(bool newShunt);
     void setTravelDistance(int newDistance);
 
     virtual ~Train();
