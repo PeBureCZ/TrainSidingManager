@@ -448,6 +448,11 @@ bool Rail::getOccupied()
     return occupied;
 }
 
+bool Rail::getShuntAllowed()
+{
+    return shuntAllowed;
+}
+
 void Rail::setOccupied(const bool isOccupied, bool setGraphic)
 {
     using namespace customQColors;

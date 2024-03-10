@@ -43,7 +43,10 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
                 if (testedRail->getConnectedRail(i) != nullptr) //true = on connection is rail
                 {
                     Rail* newRailFinded = testedRail->getConnectedRail(i);
-                    if (newRailFinded->getOccupied()) continue;
+
+                    //check shunt mode and occupied state
+                    if (train->getShunt() && newRailFinded->getShuntAllowed() == false) continue;
+                    else if (!train->getShunt() && newRailFinded->getOccupied()) continue;
 
                     int conectionToPreviousRail = newRailFinded->getConnection(testedRail);
                     if (conectionToPreviousRail <=1) conectionToPreviousRail = 0;
@@ -136,7 +139,7 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
             }  
             train->addNextPartOfPath(outputPath);
             train->recalculateRemainToPathEnd();
-            TrainNavigation::checkSignalsOnPath(train->getActualRail(), train->getRemainingPath(),train->getDirectionToRailEnd(),train->getRemainToPathEnd()- train->getActualSpeed());
+            TrainNavigation::checkSignalsOnPath(train->getShunt(), train->getActualRail(), train->getRemainingPath(),train->getDirectionToRailEnd(),train->getRemainToPathEnd()- train->getActualSpeed());
             if (train->getAutopilot()) train->setTravelDistance(train->getRemainToPathEnd());
         }
         else qDebug() << "the path was not found!";

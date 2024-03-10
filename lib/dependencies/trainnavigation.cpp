@@ -87,7 +87,7 @@ bool TrainNavigation::checkDirectionOnLatestRail(const QList<Rail *> path, const
     return direction;
 }
 
-void TrainNavigation::checkSignalsOnPath(const Rail* actualRail, const QList<Rail*> actualPath, bool direction, int distanceToEnd)
+void TrainNavigation::checkSignalsOnPath(const bool shunt, const Rail* actualRail, const QList<Rail*> actualPath, bool direction, int distanceToEnd)
 {
     //check a signals on the actualRail
     QList<Signal*> signalsOnPath = {};
@@ -119,21 +119,36 @@ void TrainNavigation::checkSignalsOnPath(const Rail* actualRail, const QList<Rai
     }
 
     int signalsCount = signalsOnPath.size();
-    if (signalsCount > 0) signalsOnPath.last()->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
-    if (signalsCount > 1)
+    if (shunt)
     {
-        if (distanceToEnd >= (distanceMeasure - signalOnDistant[signalsCount-2])) dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_CAUTION, CAUTION_SIGNAL_SPRITE);
-        else dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
-    }
-
-    if (signalsCount > 2)
-    {
-        for (int i = 0; i < signalsCount-2; i++)
+        if (signalsCount > 0) signalsOnPath.last()->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+        if (signalsCount > 1)
         {
-            if (distanceToEnd >= (distanceMeasure - signalOnDistant[i])) dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_PROCEED, PROCEED_SIGNAL_SPRITE);
-            else dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+            for (int i = 0; i < signalsCount-1; i++)
+            {
+                if (distanceToEnd >= (distanceMeasure - signalOnDistant[i])) dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_SHUNT, SHUNT_SIGNAL_SPRITE);
+            }
         }
     }
+    else
+    {
+        if (signalsCount > 0) signalsOnPath.last()->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+        if (signalsCount > 1)
+        {
+            if (distanceToEnd >= (distanceMeasure - signalOnDistant[signalsCount-2])) dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_CAUTION, CAUTION_SIGNAL_SPRITE);
+            else dynamic_cast<Signal*>(signalsOnPath[signalsCount-2])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+        }
+
+        if (signalsCount > 2)
+        {
+            for (int i = 0; i < signalsCount-2; i++)
+            {
+                if (distanceToEnd >= (distanceMeasure - signalOnDistant[i])) dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_PROCEED, PROCEED_SIGNAL_SPRITE);
+                else dynamic_cast<Signal*>(signalsOnPath[i])->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
+            }
+        }
+    }
+
 }
 
 bool TrainNavigation::checkDirectionOnNextRail(bool actualDirection, const Rail *actualRail, const Rail *nextRail)

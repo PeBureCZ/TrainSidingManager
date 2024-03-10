@@ -95,7 +95,8 @@ void TrainSelector::findNearestSignal()
         if (dynamic_cast<Rail*>(actor))
         {
             Rail* nearRail = dynamic_cast<Rail*>(actor);
-            if (nearRail->getOccupied()) continue;
+            if (nearestTrain->getShunt() && nearRail->getShuntAllowed() == false) continue;
+            else if (!nearestTrain->getShunt() && nearRail->getOccupied()) continue;
 
             int testedDistance = 99999999;
 
@@ -141,7 +142,8 @@ void TrainSelector::findNearestSignal()
         nearestSignal->setState(nearestSignal->getState(),STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
         nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(17,12),true);
         nearestSignal = nullptr;
-        nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
+        if (nearestRail->getOccupied()) nearestRail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        else nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
     }
 }
 
@@ -174,5 +176,9 @@ TrainSelector::~TrainSelector()
     using namespace customQColors;
     if(nearestTrain != nullptr) nearestTrain->selectTrain(false);
     if(nearestSignal != nullptr) nearestSignal->setState(nearestSignal->getState(),STOP_SIGNAL_SPRITE);
-    if (nearestRail != nullptr) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
+    if (nearestRail != nullptr)
+    {
+        if (nearestRail->getOccupied()) nearestRail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        else nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
+    }
 }

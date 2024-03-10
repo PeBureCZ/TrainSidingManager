@@ -593,7 +593,7 @@ void Train::tickEvent()
     if (lastRailChecked != occupiedByFirstVehicle && remainToPathEnd != -1)
     {
         //train go throw new rail - need actualize signals
-        TrainNavigation::checkSignalsOnPath(actualRail, remainingPath,directionToRailEnd,remainToPathEnd-actualSpeed);
+        TrainNavigation::checkSignalsOnPath(shunt, actualRail, remainingPath,directionToRailEnd,remainToPathEnd-actualSpeed);
         lastRailChecked = occupiedByFirstVehicle;
     }
 }

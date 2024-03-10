@@ -304,7 +304,7 @@ void mwlogic::clickInTrainMenu()
             {
                 managerConsole->printToConsole("Train direction changed", DEFAULT_COLOR, MIDDLE_DURATION);
                 selectedTrain->changeMoveDirection();
-                TrainNavigation::checkSignalsOnPath(selectedTrain->getActualRail(), selectedTrain->getRemainingPath(),selectedTrain->getDirectionToRailEnd(),selectedTrain->getRemainToPathEnd()- selectedTrain->getActualSpeed());
+                TrainNavigation::checkSignalsOnPath(selectedTrain->getShunt(), selectedTrain->getActualRail(), selectedTrain->getRemainingPath(),selectedTrain->getDirectionToRailEnd(),selectedTrain->getRemainToPathEnd()- selectedTrain->getActualSpeed());
             }
             else managerConsole->printToConsole("Can´t change the direction of the train, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;

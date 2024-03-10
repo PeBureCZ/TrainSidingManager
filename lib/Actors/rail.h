@@ -47,6 +47,7 @@ public:
 
     bool getLined();
     bool getOccupied();
+    bool getShuntAllowed();
 
     int getLengthOfRail() const;
     int getConnection(const Rail *rail) const;
@@ -69,7 +70,7 @@ public:
     void setOccupied(const bool isOccupied, bool setGraphic);
     void setRailColor(QColor color, int layerEnum);
     void moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);
-    void setRailObjectBoxCollider() override;
+    void setRailObjectBoxCollider();
     void addSignal(int numberOfEndPoint, Signal *signalActor);
 
     void actorLeaveFromCollision(Actor* actor) override; //used if signal is deleted
