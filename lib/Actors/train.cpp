@@ -446,9 +446,9 @@ void Train::makePathFromPortal()
     remainingPath = TrainNavigation::autopilotCheck(30000,100,actualRail,directionToRailEnd);
     for (auto rail : remainingPath)
     {
-        rail->setOccupied(true, true);
+        rail->setOccupied(true);
     }
-    actualRail->setOccupied(true, true);
+    actualRail->setOccupied(true);
 }
 
 void Train::setTrainPath(QVector<Rail*> newTrainPath)
@@ -461,7 +461,7 @@ void Train::addNextPartOfPath(QVector<Rail *> addedPartOfPath)
     remainingPath += addedPartOfPath;
     for (auto rail : addedPartOfPath)
     {
-        rail->setOccupied(true, true);
+        rail->setOccupied(true);
     }
     lastRailChecked = nullptr; //will actualize signals
     remainToPathEnd = -1;
@@ -583,7 +583,7 @@ void Train::tickEvent()
     {
         for (auto rail : takenPath)
         {
-            rail->setOccupied(false, true);
+            rail->setOccupied(false);
             if (rail->getSignal(0) != nullptr) rail->getSignal(0)->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
             if (rail->getSignal(1) != nullptr) rail->getSignal(1)->setState(SIGNAL_STOP, STOP_SIGNAL_SPRITE);
         }
@@ -614,7 +614,7 @@ Train::~Train()
     {
         delete vehicle;
     }
-    for (auto rail : takenPath) rail->setOccupied(false, true);
-    for (auto rail : remainingPath) rail->setOccupied(false, true);
-    if (actualRail != nullptr) actualRail->setOccupied(false, true);
+    for (auto rail : takenPath) rail->setOccupied(false);
+    for (auto rail : remainingPath) rail->setOccupied(false);
+    if (actualRail != nullptr) actualRail->setOccupied(false);
 }

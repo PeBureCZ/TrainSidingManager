@@ -453,11 +453,16 @@ bool Rail::getShuntAllowed()
     return shuntAllowed;
 }
 
-void Rail::setOccupied(const bool isOccupied, bool setGraphic)
+void Rail::setOccupied(const bool isOccupied)
 {
     using namespace customQColors;
     occupied = isOccupied;
-    isOccupied ? setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER) : setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
+    isOccupied ? occupiedBy += 1 : occupiedBy -= 1;
+    if (occupiedBy > 0)
+    {
+        setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+    }
+    else setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
 }
 
 void Rail::setRailColor(QColor color, int layerEnum)

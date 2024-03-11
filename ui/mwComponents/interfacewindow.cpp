@@ -72,7 +72,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
         }
         else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END)
         {
-            if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT) //TRAIN_MODE
+            if (menuSelected == TRAIN_MODE_SELECT_PATH) //TRAIN_MODE
             {
                 clickInTrainMenu();
             }
