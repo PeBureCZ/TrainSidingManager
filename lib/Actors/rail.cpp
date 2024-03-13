@@ -14,7 +14,7 @@ Rail::Rail(QObject* parent, QGraphicsItem* newGraphicItem) : RailwayObject(paren
     startArea = nullptr;
     endArea = nullptr;
     occupied = false;
-    occupiedBy = 0;
+    occupiedBy = {};
     visuallyOccupied = false;
     signalP0 = nullptr;
     signalP3 = nullptr;
@@ -453,12 +453,18 @@ bool Rail::getShuntAllowed()
     return shuntAllowed;
 }
 
-void Rail::setOccupied(const bool isOccupied)
+void Rail::setOccupied(const bool isOccupied, Actor* actor )
 {
     using namespace customQColors;
     occupied = isOccupied;
-    isOccupied ? occupiedBy += 1 : occupiedBy -= 1;
-    if (occupiedBy > 0)
+    if (isOccupied) occupiedBy.push_back(actor);
+    else
+    {
+        int index = occupiedBy.indexOf(actor);
+        if (index != -1) occupiedBy.removeAt(index);
+    }
+
+    if (occupiedBy.size() > 0)
     {
         setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
     }

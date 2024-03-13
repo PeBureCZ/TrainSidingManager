@@ -31,7 +31,7 @@ protected:
     bool occupied;
     bool visuallyOccupied;
     bool shuntAllowed;
-    int occupiedBy;
+    QList<Actor*> occupiedBy;
 
 public:
     Rail(QObject *parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
@@ -67,7 +67,7 @@ public:
     void unconnectRail(Rail* unconnectedRail);
     void smoothConnectionA0(bool changeP1Distance);
     void smoothConnectionC1(bool changeP2Distance);
-    void setOccupied(const bool isOccupied);
+    void setOccupied(const bool isOccupied, Actor *actor);
     void setRailColor(QColor color, int layerEnum);
     void moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3);
     void setRailObjectBoxCollider();
