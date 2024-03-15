@@ -44,6 +44,7 @@ public:
     Trigger* getP0Trigger();
     Trigger *getP3Trigger();
     Signal* getSignal(int numberOfEndPoint) const;
+    QList<Actor*> getOccupiedBy();
 
     bool getLined();
     bool getOccupied();

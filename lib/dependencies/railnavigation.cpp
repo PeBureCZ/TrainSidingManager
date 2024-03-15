@@ -45,7 +45,21 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
                     Rail* newRailFinded = testedRail->getConnectedRail(i);
 
                     //check shunt mode and occupied state
-                    if (train->getShunt() && newRailFinded->getShuntAllowed() == false) continue;
+                    if (train->getShunt())
+                    {
+                        if (newRailFinded->getShuntAllowed() == false) continue;
+                        QList<Actor*> actorsOnRail = newRailFinded->getOccupiedBy();
+                        bool isActive = false;
+                        for (auto actor : actorsOnRail)
+                        {
+                            if (dynamic_cast<Train*>(actor) && !dynamic_cast<Train*>(actor)->getIdle())
+                            {
+                                isActive = true;
+                                break;
+                            }
+                        }
+                        if (isActive) continue;
+                    }
                     else if (!train->getShunt() && newRailFinded->getOccupied()) continue;
 
                     int conectionToPreviousRail = newRailFinded->getConnection(testedRail);

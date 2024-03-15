@@ -1,6 +1,19 @@
 #include "trainselector.h"
 
 
+int TrainSelector::getSlateFromSprite(int state)
+{
+    switch (state)
+    {
+    case SIGNAL_STOP: { return STOP_SIGNAL_SPRITE;}
+    case SIGNAL_PROCEED: { return PROCEED_SIGNAL_SPRITE;}
+    case SIGNAL_CAUTION: { return CAUTION_SIGNAL_SPRITE;}
+    case SIGNAL_SHUNT: { return SHUNT_SIGNAL_SPRITE;}
+    case SIGNAL_FULL: { return FULL_SIGNAL_SPRITE;}
+    default:  { return SIGNAL_STOP;}
+    }
+}
+
 TrainSelector::TrainSelector(QObject* parent, QGraphicsItem* newGraphicItem, Actor *actorToConstructing)
     : SelectConstructor(parent, newGraphicItem, actorToConstructing)
 {
@@ -90,7 +103,6 @@ void TrainSelector::findNearestTrain()
 
 void TrainSelector::findNearestSignal()
 {
-    qDebug() << "test";
     int nearestSignalDistance = 99999999;
     Signal* retestedNearestSignal = nullptr;
     //try to find nearest signal (from picture location!)
@@ -102,15 +114,25 @@ void TrainSelector::findNearestSignal()
             if (nearestTrain->getShunt() && nearRail->getShuntAllowed() == false) continue;
             else if (nearestTrain->getShunt())
             {
+                if (nearRail->getOccupied())
+                {
+                    bool isActivOccupied = false;
+                    QList<Actor*> occupiedActors = nearRail->getOccupiedBy();
+                    for (auto actor : occupiedActors)
+                    {
+                        if (dynamic_cast<Train*>(actor) && !dynamic_cast<Train*>(actor)->getIdle())
+                        {
+                            isActivOccupied = true;
+                            break;
+                        }
+                    }
+                    if (isActivOccupied) continue;
+                }
                 //The selector does not attempt to select signals on selected path (from selected train)
-                qDebug() << "try to find";
                 QVector railsUsed = selectedTrain->getRemainingPath();
                 railsUsed.push_back(selectedTrain->getActualRail());
                 int index = railsUsed.indexOf(nearRail);
-                qDebug() << "index: " << index;
-                qDebug() << railsUsed.size();
                 if (index != -1) continue;
-                qDebug() << "not in";
             }
             else if (!nearestTrain->getShunt() && nearRail->getOccupied()) continue;
 
@@ -137,29 +159,30 @@ void TrainSelector::findNearestSignal()
     {
         nearestSignal = retestedNearestSignal;
         nearestRail = dynamic_cast<Rail*>(retestedNearestSignal->getRailActor());
-        nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        nearestRail->setRailColor(ACTUAL_RAIL_COLOR, SELECTED_RAIL_LAYER);
         nearestSignal->setState(nearestSignal->getState(), SELECTED_SIGNAL_SPRITE);
         nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(-17,-12),true);
     }
     else if (retestedNearestSignal != nullptr && nearestSignal != nullptr && retestedNearestSignal != nearestSignal)
     {
-        nearestSignal->setState(nearestSignal->getState(), STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+        nearestSignal->setState(nearestSignal->getState(), getSlateFromSprite(nearestSignal->getState()));
         nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(17,12),true);
-        nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
-
         nearestSignal = retestedNearestSignal;
+        if (nearestRail->getOccupied()) nearestRail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        else nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail = dynamic_cast<Rail*>(retestedNearestSignal->getRailActor());
         nearestSignal->setState(nearestSignal->getState(), SELECTED_SIGNAL_SPRITE);
         nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(-17,-12),true);
-        nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        nearestRail->setRailColor(ACTUAL_RAIL_COLOR, SELECTED_RAIL_LAYER);
     }
     else if (nearestSignal != nullptr && retestedNearestSignal == nullptr)
     {
-        nearestSignal->setState(nearestSignal->getState(),STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+        nearestSignal->setState(nearestSignal->getState(),getSlateFromSprite(nearestSignal->getState()));
         nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(17,12),true);
         nearestSignal = nullptr;
         if (nearestRail->getOccupied()) nearestRail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
         else nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
+        nearestRail = nullptr;
     }
 }
 
@@ -167,7 +190,7 @@ void TrainSelector::unselectSignal()
 {
     //called when train path is set
     nearestRail = nullptr;
-    nearestSignal->setState(nearestSignal->getState(), STOP_SIGNAL_SPRITE); //NEED CHANGE TO TRUE VISUAL STATE - NOT RED ONLY
+    nearestSignal->setState(nearestSignal->getState(), getSlateFromSprite(nearestSignal->getState()));
     nearestSignal->setLocation(nearestSignal->getLocation()+QPoint(17,12),true);
     nearestSignal = nullptr;
 }

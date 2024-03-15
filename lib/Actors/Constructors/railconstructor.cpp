@@ -135,14 +135,14 @@ void RailConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
             {
                 nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
                 nearestRail = testedNearestRail;
-                nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+                nearestRail->setRailColor(ACTUAL_RAIL_COLOR, SELECTED_RAIL_LAYER);
             }
             //else = no change
         }
         else
         {
             nearestRail = testedNearestRail;
-            nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+            nearestRail->setRailColor(ACTUAL_RAIL_COLOR, SELECTED_RAIL_LAYER);
         }
     }
     else

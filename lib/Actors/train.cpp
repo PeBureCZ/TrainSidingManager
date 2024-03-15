@@ -15,8 +15,8 @@ Train::Train(QObject* parent, QGraphicsItem* newGraphicItem, Rail* spawnedRail) 
     releasePath = false;
     setActualPathGraphic(actualRail);
     remainToPathEnd = 0;
-    breakLevel = 0.2f;
-    throttleLevel = 0.07f;
+    breakLevel = 2.0f; //normal ~ 0.2f
+    throttleLevel = 1.0f; //normal ~ 0.07f
     lastRailChecked = nullptr;
     occupiedByFirstVehicle = nullptr;
     isIdle = false;
@@ -335,8 +335,20 @@ void Train::actualizeVehiclesOnPath()
 
 void Train::selectTrain(bool selected)
 {
+    using namespace customQColors;
     if (isIdle && !selected) for (auto vehicle : vehicles) vehicle->idleVehicle(!selected);
     else for (auto vehicle : vehicles) vehicle->selectVehicle(selected);
+
+    if (selected)
+    {
+        for (auto rail : remainingPath) rail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        actualRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+    }
+    else
+    {
+        for (auto rail : remainingPath) rail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        actualRail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+    }
 }
 
 void Train::setdirectionToRailEnd(bool newDirection)
@@ -443,12 +455,18 @@ void Train::setTravelDistance(int newDistance)
 
 void Train::makePathFromPortal()
 {
+    using namespace customQColors;
     remainingPath = TrainNavigation::autopilotCheck(30000,100,actualRail,directionToRailEnd);
     for (auto rail : remainingPath)
     {
         rail->setOccupied(true, dynamic_cast<Actor*>(this));
+
+        //The train spawned from portal is unselected -> it requires changinge the rail color
+        rail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
     }
     actualRail->setOccupied(true, dynamic_cast<Actor*>(this));
+    //The train spawned from portal is unselected -> it requires changinge the rail color
+    actualRail->setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
 }
 
 void Train::setTrainPath(QVector<Rail*> newTrainPath)
@@ -491,16 +509,16 @@ bool Train::teleportTrainToRail(Rail *rail, bool direction)
     directionToRailEnd = direction;
     directionToRailEnd ? onPathLength = 5 : onPathLength = actualRail->getLengthOfRail() - 5;
     setActualPathGraphic(actualRail);
-    int savedSpeed = actualSpeed;
-    setActualSpeed(1.0);
-    moveTrain(); //move train by 1 set train in right position
-    setActualSpeed(savedSpeed);
     makePathFromPortal();
     if (rail->getLengthOfRail() + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
     {
         qDebug() << "can´t teleport, rail is too short";
         return false;
     }
+    int savedSpeed = actualSpeed;
+    setActualSpeed(1.0);
+    moveTrain(); //move train by 1 set train in right position
+    setActualSpeed(savedSpeed);
     return true;
 }
 

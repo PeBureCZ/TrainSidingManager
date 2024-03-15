@@ -456,7 +456,6 @@ bool Rail::getShuntAllowed()
 void Rail::setOccupied(const bool isOccupied, Actor* actor )
 {
     using namespace customQColors;
-    occupied = isOccupied;
     if (isOccupied) occupiedBy.push_back(actor);
     else
     {
@@ -464,11 +463,21 @@ void Rail::setOccupied(const bool isOccupied, Actor* actor )
         if (index != -1) occupiedBy.removeAt(index);
     }
 
-    if (occupiedBy.size() > 0)
+    if (occupiedBy.size() > 0 && isOccupied)
     {
-        setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        occupied = isOccupied;
+        setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
     }
-    else setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
+    else if (occupiedBy.size() > 0 && !isOccupied) setRailColor(OCCUPIED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+    else
+    {
+        setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
+        occupied = isOccupied;
+    }
+
+
+
+
 }
 
 void Rail::setRailColor(QColor color, int layerEnum)
@@ -584,6 +593,11 @@ Signal *Rail::getSignal(int numberOfEndPoint) const
     if (numberOfEndPoint == 0) return signalP0;
     else if (numberOfEndPoint == 1) return signalP3;
     return nullptr;
+}
+
+QList<Actor*> Rail::getOccupiedBy()
+{
+    return occupiedBy;
 }
 
 Trigger *Rail::getP0Trigger()

@@ -16,6 +16,8 @@ protected:
     Signal* nearestSignal;
     Train* nearestTrain;
     Rail* nearestRail;
+private:
+    int getSlateFromSprite(int state);
 
 public:
     explicit TrainSelector(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);

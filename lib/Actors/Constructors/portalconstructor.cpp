@@ -87,7 +87,7 @@ void PortalConstructor::calledCollisionEvent(const QList<Actor *> isInCollision)
     {
         if (nearestRail != nullptr && testedNearestRail != nearestRail) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         nearestRail = testedNearestRail;
-        nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+        nearestRail->setRailColor(ACTUAL_RAIL_COLOR, SELECTED_RAIL_LAYER);
     }
     else if (nearestRail != nullptr)
     {
@@ -115,11 +115,15 @@ Rail* PortalConstructor::getNearestRail()
 
 PortalConstructor::~PortalConstructor()
 {
-    for (auto railActor : actorsInCollision)
+    for (auto actor : actorsInCollision)
     {
-        Rail* rail = dynamic_cast<Rail*>(railActor);
-        rail->setVisibilityOfArea(0, false, nullptr);
-        rail->setVisibilityOfArea(1, false, nullptr);
+        if (dynamic_cast<Rail*>(actor))
+        {
+            Rail* rail = dynamic_cast<Rail*>(actor);
+            rail->setVisibilityOfArea(0, false, nullptr);
+            rail->setVisibilityOfArea(1, false, nullptr);
+        }
+
     }
     using namespace customQColors;
     if (nearestRail != nullptr) nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);

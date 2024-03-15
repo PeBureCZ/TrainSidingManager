@@ -165,14 +165,14 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
             {
                 nearestRail->setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
                 nearestRail = testedNearestRail;
-                nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+                nearestRail->setRailColor(ACTUAL_RAIL_COLOR, SELECTED_RAIL_LAYER);
             }
             //else = no change
         }
         else
         {
             nearestRail = testedNearestRail;
-            nearestRail->setRailColor(SELECTED_RAIL_COLOR, SELECTED_RAIL_LAYER);
+            nearestRail->setRailColor(ACTUAL_RAIL_COLOR, SELECTED_RAIL_LAYER);
         }
     }
     else if (!underSelectMode)
@@ -184,6 +184,7 @@ void RailSelector::calledCollisionEvent(const QList<Actor *> isInCollision)
 
 void RailSelector::actorLeaveFromCollision(Actor *actor)
 {
+
     if (underSelectMode) return;
     Actor::actorLeaveFromCollision(actor);
     Rail* rail = dynamic_cast<Rail*>(actor);
