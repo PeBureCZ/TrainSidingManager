@@ -264,12 +264,8 @@ void mwlogic::clickInTrainMenu()
     switch (menuSelected)
     {
        case TRAIN_MODE_SELECT_PATH:
-        {       
-           Signal* nearestSignal = trainSelector->getNearestSignal();
-           if (nearestSignal != nullptr && selectedTrain != nullptr)
-           {
-                trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
-           }
+        {
+           trainSelector->findPathToSignal(); //try to find a viable path to the selected signal (the selected signal is saved in TrainSelector)
            break;
         }
         case TRAIN_MODE_MOVE:

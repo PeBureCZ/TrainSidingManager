@@ -39,13 +39,16 @@ Train *TrainSelector::getNearestTrain()
 
 void TrainSelector::findPathToSignal()
 {
-    RailNavigation::makePath(selectedTrain, getNearestSignal());
-    if (nearestTrain != nullptr) unselectSignal();
-    if (selectedTrain->getAutopilot())
+    if (nearestTrain != nullptr && nearestSignal != nullptr)
     {
-        selectedTrain->recalculateRemainToPathEnd();
-        selectedTrain->setTravelDistance(selectedTrain->getRemainToPathEnd());
-        if (selectedTrain->getRemainToPathEnd() > 50 && selectedTrain->getActualSpeed() == 0.0f) selectedTrain->setActualSpeed(1.0f);
+        RailNavigation::makePath(selectedTrain, nearestSignal);
+        unselectSignal();
+        if (selectedTrain->getAutopilot())
+        {
+            selectedTrain->recalculateRemainToPathEnd();
+            selectedTrain->setTravelDistance(selectedTrain->getRemainToPathEnd());
+            if (selectedTrain->getRemainToPathEnd() > 50 && selectedTrain->getActualSpeed() == 0.0f) selectedTrain->setActualSpeed(1.0f);
+        }
     }
 }
 
@@ -87,6 +90,7 @@ void TrainSelector::findNearestTrain()
 
 void TrainSelector::findNearestSignal()
 {
+    qDebug() << "test";
     int nearestSignalDistance = 99999999;
     Signal* retestedNearestSignal = nullptr;
     //try to find nearest signal (from picture location!)
@@ -96,6 +100,18 @@ void TrainSelector::findNearestSignal()
         {
             Rail* nearRail = dynamic_cast<Rail*>(actor);
             if (nearestTrain->getShunt() && nearRail->getShuntAllowed() == false) continue;
+            else if (nearestTrain->getShunt())
+            {
+                //The selector does not attempt to select signals on selected path (from selected train)
+                qDebug() << "try to find";
+                QVector railsUsed = selectedTrain->getRemainingPath();
+                railsUsed.push_back(selectedTrain->getActualRail());
+                int index = railsUsed.indexOf(nearRail);
+                qDebug() << "index: " << index;
+                qDebug() << railsUsed.size();
+                if (index != -1) continue;
+                qDebug() << "not in";
+            }
             else if (!nearestTrain->getShunt() && nearRail->getOccupied()) continue;
 
             int testedDistance = 99999999;

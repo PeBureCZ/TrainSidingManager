@@ -72,23 +72,22 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
         }
         else if (menuSelected >= PLAY_SELECT_START && menuSelected <= PLAY_MODE_END)
         {
-            if (menuSelected == TRAIN_MODE_SELECT_PATH) //TRAIN_MODE
+            //playmode + EDIT/SELECT
+            switch (menuSelected)
             {
-                clickInTrainMenu();
-            }
-            else
-            {
-                //playmode + EDIT/SELECT
-                switch (menuSelected)
+                case TRAIN_MODE_SELECT_PATH:
                 {
-                    case PLAY_SELECT_TRAIN:
-                    {
-                        trainSelect();
-                        break;
-                    }
-                    default: {}
+                    clickInTrainMenu();
+                    break;
                 }
+                case PLAY_SELECT_TRAIN:
+                {
+                    trainSelect();
+                    break;
+                }
+                default: {}
             }
+
         }
     }
     else if (event->button() == Qt::RightButton)
