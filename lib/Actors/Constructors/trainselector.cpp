@@ -68,14 +68,19 @@ void TrainSelector::findPathToSignal()
 void TrainSelector::findNearestTrain()
 {
     Train* retestedNearestTrain = nullptr;
-    int distance;
-    (nearestTrain == nullptr) ? distance = 9999999 : distance = getDistance(getLocation(), nearestTrain->getLocation());
+    int distance = 9999999;
     for (auto actor : actorsInCollision)
     {
-        if (dynamic_cast<Train*>(actor))
+        if (dynamic_cast<Vehicle*>(actor))
         {
-            Train* testedTrain = dynamic_cast<Train*>(actor);
-            int testedDistance = getDistance(getLocation(), testedTrain->getLocation());
+            Vehicle* testedVehicle = dynamic_cast<Vehicle*>(actor);
+            Train* testedTrain = dynamic_cast<Train*>(testedVehicle->getTrainActor());
+            Trigger* testedTrigger = actor->getTriggers().first();
+            float rotation = testedVehicle->getRotation()+testedTrigger->getRelativeRotation();
+            QPoint worldTrigPos = testedVehicle->getRotatedPointArountPivot(testedTrigger->getRelativeLocation(), QPoint(0,0),rotation) + testedVehicle->getLocation();
+
+            if (testedTrain == nullptr) continue;
+            int testedDistance = getDistance(location, worldTrigPos);
             if (distance >= testedDistance)
             {
                 distance = testedDistance;

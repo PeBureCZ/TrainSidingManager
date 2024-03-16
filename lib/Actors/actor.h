@@ -41,7 +41,7 @@ public:
     QString getName();
     QPoint getLocation();
     QPoint getRotatedPointArountPivot(const QPoint point, const QPoint pivot, const double angle);
-    QVector<Trigger*> getAllTriggers();
+    QVector<Trigger*> getTriggers();
 
     void setGraphicRotation(const float newRotation);
     void setRotation(const float newRotation, bool setGraphic);

@@ -202,7 +202,7 @@ Actor *WorldMap::getActorFromTriggersInCollide(Actor *testedActor, QPoint positi
 {
     if (testedActor != nullptr)
     {
-        QVector<Trigger*> testedTriggers = testedActor->getAllTriggers();
+        QVector<Trigger*> testedTriggers = testedActor->getTriggers();
         for (auto trigger : testedTriggers)
         {
             for (auto usedChannel : trigger->getBlockChannels())
@@ -216,7 +216,10 @@ Actor *WorldMap::getActorFromTriggersInCollide(Actor *testedActor, QPoint positi
                 }
                 else if (dynamic_cast<BoxCollider*>(trigger))
                 {
-                    if (dynamic_cast<BoxCollider*>(trigger)->isInCollision(position - testedActor->getLocation())) return testedActor;
+                    QPoint pivot = position - testedActor->getLocation();
+                    QPoint transferedPosition = position - testedActor->getLocation() - trigger->getRelativeLocation(); //to relative
+                    QPoint relativeRotatedPos = testedActor->getRotatedPointArountPivot(transferedPosition, pivot, testedActor->getRotation()+trigger->getRelativeRotation());
+                    if (dynamic_cast<BoxCollider*>(trigger)->isInCollision(relativeRotatedPos)) return testedActor;
                 }
             }
         }
@@ -231,7 +234,7 @@ ActorConstructor *WorldMap::getActualConstructor()
 
 Trigger *WorldMap::getNearestTriggerInRange(Actor *actor, QPoint position, int radius)
 {
-    QVector<Trigger*> testedTriggers = actor->getAllTriggers();
+    QVector<Trigger*> testedTriggers = actor->getTriggers();
     QPoint actorLocation = actor->getLocation();
     int nearestDistance = radius;
     Trigger* nearestTrigger = nullptr;

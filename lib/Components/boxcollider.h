@@ -3,7 +3,6 @@
 
 #include "collider.h"
 #include <QDebug>
-#include <QTransform>
 
 class LIB_EXPORT BoxCollider : public Collider
 {

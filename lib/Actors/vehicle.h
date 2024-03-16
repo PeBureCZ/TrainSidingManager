@@ -15,6 +15,7 @@ protected:
     int unactiveSpriteEnum;
     QPoint firstAxleCenter; //relative
     QPoint secondAxleCenter; //relative
+    Actor* trainActorOwner;
 
 public:
     Vehicle(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr);
@@ -22,6 +23,9 @@ public:
     const int getLegth();
     void selectVehicle(bool selected);
     void idleVehicle(bool idle);
+    const void setTrainActor(Actor *actorTrain);
+
+    Actor* getTrainActor();
 signals:
 
 

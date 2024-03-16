@@ -331,6 +331,10 @@ void mwlogic::clickInTrainMenu()
             else managerConsole->printToConsole("Can´t uncouple now, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;
         }
+        case TRAIN_MODE_COUPLE:
+        {
+            break;
+        }
         case TRAIN_MODE_LOAD:
         {
             break;

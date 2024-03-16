@@ -328,10 +328,8 @@ void InterfaceWindow::on_MultiFuncBut10_clicked()
 {
     if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
-        int savedMenuValue = menuSelected;
-        menuSelected = TRAIN_MODE_CHANGE_DIRECTION;
+        menuSelected = TRAIN_MODE_COUPLE;
         clickInTrainMenu();
-        menuSelected = savedMenuValue;
     }
 }
 
@@ -348,7 +346,13 @@ void InterfaceWindow::on_MultiFuncBut11_clicked()
 
 void InterfaceWindow::on_MultiFuncBut12_clicked()
 {
-
+    if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
+    {
+        int savedMenuValue = menuSelected;
+        menuSelected = TRAIN_MODE_CHANGE_DIRECTION;
+        clickInTrainMenu();
+        menuSelected = savedMenuValue;
+    }
 }
 
 void InterfaceWindow::on_MultiFuncBut13_clicked()

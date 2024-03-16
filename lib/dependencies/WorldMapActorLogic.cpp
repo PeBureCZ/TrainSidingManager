@@ -175,13 +175,13 @@ void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
             newVehicles.push_back(new CD753(nullptr, vehicleGraphicsItem));
             break;
         }
-        case VAGON_EAS:
+        case WAGON_EAS:
         {
             QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(EAS_ACTIVE_SPRITE));
             newVehicles.push_back(new Eas(nullptr, vehicleGraphicsItem));
             break;
         }
-        case VAGON_ZAES:
+        case WAGON_ZAES:
         {
             QGraphicsItem* vehicleGraphicsItem = new QGraphicsPixmapItem(newSprite.getSprite(ZAES_ACTIVE_SPRITE));
             newVehicles.push_back(new Zaes(nullptr, vehicleGraphicsItem));
@@ -198,6 +198,8 @@ void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
         {
             worldScene->addItem(vehicle->getGraphicItem());
             vehicle->getGraphicItem()->setZValue(VEHICLE_LAYER);
+            getWorldCollide()->addCollideTriger(vehicle,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(15,65),0.f, 350);
+            vehicle->setTrainActor(dynamic_cast<Actor*>(ownerTrain));
         }
         dynamic_cast<Train*>(ownerTrain)->addMultipleVehicleToTrain(newVehicles);
     }
@@ -271,13 +273,11 @@ Actor *WorldMap::addTrain()
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, nullptr);
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
-        QList<int> vehicles = {LOCO_CD753, VAGON_EAS};
+        QList<int> vehicles = {LOCO_CD753, WAGON_EAS, WAGON_EAS, WAGON_EAS, WAGON_ZAES, WAGON_ZAES, WAGON_ZAES, WAGON_ZAES};
         addVehicleActors(dynamic_cast<Train*>(newTrain), vehicles);
 
         qDebug() << "spawn train - temporary solution";
         dynamic_cast<Train*>(newTrain)->setActualSpeed(1); //centimeters/s
-
-        getWorldCollide()->addCollideTriger(newTrain,BOX_COLLIDER, {TRAIN_CHANNEL}, QPoint(0,0),0.f, 1000);
         return newTrain;
     }
     return nullptr;

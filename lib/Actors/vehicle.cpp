@@ -11,6 +11,7 @@ Vehicle::Vehicle(QObject* parent, QGraphicsItem* newGraphicItem) :Movable(parent
     selectedSpriteEnum = EMPTY_SPRITE;
     unselectedSpriteEnum = EMPTY_SPRITE;
     unactiveSpriteEnum = EMPTY_SPRITE;
+    trainActorOwner = nullptr;
 }
 
 const int Vehicle::getWidth()
@@ -31,6 +32,16 @@ void Vehicle::selectVehicle(bool selected)
 void Vehicle::idleVehicle(bool idle)
 {
     idle ? changeSprite(unactiveSpriteEnum) : changeSprite(selectedSpriteEnum);
+}
+
+const void Vehicle::setTrainActor(Actor* actorTrain)
+{
+    trainActorOwner = actorTrain;
+}
+
+Actor *Vehicle::getTrainActor()
+{
+    return trainActorOwner;
 }
 
 

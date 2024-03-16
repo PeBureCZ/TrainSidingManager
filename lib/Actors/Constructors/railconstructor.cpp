@@ -45,9 +45,9 @@ void RailConstructor::actualizeConstructor(QPoint newPoint, int zoomLevel)
         actualizeRail();
         setPoints(newPoint);
         actualizePathVisual();
-        if (ownedRail->getAllTriggers().size() > 0)
+        if (ownedRail->getTriggers().size() > 0)
         {
-            dynamic_cast<Component*>(ownedRail->getAllTriggers()[1])->setRelativeLocation(newPoint - ownedRail->getLocation()); //p3 trigger
+            dynamic_cast<Component*>(ownedRail->getTriggers()[1])->setRelativeLocation(newPoint - ownedRail->getLocation()); //p3 trigger
         }
     }
     else setLocation(newPoint,true);

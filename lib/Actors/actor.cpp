@@ -129,7 +129,7 @@ QPoint Actor::getRotatedPointArountPivot(const QPoint point, const QPoint pivot,
     return newPoint;
 }
 
-QVector<Trigger*> Actor::getAllTriggers()
+QVector<Trigger*> Actor::getTriggers()
 {
     return triggers;
 }
@@ -157,8 +157,10 @@ void Actor::createTriggerInActor(int indexOfType, QVector<int> channels, QPoint 
         case BOX_COLLIDER:
         {
             Trigger* newComponent = new BoxCollider();
-            QPoint leftUpCorner = relativeLocation + QPoint(relativeLocation.x() - radius/2, relativeLocation.y() - radius/2);
-            QPoint rightDownCorner = relativeLocation + QPoint(relativeLocation.x() + radius/2, relativeLocation.y() + radius/2);
+            //QPoint leftUpCorner = relativeLocation + QPoint(relativeLocation.x() - radius/2, relativeLocation.y() - radius/2);
+            //QPoint rightDownCorner = relativeLocation + QPoint(relativeLocation.x() + radius/2, relativeLocation.y() + radius/2);
+            QPoint leftUpCorner = QPoint(- radius/2, - radius/2);
+            QPoint rightDownCorner = QPoint(radius/2, radius/2);
             dynamic_cast<BoxCollider*>(newComponent)->setBoxCollider(leftUpCorner, rightDownCorner, relativeRotation);
             component = newComponent;
             break;
@@ -182,6 +184,11 @@ void Actor::changeSprite(int spriteFromEnum)
         QPixmap pixmap = newSprite.getSprite(spriteFromEnum);
         dynamic_cast<QGraphicsPixmapItem*>(graphicItem)->setPixmap(pixmap);
     }
+}
+
+float Actor::getRotation()
+{
+    return rotation;
 }
 
 int Actor::getDistance(QPoint pointA, QPoint pointB)

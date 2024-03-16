@@ -29,6 +29,7 @@ void MainWindow::initializeInterface()
             relativePath + "/images/button_signals.png",
             relativePath + "/images/button_train.png",
             relativePath + "/images/button_uncouple.png",
+            relativePath + "/images/button_couple.png",
             relativePath + "/images/button_unload.png",
             relativePath + "/images/button_exit.png",
             relativePath + "/images/button_bin.png",
@@ -331,12 +332,12 @@ void MainWindow::setTrainMenu(Train *train)
     ui->MultiFuncBut7->setIcon(QIcon(relativeIconPaths[LOAD_ICON]));
     ui->MultiFuncBut8->setIcon(QIcon(relativeIconPaths[UNLOAD_ICON]));
     ui->MultiFuncBut9->setIcon(QIcon(relativeIconPaths[UNCOUPLE_ICON]));
-    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
+    ui->MultiFuncBut10->setIcon(QIcon(relativeIconPaths[COUPLE_ICON]));
 
     if (train->getIdle()) ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[MOTOR_FALSE_ICON]));
     else ui->MultiFuncBut11->setIcon(QIcon(relativeIconPaths[MOTOR_TRUE_ICON]));
 
-    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
+    ui->MultiFuncBut12->setIcon(QIcon(relativeIconPaths[CHANGEDIR_ICON]));
     ui->MultiFuncBut13->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
     ui->MultiFuncBut14->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));
     ui->MultiFuncBut15->setIcon(QIcon(relativeIconPaths[EMPTY_ICON]));

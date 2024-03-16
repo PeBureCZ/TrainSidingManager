@@ -7,8 +7,8 @@ enum TrainsEnum
     LOCO_CD730,
     LOCO_CD753,
     //vagons
-    VAGON_EAS,
-    VAGON_ZAES,
+    WAGON_EAS,
+    WAGON_ZAES,
 };
 
 #endif // TRAINSENUM_H

@@ -353,10 +353,7 @@ void Rail::smoothConnectionC1(bool changeP2Distance)
     }
     if (negativeVectorP2 != QPoint(999999,999999))
     {
-        if (changeP2Distance)
-        {
-            P2 = (2*mirrorCenterPoint) - negativeVectorP2  - P0;
-        }
+        if (changeP2Distance) P2 = (2*mirrorCenterPoint) - negativeVectorP2  - P0;
         else
         {
             QPoint oldP2World= P0+P2;
@@ -376,7 +373,6 @@ void Rail::smoothConnectionC1(bool changeP2Distance)
         }
         P3 = mirrorCenterPoint - P0;
     }
-
     moveRailPoints(P0,P1,P2,P3);
 }
 
@@ -474,10 +470,6 @@ void Rail::setOccupied(const bool isOccupied, Actor* actor )
         setRailColor(DEFAULT_RAIL_COLOR, UNSELECTED_RAIL_LAYER);
         occupied = isOccupied;
     }
-
-
-
-
 }
 
 void Rail::setRailColor(QColor color, int layerEnum)
@@ -512,7 +504,7 @@ void Rail::moveRailPoints(QPoint newP0, QPoint newP1, QPoint newP2, QPoint newP3
 void Rail::setRailObjectBoxCollider()
 {
     BoxCollider* boxCollider = {};
-    for (auto trigger : getAllTriggers())
+    for (auto trigger : getTriggers())
     {
         if (dynamic_cast<BoxCollider*>(trigger))
         {
@@ -602,14 +594,14 @@ QList<Actor*> Rail::getOccupiedBy()
 
 Trigger *Rail::getP0Trigger()
 {
-    QList<Trigger*> allTriggers = getAllTriggers();
+    QList<Trigger*> allTriggers = getTriggers();
     if (allTriggers.size() > 0) return allTriggers[0];
     return nullptr;
 }
 
 Trigger* Rail::getP3Trigger()
 {
-    QList<Trigger*> allTriggers = getAllTriggers();
+    QList<Trigger*> allTriggers = getTriggers();
     if (allTriggers.size() > 1) return allTriggers[1];
     return nullptr;
 }

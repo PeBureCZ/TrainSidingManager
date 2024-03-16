@@ -16,6 +16,7 @@ public:
     void setRelativeLocation(QPoint newPosition);
     void setRelativeRotation(float newRotation);
     QPoint getRelativeLocation();
+    float getRelativeRotation();
     virtual ~Component();
 };
 

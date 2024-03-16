@@ -21,6 +21,11 @@ QPoint Component::getRelativeLocation()
     return relativeLocation;
 }
 
+float Component::getRelativeRotation()
+{
+    return relativeRotation;
+}
+
 Component::~Component()
 {
 

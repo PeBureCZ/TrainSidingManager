@@ -37,6 +37,7 @@ enum iconEnums
     SIGNAL_ICON,
     TRAIN_ICON,
     UNCOUPLE_ICON,
+    COUPLE_ICON,
     UNLOAD_ICON,
     EXIT_ICON,
     BIN_ICON,
