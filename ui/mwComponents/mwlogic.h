@@ -36,7 +36,7 @@ public:
     void constructRail(QPoint point);
     void constructSignal();
     void constructPortal();
-    void constructTrain(QPoint point);
+    void spawnPortalTrain(QPoint point);
     void trainSelect();
     void clickInTrainMenu();
 

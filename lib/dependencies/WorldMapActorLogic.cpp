@@ -152,7 +152,7 @@ Actor *WorldMap::addStaticlActor(QPoint spawnPos, int indexOfActor)
     return nullptr;
 }
 
-void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
+void WorldMap::createVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
 {
     //VEHICLES ARE NOT ADDED TO ACTOR LIST!!!
     //(delete train ---> delete all vehicles)
@@ -205,6 +205,20 @@ void *WorldMap::addVehicleActors(Train *ownerTrain, QList<int> indexOfVehicles)
     }
 }
 
+void WorldMap::moveVehiclesToTrain(Train* fromTrain, Train* toTrain, QList<Vehicle*> vehiclesToMove)
+{
+    for (auto vehicle : vehiclesToMove)
+    {
+        vehicle->setTrainActor(toTrain);
+    }
+    fromTrain->removeVehicleFromLists(vehiclesToMove);
+    toTrain->addMultipleVehicleToTrain(vehiclesToMove);
+    toTrain->setTrainPath(fromTrain->getRemainingPath());
+    RailNavigation::makeNewActualRail(toTrain, fromTrain->getActualRail(),fromTrain->getRemainingPath(),fromTrain->getOnPathLength(),fromTrain->getDirectionToRailEnd(),0);
+    RailNavigation::makeNewActualRail(fromTrain, fromTrain->getActualRail(),fromTrain->getRemainingPath(),fromTrain->getOnPathLength(),fromTrain->getDirectionToRailEnd(),toTrain->getTrainLength());
+
+}
+
 void WorldMap::addActorToLists(Actor* addedActor)
 {
     actorList.push_back(addedActor);
@@ -225,11 +239,17 @@ void WorldMap::deleteActor(Actor *actor)
             worldCollide->removeActorFromCollideLists(actor);
         }
         if (tickedActorsList.contains(actor)) tickedActorsList.remove(tickedActorsList.indexOf(actor));
-
         if (dynamic_cast<Rail*>(actor))
         {
             int railIndex = railList.indexOf(dynamic_cast<Rail*>(actor));
             railList.remove(railIndex); //actor will be deleted from actor List
+        }
+        if (dynamic_cast<Train*>(actor))
+        {
+            for (auto vehicle : dynamic_cast<Train*>(actor)->getVehicles())
+            {
+                worldCollide->removeActorFromCollideLists(vehicle);
+            }
         }
         int actorIndex = actorList.indexOf(actor);
         delete actorList[actorIndex];
@@ -250,6 +270,43 @@ void WorldMap::setConstructor(Actor * actor)
 {
     actualConstructor = dynamic_cast<ActorConstructor*>(actor);
     tickedActorsList.push_back(actor);
+}
+
+void WorldMap::coupleTrain()
+{
+
+}
+
+void WorldMap::uncoupleTrain(Train* train, Vehicle* uncoupledVehicle)
+{
+    if (uncoupledVehicle != nullptr)
+    {
+        QList<Vehicle*> allVehicles = train->getVehicles();
+        qDebug() << "index before: " << allVehicles.indexOf(uncoupledVehicle);
+        QList<Vehicle*> uncoupledVehicles = {};
+        if (!train->getDirectionToRailEnd())
+        {
+            for (int i = train->getVehicles().size() -1; i >= 0; i--)
+            {
+                uncoupledVehicles.push_back(allVehicles[i]);
+            }
+            allVehicles = uncoupledVehicles;
+            uncoupledVehicles.clear();
+        }
+        int indexOfUncoupled = allVehicles.indexOf(uncoupledVehicle); //to uncouple
+        if (indexOfUncoupled == -1) return;
+        qDebug() << "index after: " << indexOfUncoupled;
+        for (int i = allVehicles.size()-1; i >= indexOfUncoupled ; i--)
+        {
+            uncoupledVehicles.push_back(allVehicles[i]);
+        }
+        Train* newTrain = dynamic_cast<Train*>(addActor(TRAIN_ACTOR));
+        if (newTrain != nullptr && uncoupledVehicles.size() > 0)
+        {
+            moveVehiclesToTrain(train, newTrain, uncoupledVehicles);
+        }
+        newTrain->idle(true);
+    }  
 }
 
 void WorldMap:: deleteConstructor()
@@ -273,8 +330,6 @@ Actor *WorldMap::addTrain()
         QGraphicsItem* trainItem = new QGraphicsPixmapItem(newSprite.getSprite(EMPTY_SPRITE)); //sprite from struct
         Actor* newTrain = new Train(nullptr, trainItem, nullptr);
         tickedActorsList.push_back(newTrain); //actor with tick update (for move function)
-        QList<int> vehicles = {LOCO_CD753, WAGON_EAS, WAGON_EAS, WAGON_EAS, WAGON_ZAES, WAGON_ZAES, WAGON_ZAES, WAGON_ZAES};
-        addVehicleActors(dynamic_cast<Train*>(newTrain), vehicles);
 
         qDebug() << "spawn train - temporary solution";
         dynamic_cast<Train*>(newTrain)->setActualSpeed(1); //centimeters/s

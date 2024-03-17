@@ -16,6 +16,7 @@ protected:
     Signal* nearestSignal;
     Train* nearestTrain;
     Rail* nearestRail;
+    Vehicle* nearestVehicle;
 private:
     int getSlateFromSprite(int state);
 
@@ -23,12 +24,14 @@ public:
     explicit TrainSelector(QObject* parent = nullptr, QGraphicsItem* newGraphicItem = nullptr, Actor *actorToConstructing = nullptr);
     void actualizeConstructor(QPoint newPoint, int zoomLevel) override;
 
-    Train *getSelectedTrain();
-    void setSelectedTrain();
     Signal* getNearestSignal();
     Train* getNearestTrain();
+    Train *getSelectedTrain();
+    Vehicle* getNearestVehicle();
+
+    void setSelectedTrain();
     void findPathToSignal();
-    void findNearestTrain();
+    void findNearestVehicle();
     void findNearestSignal();
     void unselectSignal();
 

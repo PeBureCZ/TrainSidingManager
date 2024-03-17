@@ -71,7 +71,6 @@ private:
 
     //multi-type actor switch
     Actor* addStaticlActor(QPoint spawnPos, int indexOfActor);
-    void *addVehicleActors(Train* ownerTrain, QList<int> indexOfVehicles);
 
 public:
     WorldMap(QObject *parent = nullptr
@@ -94,7 +93,11 @@ public:
     void deleteActor(Actor* actor);
     void kickTickedActor(Actor* actor);
     void setConstructor(Actor*actor);
+    void coupleTrain();
+    void uncoupleTrain(Train *train, Vehicle *uncoupledVehicle);
     void deleteConstructor();
+    void createVehicleActors(Train* ownerTrain, QList<int> indexOfVehicles);
+    void moveVehiclesToTrain(Train* fromTrain, Train* toTrain, QList<Vehicle *> vehiclesToMove);
 
     //FCE - RETURN
     QString testFunction();

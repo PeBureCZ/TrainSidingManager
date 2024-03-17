@@ -53,6 +53,11 @@ Rail *Train::getActualRail() const
     return actualRail;
 }
 
+Rail *Train::getFirstOccupiedRail()
+{
+    return occupiedByFirstVehicle;
+}
+
 float Train::getActualPathValue() const
 {
     return onPathValue;
@@ -74,6 +79,18 @@ void Train::addMultipleVehicleToTrain(QList<Vehicle *> newVehicles)
     actualizeTrainLenth();
 }
 
+void Train::removeVehicleFromLists(QList<Vehicle*> vehiclesToMove)
+{
+    for (auto vehicle : vehiclesToMove)
+    {
+        int indexOfVehicle = vehicles.indexOf(vehicle);
+        vehicles.removeAt(indexOfVehicle);
+        vehicleGraphicsItems.removeAt(indexOfVehicle);
+    }
+    actualizeMaxSpeed();
+    actualizeTrainLenth();
+}
+
 void Train::actualizeMaxSpeed()
 {
     //It will recalculate the maximum speed based on the train's weight...
@@ -89,7 +106,7 @@ void Train::actualizeMaxSpeed()
 
 Vehicle *Train::getVehicleActor(int indexOfVehicle)
 {
-    if (vehicles.length() >= indexOfVehicle)
+    if (vehicles.length() > indexOfVehicle)
     {
         return vehicles[indexOfVehicle];
     }
@@ -402,8 +419,6 @@ void Train::changeMoveDirection()
     takenPath = remainingPath;
     remainingPath = savedTakenPath;
 
-
-
     //change actual rail and occupiedByFirstVehicle rail
     //Rail* savedActualRail = actualRail;
     //actualRail = occupiedByFirstVehicle;
@@ -419,14 +434,6 @@ void Train::changeMoveDirection()
 
     actualizeVehiclesOnPath();
     recalculateRemainToPathEnd();
-}
-
-void Train::uncouple(int uncoupledVehicleIndex)
-{
-    if (uncoupledVehicleIndex <= vehicles.size()-1)
-    {
-
-    }
 }
 
 void Train::idle(bool idleState)
@@ -498,19 +505,19 @@ void Train::setActualPathGraphic(Rail* actualRail)
     else actualPathGraphic = nullptr;
 }
 
-bool Train::teleportTrainToRail(Rail *rail, bool direction)
+bool Train::teleportTrainToRail(Rail *rail, bool direction, bool checkOccupied, int movedByLength)
 {
-    if (rail->getOccupied() == true)
+    if (checkOccupied && rail->getOccupied())
     {
         qDebug() << "can´t teleport, rail is occupied";
         return false;
     }
     actualRail = rail;
     directionToRailEnd = direction;
-    directionToRailEnd ? onPathLength = 5 : onPathLength = actualRail->getLengthOfRail() - 5;
+    directionToRailEnd ? onPathLength = movedByLength : onPathLength = actualRail->getLengthOfRail() - movedByLength;
     setActualPathGraphic(actualRail);
     makePathFromPortal();
-    if (rail->getLengthOfRail() + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
+    if (rail->getLengthOfRail() - movedByLength + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
     {
         qDebug() << "can´t teleport, rail is too short";
         return false;

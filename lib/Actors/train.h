@@ -41,9 +41,10 @@ public:
     QVector<Rail *> getRemainingPath() const;
     QVector<Rail *> getTakenPath() const;
     Rail* getActualRail() const;
+    Rail* getFirstOccupiedRail();
 
     bool getDirectionToRailEnd()const;
-    bool teleportTrainToRail(Rail* rail, bool direction);
+    bool teleportTrainToRail(Rail* rail, bool direction, bool checkOccupied, int movedByLength);
     bool getShunt();
     const bool getIdle();
     const bool getMoveDirection();
@@ -61,6 +62,7 @@ public:
     void tickEvent() override;
 
     void addMultipleVehicleToTrain(QList<Vehicle*> newVehicles);
+    void removeVehicleFromLists(QList<Vehicle *> vehiclesToMove);
     void actualizeMaxSpeed();
     void setActualPathValue(float newValue);
     void setTrainPath(QVector<Rail*> newTrainPath);
@@ -76,7 +78,6 @@ public:
     void selectTrain(bool selected);
     void setdirectionToRailEnd(bool newDirection);
     void changeMoveDirection();
-    void uncouple(int uncoupledVehicleIndex);
     void idle (bool idleState);
     void setAutopilot(bool newAutopilot);
     void setShunt(bool newShunt);

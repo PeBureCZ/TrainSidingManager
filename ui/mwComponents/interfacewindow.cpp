@@ -63,7 +63,7 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                     int xBarValue = world->getWorldView()->horizontalScrollBar()->value();
                     int yBarValue = world->getWorldView()->verticalScrollBar()->value();
                     int zoomLevel = world->getWorldView()->getZoomLevel();
-                    constructTrain(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
+                    spawnPortalTrain(world->getRelativeWorldPos(event->pos(),xBarValue, yBarValue, zoomLevel));
                     break;
                 }
                 default: {}
@@ -83,6 +83,11 @@ void InterfaceWindow::mousePressEvent(QMouseEvent *event)
                 case PLAY_SELECT_TRAIN:
                 {
                     trainSelect();
+                    break;
+                }
+                case TRAIN_MODE_UNCOUPLE:
+                {
+                    clickInTrainMenu();
                     break;
                 }
                 default: {}
@@ -129,7 +134,7 @@ void InterfaceWindow::leftMouseRelease()
     if (sharedBool)
     {
         SelectConstructor* selector = dynamic_cast<SelectConstructor*>(constructor);
-        if (selector->getUnderSelect() == false)
+        if (!selector->getUnderSelect())
         {
             selector->setUnderSelect(true);
             if (dynamic_cast<RailSelector*>(selector))
@@ -320,7 +325,6 @@ void InterfaceWindow::on_MultiFuncBut9_clicked()
     if (menuSelected >= TRAIN_MODE_SELECT_PATH && menuSelected <= TRAIN_MODE_EXIT)
     {
         menuSelected = TRAIN_MODE_UNCOUPLE;
-        clickInTrainMenu();
     }
 }
 

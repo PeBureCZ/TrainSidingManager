@@ -21,18 +21,27 @@ TrainSelector::TrainSelector(QObject* parent, QGraphicsItem* newGraphicItem, Act
     nearestSignal = nullptr;
     nearestTrain = nullptr;
     nearestRail = nullptr;
+    nearestVehicle = nullptr;
 }
 
 void TrainSelector::actualizeConstructor(QPoint newPoint, int zoomLevel)
 {
     ActorConstructor::actualizeConstructor(newPoint, zoomLevel);
-    if (selectedTrain == nullptr) findNearestTrain();
-    else findNearestSignal();
+    findNearestVehicle();
+    if (selectedTrain != nullptr) findNearestSignal();
 }
 
 Train* TrainSelector::getSelectedTrain()
 {
     return selectedTrain;
+}
+
+Vehicle *TrainSelector::getNearestVehicle()
+{
+    if (nearestVehicle != nullptr)
+    {
+        return nearestVehicle;
+    }
 }
 
 void TrainSelector::setSelectedTrain()
@@ -65,10 +74,11 @@ void TrainSelector::findPathToSignal()
     }
 }
 
-void TrainSelector::findNearestTrain()
+void TrainSelector::findNearestVehicle()
 {
     Train* retestedNearestTrain = nullptr;
     int distance = 9999999;
+    Vehicle* retestedNearestVehicle = nullptr;
     for (auto actor : actorsInCollision)
     {
         if (dynamic_cast<Vehicle*>(actor))
@@ -85,24 +95,32 @@ void TrainSelector::findNearestTrain()
             {
                 distance = testedDistance;
                 retestedNearestTrain = testedTrain;
+                retestedNearestVehicle = testedVehicle;
             }
         }
     }
-    if(nearestTrain == nullptr && retestedNearestTrain != nullptr)
+    if (selectedTrain)
+    {
+        (retestedNearestVehicle != nullptr) ? nearestVehicle = retestedNearestVehicle : nearestVehicle = nullptr;
+    }
+    else if(nearestTrain == nullptr && retestedNearestTrain != nullptr)
     {
         nearestTrain = retestedNearestTrain;
         nearestTrain->selectTrain(true);
+        nearestVehicle = retestedNearestVehicle;
     }
     else if (retestedNearestTrain != nullptr && nearestTrain != nullptr && retestedNearestTrain != nearestTrain)
     {
         nearestTrain->selectTrain(false);
         nearestTrain = retestedNearestTrain;
         nearestTrain->selectTrain(true);
+        nearestVehicle = retestedNearestVehicle;
     }
     else if (nearestTrain != nullptr && retestedNearestTrain == nullptr)
     {
         nearestTrain->selectTrain(false);
         nearestTrain = nullptr;
+        nearestVehicle = nullptr;
     }
 }
 
@@ -116,7 +134,7 @@ void TrainSelector::findNearestSignal()
         if (dynamic_cast<Rail*>(actor))
         {
             Rail* nearRail = dynamic_cast<Rail*>(actor);
-            if (nearestTrain->getShunt() && nearRail->getShuntAllowed() == false) continue;
+            if (nearestTrain->getShunt() && !nearRail->getShuntAllowed()) continue;
             else if (nearestTrain->getShunt())
             {
                 if (nearRail->getOccupied())

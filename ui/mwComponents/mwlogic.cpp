@@ -201,7 +201,7 @@ void mwlogic::constructSignal()
     }
 }
 
-void mwlogic::constructTrain(QPoint point)
+void mwlogic::spawnPortalTrain(QPoint point)
 {
     QList<Actor*> actors = world->getActorsCollideInLocation({STATIC_CHANNEL}, point);
     if (actors.size() != 0)
@@ -215,9 +215,14 @@ void mwlogic::constructTrain(QPoint point)
                 Rail* portalOwnedRail = portal->getConnectedRail();
 
                 Train* createdTrain = dynamic_cast<Train*>(world->addActor(TRAIN_ACTOR));
+                if (createdTrain != nullptr)
+                {
+                    QList<int> vehicles = {LOCO_CD753, WAGON_EAS, WAGON_EAS, WAGON_EAS, WAGON_ZAES, WAGON_ZAES, WAGON_ZAES, WAGON_ZAES};
+                    world->createVehicleActors(dynamic_cast<Train*>(createdTrain), vehicles);
+                }
                 bool trainDirection;
                 (portalRailEnd == 0)? trainDirection = true : trainDirection = false;
-                if (portalRailEnd == -1 || !createdTrain->teleportTrainToRail(portalOwnedRail, trainDirection))
+                if (portalRailEnd == -1 || !createdTrain->teleportTrainToRail(portalOwnedRail, trainDirection, true, 5))
                 {
                     //false =rail is too short -> delete
                     world->deleteActor(createdTrain);
@@ -231,7 +236,6 @@ void mwlogic::trainSelect()
 {
     Actor* actualConstructor = world->getActualConstructor();
     if (actualConstructor == nullptr || !dynamic_cast<TrainSelector*>(actualConstructor)) return;
-
     TrainSelector* trainSelector = dynamic_cast<TrainSelector*>(actualConstructor);
 
     QPoint point = actualConstructor->getLocation();
@@ -326,7 +330,7 @@ void mwlogic::clickInTrainMenu()
             if (selectedTrain->getActualSpeed() == 0)
             {
                 managerConsole->printToConsole("Temporarry solution - uncouple", DEFAULT_COLOR, MIDDLE_DURATION);
-                selectedTrain->uncouple(1);
+                world->uncoupleTrain(selectedTrain, trainSelector->getNearestVehicle());
             }
             else managerConsole->printToConsole("Can´t uncouple now, because the train is moving now", DEFAULT_COLOR, MIDDLE_DURATION);
             break;

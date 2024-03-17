@@ -47,7 +47,7 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
                     //check shunt mode and occupied state
                     if (train->getShunt())
                     {
-                        if (newRailFinded->getShuntAllowed() == false) continue;
+                        if (!newRailFinded->getShuntAllowed()) continue;
                         QList<Actor*> actorsOnRail = newRailFinded->getOccupiedBy();
                         bool isActive = false;
                         for (auto actor : actorsOnRail)
@@ -157,5 +157,13 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
             if (train->getAutopilot()) train->setTravelDistance(train->getRemainToPathEnd());
         }
         else qDebug() << "the path was not found!";
+    }
+}
+
+void RailNavigation::makeNewActualRail(Train* train, Rail *actualRail, QList<Rail *> path, int onPathLength, bool direction, int movedBy)
+{
+    if (onPathLength + movedBy < actualRail->getLengthOfRail())
+    {
+        train->teleportTrainToRail(actualRail,direction,false, onPathLength + movedBy);
     }
 }
