@@ -83,6 +83,7 @@ void TrainSelector::findNearestVehicle()
     {
         if (dynamic_cast<Vehicle*>(actor))
         {
+            if (selectedTrain && dynamic_cast<Vehicle*>(actor)->getTrainActor() != selectedTrain) continue;
             Vehicle* testedVehicle = dynamic_cast<Vehicle*>(actor);
             Train* testedTrain = dynamic_cast<Train*>(testedVehicle->getTrainActor());
             Trigger* testedTrigger = actor->getTriggers().first();

@@ -519,6 +519,7 @@ bool Train::teleportTrainToRail(Rail *rail, bool direction, bool checkOccupied, 
     makePathFromPortal();
     if (rail->getLengthOfRail() - movedByLength + TrainNavigation::getTrainPathLength(remainingPath) < actualTrainLength - 10)
     {
+        qDebug() << "RL: " << rail->getLengthOfRail() <<  " MBL: " << movedByLength << " PL: " << TrainNavigation::getTrainPathLength(remainingPath) << " ATL: " << actualTrainLength - 10;
         qDebug() << "can´t teleport, rail is too short";
         return false;
     }

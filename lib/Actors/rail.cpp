@@ -517,11 +517,12 @@ void Rail::setRailObjectBoxCollider()
         //get and make rotation
         float radian = atan2(static_cast<double>(P3.y()),P3.x());
         float basicRotation = qRadiansToDegrees(radian);
-        float correctedRotation = fmod(360 - basicRotation, 360);
+        float correctedRotation = fmod(360+90 - basicRotation, 360);
 
         QTransform rotationTransform;
         rotationTransform.rotate(correctedRotation);
 
+        //boxCollider->setRelativeRotation(correctedRotation);
         QVector<QPoint> relativeLocations = {};
 
         //make 10 points on path declare box (still in "rotated" coordinate)
@@ -531,7 +532,7 @@ void Rail::setRailObjectBoxCollider()
             relativeLocations.push_back(dynamic_cast<QGraphicsPathItem*>(graphicItem)->path().pointAtPercent(percent).toPoint()); //relative
         }
 
-        //make points "unrotated" to check bounds
+        //make points "unrotated" to set bounds
         for (auto &point : relativeLocations)
         {
             point = rotationTransform.map(point);
@@ -550,13 +551,9 @@ void Rail::setRailObjectBoxCollider()
             if (minY > point.y()) minY = point.y();
         }
 
-        maxX += 40; //decimeters
-        minX -= 40; //decimeters
-        maxY += 40; //decimeters
-        minY -= 40; //decimeters
-
-        QPoint leftUpCorner = {minX, minY};
-        QPoint rightDownCorner = {maxX, maxY};
+        QPoint leftUpCorner = {minX-80,-80};
+        QPoint rightDownCorner = {maxX+80, maxY+80};
+        boxCollider->setRelativeLocation(QPoint(0,maxY/2));
 
         //set coordination and rotations
         boxCollider->setBoxCollider(leftUpCorner, rightDownCorner, correctedRotation);

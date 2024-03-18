@@ -162,6 +162,8 @@ void RailNavigation::makePath(Train* train, Signal *nearestSignal)
 
 void RailNavigation::makeNewActualRail(Train* train, Rail *actualRail, QList<Rail *> path, int onPathLength, bool direction, int movedBy)
 {
+    train->teleportTrainToRail(actualRail,direction,false, onPathLength + movedBy);
+    return;
     if (onPathLength + movedBy < actualRail->getLengthOfRail())
     {
         train->teleportTrainToRail(actualRail,direction,false, onPathLength + movedBy);

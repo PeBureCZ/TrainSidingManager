@@ -216,9 +216,8 @@ Actor *WorldMap::getActorFromTriggersInCollide(Actor *testedActor, QPoint positi
                 }
                 else if (dynamic_cast<BoxCollider*>(trigger))
                 {
-                    QPoint pivot = position - testedActor->getLocation();
-                    QPoint transferedPosition = position - testedActor->getLocation() - trigger->getRelativeLocation(); //to relative
-                    QPoint relativeRotatedPos = testedActor->getRotatedPointArountPivot(transferedPosition, pivot, testedActor->getRotation()+trigger->getRelativeRotation());
+                    QPoint transferedPosition = position - testedActor->getLocation();
+                    QPoint relativeRotatedPos = testedActor->getRotatedPointArountPivot(transferedPosition, QPoint(0,0), testedActor->getRotation()+trigger->getRelativeRotation());
                     if (dynamic_cast<BoxCollider*>(trigger)->isInCollision(relativeRotatedPos)) return testedActor;
                 }
             }
